@@ -1,3 +1,5 @@
+git b53c684635c8b6551994b12c716bc44d9d74eec6
+---
 # Установка
 
 - [Установка Composer](#install-composer)
@@ -74,6 +76,3 @@ Laravel поставляется вместе с файлом `public/.htaccess`
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]
-
----
-git ea2c748
