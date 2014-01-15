@@ -58,7 +58,6 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
     ));
 
-In this example, 'local' is the name of the environment and 'your-machine-name' is the hostname of your server. On Linux and Mac, you may determine your hostname using the `hostname` terminal command.
 В этом примере 'local' это название среды, а 'your-machine-name' - это имя вашего компьютера. Чтобы узнать его, в Mac OS или Linux вы можете использовать команду hostname в терминале, а в Windows - зайти в Панель управления - Система.
 
 Если вам нужна бОльшая гибкость в определении среды, Вы можете передать в метод функцию-замыкание (Сlosure) и задавать среду так, как нужно именно вам.
