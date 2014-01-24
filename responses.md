@@ -62,15 +62,15 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	return Redirect::route('profile', array('user' => 1));
 
-#### Переадресация на экшн контроллера
+#### Переадресация на метод контроллера
 
 	return Redirect::action('HomeController@index');
 
-#### Переадресация на экшн контроллера с параметрами
+#### Переадресация на метод контроллера с параметрами
 
 	return Redirect::action('UserController@profile', array(1));
 
-#### Переадресация на экшн контроллера с именованными параметрами
+#### Переадресация на метод контроллера с именованными параметрами
 
 	return Redirect::action('UserController@profile', array('user' => 1));
 
