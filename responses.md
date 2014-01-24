@@ -1,3 +1,7 @@
+git f53f291f67507108dd0f5772a7eb33bc6458d840
+
+---
+
 # Ответ (response) и вьюхи (views)
 
 - [Ответ: основы](#basic-responses)
