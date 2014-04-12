@@ -1,4 +1,4 @@
-git b53c684635c8b6551994b12c716bc44d9d74eec6
+git 71802e293e6738247fe5485816e5f4be66311558
 ---
 # Установка
 
@@ -66,6 +66,8 @@ Laravel требует, чтобы у сервера были права на з
 <a name="pretty-urls"></a>
 ## Красивые URL
 
+### Apache
+
 Laravel поставляется вместе с файлом `public/.htaccess`, который настроен для обработки URL без указания `index.php`. Если вы используете Apache в качестве веб-сервера обязательно включите модуль `mod_rewrite`.
 
 Если стандартный `.htaccess` не работает для вашего Apache, попробуйте следующий:
@@ -76,3 +78,11 @@ Laravel поставляется вместе с файлом `public/.htaccess`
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]
+
+### Nginx
+
+Если вы используете в качествет веб-сервера Nginx, то используйте для ЧПУ следующую конструкцию:
+
+	location / {
+		try_files $uri $uri/ /index.php?$query_string;
+	}
