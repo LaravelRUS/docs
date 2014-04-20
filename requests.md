@@ -1,4 +1,4 @@
-git cfc237dc30bf26ed006185c15e950b960ec06e85
+git a49894e56c3ac8b837ba7d8687d94f6010cb1808
 
 ---
 
@@ -148,15 +148,6 @@ git cfc237dc30bf26ed006185c15e950b960ec06e85
 #### Получение URI (пути) запроса
 
 	$uri = Request::path();
-
-#### Определение типа запроса (GET, POST и т.п.)	
-
-	$method = Request::method();
-
-	if (Request::isMethod('post'))
-	{
-		//
-	}
 
 #### Соответствует ли запрос маске пути?
 
