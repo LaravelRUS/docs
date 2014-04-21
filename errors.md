@@ -1,14 +1,26 @@
-git 41941dc4fc5857da598029e4df558a7a83fa0f84
+git 4c0a0d6a663b0cfb40feee759940fe9b80fbad6c
 
 ---
 
 # Ошибки и логирование
 
+- [Конфигурация](#configuration)
 - [Детализация ошибок](#error-detail)
 - [Обработка ошибок](#handling-errors)
 - [HTTP-исключения](#http-exceptions)
 - [Обработка 404](#handling-404-errors)
 - [Логирование](#logging)
+
+<a name="configuration"></a>
+## Конфигурация
+
+Логгер регистрируется в [старт-файле](/docs/lifecycle#start-files) `app/start/global.php`. По умолчанию логи пишутся в один файл, но вы можете изменить это поведение. Для ведения логов Laravel использует модуль [Monolog](https://github.com/Seldaek/monolog).
+
+Например, если вы не хотите, чтобы все логи писались в один огромный файл, а хотите разбивать свои лог-файлы по дням, то вам нужно вписать в `app/start/global.php` следующее:
+
+	$logFile = 'laravel.log';
+	Log::useDailyFiles(storage_path().'/logs/'.$logFile);
+
 
 <a name="error-detail"></a>
 ## Детализация ошибок
