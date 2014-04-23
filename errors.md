@@ -1,11 +1,10 @@
-git 4c0a0d6a663b0cfb40feee759940fe9b80fbad6c
+git a55b92e723313ecf50e8fddc83ad868f33028d3e
 
 ---
 
 # Ошибки и логирование
 
 - [Конфигурация](#configuration)
-- [Детализация ошибок](#error-detail)
 - [Обработка ошибок](#handling-errors)
 - [HTTP-исключения](#http-exceptions)
 - [Обработка 404](#handling-404-errors)
@@ -21,9 +20,7 @@ git 4c0a0d6a663b0cfb40feee759940fe9b80fbad6c
 	$logFile = 'laravel.log';
 	Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 
-
-<a name="error-detail"></a>
-## Детализация ошибок
+### Детализация ошибок
 
 По умолчанию в Laravel включена детализация ошибок, происходящих в вашем приложении. Это значит, что при их возникновении будет отображена страница с цепочкой вызовов и текстом ошибки. Вы можете отключить детализацию ошибок установкой настройки `debug` файла `app/config/app.php` в значение `false`. 
 
