@@ -1,3 +1,7 @@
+git 78edefcad5b6a9cbd595e10fd4a8a11fbe63d58d
+
+---
+
 # Расширение фреймворка
 
 - [Введение](#introduction)
