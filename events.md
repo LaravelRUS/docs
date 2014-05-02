@@ -1,3 +1,7 @@
+git 596b4a1a37092cc74a045a0e59f4868dbf78cf7f
+
+---
+
 # События
 
 - [Простейшее использование](#basic-usage)
@@ -13,7 +17,7 @@
 
 #### Подписка на событие
 
-	Event::listen('user.login', function($user)
+	Event::listen('auth.login', function($user)
 	{
 		$user->last_login = new DateTime;
 
@@ -22,21 +26,21 @@
 
 #### Запуск события
 
-	$event = Event::fire('user.login', array($user));
+	$event = Event::fire('auth.login', array($user));
 
 При подписывании на событие вы можете указать приоритет. Обработчики с более высоким приоритетом будут вызваны перед теми, чей приоритет ниже, а обработчики с одинаковым приоритетом будут вызываться в порядке их регистрации.
 
 #### Подписка на событие с приоритетом
 
-	Event::listen('user.login', 'LoginHandler', 10);
+	Event::listen('auth.login', 'LoginHandler', 10);
 
-	Event::listen('user.login', 'OtherHandler', 5);
+	Event::listen('auth.login', 'OtherHandler', 5);
 
 Иногда вам может быть нужно пропустить вызовы других обработчиков события. Вы можете сделать это, вернув значение `false`:
 
 #### Прерывание обработки события
 
-	Event::listen('user.login', function($event)
+	Event::listen('auth.login', function($event)
 	{
 		// Обработка события
 
@@ -78,7 +82,7 @@
 
 #### Регистрация обработчика в классе
 
-	Event::listen('user.login', 'LoginHandler');
+	Event::listen('auth.login', 'LoginHandler');
 
 По умолчанию будет вызываться метод `handle` класса `LoginHandler`.
 
@@ -97,7 +101,7 @@
 
 #### Регистрация обработчика в другом методе
 
-	Event::listen('user.login', 'LoginHandler@onLogin');
+	Event::listen('auth.login', 'LoginHandler@onLogin');
 
 <a name="queued-events"></a>
 ## Запланированные события
@@ -152,7 +156,7 @@
 		 */
 		public function subscribe($events)
 		{
-			$events->listen('user.login', 'UserEventHandler@onUserLogin');
+			$events->listen('auth.login', 'UserEventHandler@onUserLogin');
 
 			$events->listen('user.logout', 'UserEventHandler@onUserLogout');
 		}
