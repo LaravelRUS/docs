@@ -9,7 +9,7 @@ git f002fb4ab43103545a0c8e05268c6904c272dee0
 - [Основы использования](#basic-usage)
 - [Формы множественного числа](#pluralization)
 - [Сообщения валидации](#validation)
-- [Локализация из пакетов](#overriding-package-language-files)
+- [Перекрытие файлов локализации из пакетов](#overriding-package-language-files)
 
 <a name="introduction"></a>
 ## Введение
@@ -100,3 +100,13 @@ git f002fb4ab43103545a0c8e05268c6904c272dee0
 Благодаря тому, что Laravel использует компонент Symfony Translation cвы можете легко создать более точные правила для проверки числа:
 
 	'apples' => '{0} There are none|[1,19] There are some|[20,Inf] There are many',
+
+<a name="validation"></a>
+## Сообщения валидации
+
+О том, как использовать файлы локализации для сообщений валидации, смотрите соответствующий раздел [документации](/docs/validation#localization). 
+
+<a name="overriding-package-language-files"></a>
+## Перекрытие файлов локализации из пакетов
+
+Многие пакеты идут со своими файлами локализации. Вы можете "перекрыть" их, располагая файлы в папках `app/lang/packages/{locale}/{package}`. Например, если вам надо перекрыть файл `messages.php` пакета `skyrim/hearthfire`, путь до вашего файла локализации должен выглядеть так: `app/lang/packages/en/hearthfire/messages.php`. Нет нужды дублировать файл целиком, можно указать только те ключи, которые должны быть перекрыты.
