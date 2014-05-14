@@ -2,7 +2,7 @@ git d0ca8271e6081cd9729709701e52104ff89206b3
 
 ---
 
-# Ответ (response) и вьюхи (views)
+# Ответ (response) и шаблоны (views)
 
 - [Ответ: основы](#basic-responses)
 - [Редиректы](#redirects)
