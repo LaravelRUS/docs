@@ -28,13 +28,8 @@
   * [Templates](/docs/templates)
   * [Unit Testing](/docs/testing)
   * [Validation](/docs/validation)
-ё
+
 * Работа с БД
   * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
-  * [Начала](/docs/database)
+  * [Query Builder](/docs/queries)
+  
