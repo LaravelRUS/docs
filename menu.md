@@ -1,9 +1,3 @@
-* О фреймворке
-  * [Введение](/docs/introduction)
-  * [Быстрый старт](/docs/quick)
-  * [Последние изменения](/docs/releases)
-  * [Апгрейд со старых версий](/docs/upgrade)
-
 * Первый взгляд
   * [Установка](/docs/installation)
   * [Настройка](/docs/configuration)
@@ -34,6 +28,13 @@
   * [Templates](/docs/templates)
   * [Unit Testing](/docs/testing)
   * [Validation](/docs/validation)
-
-* Базы данных
+ё
+* Работа с БД
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
+  * [Начала](/docs/database)
   * [Начала](/docs/database)
