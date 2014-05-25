@@ -65,8 +65,6 @@ git c7c67b71b26b7f551c8f06c32040c57e7494961c
 
 ### Получение ввода
 
-While your command is executing, you will obviously need to access the values for the arguments and options accepted by your application. To do so, you may use the `argument` and `option` methods:
-
 Во время исполнения команды, очевидно, потребуется получать значения переданных аргументов и опций. Для этого можно воспользоваться методами `argument` и `option`:
 
 #### Получение значения аргумента команды
