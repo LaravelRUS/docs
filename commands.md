@@ -135,9 +135,9 @@ While your command is executing, you will obviously need to access the values fo
 
     Artisan::resolve('binding.name');
 
-#### Регистрация команд внутри поставщиков служб (Service Provider)
+#### Регистрация команд внутри сервис-провайдеров (Service Provider)
 
-Если Вам необходимо зарегистрировать команды внутри поставщика службы, следует вызывать метод `commands` из метода `boot` поставщика, передавая в качестве аргумента зарегистрированное имя в [IoC контейнере](/docs/ioc):
+Если Вам необходимо зарегистрировать команды внутри сервис-провайдера, следует вызывать метод `commands` из метода `boot` провайдера, передавая в качестве аргумента зарегистрированное имя в [IoC контейнере](/docs/ioc):
 
     public function boot()
     {
@@ -145,7 +145,7 @@ While your command is executing, you will obviously need to access the values fo
     }
 
 <a name="calling-other-commands"></a>
-## Выхов других команд
+## Вызов других команд
 
 Иногда может потребоваться вызвать другую команду из Вашей команды. Это можно сделать, вызвав метод `call`:
 
