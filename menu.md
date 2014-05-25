@@ -33,3 +33,5 @@
   * [Начала](/docs/database)
   * [Query Builder](/docs/queries)
   
+* Artisan
+  * [Разработка Artisan-команд](/docs/commands)
