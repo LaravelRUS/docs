@@ -1,4 +1,4 @@
-Laravel 4
+Laravel 5
 ====
 
 Документация на русском языке. Перевод [официальной документации](https://github.com/laravel/docs).
@@ -16,7 +16,7 @@ Laravel 4
 
 `https://github.com/laravel/docs/commits/4.1/facades.md`
 
-Здесь 4.1 - имя бранча (`master`, `4.1`, `4.0`), а facades.md - название файла.
+Здесь 4.1 - имя ветки (`master`, `4.1`, `4.0`), а facades.md - название файла.
 
 ## Перевод терминов
 
