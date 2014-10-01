@@ -1,3 +1,7 @@
+git 76ea4e157780376ed63bede1d2188a8e31057190
+
+---
+
 - Первый взгляд
   - [Установка](/docs/4.1/installation)
   - [Настройка](/docs/4.1/configuration)
