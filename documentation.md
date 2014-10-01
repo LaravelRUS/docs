@@ -1,3 +1,7 @@
+git f11216c577652d1bedad923b4c3f98c28f520edc
+
+---
+
 - Вступление
     - [Введение](/docs/master/introduction)
     - [Быстрый старт](/docs/master/quick)
