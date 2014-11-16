@@ -1,4 +1,4 @@
-git bc291efbd462d4e7ab0dc3729a6a60aabe50a69a
+git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
 
 ---
 
@@ -18,9 +18,8 @@ git bc291efbd462d4e7ab0dc3729a6a60aabe50a69a
     - [Жизненный цикл запроса](/docs/master/lifecycle)
     - [Структура приложения](/docs/master/structure)
 - HTTP-слой
-    - [Быстрый старт](/docs/master/quick)
     - [Routing](/docs/master/routing)
-    - [Filters](/docs/master/filters)
+    - [Middleware](/docs/master/middleware)
     - [Controllers](/docs/master/controllers)
     - [Requests](/docs/master/requests)
     - [Responses](/docs/master/responses)
