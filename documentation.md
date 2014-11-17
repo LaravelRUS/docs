@@ -11,7 +11,6 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
   - [Выход](/docs/4.1/responses)
   - [Контроллеры](/docs/4.1/controllers)
   - [Ошибки и логирование](/docs/4.1/errors)
-
 - Обо всем поподробнее
   - [Authentication](/docs/4.1/security)
   - [Cache](/docs/4.1/cache)
@@ -32,10 +31,8 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
   - [Templates](/docs/4.1/templates)
   - [Unit Testing](/docs/4.1/testing)
   - [Validation](/docs/4.1/validation)
-
 - Работа с БД
   - [Начала](/docs/4.1/database)
   - [Query Builder](/docs/4.1/queries)
-  
 - Artisan
   - [Разработка Artisan-команд](/docs/4.1/commands)
