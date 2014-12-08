@@ -1,4 +1,4 @@
-git ac9714e6964d7cd636f8b020c0c06d2368fcf517
+git 3df4947eccd837d359ade0285dc2fafc9cf90376
 
 ---
 
@@ -30,7 +30,7 @@ Laravel является open-source проектом (с открытым ис�
 - [Laravel Envoy](https://github.com/laravel/envoy)
 - [Laravel Homestead](https://github.com/laravel/homestead)
 - [Laravel Homestead Build Scripts](https://github.com/laravel/settler)
-- [Laravel Website](https://github.com/laravel/website)
+- [Laravel Website](https://github.com/laravel/laravel.com)
 - [Laravel Art](https://github.com/laravel/art)
 
 <a name="core-development-discussion"></a>
