@@ -1,4 +1,4 @@
-git 78edefcad5b6a9cbd595e10fd4a8a11fbe63d58d
+git 7ab844b4711bde6c244247a19b10562e122344e3
 
 ---
 
@@ -141,12 +141,18 @@ Laravel содержит несколько классов `Manager`, котор
 	interface UserProviderInterface {
 
 		public function retrieveById($identifier);
+		public function retrieveByToken($identifier, $token);
+		public function updateRememberToken(UserInterface $user, $token);
 		public function retrieveByCredentials(array $credentials);
 		public function validateCredentials(UserInterface $user, array $credentials);
 
 	}
 
-Метод `retrieveById` бычно получает числовой ключ, идентифицирующий пользователя - такой, как первичный ключ в MySQL. Метод должен возвращать объект `UserInterface`, соответствующий переданному ID.
+Метод `retrieveById` обычно получает числовой ключ, идентифицирующий пользователя - такой, как первичный ключ в MySQL. Метод должен возвращать объект `UserInterface`, соответствующий переданному ID.
+
+Метод `retrieveByToken` получает пользователя по его уникальному идентификатору (токену). Этот идентификатор хранится в БД в поле remember_token. Как и предыдущий метод, этот метод должен возвращать объект, который является реализацией `UserInterface`.
+
+Метод `updateRememberToken` обновляет поле `remember_token`. Новый $token может быть строкой, полученной от куки `remember_me`, или null, если пользователь разлогинился.
 
 Метод `retrieveByCredentials` получает массив данных, ктоорые были переданы методу `Auth::attempt` при попытке входа в систему. Этот метод должен запросить своё постоянное хранилище на наличие пользователя с совпадающими данными. Обычно этот метод выполнит SQL-запрос с проверкой на `$credentails['username']`. **Этот метод не должен производить сравнение паролей или выполнять вход.**
 
