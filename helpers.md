@@ -99,7 +99,9 @@ git cc81f0f2b676134813426d22763dbb4af01ee1a9
 
 	$value = array_get($array, 'names.joe');
 
-> **Примечание:** 
+	$value = array_get($array, 'names.john', 'default');
+
+> **Примечание:** Функция `object_get` делает то же самое с объектом.
 
 ### array_only
 
