@@ -34,5 +34,10 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
 - Работа с БД
   - [Начала](/docs/4.1/database)
   - [Query Builder](/docs/4.1/queries)
+  - [Eloquent ORM](/docs/4.1/eloquent)
+  - [Конструктор таблиц](/docs/4.1/schema)
+  - [Миграции](/docs/4.1/migrations)
+  - [Redis](/docs/4.1/redis)
 - Artisan
+  - [Обзор](/docs/4.1/artisan)
   - [Разработка Artisan-команд](/docs/4.1/commands)
