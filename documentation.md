@@ -39,5 +39,5 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
   - [Миграции](/docs/4.1/migrations)
   - [Redis](/docs/4.1/redis)
 - Artisan
-  - [Использование](/docs/4.1/artisan)
+  - [Обзор](/docs/4.1/artisan)
   - [Разработка команд](/docs/4.1/commands)
