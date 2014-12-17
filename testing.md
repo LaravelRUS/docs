@@ -1,4 +1,4 @@
-git 491d421199914ffc33be73bf6fb1b05668c5c450
+git fb85738c37ef8da3e0b3ed2c6e059b94d3d0dbac
 
 ---
 
@@ -48,9 +48,9 @@ Laravel построен с учётом того, что современная
 <a name="calling-routes-from-tests"></a>
 ## Обращение к URL
 
-Вы можете легко вызвать любой ваш URL методом `call`:
-
 #### Вызов URL из теста
+
+Вы можете легко вызвать любой ваш URL методом `call`:
 
 	$response = $this->call('GET', 'user/profile');
 
@@ -60,9 +60,9 @@ Laravel построен с учётом того, что современная
 
 	$this->assertEquals('Hello World', $response->getContent());
 
-Вы также можете вызвать из теста любой контроллер.
-
 #### Вызов контроллера из теста
+
+Вы также можете вызвать из теста любой контроллер.
 
 	$response = $this->action('GET', 'HomeController@index');
 
