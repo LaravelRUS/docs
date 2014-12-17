@@ -1,4 +1,4 @@
-git f53f291f67507108dd0f5772a7eb33bc6458d840
+git fb85738c37ef8da3e0b3ed2c6e059b94d3d0dbac
 
 ---
 
@@ -33,6 +33,13 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 	{
 		return 'Hello World';
 	});
+
+#### Регистрация роута для нескольких методов
+
+	Route::match(array('GET', 'POST'), '/', function()
+	{
+		return 'Hello World';
+	});	
 
 #### Регистрация роута для любого типа HTTP-запроса:
 
@@ -149,14 +156,21 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	Route::get('user', array('before' => 'old', 'uses' => 'UserController@showProfile'));	
 
-#### Привязка нескольких фильтров к роуту:
+#### Привязка нескольких фильтров к роуту
 
 	Route::get('user', array('before' => 'auth|old', function()
 	{
 		return 'You are authenticated and over 200 years old!';
 	}));
 
-#### Передача параметров для фильтра:
+#### Привязка нескольких фильтров к роуту при помощи массива
+
+	Route::get('user', array('before' => array('auth', 'old'), function()
+	{
+		return 'You are authenticated and over 200 years old!';
+	}));	
+
+#### Передача параметров для фильтра
 
 	Route::filter('age', function($route, $request, $value)
 	{
@@ -170,7 +184,7 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 Фильтры типа `after` (выполняющиеся после запроса, если он не был отменён фильтром `before` - прим. пер.) получают `$response` как свой третий аргумент:
 
-	Route::filter('log', function($route, $request, $response, $value)
+	Route::filter('log', function($route, $request, $response)
 	{
 		//
 	});
@@ -198,6 +212,10 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 #### Определение класса для фильтра:
 
+	Route::filter('foo', 'FooFilter');
+
+По умолчанию будет вызван метод `filter` класса `FooFilter`:	
+
 	class FooFilter {
 
 		public function filter()
@@ -207,9 +225,9 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	}
 
-#### Регистрация фильтра-класса:
+Вы можете изменить это дефолтное поведение и указать метод явно:
 
-	Route::filter('foo', 'FooFilter');
+	Route::filter('foo', 'FooFilter@foo');
 
 <a name="named-routes"></a>
 ## Именованные роуты
@@ -253,6 +271,13 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 		});
 	});
 
+Внутри группы вы можете указать параметр `namespace` , чтобы не прописывать неймспейсы к каждому контроллеру:
+
+	Route::group(array('namespace' => 'Admin'), function()
+	{
+		//
+	});
+
 <a name="sub-domain-routing"></a>
 ## Поддоменные роуты
 
@@ -272,9 +297,7 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 <a name="route-prefixing"></a>
 ## Префикс пути
 
-Группа роутов может быть зарегистрирована с одним префиксом без его явного указания с помощью ключа `prefix` в параметрах группы.
-
-#### Добавление префикса к сгруппированным маршрутам:
+Группа роутов может быть зарегистрирована с одним префиксом в URL без его явного указания, с помощью ключа `prefix` в параметрах группы.
 
 	Route::group(array('prefix' => 'admin'), function()
 	{
@@ -310,7 +333,7 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	Route::model('user', 'User', function()
 	{
-		throw new NotFoundException;
+		throw new NotFoundHttpException;
 	});
 
 Иногда вам может быть нужно использовать собственный метод для получения модели перед её передачей в маршрут. В этом случае просто используйте метод `Route::bind`:
