@@ -1,4 +1,4 @@
-git a49894e56c3ac8b837ba7d8687d94f6010cb1808
+git f502c5b5edf90b7390a7c010ba1f24b1e440aabb
 
 ---
 
@@ -114,6 +114,13 @@ git a49894e56c3ac8b837ba7d8687d94f6010cb1808
 
 Метод `file` возвращает объект класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который в свою очередь расширяет стандартный класс `SplFileInfo`, который предоставляет множество методов для работы с файлами.
 
+#### Проверка загруженного файла на валидность
+
+	if (Input::file('photo')->isValid())
+	{
+		//
+	}
+
 #### Перемещение загруженного файла
 
 	Input::file('photo')->move($destinationPath);
@@ -148,6 +155,15 @@ git a49894e56c3ac8b837ba7d8687d94f6010cb1808
 #### Получение URI (пути) запроса
 
 	$uri = Request::path();
+
+#### Определение метода запроса (GET, POST и т.п.)
+
+	$method = Request::method();
+
+	if (Request::isMethod('post'))
+	{
+		//
+	}
 
 #### Соответствует ли запрос маске пути?
 
