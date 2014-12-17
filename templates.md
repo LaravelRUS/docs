@@ -1,4 +1,4 @@
-git ac076e66b061e6837bf0097bb81ba451eefb1f81
+git db5ec86a24a8686be5c3dc9b8ef2085bd9447200
 
 ---
 
@@ -176,5 +176,5 @@ Blade позволяет создавать свои управляющие ст
 	{
 		$pattern = $compiler->createMatcher('datetime');
 
-		return preg_replace($pattern, '$1<?php echo $2->format('m/d/Y H:i'); ?>', $view);
+		return preg_replace($pattern, '$1<?php echo $2->format(\'m/d/Y H:i\'); ?>', $view);
 	});
