@@ -1,8 +1,8 @@
-git bd345ada60640991a56aed714cf4cb64501e3b71
+git e9d876cf2b530347fdd44bad2b00a7ffe1b75c86
 
 ---
 
-# Пагинация
+# Постраничный вывод данных (пагинация)
 
 - [Настройка](#configuration)
 - [Использование](#usage)
@@ -26,7 +26,11 @@ git bd345ada60640991a56aed714cf4cb64501e3b71
 
 	$users = DB::table('users')->paginate(15);
 
+> **Примечание:** Если вы используете `groupBy` в запросе, то встроенная пагинация Laravel будет работать неэффективно. В этом случае вам нужно сделать пагинацию вручную при помощи `Paginator::make`.
+
 #### Постраничный вывод запроса Eloquent
+
+	$allUsers = User::paginate(15);
 
 	$users = User::where('votes', '>', 100)->paginate(15);
 
@@ -51,9 +55,17 @@ git bd345ada60640991a56aed714cf4cb64501e3b71
 - `getFrom`
 - `getTo`
 
-Иногда вам может потребоваться создать объект пагинации вручную. Вы можете сделать это методом `Paginator::make`:
+#### Простая пагинация
+
+If you are only showing "Next" and "Previous" links in your pagination view, you have the option of using the `simplePaginate` method to perform a more efficient query. This is useful for larger datasets when you do not require the display of exact page numbers on your view:
+
+Если вам нужна простая навигация, состоящая только из кнопок "Вперед" и "Назад" (полезно на больших объемах данных, где нужны только последние данные), то воспользуйтесь методом `simplePaginate`. Это уменьшит количество запросов к БД.
+
+	$someUsers = User::where('votes', '>', 100)->simplePaginate(15);
 
 #### Создание пагинации вручную
+
+	Иногда вам может потребоваться создать объект пагинации вручную. Вы можете сделать это методом `Paginator::make`:
 
 	$paginator = Paginator::make($items, $totalItems, $perPage);
 
@@ -98,15 +110,15 @@ git bd345ada60640991a56aed714cf4cb64501e3b71
 
         public function getActivePageWrapper($text)
         {
-            return '<li class="current">'.$text.'</li>';
+            return '<li class="current"><a href="">'.$text.'</a></li>';
         }
 
         public function getDisabledTextWrapper($text)
         {
-            return '<li class="unavailable">'.$text.'</li>';
+            return '<li class="unavailable"><a href="">'.$text.'</a></li>';
         }
 
-        public function getPageLinkWrapper($url, $page)
+        public function getPageLinkWrapper($url, $page, $rel = null)
         {
             return '<li><a href="'.$url.'">'.$page.'</a></li>';
         }
