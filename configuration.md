@@ -165,5 +165,4 @@ Laravel поставляется вместе с файлом `public/.htaccess`
 		try_files $uri $uri/ /index.php?$query_string;
 	}
 
-
 Если вы используете [Homestead](/docs/master/homestead), то вам ничего делать не нужно, там всё это уже настроено.
