@@ -1,7 +1,11 @@
 git 76ea4e157780376ed63bede1d2188a8e31057190
 
 ---
-
+- Предисловие
+  - [Введение](/docs/4.1/introduction)
+  - [Быстрый старт](/docs/4.1/quick)
+  - [Описания релизов](/docs/4.1/releases)
+  - [Апгрейд](/docs/4.1/upgrade)
 - Первый взгляд
   - [Установка](/docs/4.1/installation)
   - [Настройка](/docs/4.1/configuration)
