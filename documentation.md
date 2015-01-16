@@ -1,7 +1,6 @@
 git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
 
 ---
-
 - Вступление
     - [Введение](/docs/master/introduction)
     - [Версии фреймворка](/docs/master/releases)
