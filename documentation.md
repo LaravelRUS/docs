@@ -1,13 +1,12 @@
 git 76ea4e157780376ed63bede1d2188a8e31057190
 
 ---
-- Предисловие
+- Вступление
   - [Введение](/docs/4.2/introduction)
   - [Быстрый старт](/docs/4.2/quick)
   - [Описания релизов](/docs/4.2/releases)
   - [Апгрейд](/docs/4.2/upgrade)
   - [Участие в разработке](/docs/4.2/contributions)
-
 - Первый взгляд
   - [Установка](/docs/4.2/installation)
   - [Настройка](/docs/4.2/configuration)
@@ -41,6 +40,9 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
   - [Начала](/docs/4.2/database)
   - [Query Builder](/docs/4.2/queries)
   - [Eloquent ORM](/docs/4.2/eloquent)
+  - [Конструктор таблиц](/docs/4.2/schema)
+  - [Миграции](/docs/4.2/migrations)
+  - [Redis](/docs/4.2/redis)
 - Artisan
   - [Обзор](/docs/4.2/artisan)
   - [Разработка команд](/docs/4.2/commands)
