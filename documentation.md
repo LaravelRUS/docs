@@ -10,6 +10,7 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
 - Первый взгляд
   - [Установка](/docs/4.2/installation)
   - [Настройка](/docs/4.2/configuration)
+  - [Homestead](/docs/4.2/homestead)
   - [Жизненный цикл запроса](/docs/4.2/lifecycle)
   - [Роутинг](/docs/4.2/routing)
   - [Вход](/docs/4.2/requests)
@@ -18,6 +19,7 @@ git 76ea4e157780376ed63bede1d2188a8e31057190
   - [Ошибки и логирование](/docs/4.2/errors)
 - Обо всем поподробнее
   - [Authentication](/docs/4.2/security)
+  - [Billing](/docs/4.2/billing)
   - [Cache](/docs/4.2/cache)
   - [Core Extension](/docs/4.2/extending)
   - [Events](/docs/4.2/events)
