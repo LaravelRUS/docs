@@ -1,8 +1,8 @@
-git 491d421199914ffc33be73bf6fb1b05668c5c450
+git e329f8f4dec6ca9d415112f011b2e5916867c6b0
 
 ---
 
-# Юнит-тесты
+# Тестирование
 
 - [Введение](#introduction)
 - [Написание и запуск тестов](#defining-and-running-tests)
@@ -48,9 +48,9 @@ Laravel построен с учётом того, что современная
 <a name="calling-routes-from-tests"></a>
 ## Обращение к URL
 
-Вы можете легко вызвать любой ваш URL методом `call`:
-
 #### Вызов URL из теста
+
+Вы можете легко вызвать любой ваш URL методом `call`:
 
 	$response = $this->call('GET', 'user/profile');
 
@@ -60,9 +60,9 @@ Laravel построен с учётом того, что современная
 
 	$this->assertEquals('Hello World', $response->getContent());
 
-Вы также можете вызвать из теста любой контроллер.
-
 #### Вызов контроллера из теста
+
+Вы также можете вызвать из теста любой контроллер.
 
 	$response = $this->action('GET', 'HomeController@index');
 
