@@ -1,4 +1,4 @@
-git ac076e66b061e6837bf0097bb81ba451eefb1f81
+git f71e28640ff4eaa49134b44a36bd7c4541af9252
 
 ---
 
@@ -72,7 +72,7 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 Иногда - например, когда вы не уверены, что секция была определена - вам может понадобиться указать значение по умолчанию для директивы `@yield`. Вы можете передать его вторым аргументом:
 
-	@yield('section', 'Default Content');
+	@yield('section', 'Default Content')
 
 <a name="other-blade-control-structures"></a>
 ## Другие директивы Blade
@@ -131,6 +131,12 @@ Blade - простой, но мощный шаблонизатор, входящ
 		<p>Это пользователь{{ $user->id }}</p>
 	@endforeach
 
+	@forelse($users as $user)
+	  	<li>{{ $user->name }}</li>
+	@empty
+	  	<p>Нет пользователей</p>
+	@endforelse
+
 	@while (true)
 		<p>Это будет длиться вечно.</p>
 	@endwhile
@@ -145,7 +151,7 @@ Blade - простой, но мощный шаблонизатор, входящ
 	
 #### Перезапись секций
 
-По умолчанию, содержимое новой секции добавляется в конец содержимого старой (перекрытой) секции. Для полной перезаписи можно использовать директиву  `overwrite`:
+Для того, чтобы переписать секцию целиком, используйте директиву `overwrite`:
 	
 	@extends('list.item.container')
 
@@ -157,7 +163,7 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 	@lang('language.line')
 
-	@choice('language.line', 1);
+	@choice('language.line', 1)
 
 #### Комментарии
 
@@ -176,5 +182,5 @@ Blade позволяет создавать свои управляющие ст
 	{
 		$pattern = $compiler->createMatcher('datetime');
 
-		return preg_replace($pattern, '$1<?php echo $2->format('m/d/Y H:i'); ?>', $view);
+		return preg_replace($pattern, '$1<?php echo $2->format(\'m/d/Y H:i\'); ?>', $view);
 	});
