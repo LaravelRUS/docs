@@ -42,10 +42,6 @@ git 1a55def4d49605ea2953796b7fef1792bc106a18
 
 	$value = Session::get('key', function() { return 'дефолтное значение'; });
 
-#### Чтение переменной и удаление её
-
-	$value = Session::pull('key', 'дефолтное значение');
-
 #### Получение всех переменных сессии
 
 	$data = Session::all();
