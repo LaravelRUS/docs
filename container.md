@@ -17,46 +17,46 @@ git 5812df5ca636f02c5b1581532355cdd6f247041e
 
 Service Container (сервис-контейнер, ранее IoC-контейнер) - это мощное средство для управлением зависимостями классов. В современном мире веб-разработки есть такой модный термин - Dependency Injection, "внедрение зависимостей", он означает внедрение неких классов в создаваемый класс через конструктор или метод-сеттер. Создаваемый класс использует эти классы в своей работе. Сервис-контейнер реализует как раз этот функционал.
 
-Несколько упрощая, можно сказать так: когда фреймворку нужно создать класс, он применяет не конструкцию `new SomeClass(new SomeService())` , а `App::make('SomeClass')`, предварительно зарегистрировав функцию, которая создает класс `SomeClass` и все классы, которые `SomeClass` принимает в качестве аргументов конструктора.
+Несколько упрощая, можно сказать так: когда фреймворку нужно создать класс, он применяет не конструкцию `new SomeClass(new SomeService())` , а `App::make("SomeClass")`, предварительно зарегистрировав функцию, которая создает класс `SomeClass` и все классы, которые `SomeClass` принимает в качестве аргументов конструктора.
 
 Вот простой пример:
-```php
-<?php namespace App\Users;
 
-use App\User;
-use Illuminate\Contracts\Mail\Mailer;
+    <?php namespace App\Users;
 
-class Registrar {
+    use App\User;
+    use Illuminate\Contracts\Mail\Mailer;
 
-	/**
-	 * The mailer implementation.
-	 */
-	protected $mailer;
+    class Registrar {
 
-	/**
-	 * Create a new user registrar instance.
-	 *
-	 * @param  Mailer  $mailer
-	 * @return void
-	 */
-	public function __construct(Mailer $mailer)
-	{
-		$this->mailer = $mailer;
-	}
+        /**
+         * The mailer implementation.
+         */
+        protected $mailer;
 
-	/**
-	 * Register a new user with the application.
-	 *
-	 * @param  array  $input
-	 * @return User
-	 */
-	public function registerNewUser(array $input)
-	{
-		//
-	}
+        /**
+         * Create a new user registrar instance.
+         *
+         * @param  Mailer  $mailer
+         * @return void
+         */
+        public function __construct(Mailer $mailer)
+        {
+            $this->mailer = $mailer;
+        }
 
-}
-```
+        /**
+         * Register a new user with the application.
+         *
+         * @param  array  $input
+         * @return User
+         */
+        public function registerNewUser(array $input)
+        {
+            //
+        }
+
+    }
+
 В этом примере нам нужно в классе `Registrar`, который регистрирует пользователей, написать отправку мейла пользователю для подтверждения регистрации. Так как мы хотим соблюдать первый принцип SOLID - ["Принцип разделения ответственности"](http://habrahabr.ru/post/208442/), мы не пишем в нем код общения с SMTP-сервером и т.п., а встраиваем, инжектим (inject) в него класс отправки мейлов. Преимущество такого подхода - не изменяя код класса `Registrar` мы можем легко сменить способ отправки почты, например, с сервиса Mailchip на Mailjet или другой, и для тестирования можем вообще подать класс-заглушку.
 
 Сервис-контейнер - очень важная вещь, без него невозможно построить действительно большое приложение Laravel. Также глубокое понимание его работы необходимо, если вы хотите изменять код ядра Laravel и предлагать новые фичи.
@@ -77,239 +77,237 @@ TODO дополнить примерами
 
 Рассмотрим первый способ.
 Коллбэк регистрируется в сервис-контейнере под неким строковым ключем (в данном случае `FooBar`) - обычно для этого используют название класса, который будет возвращаться этим коллбэком:
-```php
-$this->app->bind('FooBar', function($app)
-{
-    return new FooBar($app['SomethingElse']);
-});
-```
+
+    $this->app->bind('FooBar', function($app)
+    {
+        return new FooBar($app['SomethingElse']);
+    });
+
 Когда из контейнера будет запрошен объект по ключу `FooBar`, контейнер создаст объект класса FooBar, в констркутор коотрого в качестве аргумента добавит объект из контейнера с ключом `SomethingElse`.
 
 #### Регистрация класса-синглтона
 
 Иногда вам нужно, чтобы объект создавался один раз, а все остальные разы, когда вы запрашиваете его, вам возвращался тот же созданный экземпляр. В этом случае вместо `bind` используйте `singletone`:
-```php
-$this->app->singleton('FooBar', function($app)
-{
-    return new FooBar($app['SomethingElse']);
-});
-```
+
+    $this->app->singleton('FooBar', function($app)
+    {
+        return new FooBar($app['SomethingElse']);
+    });
 
 #### Добавление существующего экземпляра класса в контейнер
 
 Вы можете добавить в контейнер существующий экземпляр класса:
-```php
-$fooBar = new FooBar(new SomethingElse);
 
-$this->app->instance('FooBar', $fooBar);
-```
+    $fooBar = new FooBar(new SomethingElse);
+
+    $this->app->instance('FooBar', $fooBar);
 
 ### Получение из контейнера
 
 Есть несколько способов получить (resolve) содержимое контейнера. Во-первых, вы можете использовать метод `make()`:
-```php
-$fooBar = $this->app->make('FooBar');
-```
+
+    $fooBar = $this->app->make('FooBar');
+
 Во-вторых, вы можете обратиться к контейнеру как к массиву:
-```php
-$fooBar = $this->app['FooBar'];
-```
+
+    $fooBar = $this->app['FooBar'];
+
 И, наконец, в-третьих (и в главных) вы можете явно указать тип аргумента в конструкторе класса, который сам ресолвится (получается) из контейнера (в примере ниже это `UserInterface`), и фреймворк возьмет его из контейнера сам (в данном случае по ключу `'UserInterface'`). 
-```php
-<?php namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-use App\Users\Repository as UserRepository;
+    <?php namespace App\Http\Controllers;
 
-class UserController extends Controller {
+    use Illuminate\Routing\Controller;
+    use App\Users\Repository as UserRepository;
 
-    /**
-     * The user repository instance.
-     */
-    protected $users;
+    class UserController extends Controller {
 
-    /**
-     * Create a new controller instance.
-     *
-     * @param  UserRepository  $users
-     * @return void
-     */
-    public function __construct(UserRepository $users)
-    {
-        $this->users = $users;
+        /**
+         * The user repository instance.
+         */
+        protected $users;
+
+        /**
+         * Create a new controller instance.
+         *
+         * @param  UserRepository  $users
+         * @return void
+         */
+        public function __construct(UserRepository $users)
+        {
+            $this->users = $users;
+        }
+
+        /**
+         * Show the user with the given ID.
+         *
+         * @param  int  $id
+         * @return Response
+         */
+        public function show($id)
+        {
+            //
+        }
+
     }
 
-    /**
-     * Show the user with the given ID.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-}
-```
 <a name="binding-interfaces-to-implementations"></a>
 ## Связывание интерфейса с реализацией
 
 ### Иньекции зависимостей
 
 Особенно интересная и мощная возможность сервис-контейнера - связывать интерфейсы с различными их реализациями. Например, наше приложение использует [Pusher](https://pusher.com/) для отправки и приема реалтаймовых сообщений. Если мы используем Pusher PHP SDK, мы должны инжектить экземпляр класса `PusherClient` в наш класс:
-```php
-<?php namespace App\Orders;
 
-use Pusher\Client as PusherClient;
-use App\Orders\Commands\CreateOrder;
+    <?php namespace App\Orders;
 
-class CreateOrderHandler {
+    use Pusher\Client as PusherClient;
+    use App\Orders\Commands\CreateOrder;
 
-    /**
-     * The Pusher SDK client instance.
-     */
-    protected $pusher;
+    class CreateOrderHandler {
 
-    /**
-     * Create a new order handler instance.
-     *
-     * @param  PusherClient  $pusher
-     * @return void
-     */
-    public function __construct(PusherClient $pusher)
-    {
-        $this->pusher = $pusher;
+        /**
+         * The Pusher SDK client instance.
+         */
+        protected $pusher;
+
+        /**
+         * Create a new order handler instance.
+         *
+         * @param  PusherClient  $pusher
+         * @return void
+         */
+        public function __construct(PusherClient $pusher)
+        {
+            $this->pusher = $pusher;
+        }
+
+        /**
+         * Execute the given command.
+         *
+         * @param  CreateOrder  $command
+         * @return void
+         */
+        public function execute(CreateOrder $command)
+        {
+            //
+        }
+
     }
 
-    /**
-     * Execute the given command.
-     *
-     * @param  CreateOrder  $command
-     * @return void
-     */
-    public function execute(CreateOrder $command)
-    {
-        //
-    }
-
-}
-```
 Все бы ничего, но наш код становится завязанным на конкретный сервис - Pusher. Если в дальнейшем мы заходим его сменить, или просто Pusher сменит названия методов в своем SDK, мы будем вынуждены менять код в нашем классе `CreateOrderHandler`.
 
 ### От класса к интерфейсу
 
 Для того, чтобы "изолировать" класс `CreateOrderHandler` от постоянно меняющегося внешнего мира, определим некий постоянный интерфейс, с реализациями которого наш класс будет теперь работать. 
-```php
-<?php namespace App\Contracts;
 
-interface EventPusher {
+    <?php namespace App\Contracts;
+
+    interface EventPusher {
+
+        /**
+         * Push a new event to all clients.
+         *
+         * @param  string  $event
+         * @param  array  $data
+         * @return void
+         */
+        public function push($event, array $data);
+
+    } 
+
+Когда мы создадим реализацию (implementation, имплементацию) этого интерфейса, `PusherEventPusher`, мы можем связать её с интерфейсом в методе `register()` сервис-провайдера:
+
+    $this->app->bind('App\Contracts\EventPusher', 'App\Services\PusherEventPusher');
+
+Здесь мы говорим фреймворку, что когда из контейнера будет запрошен `EventPusher`, вместо него отдавать реализацию этого интерфейса, `PusherEventPusher`. Теперь мы можем переписать наш конструктор класса `СreateOrderHandler` следующим образом:
 
     /**
-     * Push a new event to all clients.
+     * Create a new order handler instance.
      *
-     * @param  string  $event
-     * @param  array  $data
+     * @param  EventPusher  $pusher
      * @return void
      */
-    public function push($event, array $data);
+    public function __construct(EventPusher $pusher)
+    {
+        $this->pusher = $pusher;
+    }
 
-} 
-```
-Когда мы создадим реализацию (implementation, имплементацию) этого интерфейса, `PusherEventPusher`, мы можем связать её с интерфейсом в методе `register()` сервис-провайдера:
-```php
-$this->app->bind('App\Contracts\EventPusher', 'App\Services\PusherEventPusher');
-```
-Здесь мы говорим фреймворку, что когда из контейнера будет запрошен `EventPusher`, вместо него отдавать реализацию этого интерфейса, `PusherEventPusher`. Теперь мы можем переписать наш конструктор класса `СreateOrderHandler` следующим образом:
-```php
-/**
-* Create a new order handler instance.
-*
-* @param  EventPusher  $pusher
-* @return void
-*/
-public function __construct(EventPusher $pusher)
-{
-$this->pusher = $pusher;
-}
-```
 Теперь, с какой бы реализацией работы реалтаймовых сообщений мы би ни работали, изменять код в `CreateOrderHandler` нам не потребуется.
 
 <a name="contextual-binding"></a>
 ## Контекстное связывание
 
 Иногда у вас может быть несколько реализаций одного интерфейса и вы хотите включать (инжектить) их каждый в свой класс. Например, когда делается новый заказ, вам нужно отправлять сообщение в [PubNub](http://www.pubnub.com/) вместо Pusher. Вы можете сделать это следующим образом:
-```php
-$this->app->when('App\Orders\CreateOrderHandler')
-          ->needs('App\Contracts\EventPusher')
-          ->give('App\Services\PubNubEventPusher');
-```
+
+    $this->app->when('App\Orders\CreateOrderHandler')
+              ->needs('App\Contracts\EventPusher')
+              ->give('App\Services\PubNubEventPusher');
+
 <a name="tagging"></a>
 ## Тэгирование
 
 Иногда вам может потребоваться ресолвить реализации в определенной категории. Например, вы пишете сборщик отчетов, который принимает на вход массив различных реализаций интерфейса `Report`. Вы можете протэгировать их следующим образом:
-```php
-$this->app->bind('SpeedReport', function()
-{
-    //
-});
 
-$this->app->bind('MemoryReport', function()
-{
-    //
-});
+    $this->app->bind('SpeedReport', function()
+    {
+        //
+    });
 
-$this->app->tag(['SpeedReport', 'MemoryReport'], 'reports');
-```
+    $this->app->bind('MemoryReport', function()
+    {
+        //
+    });
+
+    $this->app->tag(['SpeedReport', 'MemoryReport'], 'reports');
+
 Теперь вы можете получить их все сразу по тэгу:
-```php
-$this->app->bind('ReportAggregator', function($app)
-{
-    return new ReportAggregator($app->tagged('reports'));
-});
-```
+
+    $this->app->bind('ReportAggregator', function($app)
+    {
+        return new ReportAggregator($app->tagged('reports'));
+    });
+
 <a name="practical-applications"></a>
 ## Использование на практике
 
 Laravel предлагает несколько возможностей использования сервис-контейнера для повышения гибкости и тестируемости вашего кода. Один их характерных примеров - реализация Dependency Injection в контроллерах. Laravel регистрирует все контроллеры в сервис-контейнере и поэтому при получении (resolve) класса контроллера из контейнера, автоматически ресолвятся все зависимости, указанные в аргументах конструктора и других методов контроллера.
-```php
-<?php namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-use App\Repositories\OrderRepository;
+    <?php namespace App\Http\Controllers;
 
-class OrdersController extends Controller {
+    use Illuminate\Routing\Controller;
+    use App\Repositories\OrderRepository;
 
-	/**
-	 * The order repository instance.
-	 */
-	protected $orders;
-	
-	/**
-	 * Create a controller instance.
-	 *
-	 * @param  OrderRepository  $orders
-	 * @return void
-	 */
-	public function __construct(OrderRepository $orders)
-	{
-		$this->orders = $orders;
-	}
-	
-	/**
-	 * Show all of the orders.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		$all = $this->orders->all();
-	
-		return view('orders', ['all' => $all]);
-	}
-	
-}
-```
+    class OrdersController extends Controller {
+
+        /**
+         * The order repository instance.
+         */
+        protected $orders;
+
+        /**
+         * Create a controller instance.
+         *
+         * @param  OrderRepository  $orders
+         * @return void
+         */
+        public function __construct(OrderRepository $orders)
+        {
+            $this->orders = $orders;
+        }
+
+        /**
+         * Show all of the orders.
+         *
+         * @return Response
+         */
+        public function index()
+        {
+            $all = $this->orders->all();
+
+            return view('orders', ['all' => $all]);
+        }
+
+    }
+
 В этом примере `OrderRepository` будет автоматически создан и подан в аргумент конструктору. Во время тестирования вы можете связать ключ `'OrderRepository'` с классом-заглушкой и абстрагироваться от слоя базы данных, протестировав только функционал самого класса `OrdersController`.
 
 #### Другие примеры
@@ -322,15 +320,15 @@ class OrdersController extends Controller {
 ### Регистрация события на извлечение объекта из контейнера
 
 Сервис-контейнер запускает событие каждый раз, когда объект извлекается из контейнера. Можно ловить все события, можно только те, которые привязыны к конкретному ключу.
-```php
-$this->app->resolvingAny(function($object, $app)
-{
-    //
-});
 
-$this->app->resolving('FooBar', function($fooBar, $app)
-{
-    //
-});
-```
+    $this->app->resolvingAny(function($object, $app)
+    {
+        //
+    });
+
+    $this->app->resolving('FooBar', function($fooBar, $app)
+    {
+        //
+    });
+
 Объект, получаемый из контейнера, передается в функцию-коллбэк.
