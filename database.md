@@ -1,4 +1,4 @@
-git 801b142e6585c227681550d730314fa71b135aad
+git a9970efe31e6ccc2b1f42d9ec1bcf943f824b0b6
 
 ---
 
@@ -46,21 +46,21 @@ Laravel делает процесс соединенеия с БД и выпол
 <a name="running-queries"></a>
 ## Выполнение запросов
 
-Как только вы настроили соединение с базой данных, вы можете выполнять запросы используя класс `DB`.
+Как только вы настроили соединение с базой данных, вы можете выполнять запросы используя фасад `DB`.
 
 #### Выполнение запроса SELECT
 
-	$results = DB::select('select * from users where id = ?', array(1));
+	$results = DB::select('select * from users where id = ?', [1]);
 
 Метод `select` всегда возвращает массив результатов.
 
 #### Выполнение запроса INSERT
 
-	DB::insert('insert into users (id, name) values (?, ?)', array(1, 'Dayle'));
+	DB::insert('insert into users (id, name) values (?, ?)', [1, 'Dayle']);
 
 #### Выполнение запроса UPDATE
 
-	DB::update('update users set votes = 100 where name = ?', array('John'));
+	DB::update('update users set votes = 100 where name = ?', ['John']);
 
 #### Выполнение запроса DELETE
 
@@ -88,7 +88,7 @@ Laravel делает процесс соединенеия с БД и выпол
 
 	DB::transaction(function()
 	{
-		DB::table('users')->update(array('votes' => 1));
+		DB::table('users')->update(['votes' => 1]);
 
 		DB::table('posts')->delete();
 	});
