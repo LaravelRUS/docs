@@ -6,8 +6,8 @@ git 4a83b82d8e8a6216ab0623aa4db9dd006bbead6b
 
 - [Введение](#introduction)
 - [Использование](#usage)
-- [Calling Commands Outside Of CLI](#calling-commands-outside-of-cli)
-- [Scheduling Artisan Commands](#scheduling-artisan-commands)
+- [Вызов команды из приложения](#calling-commands-outside-of-cli)
+- [Планировщик заданий](#scheduling-artisan-commands)
 
 <a name="introduction"></a>
 ## Введение
@@ -63,7 +63,7 @@ Artisan - название интерфейса командной строки,
 	});
 
 <a name="scheduling-artisan-commands"></a>
-## Scheduling Artisan Commands
+## Планировщик заданий
 
 Раньше разработчикам приходилось добавлять задание в Cron для каждой консольной команды и это была большая головная боль. Давайте сделаем нашу жизнь проще.
 Планировщик заданий Laravel позволяет гибко и просто составлять расписание запуска ваших команд из самого приложения, и для этго потребуется добавить всего одно задание в Cron.
@@ -113,7 +113,7 @@ Artisan - название интерфейса командной строки,
 
 	$schedule->command('foo')->dailyAt('15:00');
 
-#### Выполннеие два раза в день
+#### Выполнение два раза в день
 
 	$schedule->command('foo')->twiceDaily();
 
@@ -132,7 +132,7 @@ Artisan - название интерфейса командной строки,
 
 	$schedule->command('foo')->monthly();
 
-#### Выполнение только в определённой среде исполнения
+#### Выполнение задания только в определённой среде выполнения
 
 	$schedule->command('foo')->monthly()->environments('production');
 
