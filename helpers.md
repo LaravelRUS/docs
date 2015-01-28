@@ -1,4 +1,4 @@
-git cc81f0f2b676134813426d22763dbb4af01ee1a9
+git ab97465c61526178e582d038784455d121862004
 
 ---
 
@@ -98,8 +98,10 @@ git cc81f0f2b676134813426d22763dbb4af01ee1a9
 	$array = array('names' => array('joe' => array('programmer')));
 
 	$value = array_get($array, 'names.joe');
+	
+	$value = array_get($array, 'names.john', 'default');
 
-> **Примечание:** 
+> **Примечание:** Нужен `array_get` для объектов? Используйте `object_get`.
 
 ### array_only
 
