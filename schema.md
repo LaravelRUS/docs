@@ -1,4 +1,4 @@
-git 58fd8036b50635412c299a32772bdab07bc9294f
+git 043025da5afcab0f811be66a0cb3ceabf86ea1aa
 
 ---
 
@@ -7,6 +7,7 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 - [Введение](#introduction)
 - [Создание и удаление таблиц](#creating-and-dropping-tables)
 - [Добавление полей](#adding-columns)
+- [Изменение полей](#changing-columns)
 - [Переименование полей](#renaming-columns)
 - [Удаление полей](#dropping-columns)
 - [Проверка на существование](#checking-existence)
@@ -72,11 +73,12 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 `$table->date('created_at');`  |  Поле DATE
 `$table->dateTime('created_at');`  |  Поле DATETIME
 `$table->decimal('amount', 5, 2);`  |  Поле DECIMAL с параметрами "точность" (общее количество значащих десятичных знаков) и "масштаб" (количество десятичных знаков после запятой)
-`$table->double('column', 15, 8);`  |  Поле DOUBLE 
+`$table->double('column', 15, 8);`  |  Поле DOUBLE (параметры аналогичны полю DECIMAL)
 `$table->enum('choices', array('foo', 'bar'));` | Поле ENUM
 `$table->float('amount');`  |  Поле FLOAT
 `$table->increments('id');`  |  Первичный последовательный (autoincrement) ключ 
 `$table->integer('votes');`  |  Поле INTEGER
+`$table->json('options');`  |  Текстовое поле для хранения JSON-данных
 `$table->longText('description');`  |  Поле LONGTEXT
 `$table->mediumInteger('numbers');`  |  Поле MEDIUMINT
 `$table->mediumText('description');`  |  Поле MEDIUMTEXT
@@ -102,6 +104,23 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 
 	$table->string('name')->after('email');
 
+<a name="changing-columns"></a>
+## Изменение полей
+
+Иногда возникает необходимость изменить существующее поле. К примеру, увеличить длину строкового поля. В этом поможет метод `change`. Давайте увеличим длину поля `name` до 50 символов:
+
+	Schema::table('users', function($table)
+	{
+		$table->string('name', 50)->change();
+	});
+
+Так же можно указать, может ли поле быть NULL:
+
+	Schema::table('users', function($table)
+	{
+		$table->string('name', 50)->nullable()->change();
+	});
+	
 <a name="renaming-columns"></a>
 ## Переименование полей
 
@@ -138,7 +157,7 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 
 #### Проверка существования таблицы
 
-Вы можете легко проверить существование таблицы или поля с помощью методов  `hasTable` и `hasColumn`.
+Вы можете легко проверить существование таблицы или поля с помощью методов `hasTable` и `hasColumn`.
 
 	if (Schema::hasTable('users'))
 	{
@@ -155,7 +174,7 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 <a name="adding-indexes"></a>
 ## Добавление индексов
 
-Есть два способа добавлять индексы: можно определять их во время определения полей, либо добавлять отдельно:
+Есть два способа добавлять индексы: вместе с определением полей, либо отдельно:
 
 	$table->string('email')->unique();
 
@@ -173,7 +192,7 @@ git 58fd8036b50635412c299a32772bdab07bc9294f
 <a name="foreign-keys"></a>
 ## Внешние ключи
 
-Laravel поддерживает добавление внешних ключей (foreign key constraints) для ваших таблиц:
+Laravel поддерживает добавление внешних ключей (foreign key constraints) для таблиц:
 
 	$table->integer('user_id')->unsigned();
 	$table->foreign('user_id')->references('id')->on('users');
