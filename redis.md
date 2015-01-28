@@ -1,4 +1,4 @@
-git 801b142e6585c227681550d730314fa71b135aad
+git a855cd636be488801de0ea4e2aa69902aa208082
 
 ---
 
@@ -14,6 +14,8 @@ git 801b142e6585c227681550d730314fa71b135aad
 
 [Redis](http://redis.io) - продвинутое хранилище пар ключ/значение. Его часто называют сервисом структур данных, так как ключи могут содержать [строки](http://redis.io/topics/data-types#strings), [хэши](http://redis.io/topics/data-types#hashes), [списки](http://redis.io/topics/data-types#lists), [наборы](http://redis.io/topics/data-types#sets), and [сортированные наборы](http://redis.io/topics/data-types#sorted-sets).
 
+Прежде чем использовать Redis, необходимо установить пакет `predis/predis` версии `~1.0` через Composer.
+
 > **Внимание:** Если у вас установлено расширение Redis через PECL, вам нужно переименовать псевдоним в файле `config/app.php`.
 
 <a name="configuration"></a>
@@ -21,13 +23,13 @@ git 801b142e6585c227681550d730314fa71b135aad
 
 Настройки вашего подключения к Redis хранятся в файле `app/config/database.php`. В нём вы найдёте массив `redis`, содержащий список серверов, используемых приложением:
 
-	'redis' => array(
+	'redis' => [
 
 		'cluster' => true,
 
-		'default' => array('host' => '127.0.0.1', 'port' => 6379),
+		'default' => ['host' => '127.0.0.1', 'port' => 6379],
 
-	),
+	],
 
 Если у вас Redis установлен на других портах, или есть несколько redis-серверов, дайте имя каждому подключению к Redis и укажите серверные хост и порт.
 
