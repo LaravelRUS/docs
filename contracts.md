@@ -18,12 +18,12 @@ git 11619ec101e66d1feabbc923fda58ce8b5daf763
 Каждый контракт имеет свою реализацию (implementation) во фреймворке. Например, есть реализация `Queue` с различными драйверами
 очередей и реализация `Mailer` с использованием [SwiftMailer](http://swiftmailer.org/).
 
-Для удобства, контракты находятся в отдельном репозитории на гитхабе - https://github.com/illuminate/contracts . 
+Для удобства, контракты находятся в отдельном репозитории на гитхабе - https://github.com/illuminate/contracts. 
 
 <a name="why-contracts"></a>
 ## Зачем нужны контракты?
 
-Вы можете спросить - а для чего нужны контракты ? Зачем вообще нужны интерфейсы ? 
+Вы можете спросить - а для чего нужны контракты? Зачем вообще нужны интерфейсы? 
 
 Ответ - слабая связность и упрощение кода.
 
@@ -114,8 +114,8 @@ git 11619ec101e66d1feabbc923fda58ce8b5daf763
 
 Контракт  |  Фасад Laravel 4.x 
 ------------- | -------------
-[Illuminate\Contracts\Auth\Пгфкв](https://github.com/illuminate/contracts/blob/master/Auth/Guard.php)  |  Auth
-[Illuminate\Contracts\Auth\PasswordBroker](https://github.com/illuminate/contracts/blob/master/Auth/PasswordBroker.php)  |  Password
+[Illuminate\Contracts\Auth\Пгфкв](https://github.com/illuminate/contracts/blob/master/Auth/Guard.php) | Auth
+[Illuminate\Contracts\Auth\PasswordBroker](https://github.com/illuminate/contracts/blob/master/Auth/PasswordBroker.php) | Password
 [Illuminate\Contracts\Cache\Repository](https://github.com/illuminate/contracts/blob/master/Cache/Repository.php) | Cache
 [Illuminate\Contracts\Cache\Factory](https://github.com/illuminate/contracts/blob/master/Cache/Factory.php) | Cache::driver()
 [Illuminate\Contracts\Config\Repository](https://github.com/illuminate/contracts/blob/master/Config/Repository.php) | Config
@@ -124,7 +124,7 @@ git 11619ec101e66d1feabbc923fda58ce8b5daf763
 [Illuminate\Contracts\Cookie\QueueingFactory](https://github.com/illuminate/contracts/blob/master/Cookie/QueueingFactory.php) | Cookie::queue()
 [Illuminate\Contracts\Encryption\Encrypter](https://github.com/illuminate/contracts/blob/master/Encryption/Encrypter.php) | Crypt
 [Illuminate\Contracts\Events\Dispatcher](https://github.com/illuminate/contracts/blob/master/Events/Dispatcher.php) | Event
-[Illuminate\Contracts\Filesystem\Cloud](https://github.com/illuminate/contracts/blob/master/Filesystem/Cloud.php) | &nbsp;
+[Illuminate\Contracts\Filesystem\Cloud](https://github.com/illuminate/contracts/blob/master/Filesystem/Cloud.php) |  &nbsp;
 [Illuminate\Contracts\Filesystem\Factory](https://github.com/illuminate/contracts/blob/master/Filesystem/Factory.php) | File
 [Illuminate\Contracts\Filesystem\Filesystem](https://github.com/illuminate/contracts/blob/master/Filesystem/Filesystem.php) | File
 [Illuminate\Contracts\Foundation\Application](https://github.com/illuminate/contracts/blob/master/Foundation/Application.php) | App
