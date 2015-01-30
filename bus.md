@@ -7,7 +7,7 @@ git ac43b591de226936a8f15b115d7827584780952f
 - [Введение](#introduction)
 - [Cоздание команды](#creating-commands)
 - [Выполнение команды](#dispatching-commands)
-- [Команды в очереди](#queued-commands)
+- [Запуск команды в фоне](#queued-commands)
 
 <a name="introduction"></a>
 ## Введение
@@ -26,7 +26,6 @@ git ac43b591de226936a8f15b115d7827584780952f
 Создаем команду при помощи artisan-команды `make:command`:
 
 	php artisan make:command PurchasePodcast
-
 
 Созданный этой командой класс помещается в папку `app/Commands`. По умолчанию команда содержит два метода - конструктор и метод `handle`. При помощи конструктора вы можете добавить нужные зависимости в класс команды, а метод `handle` собственно исполняет команду. Например:
 
@@ -74,11 +73,7 @@ git ac43b591de226936a8f15b115d7827584780952f
 <a name="dispatching-commands"></a>
 ## Выполнение команд
 
-So, once we have created a command, how do we dispatch it? Of course, we could call the `handle` method directly; however, dispatching the command through the Laravel "command bus" has several advantages which we will discuss later.
-
 Мы создали команду, как теперь запустить её ? Конечно, мы можем выполнить метод `handle` нашего класса, однако лучше запускать его через командную шину Laravel. О преимуществах такого подхода будет рассказано ниже.
-
-If you glance at your application's base controller, you will see the `DispatchesCommands` trait. This trait allows us to call the `dispatch` method from any of our controllers. For example:
 
 Если вы взглянете на базовый контроллер вашего приложения, который расширяют ваши собственные контроллеры, вы увидите там трейт `DispatchesCommands`. Этот трейт позволяет запускать команды при помощи метода `dispatch`. Например:
 
@@ -112,9 +107,7 @@ If you glance at your application's base controller, you will see the `Dispatche
 	]);
 
 <a name="queued-commands"></a>
-## Команды в очереди
-
-The command bus is not just for synchronous jobs that run during the current request cycle, but also serves as the primary way to build queued jobs in Laravel. So, how do we instruct command bus to queue our job for background processing instead of running it synchronously? It's easy. Firstly, when generating a new command, just add the `--queued` flag to the command:
+## Запуск команды в фоне
 
 Командная шина может применяться не только для немедленного запуска задач в текущем запросе, но и помещать команды в очередь для того, чтобы запустить их в отдельном процессе. Таким образом, командная шина может быть основным инструментом для работы с очередями. 
 
@@ -122,11 +115,7 @@ The command bus is not just for synchronous jobs that run during the current req
 
 	php artisan make:command PurchasePodcast --queued
 
-As you will see, this adds a few more features to the command, namely the `Illuminate\Contracts\Queue\ShouldBeQueued` interface and the `SerializesModels` trait. These instruct the command bus to queue the command, as well as gracefully serialize and deserialize any Eloquent models your command stores as properties.
-
 Сгенеренный класс будет наследовать интерфейс `Illuminate\Contracts\Queue\ShouldBeQueued` и иметь трейт `SerializesModels`. Этот функционал позволит команде добавляться в очередь для последующего запуска слушателем очереди, а также добавит возможность сериализовать и десериализовать Eloquent-модели. 
-
-If you would like to convert an existing command into a queued command, simply implement the `Illuminate\Contracts\Queue\ShouldBeQueued` interface on the class manually. It contains no methods, and merely serves as a "marker interface" for the dispatcher.
 
 Если у вас уже есть сгенеренная команда и вы хотите сделать её работающей в фоне, просто вручную добавьте `implements Illuminate\Contracts\Queue\ShouldBeQueued`. Этот интерфейс не содержит обязательных методов и является просто индикатором для командной шины. После этого метод `dispatch` вместо того, чтобы запустить команду, поместит её в очередь для последующего запуска в фоне.
 
