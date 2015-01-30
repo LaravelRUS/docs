@@ -1,7 +1,199 @@
-git 74f37ad6fc53aac7df649435a91a645c337d15cf
+git 63a1e614e4f483d475902fe63dbf8e61d25229d8
 
 ---
 
-# Views (ex Response)
+# Views
 
-Перевод ожидается.
+- [Основы использования](#views)
+- [Композеры](#view-composers)
+
+<a name="basic-usage"></a>
+## Основы использования
+
+Views (представления, отображения) обычно содержат HTML-код вашего приложения и представляют собой удобный способ разделения бизнес-логики и логики отображения информации. Отображения хранятся в папке `resources/views`.
+
+Простое отображение выглядит примерно так:
+
+	<!-- resources/views/greeting.php -->
+
+	<html>
+		<body>
+			<h1>Hello, <?php echo $name; ?></h1>
+		</body>
+	</html>
+
+Из данного отображения можно сформировать ответ в браузер примерно так:
+
+	Route::get('/', function()
+	{
+		return view('greeting', ['name' => 'James']);
+	});	
+
+Как вы можете видеть, первый аргумент хелпера `view` - имя файла отображения в папке `resources/views`, а второй - данные, которые будут переданы в отображение.
+
+Конечно, вы можете делать поддиректории в `resources/views`. Например, если ваше отображение находится в файле `resources/views/admin/profile.php` , то вызов хэлпера быдет выглядеть так:
+
+	return view('admin.profile', $data); 
+
+Или так: 
+
+	return view('admin/profile', $data);	
+
+#### Передача данных в отображение
+
+Следующие примеры делают доступным в отображении переменную `$name` и присваивают ей значение 'Victoria':
+
+	// используя with()
+	$view = view('greeting')->with('name', 'Victoria');
+
+	// используя "магический" метод 
+	$view = view('greeting')->withName('Victoria');	
+
+	// при помощи второго параметра хэлпера
+	$view = view('greetings', ['name' => 'Victoria']);
+
+#### Передача данных во все отображения
+
+Иногда вам нужно передать данные во все отображения (например, это может быть залогиненый пользователь). Вы можете сделать это несколькими путями: при помощи хэлпера view(), используя `Illuminate\Contracts\View\Factory` [contract](/docs/master/contracts) или при помощи общего шаблона (wildcard) композера.
+
+При помощи хэлпера это можно сделать вот так:
+
+	view()->share('data', [1, 2, 3]);
+
+Или, если вы хотите использовать фасад, как в Laravel 4.x:
+ 
+	View::share('data', [1, 2, 3]);
+
+Этот код вы можете положить в метод `boot()` сервис-провайдера - или общего сервис-провайдера приложения `AppServiceProvider` или своего собственного.
+
+> **Примечание:** Когда хэлпер `view()` вызывается без аргументов, он возвращает имплементацию контракта `Illuminate\Contracts\View\Factory`
+
+#### Определение наличия представления
+
+Чтобы определить, есть ли заданный файл представления на диске, используйте метод `exist()`
+
+	if (view()->exists('emails.customer'))
+	{
+		//
+	}
+
+#### Получение представления по полному пути 
+
+Вы можете взять файл представления по полному пути до него в файловой системе:
+
+	return view()->file($pathToFile);
+
+<a name="view-composers"></a>
+## Композеры
+
+Композеры (view composers) - функции-замыкания или методы класса, которые вызываются, когда представление рендерится в строку. Если у вас есть данные, которые вы хотите привязать к представлению при каждом его рендеринге, то композеры помогут вам выделить такую логику в отдельное место. 
+
+### Определение композера
+
+Регистрировать композеры можно внутри [сервис-провайдера](/docs/master/providers). Мы будем использовать фасад `View` для того, чтобы получить доступ к имплементации контракта `Illuminate\Contracts\View\Factory`:
+
+	<?php namespace App\Providers;
+
+	use View;
+	use Illuminate\Support\ServiceProvider;
+
+	class ComposerServiceProvider extends ServiceProvider {
+
+		/**
+		 * Register bindings in the container.
+		 *
+		 * @return void
+		 */
+		public function boot()
+		{
+			// Если композер реализуется при помощи класса:
+			View::composer('profile', 'App\Http\ViewComposers\ProfileComposer');
+
+			// Если композер реализуется в функции-замыкании:
+			View::composer('dashboard', function()
+			{
+
+			});
+		}
+
+	}
+
+> **Примечание:** В Laravel нет папки, в которой должны находиться классы композеров, вы можете создать её сами там, где вам будет удобно. Например, это может быть `App\Http\Composers`.
+
+Допустим, мы хотим, чтобы композер `profile` был реализован в классе (см. код выше). Метод `ProfileComposer@compose` будет вызываться каждый раз перед тем, как представление `profile` будет рендерится в строку.
+Давайте определим класс композера:
+
+
+	<?php namespace App\Http\Composers;
+
+	use Illuminate\Contracts\View\View;
+	use Illuminate\Users\Repository as UserRepository;
+
+	class ProfileComposer {
+
+		/**
+		 * The user repository implementation.
+		 *
+		 * @var UserRepository
+		 */
+		protected $users;
+
+		/**
+		 * Create a new profile composer.
+		 *
+		 * @param  UserRepository  $users
+		 * @return void
+		 */
+		public function __construct(UserRepository $users)
+		{
+			// Dependencies automatically resolved by service container...
+			$this->users = $users;
+		}
+
+		/**
+		 * Bind data to the view.
+		 *
+		 * @param  View  $view
+		 * @return void
+		 */
+		public function compose(View $view)
+		{
+			$view->with('count', $this->users->count());
+		}
+
+	}
+
+Метод `compose` должен получать в качестве аргумента инстанс `Illuminate\Contracts\View\View`. Для передачи переменных в представление используйте метод `with()`.
+
+> **Примечание:** Все композеры берутся из [сервис-контейнера](/docs/master/container), поэтому вы можете указать необходимые зависимости в конструкторе композера - они будут автоматически поданы ему.
+
+#### Wildcards (шаблоны) имен представлений композеров
+
+В названии представлений можно использовать wildcards. Например, вот так можно назначить композер для всех представлений:
+
+	View::composer('*', function()
+	{
+		//
+	});
+
+#### Назначение композера для нескольких представлений
+
+Вместо одного имени представления вы можете использовать массив имен:
+
+	View::composer(['profile', 'dashboard'], 'App\Http\ViewComposers\MyViewComposer');
+
+#### Регистрация нескольких композеров
+
+Вы можете использовать метод `composers` чтобы зарегистрировать несколько композеров одновременно:	
+
+	View::composers([
+		'App\Http\ViewComposers\AdminComposer' => ['admin.index', 'admin.profile'],
+		'App\Http\ViewComposers\UserComposer' => 'user',
+		'App\Http\ViewComposers\ProductComposer' => 'product'
+	]);
+
+### Криейтор (view creators)
+
+Криейторы представлений работают почти так же, как композеры , но вызываются сразу после создания объекта представления, а не во время его рендеринга в строку. Для регистрации используйте метод `creator`:
+
+	View::creator('profile', 'App\Http\ViewCreators\ProfileCreator');	
