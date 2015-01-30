@@ -1,4 +1,4 @@
-git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
+git 278dc5e75a7a45d268c2745a11f12425a9911c9c
 
 ---
 - Вступление
@@ -10,12 +10,6 @@ git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
     - [Установка](/docs/master/installation)
     - [Настройка](/docs/master/configuration)
     - [Homestead](/docs/master/homestead)
-- Основы 
-    - [Service Providers](/docs/master/providers)
-    - [Service Container](/docs/master/container)
-    - [Contracts](/docs/master/contracts)
-    - [Жизненный цикл запроса](/docs/master/lifecycle)
-    - [Структура приложения](/docs/master/structure)
 - HTTP-слой
     - [Routing](/docs/master/routing)
     - [Middleware](/docs/master/middleware)
@@ -23,16 +17,24 @@ git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
     - [Requests](/docs/master/requests)
     - [Responses](/docs/master/responses)
     - [Views](/docs/master/views)
+- Архитектура фреймворка
+    - [Service Providers](/docs/master/providers)
+    - [Service Container](/docs/master/container)
+    - [Контракты](/docs/master/contracts)
+    - [Фасады](/docs/master/facades)
+    - [Жизненный цикл запроса](/docs/master/lifecycle)
+    - [Структура приложения](/docs/master/structure)    
 - Сервисы
     - [Authentication](/docs/master/authentication)
     - [Billing](/docs/master/billing)
     - [Cache](/docs/master/cache)
-    - [Configuration](/docs/master/configuration)
+    - [Collections](/docs/master/collections)
+    - [Command Bus](/docs/master/bus)
     - [Расширение ядра](/docs/master/extending)
     - [Encryption](/docs/master/encryption)
     - [Ошибки и логирование](/docs/master/errors)
     - [Events](/docs/master/events)
-    - [Facades](/docs/master/facades)
+    - [Filesystem / Cloud Storage](/docs/master/filesystem)
     - [Hashing](/docs/master/hashing)
     - [Helpers](/docs/master/helpers)
     - [Локализация](/docs/master/localization)
@@ -42,7 +44,7 @@ git 7e8dae6c8c866e4bf9e5435093e3c190500a93bb
     - [Queues](/docs/master/queues)
     - [Session](/docs/master/session)
     - [Templates](/docs/master/templates)
-    - [Unit Testing](/docs/master/testing)
+    - [Тестирование](/docs/master/testing)
     - [Validation](/docs/master/validation)
 - База данных
     - [Basic Usage](/docs/master/database)
