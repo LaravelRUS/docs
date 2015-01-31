@@ -43,7 +43,7 @@ git 278dc5e75a7a45d268c2745a11f12425a9911c9c
     - [Pagination](/docs/master/pagination)
     - [Queues](/docs/master/queues)
     - [Session](/docs/master/session)
-    - [Templates](/docs/master/templates)
+    - [Шаблонизатор Blade](/docs/master/templates)
     - [Тестирование](/docs/master/testing)
     - [Validation](/docs/master/validation)
 - База данных
