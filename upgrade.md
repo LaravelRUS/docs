@@ -1,4 +1,4 @@
-git 07431a1c1064c05eeb7e54f6536e28e6604a9a25
+git ed4b8747fd20dc041fe4f3decb9f628f2376fb7f
 
 ---
 
@@ -13,54 +13,211 @@ git 07431a1c1064c05eeb7e54f6536e28e6604a9a25
 <a name="upgrade-5.0"></a>
 ## Обновление до 5.0 с 4.2
 
-### Быстрое обновление с использованием LegacyServiceProvider
+### Общие положения
 
-Laravel 5.0 представляет новую надежную структуру папок. Но если вы хотите обновить приложение до Laravel 5.0 сохраняя структуру Laravel 4.2, вы можете использовать `Illuminate\Foundation\Providers\LegacyStructureServiceProvider`. Чтобы выполнить обновление до Laravel 5.0 с помощью этого провайдера, вы должны сделать следующее:
+Общие рекомендации к переходу на Laravel 5.0 таковы - нужно создать новое приложение Laravel и скопировать в него классы и файлы из старого приложения Laravel 4.2, а именно контроллеры, роуты, Eloquent-модели, команды Artisan, статические файлы (css/js), отображения (views) и т.п. в новые места, по пути соответственно их изменив.
 
-**1.** Обновите зависимость в `composer.json`  от `laravel/framework` до версии `5.0.*`.
+Итак, [установите приложение Laravel 5.0](/docs/master/installation) в новую папку на своей локальной машине. Дальше мы рассмотрим процесс миграции поподробнее.
 
-**2.** Запустите `composer update --no-scripts`.
+### Зависимости Composer и пакеты
 
-**3.** Добавьте `Illuminate\Foundation\Providers\LegacyStructureServiceProvider` в массив `providers` в файле `app/config/app.php`.
+Don't forget to copy any additional Composer dependencies into your 5.0 application. This includes third-party code such as SDKs.
 
-**4.** Удалите `Illuminate\Session\CommandsServiceProvider`, `Illuminate\Routing\ControllerServiceProvider` и `Illuminate\Workbench\WorkbenchServiceProvider` из массива `providers` в файле `app/config/app.php`.
+Отредактируйте composer.json - добавьте туда зависимости и пакеты, которые использует ваше приложение. Убедитесь, что версии laravel-пакетов, которые вы используете, совместимы с Laravel 5.0.
 
-**5.** Добавьте слудующие пути в конец файла `bootstrap/paths.php`:
+После редактирование запустите `composer update`.
 
-	'commands' => __DIR__.'/../app/commands',
-	'config' => __DIR__.'/../app/config',
-	'controllers' => __DIR__.'/../app/controllers',
-	'database' => __DIR__.'/../app/database',
-	'filters' => __DIR__.'/../app/filters',
-	'lang' => __DIR__.'/../app/lang',
-	'providers' => __DIR__.'/../app/providers',
-	'requests' => __DIR__.'/../app/requests',
+### Неймспейсы
 
-После того, как эти изменения были сделаны, вы можете запустить ваше приложение. Тем не менее необходимо продолжить процедуру обновления.
+В отличие от Laravel 5.0, Laravel 4.x по умолчанию не использовал неймспейсы в контроллерах и моделях. Для упрощения перехода вы можете оставить эти классы в глобальном неймспейсе Laravel? отредактировав секцию `classmap` в `composer.json`.
 
-### Compile Configuration File
+### Настройка 
 
-Файл конфигурации `app/config/compile.php` теперь имеет следующий формат:
+#### Переменные среды выполнения
 
-	<?php
+Скопируйте `.env.example` в файл `.env`. Этот файл - эквивалент старого `.env.php`. Установите в нём ваши переменные среды выполнения из старого файла, и отредактируйте новые, как то APP_KEY (ключ шифрования приложения), APP_ENV (название среды выполнения - теперь она задается в `.env` файле), тип драйвера кэша и сессий. 
 
-	return [
+> **Примечание:** Название среды выполнения теперь задается не в привязке к имени машины как в Laravel 4.х, а в файле `.env` в параметре `APP_ENV`.
 
-		'files' => [
-			//
-		],
+[Документация по настройке среды выполнения](/docs/master/configuration#environment-configuration).
 
-		'providers' => [
-			//
-		],
+> **Примечание:** Вы должны создать корректный `.env` перед тем как разворачивать (deploy) ваше Laravel 5 приложение на продакшн (основном) сервере.
 
-	];
+#### Конфиги
 
-Новая опция `providers` позволяет перечислить сервис-провайдеры, которые возвращают массивы файлов от их метода `compiles`.
+Laravel 5.0 больше не использует систему разграничения конфигов для разных сред выполнения в различных папках (`app/config/{название_среды_выполнения}/`). Теперь все конфигурационные файлы находятся в папке `config`. Значения для конфигов вносятся в `.env` и читаются в конфигах конструкцией `env('key', 'default value')`. Для примера, посмотрите файл `config/database.php`.
 
-### Beanstalk Queuing
+Запомните, если вы добавляете ключ в `.env` файл, добавляйте его и в `.env.example`, чтобы при развертывании приложения в новой среде выполнения в конфигах оказались все нужные значения.
 
-Laravel 5.0 теперь требуется  `"pda/pheanstalk": "~3.0"` вместо `"pda/pheanstalk": "~2.1"` как это было в Laravel 4.2.
+### Роуты
+
+Скопируйте `routes.php` в `app/routes.php`.
+
+### Контроллеры
+
+Скопируйте контроллеры в папку `app/Http/Controllers`. Далее вы можете 
+1. Поместить их в неймспейс контроллеров, добавив каждому в начало `namespace App\Http\Controllers;` 
+или 
+2. Добавить папку в `app/Http/Controllers` в директиву `classmap` файла `composer.json` для того, чтобы назначить её папкой глобального неймспейса. Убрать неймспейс у базового контроллера `app/Http/Controllers/Controller.php`. В файле `app/Providers/RouteServiceProvider.php` установите свойство `namespace` в `null`.
+
+Проследите, чтобы все контроллеры наследовались от базового контроллера `Controller`.
+
+### Фильтры роутов
+
+Возьмите ваши фильтры роутов из `app/filters.php` и разместите их в методе `boot()` файла `app/Providers/RouteServiceProvider.php`. Добавьте `use Illuminate\Support\Facades\Route;` в начало этого файла, чтобы корректно работал фасад `Route`.
+
+Если вы не создавали своих фильтров, а использовали только встроенные (`auth`, `csrf` и т.д.), то переносить их не надо. Они остались, только теперь называются middleware (посредники). Чтобы задействовать их в своих роутах, замените `'before'` на `'middleware'` (например, `['before' => 'auth']` меняется на `['middleware' => 'auth'].`).
+
+Фильтры в целом не пропали из Laravel, вы можете использовать их в `before` и `after` как раньше. Просто дефолтные фильтры роутов переместились в middleware.
+
+### Глобальная фильтрация CSRF
+
+Теперь [CSRF защита](/docs/master/routing#csrf-protection) включена по дефолту для всех роутов. Чтобы вернуть старое поведение и не проверять CSRF, удалите следующую строку из массива `middleware` класса `App\Http\Kernel`:
+
+	'App\Http\Middleware\VerifyCsrfToken',
+
+Если вы хотите делать выборочную проверку на CSRF, добавьте в `$routeMiddleware` класса `App\Http\Kernel` следующее:
+
+	'csrf' => 'App\Http\Middleware\VerifyCsrfToken',
+
+После этого вы можете использовать в роутах конструкцию `['middleware' => 'csrf']` для проверки CSRF.
+
+[Документация по middleware](/docs/master/middleware).
+
+### Модели Eloquent
+
+Чтобы максимально просто перенести модели, создайте папку `app/Models`, скопируйте их туда и добавьте эту папку в директиву `classmap` файла `composer.json`.
+
+Замените во всех моделях, которые используют псевдоудаление, `SoftDeletingTrait` на `Illuminate\Database\Eloquent\SoftDeletes`.
+
+#### Кэширование в Eloquent
+
+Eloquent больше не использует метод `remember()` для кэширования запросов. Вы должны явно кэшировать результаты запросов при помощи `Cache::remember`.
+
+[Документация по кэшированию](/docs/master/cache).
+
+### Модель User и аутентификация
+
+Модель User нужно обновить, так как в Latavel 5.0 изменилась система аутентификации.
+
+**Удалите это из блока `use` модели**
+
+```php
+use Illuminate\Auth\UserInterface;
+use Illuminate\Auth\Reminders\RemindableInterface;
+```
+
+**Добавьте это в блок `use` модели:**
+
+```php
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+```
+
+**Удалите UserInterface и RemindableInterface**
+
+**Добавьте имплементацию:**
+
+```php
+implements AuthenticatableContract, CanResetPasswordContract
+```
+
+**Добавьте следующие трейты внутрь класса:**
+
+```php
+use Authenticatable, CanResetPassword;
+```
+
+### Laravel Cashier
+
+Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/master/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Larave\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
+
+### Artisan-команды
+
+Скопируйте ваши артизан-команды в папку `app/Console/Commands` и добавьте эту папку в `classmap` вашего `composer.json`.
+
+Затем скопируйте список команд из `start/artisan.php` в массив `command` файла `app/Console/Kernel.php`.
+
+### Миграции и seeds
+
+Удалите имеющиеся миграции (2 штуки) и скопируйте ваши миграции в `database/migrations`, а seeds в `database/seeds`.
+
+### Глобальные IoC-биндинги
+
+Если вы что-то добавляли в [IoC](/docs/master/container) в файле `start/global.php`, переместите этот код в метод `register` файла `app/Providers/AppServiceProvider.php`. You may need to import the `App` facade.
+
+Если хотите, можете разложить эти биндинги по разным сервис-провайдерам, исходя из их логической принадлежности.
+
+### Шаблоны (views)
+
+Скопируйте ваши шаблоны в папку `resources/views`.
+
+### Тэги Blade
+
+В Laravel 5.0 изменены функции тэгов Blade. Теперь `{{ }}` экранируют вывод, как и `{{{ }}}`. Чтобы вывести неэкранированные данные используйте `{!! !!}`, но имейте в виду, что вывод неэкранированных данных может быть серьёзной дырой в безопасности.
+
+Если же вы хотите продолжить использовать старый синтаксис тэгов Blade, добавьте в конец `AppServiceProvider@register`:
+
+```php
+\Blade::setRawTags('{{', '}}');
+\Blade::setContentTags('{{{', '}}}');
+\Blade::setEscapedContentTags('{{{', '}}}');
+```
+
+Тэг коммента `{{--` больше не используется.
+
+### Файлы локализации
+
+Скопируйте ваши файлы локализации из `app/lang` в `resources/lang`.
+
+### Папка Public 
+
+Скопируйте содержимое вашей папки `public` **кроме файла index.php** в папку `public` Laravel 5.0 .
+
+### Тесты 
+
+Скопируйте тесты из `app/tests` в папку `tests`.
+
+### Остальные файлы
+
+Скопируйте остальные файлы проекта (`.scrutinizer.yml`, `bower.json` и т.п.) на те же места.
+
+Вы можете располагать Sass, Less или CoffeeScript файлы в любом месте, но если не можете выбрать - `resources/assets` будет хорошим выбором.
+
+### Формы и  HTML-хелперы
+
+Для работы с фасадами `Form::` и `HTML::` вам нужно установить дополнительный пакет, они теперь не входят во фреймворк. 
+
+Для этого добавьте `"illuminate/html": "~5.0"` в секцию `require` файла `composer.json`. Вам также нужно добавить сервис-провайдер в массив 'providers' конфига `config/app.php`:
+
+    'Illuminate\Html\HtmlServiceProvider',
+
+а также добавить два алиаса туда же:
+
+    'Form'      => 'Illuminate\Html\FormFacade',
+    'Html'      => 'Illuminate\Html\HtmlFacade',
+
+### CacheManager
+
+Если ваше приложение использует `Illuminate\Cache\CacheManager` в DI, используйте `Illuminate\Contracts\Cache\Repository` вместо него.
+
+### Пагинация
+
+Замените вызовы `$paginator->links()` на `$paginator->render()`.
+
+### Очередь Beanstalk
+
+Laravel 5.0 теперь требует `"pda/pheanstalk": "~3.0"` вместо `"pda/pheanstalk": "~2.1"`
+
+### Remote
+
+Компонент Remote больше не используется (deprecated).
+
+### Workbench
+
+Компонент Workbench больше не используется (deprecated).
 
 <a name="upgrade-4.2"></a>
 ## Обновление до 4.2 с 4.1
