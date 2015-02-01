@@ -1,12 +1,12 @@
-git f53f291f67507108dd0f5772a7eb33bc6458d840
+git b8f6ed467e8e2aa87b834119ad047cf2e96668c9
 
 ---
 
-# Роуты (маршрутизация)
+# HTTP-роуты (маршрутизация)
 
-- [Простейшая маршрутизация](#basic-routing)
-- [Параметры роутов](#route-parameters)
-- [Фильтры роутов](#route-filters)
+- [Основы](#basic-routing)
+- [Защита от CSRF](#csrf-protection)
+- [Подмена HTTP-метода](#method-spoofing)
 - [Именованные роуты](#named-routes)
 - [Группы роутов](#route-groups)
 - [Доменная маршрутизация](#sub-domain-routing)
@@ -16,9 +16,9 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 - [Маршрутизация в контроллер](#routing-to-controllers)
 
 <a name="basic-routing"></a>
-## Простейшая маршрутизация
+## Основы
 
-Большинство роутов (маршруты, routes) вашего приложения будут определены в файле `app/routes.php`. В Laravel простейший роут состоит из URI (урла, пути) и функции-замыкания (она же коллбек).
+Большинство роутов (маршруты, routes) вашего приложения будут определены в файле `app/Http/routes.php`, который загружается сервис-провайдером `App\Providers\RouteServiceProvider`. В Laravel простейший роут состоит из URI (урла, пути) и функции-замыкания (она же коллбек).
 
 #### Простейший GET-роут:
 
@@ -27,9 +27,26 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 		return 'Hello World';
 	});
 
-#### Простейший POST-роут:
+#### Простейший роуты различных типов HTTP-запросов:
 
 	Route::post('foo/bar', function()
+	{
+		return 'Hello World';
+	});
+
+	Route::put('foo/bar', function()
+	{
+		//
+	});
+
+	Route::delete('foo/bar', function()
+	{
+		//
+	});
+
+#### Регистрация роута для нескольких типов HTTP-запросов
+
+	Route::match(['get', 'post'], '/', function()
 	{
 		return 'Hello World';
 	});
@@ -50,12 +67,37 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 Вам часто может понадобиться сгенерировать URL к какому-либо роуту - для этого используется метод `URL::to`:
 
-	$url = URL::to('foo');
+	$url = url('foo');
 
 Здесь 'foo' - это URI.
 
+a name="csrf-protection"></a>
+## Защита от CSRF
+
+Laravel provides an easy method of protecting your application from [cross-site request forgeries](http://en.wikipedia.org/wiki/Cross-site_request_forgery). Cross-site request forgeries are a type of malicious exploit whereby unauthorized commands are performed on behalf of the authenticated user.
+
+Laravel предоставляет встроенное средство защиты от [межсайтовых подделок запросов](https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0_%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0) (cross-site request forgeries). Фреймворк автоатически генерит так называемый CSRF-токен для каждой активной сессии. Этот токен можно проверять при обработке запроса - действительно ли запрос послан с вашего сайта, а не с сайта-злоумышленника. Как правило проверяют только POST, PUT и DELETE запросы, так как они могут изменить состояние приложения (внести изменения в БД).
+
+#### Вставка CSRF-токена в форму
+
+    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+
+Вам не нужно проверять вручную соответствие CSRF-токена, пришедшего из формы и хранящегося в сессии, middleware `VerifyCsrfToken` делает это автоматически. Вдобавок с полю `_token`, проверяется еще и HTTP-заголовок `X-XSRF-TOKEN`.
+
+<a name="method-spoofing"></a>
+## Подмена HTTP-метода
+
+HTML-формы не поддерживают методы HTTP-запроса `PUT` или `DELETE`. Для того, чтобы отправить на сервер HTTP-запрос с этими методами, вам нужно добавить в форму скрытый input с именем `_method`. Значение этого поля будет фосприниматься фреймворком как тип HTTP-запроса. Например:
+
+	<form action="/foo/bar" method="POST">
+		<input type="hidden" name="_method" value="PUT">
+    	<input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
+    </form>
+
 <a name="route-parameters"></a>
 ## Параметры роутов
+
+В роутах можно указывать параметры, которые можно получить в виде аргументов функции-замыкания:
 
 	Route::get('user/{id}', function($id)
 	{
@@ -96,142 +138,63 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 	{
 		//
 	})
-	->where(array('id' => '[0-9]+', 'name' => '[a-z]+'))
+	->where(['id' => '[0-9]+', 'name' => '[a-z]+'])
 
 #### Определение глобальных паттернов
 
-Вы можете определить соответствие параметра пути регулярному выражению глобально для всех роутов. Например, если у вас `{id}` в урлах это всегда числовое значение:
+Вы можете определить соответствие параметра пути регулярному выражению глобально для всех роутов. Паттерны задаются в методе `before` сервис-провайдера `RouteServiceProvider`. Например, если у вас `{id}` в урлах это всегда числовое значение:
 
-	Route::pattern('id', '[0-9]+');
+	$router->pattern('id', '[0-9]+');
+
+После того как паттерн определён, он применяется ко все роутам.	
 
 	Route::get('user/{id}', function($id)
 	{
-	    // Only called if {id} is numeric.
+	    // Здесь $id будет только числом
 	});
 
 #### Доступ к значению параметров роута
 
-Если вам нужно получить значение параметра роута не в нем, а, где-то еще, например, в фильтре или контроллере, то вы можете использовать `Route::input()`:
+Если вам нужно получить значение параметра вне роута, вы можете использовать метод `input()`:
 
-	Route::filter('foo', function()
+    if ($route->input('id') == 1)
+    {
+        //
+    }
+
+Вы можете обратиться к текущему роуту через объект `Illuminate\Http\Request`. Получить этот объект вы можете при помощи фасада `Request::` или подав его (type-hint) в аргументы конструктора нужного класса или в аргументы функции-замыкания:
+
+	use Illuminate\Http\Request;
+
+	Route::get('user/{id}', function(Request $request, $id)
 	{
-	    if (Route::input('id') == 1)
-	    {
-	        //
-	    }
-	});
-
-<a name="route-filters"></a>
-## Фильтры роутов
-
-Фильтры - удобный механизм ограничения доступа к определённому роуту, что полезно при создании областей сайта только для авторизованных пользователей. В Laravel изначально включено несколько фильтров, в том числе `auth`, `auth.basic`, `guest` and `csrf`. Они определены в файле `app/filters.php`.
-
-#### Регистрация фильтра маршрутов:
-
-	Route::filter('old', function()
-	{
-		if (Input::get('age') < 200)
+		if ($request->route('id'))
 		{
-			return Redirect::to('home');
+			//
 		}
 	});
-
-Если фильтр возвращает значение, оно используется как ответ фреймворка (response) на сам запрос (request) и обработчик маршрута не будет вызван, и все `after`-фильтры тоже будут пропущены.
-
-#### Привязка фильтра к роуту:
-
-	Route::get('user', array('before' => 'old', function()
-	{
-		return 'You are over 200 years old!';
-	}));
-
-#### Сочетания фильтра и привязки роута к контроллеру
-
-	Route::get('user', array('before' => 'old', 'uses' => 'UserController@showProfile'));	
-
-#### Привязка нескольких фильтров к роуту:
-
-	Route::get('user', array('before' => 'auth|old', function()
-	{
-		return 'You are authenticated and over 200 years old!';
-	}));
-
-#### Передача параметров для фильтра:
-
-	Route::filter('age', function($route, $request, $value)
-	{
-		//
-	});
-
-	Route::get('user', array('before' => 'age:200', function()
-	{
-		return 'Hello World';
-	}));
-
-Фильтры типа `after` (выполняющиеся после запроса, если он не был отменён фильтром `before` - прим. пер.) получают `$response` как свой третий аргумент:
-
-	Route::filter('log', function($route, $request, $response, $value)
-	{
-		//
-	});
-
-#### Фильтры по шаблону
-
-Вы можете также указать, что фильтр применяется ко всем роутам, URI (путь) которых соответствует шаблону.
-
-	Route::filter('admin', function()
-	{
-		//
-	});
-
-	Route::when('admin/*', 'admin');
-
-В примере выше фильтр `admin` будет применён ко всем маршрутам, адрес которых начинается с `admin/`. Звёздочка (*) используется как символ подстановки и соответствует любому набору символов, в том числе пустой строке.
-
-Вы также можете привязывать фильтры, зависящие от типа HTTP-запроса:
-
-	Route::when('admin/*', 'admin', array('post'));
-
-#### Классы фильтров
-
-Для продвинутой фильтрации вы можете использовать классы вместо функций-замыканий. Так как такие фильтры будут создаваться с помощью [IoC-контейнера](/docs/ioc), то вы можете использовать внедрение зависимостей (Dependency Injection) для лучшего тестирования.
-
-#### Определение класса для фильтра:
-
-	class FooFilter {
-
-		public function filter()
-		{
-			// Логика фильтра...
-		}
-
-	}
-
-#### Регистрация фильтра-класса:
-
-	Route::filter('foo', 'FooFilter');
 
 <a name="named-routes"></a>
 ## Именованные роуты
 
-Присваивая имена роутам вы можете сделать обращение к ним (при генерации URL во вьюхах (views) или переадресациях) более удобным. Вы можете задать имя роуту таким образом:
+Присваивая имена роутам вы можете сделать обращение к ним (при генерации URL в шаблонах (views) или редиректах) более удобным. Вы можете задать имя роуту таким образом:
 
-	Route::get('user/profile', array('as' => 'profile', function()
+	Route::get('user/profile', ['as' => 'profile', function()
 	{
 		//
-	}));
+	}]);
 
 Также можно указать контроллер и его действие:
 
-	Route::get('user/profile', array('as' => 'profile', 'uses' => 'UserController@showProfile'));
+	Route::get('user/profile', ['as' => 'profile', 'uses' => 'UserController@showProfile']);
 
 Теперь вы можете использовать имя маршрута при генерации URL или переадресации:
 
-	$url = URL::route('profile');
+	$url = route('profile');
 
-	$redirect = Redirect::route('profile');
+	$redirect = redirect()->route('profile');
 
-Получить имя текущего выполняемого маршрута можно методом `currentRouteName`:
+Получить имя текущего выполняемого роута можно методом `currentRouteName`:
 
 	$name = Route::currentRouteName();
 
@@ -240,7 +203,7 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 Иногда вам может быть нужно применить фильтры к набору маршрутов. Вместо того, чтобы указывать их для каждого маршрута в отдельности вы можете сгруппировать маршруты:
 
-	Route::group(array('before' => 'auth'), function()
+	Route::group(['before' => 'auth'], function()
 	{
 		Route::get('/', function()
 		{
@@ -253,14 +216,23 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 		});
 	});
 
-<a name="sub-domain-routing"></a>
-## Поддоменные роуты
+Чтобы не писать полный неймспейс к каждому контроллеру, вы можете использовать параметр `namespace` в группе:
 
-Роуты Laravel способны работать и с поддоменами по их маске и передавать в ваш обработчик параметры из шаблона.
+	Route::group(['namespace' => 'Admin'], function()
+	{
+		//
+	});
+
+> **Примечание:** По умолчанию `RouteServiceProvider` включает все роуты внутрь неймспейса, определенного в его свойстве `$namespace`.
+
+<a name="sub-domain-routing"></a>
+### Поддоменные роуты
+
+Роуты Laravel способны работать и с поддоменами:
 
 #### Регистрация роута по поддомену:
 
-	Route::group(array('domain' => '{account}.myapp.com'), function()
+	Route::group(['domain' => '{account}.myapp.com'], function()
 	{
 
 		Route::get('user/{id}', function($account, $id)
@@ -270,13 +242,13 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	});
 <a name="route-prefixing"></a>
-## Префикс пути
+### Префикс пути
 
 Группа роутов может быть зарегистрирована с одним префиксом без его явного указания с помощью ключа `prefix` в параметрах группы.
 
 #### Добавление префикса к сгруппированным маршрутам:
 
-	Route::group(array('prefix' => 'admin'), function()
+	Route::group(['prefix' => 'admin'], function()
 	{
 
 		Route::get('user', function()
@@ -289,20 +261,25 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 <a name="route-model-binding"></a>
 ## Привязка моделей к роутам
 
-Привязка моделей - удобный способ передачи экземпляров моделей в ваш роут. Например, вместо передачи ID пользователя вы можете передать модель User, которая соответствует данному ID, целиком. Для начала используйте метод `Route::model` для указания модели, которая должна быть использована вместо данного параметра.
+Привязка моделей - удобный способ передачи экземпляров классов в ваш роут. Например, вместо передачи ID пользователя вы можете передать модель User, которая соответствует данному ID, целиком. Для начала используйте метод `route` в `RouteServiceProvider::boot` для указания класса, который должен быть внедрён.
 
 #### Привязка параметра к модели
 
-	Route::model('user', 'User');
+	public function boot(Router $router)
+	{
+		parent::boot($router);
 
-Затем зарегистрируйте маршрут, который принимает параметр `{user}`:
+		$router->model('user', 'App\User');
+	}
 
-	Route::get('profile/{user}', function(User $user)
+Затем зарегистрируйте роут, который принимает параметр `{user}`:
+
+	Route::get('profile/{user}', function(App\User $user)
 	{
 		//
 	});
 
-Из-за того, что мы ранее привязали параметр `{user}` к модели `User`, то её экземпляр будет передан в маршрут. Таким образом, к примеру, запрос `profile/1` передаст объект `User` , который соответствует ID 1 (полученному из БД - прим. пер.).
+Из-за того, что мы ранее привязали параметр `{user}` к модели `App\User`, то её экземпляр будет передан в маршрут. Таким образом, к примеру, запрос `profile/1` передаст объект `User` , который соответствует ID 1 , полученному из БД.
 
 > **Внимание:** если переданный ID не соответствует строке в БД, будет брошено исключение (Exception) 404.
 
@@ -310,12 +287,12 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 
 	Route::model('user', 'User', function()
 	{
-		throw new NotFoundException;
+		throw new NotFoundHttpException;
 	});
 
-Иногда вам может быть нужно использовать собственный метод для получения модели перед её передачей в маршрут. В этом случае просто используйте метод `Route::bind`:
+Иногда вам может быть нужно использовать собственный метод для получения модели перед её передачей в маршрут. В этом случае просто используйте метод `Route::bind`. Функция-замыкание принимает в качестве аргумента параметр из урла и должна возвратить экземпляр класса, который должен быть встроен в роут.
 
-	Route::bind('user', function($value, $route)
+	Route::bind('user', function($value)
 	{
 		return User::where('name', $value)->first();
 	});
@@ -323,17 +300,12 @@ git f53f291f67507108dd0f5772a7eb33bc6458d840
 <a name="throwing-404-errors"></a>
 ## Ошибки 404
 
-Есть два способа вызвать исключение 404 (Not Found) из маршрута. Первый - методом `App::abort`:
+Есть два способа вызвать исключение 404 (Not Found) из маршрута. Первый - при помощи хэлпера `abort`:
 
-	App::abort(404);
+	abort(404);
 
-Второй - бросив исключение класса или потомка класса `Symfony\Component\HttpKernel\Exception\NotFoundHttpException`.
+Этот хэлпер бросает исключение `Symfony\Component\HttpFoundation\Exception\HttpException` с кодом ответа 404.
 
-Больше информации о том, как обрабатывать исключения 404 и отправлять собственный ответ на такой запрос содержится в разделе [об ошибках](/docs/errors#handling-404-errors).
+Второй - вы можете сами бросить исключение `Symfony\Component\HttpKernel\Exception\NotFoundHttpException`.
 
-<a name="routing-to-controllers"></a>
-## Роуты в контроллер
-
-Laravel позволяет вам регистрировать маршруты не только в виде функции-замыкания, но и классов-контроллеров и даже создавать [контроллеры ресурсов](/docs/controllers#resource-controllers).
-
-Больше информации содержится в разделе [о контроллерах](/docs/controllers).
+Смотрите также секцию [errors](/docs/master/errors#http-exceptions) документации.
