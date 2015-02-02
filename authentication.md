@@ -219,12 +219,12 @@ Laravel позволяет сделать аутентификацию очен�
 	}
 
 И наконец, можно использовать мощь [сервис-контейнера](/docs/master/container), указав в качестве аргумента в конструкторе
-или методе контракт `Illuminate\Contracts\Auth\User`:
+или методе контракт `Illuminate\Contracts\Auth\Authenticatable`:
 
 	<?php namespace App\Http\Controllers;
 
 	use Illuminate\Routing\Controller;
-	use Illuminate\Contracts\Auth\User;
+	use Illuminate\Contracts\Auth\Authenticatable;
 
 	class ProfileController extends Controller {
 
@@ -233,7 +233,7 @@ Laravel позволяет сделать аутентификацию очен�
 		 *
 		 * @return Response
 		 */
-		public function updateProfile(User $user)
+		public function updateProfile(Authenticatable $user)
 		{
 			// $user это объект пользователя...
 		}
@@ -360,7 +360,7 @@ Laravel так же предоставляет контроллер `Auth\Passwo
 Метод `redirect` выполнит перенаправление к провайдеру OAuth, а метод `user` получит информацию о пользователе из ответа провайдера OAuth.
 Перед перенаправление вы можете указать области доступа (scopes):
 
-	return Socialize::with('twitter')->scopes(['scope1', 'scope2'])->redirect();
+	return Socialize::with('github')->scopes(['scope1', 'scope2'])->redirect();
 
 #### Получение данных пользователя
 
