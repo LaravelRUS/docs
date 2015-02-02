@@ -1,229 +1,176 @@
-git d0ca8271e6081cd9729709701e52104ff89206b3
+git 7d4d711f55e85c2dc1dbcca47cb820db2a88a607
 
 ---
 
-# Ответ (response) и шаблоны (views)
+# HTTP-response (HTTP-ответ)
 
-- [Ответ: основы](#basic-responses)
+- [Основы](#basic-responses)
 - [Редиректы](#redirects)
-- [Вьюхи](#views)
-- [Композеры](#view-composers)
-- [Особые ответы](#special-responses)
-- [Макросы ответов](#response-macros)
+- [Особые HTTP-ответы](#special-responses)
+- [Макросы](#response-macros)
 
 <a name="basic-responses"></a>
-## Ответ: основы
+## Основы
 
-#### Ответ в виде возврата строки из роута:
+HTTP-Response - это ответ фреймворка, который отдается клиенту (обычно это браузер), от которого пришел HTTP-запрос.
+
+Наиболее простой создать HTTP-ответ - это возвратить строку в роуте или контроллере.
+
+#### Response в виде возврата строки из роута:
 
 	Route::get('/', function()
 	{
 		return 'Hello world';
 	});
 
-#### Создание собственного ответа
+#### Создание своих ответов
 
-Объект `Response` наследует класс `Symfony\Component\HttpFoundation\Response` который предоставляет набор методов для построения HTTP-ответа.
+Однако чаще в контроллерах вы возвращаете объект `Illuminate\Http\Response` или [шаблон](/docs/master/views). Возврат объекта `Response` позволяет изменить HTTP-код и заголовки ответа. Этот объект наследуется от `Symfony\Component\HttpFoundation\Response`, который предоставляет разнобразные методы для построения HTTP-ответа:
 
-	$response = Response::make($contents, $statusCode);
+	use Illuminate\Http\Response;
 
-	$response->header('Content-Type', $value);
+	return (new Response($content, $status))
+	              ->header('Content-Type', $value);
 
-	return $response;
+Для удобства вы можете использовать хэлпер `response`:
 
-#### Добавление cookie к ответу
+	return response($content, $status)
+	              ->header('Content-Type', $value);
 
-	$cookie = Cookie::make('name', 'value');
+> **Примечание:** Полный список методов `Response` можно увидеть в [документации по API Laravel](http://laravel.com/api/master/Illuminate/Http/Response.html) и [документации по API Symfony](http://api.symfony.com/2.5/Symfony/Component/HttpFoundation/Response.html).
 
-	return Response::make($content)->withCookie($cookie);
+#### Добавление контента в HTTP-ответ
+
+Если вам нужно не просто изменить заголовки, но и вывести какой-то контент, вы можете указать имя шаблона при помощи метода `view()`^
+
+	return response()->view('hello')->header('Content-Type', $type);
+
+#### Добавление куки
+
+	return response($content)->withCookie(cookie('name', 'value'));
 
 <a name="redirects"></a>
 ## Редиректы
 
-#### Простой редирект
+Redirect responses are typically instances of the `Illuminate\Http\RedirectResponse` class, and contain the proper headers needed to redirect the user to another URL.
 
-	return Redirect::to('user/login');
+Редирект - это объект класса `Illuminate\Http\RedirectResponse`, фактически это обычный HTTP-ответ без контента с установленным заголовком `Location`.
 
-#### Переадресация с одноразовыми переменными сессии:
-	
-	return Redirect::to('user/login')->with('message', 'Войти не удалось');
+#### Возвращение редиректа
 
-> **Примечание:** Метод `with` сохраняет данные в сессии, поэтому вы можете прочитать их, используя обычный метод `Session::get`.
+Есть несколько способов создать объект `RedirectResponse`. Самый простой - воспользоваться хэлпером `redirect`. 
 
-#### Переадресация на именованный роут
+	return redirect('user/login');
 
-	return Redirect::route('login');
+#### Возвращение редиректа с flash-данными в сессии
 
-#### Переадресация на именованный роут с параметрами
+Редирект [с flash-данными в сессии](/docs/master/session) - типичная задача в случае, когда после POST-запроса надо перейти на страницу с формой и показать ошибки валидации. Записать flash-данные в сессию можно при помощи метода `with()`:
 
-	return Redirect::route('profile', array(1));
+	return redirect('user/login')->with('message', 'Login Failed');
 
-#### Переадресация на именованный роут с именованными параметрами
+#### Редирект на предыдущий URL
 
-	return Redirect::route('profile', array('user' => 1));
+Для перехода назад к форме можно использовать также метод `back()`. Метод withInput() передаст данные, которые пришли от этой формы, для того, чтобы отобразить их в форме и не заставлять пользователя снова вносить их.
 
-#### Переадресация на метод контроллера
+	return redirect()->back();
 
-	return Redirect::action('HomeController@index');
+	return redirect()->back()->withInput();
 
-#### Переадресация на метод контроллера с параметрами
+#### Редирект на именованный роут
 
-	return Redirect::action('UserController@profile', array(1));
+Если использовать хэлпер `redirect()` без параметров, он вернет объект `Illuminate\Routing\Redirector`, у которого есть несколько интересных методов. При помощи них, например, вы можете сделать редирект на роут по его имено:
 
-#### Переадресация на метод контроллера с именованными параметрами
+	return redirect()->route('login');
 
-	return Redirect::action('UserController@profile', array('user' => 1));
+#### Редирект на именованный роут с параметрами
 
-<a name="views"></a>
-## Вьюхи
+Если ваш роут содержит параметры, то передать их вы можете так:
 
-Вьюхи (views, шаблон) обычно содержат HTML-код вашего приложения и представляют собой удобный способ разделения бизнес-логики и логики отображения информации. Вьюхи хранятся в папке `app/views`.
+	return redirect()->route('profile', [1]);
 
-Простая вьюха может иметь такой вид:
+If you are redirecting to a route with an "ID" parameter that is being populated from an Eloquent model, you may simply pass the model itself. The ID will be extracted automatically:
 
-	<!-- app/views/greeting.php -->
+Если параметр роута - это ID некой модели, вы можете передать в аргументе экземпляр этой модели, Laravel возбмет оттуда ID сам:
 
-	<html>
-		<body>
-			<h1>Привет, <?php echo $name; ?></h1>
-		</body>
-	</html>
+	return redirect()->route('profile', [$user]);
 
-Из этой вьюхи можно сформировать ответ в браузер, например, следующим образом:
+#### Редирект на именованный роут с именованными параметрами
 
-	Route::get('/', function()
-	{
-		return View::make('greeting', array('name' => 'Тейлор'));
-	});
+	// Если ваш роут с именем 'profile' имеет урл 'profile/{user}':
 
-Второй параметр, переданный в `View::make` - массив данных, которые будут доступны внутри вьюхи.
+	return redirect()->route('profile', ['user' => 1]);
 
-#### Передача переменных в вьюху
+#### Редирект на метод определённого контроллера
 
-	// припомощи метода with()
-	$view = View::make('greeting')->with('name', 'Стив');
+Вы можете также сделать редирект на [экшн](/docs/master/controllers) заданного контроллера:
 
-	// при помощи "магического" метода
-	$view = View::make('greeting')->withName('Стив');
+	return redirect()->action('App\Http\Controllers\HomeController@index');
 
-В примере выше переменная `$name` будет доступна в шаблоне и будет иметь значение `Стив`.
+> **Примечание:** Вам не нужно писать полный неймспейс контроллера, если вы задали его в `URL::setRootControllerNamespace`.
 
-Можно передать массив данных в виде второго параметра для метода `make`:
+#### Редирект на метод определённого контроллера с параметрами
 
-	$view = View::make('greetings', $data);
+	return redirect()->action('App\Http\Controllers\UserController@profile', [1]);
 
-Вы также можете установить глобальную переменную, которая будет видна во всех шаблонах:
+#### Редирект на метод определённого контроллера с именованными параметрами
 
-	View::share('name', 'Стив');
+	return redirect()->action('App\Http\Controllers\UserController@profile', ['user' => 1]);
 
-#### Передача вложенного шаблона в шаблон
+<a name="other-responses"></a>
+## Особые HTTP-ответы
 
-Иногда вам может быть нужно передать вьюху внутрь другой вьюхи. Например, передаем `app/views/child/view.php` внутрь `app/views/greeting.php`:
+The `response` helper may be used to conveniently generate other types of response instances. When the `response` helper is called without arguments, an implementation of the `Illuminate\Contracts\Routing\ResponseFactory` [contract](/docs/master/contracts) is returned. This contract provides several helpful methods for generating responses.
 
-	$view = View::make('greeting')->nest('child', 'child.view');
+Если хэлпер `response()` вызывается без параметров, он возвращает имплементацию [контракта](/docs/master/contracts) `Illuminate\Contracts\Routing\ResponseFactory`, которая содержит несколько методов для генерации HTTP-ответа. 
 
-	// с передачей переменных
-	$view = View::make('greeting')->nest('child', 'child.view', $data);
+#### Отдача JSON
 
-Затем вложенная вьюха может быть отображёна в `app/views/greeting.php`:
+Метод `json` автоматически устанавливает заголовок `Content-Type` в `application/json`
 
-	<html>
-		<body>
-			<h1>Привет!</h1>
-			<?php echo $child; ?>
-		</body>
-	</html>
+	return response()->json(['name' => 'Steve', 'state' => 'CA']);
 
-> **Примечание** Для работы с вложенными вьюхами смотрите также `@include` шаблонизатора [Blade](/docs/template)	
+#### Отдача JSONP
 
-<a name="view-composers"></a>
-## Композеры
+	return response()->json(['name' => 'Steve', 'state' => 'CA'])
+	                 ->setCallback($request->input('callback'));
 
-Композеры (view composers) - функции-замыкания или методы класса, которые вызываются, когда вьюха рендерится в строку. Если у вас есть данные, которые вы хотите привязать к вьюхе при каждом её формировании, то композеры помогут вам выделить такую логику в отдельное место. Можно сказать, композеры - это модели вьюх.
+#### Отдача файла
 
-#### Регистрация композера
+	return response()->download($pathToFile);
 
-	View::composer('profile', function($view)
-	{
-		$view->with('count', User::count());
-	});
+	return response()->download($pathToFile, $name, $headers);
 
-Теперь при каждом отображении шаблона `profile` к нему будет привязана переменная `count`.
+> **Note:** Классы Symfony HttpFoundation, которые занимаются функцей отдачи файла, требуют, чтобы имя файла было в ASCII-формате.
 
-Вы можете привязать композер сразу к нескольким вьюхам:
+<a name="response-macros"></a>
+## Макросы
 
-    View::composer(array('profile','dashboard'), function($view)
-    {
-        $view->with('count', User::count());
-    });
+Вы можете оформить свой вариант HTTP-ответа в виде макроса, чтобы использовать его в других роутах или контроллерах в короткой форме. 
 
-Если вам больше нравится использовать классы (что позволит вам регистрировать несколько композеров в [IoC Container](/docs/ioc) и ресолвить нужный в сервис-провайдере), то вы можете сделать так:
+HTTP-макросы определяются в методе `boot()` [сервис-провайдера](/docs/master/providers):
 
-	View::composer('profile', 'ProfileComposer');
+	<?php namespace App\Providers;
 
-Класс композера должен иметь следующий вид:
+	use Response;
+	use Illuminate\Support\ServiceProvider;
 
-	class ProfileComposer {
+	class ResponseMacroServiceProvider extends ServiceProvider {
 
-		public function compose($view)
+		/**
+		 * Perform post-registration booting of services.
+		 *
+		 * @return void
+		 */
+		public function boot()
 		{
-			$view->with('count', User::count());
+			Response::('caps', function($value) use ($response)
+			{
+				return $response->make(strtoupper($value));
+			});
 		}
 
 	}
 
-#### Регистрация нескольких композеров
+Используется макрос так:	
 
-Вы можете использовать метод `composers` чтобы зарегистрировать несколько композеров одновременно:
-
-	View::composers(array(
-	    'AdminComposer' => array('admin.index', 'admin.profile'),
-	    'UserComposer' => 'user',
-	));	
-
-> **Примечание** Обратите внимание, что нет строгого правила, где должны храниться классы-композеры. Вы можете поместить их в любое место, где их сможет найти автозагрузчик в соответствии с директивами в вашем файле `composer.json`.
-
-### Криейтор (view creators)
-
-Криейторы вьюх работают почти так же, как композеры , но вызываются сразу после создания объекта вьюхи, а не во время её отображения в строку. Для регистрации используйте метод `creator`:
-
-	View::creator('profile', function($view)
-	{
-		$view->with('count', User::count());
-	});
-
-<a name="special-responses"></a>
-## Особые ответы (response)
-
-#### Создание JSON-ответа
-
-	return Response::json(array('name' => 'Стив', 'state' => 'CA'));
-
-#### Создание JSONP-ответа
-
-	return Response::json(array('name' => 'Стив', 'state' => 'CA'))->setCallback(Input::get('callback'));
-
-#### Создание ответа передачи файла
-
-	return Response::download($pathToFile);
-
-	return Response::download($pathToFile, $name, $headers);
-
-> **Примечание** Symfony HttpFoundation, при помощи которого реализована отдача файла, требует, чтобы имя файла состояло из ASCII-символов.
-
-<a name="response-macros"></a>
-## Макросы ответов
-
-Если вы хотите использовать особый ответ в нескольких роутах или контроллерах, то вы можете определить свой макрос ответа:
-
-	Response::macro('caps', function($value)
-	{
-	    return Response::make(strtoupper($value));
-	});
-
-Использование:
-
-	return Response::caps('foo');
-
-Определения макросов ответов должны располагаться в одном из ваших [старт-файлов](/docs/lifecycle#start-files).
-
+	return response()->caps('foo');
