@@ -1,211 +1,232 @@
-git a49894e56c3ac8b837ba7d8687d94f6010cb1808
+git 4108ebc0b1aca39e323a42c15c45e81a8d21410c
 
 ---
 
-# Запросы и входные данные
+# HTTP Requests (HTTP-запросы)
 
-- [Текущие входные данные](#basic-input)
-- [Cookies](#cookies)
-- [Старый ввод](#old-input)
+- [Получение объекта HTTP-запроса](#obtaining-a-request-instance)
+- [Входных данных](#retrieving-input)
+- [Предыдущие входные данные](#old-input)
+- [Куки](#cookies)
 - [Файлы](#files)
-- [Информация о запросе](#request-information)
+- [Other Request Information](#other-request-information)
 
-<a name="basic-input"></a>
-## Текущие входные данные
+<a name="obtaining-a-request-instance"></a>
+## Получение объекта HTTP-запроса
 
-Вы можете получить доступ ко всем данным, переданным приложению, используя всего несколько простых методов. Вам не нужно думать о том, какой тип HTTP-запроса был использован (GET, POST и т.д.) - методы работают одинаково для любого из них.
+### При помощи фасада
 
-#### Получение переменной
+Фасад `Request` дает доступ к объекту HTTP-запроса:
 
-	$name = Input::get('name');
+	$name = Request::input('name');
 
-#### Получение переменной или значения по умолчанию, если переменная не была передана
+Не забудьте использовать конструкцию `use Request;` в начале файла класса.
 
-	$name = Input::get('name', 'Sally');
+### При помощи DI (dependency injection)
 
-#### Была ли передана переменная?
+To obtain an instance of the current HTTP request via dependency injection, you should type-hint the class on your controller constructor or method. The current request instance will automatically be injected by the [service container](/docs/master/container):
 
-	if (Input::has('name'))
+Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедоение зависимости). Спомоб заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/master/container)) и подает на вход конструктору контроллера:
+
+	<?php namespace App\Http\Controllers;
+
+	use Illuminate\Http\Request;
+	use Illuminate\Routing\Controller;
+
+	class UserController extends Controller {
+
+		/**
+		 * Сохранение данных пользователя.
+		 *
+		 * @param  Request  $request
+		 * @return Response
+		 */
+		public function store(Request $request)
+		{
+			$name = $request->input('name');
+
+			//
+		}
+
+	}
+
+Если ваш метод контроллера ожидает параметр из роута, укажите его после зависимостей:
+
+	<?php namespace App\Http\Controllers;
+
+	use Illuminate\Http\Request;
+	use Illuminate\Routing\Controller;
+
+	class UserController extends Controller {
+
+		/**
+		 * Store a new user.
+		 *
+		 * @param  Request  $request
+		 * @param  int  $id
+		 * @return Response
+		 */
+		public function update(Request $request, $id)
+		{
+			//
+		}
+
+	}
+
+<a name="retrieving-input"></a>
+## Входные данные
+
+#### Получение входных данных
+
+Объект `Illuminate\Http\Request` предоставляет доступ к входным данным, например, к переменным POST или PUT, полученным из формы. Вам не нужно указывать явно метод запроса, есть универсальный метод:
+
+	$name = Request::input('name');
+
+#### Получение переменной с дефолтным значением
+
+	$name = Request::input('name', 'Sally');
+
+#### Определение, содержится ли переменная в запросе
+
+	if (Request::has('name'))
 	{
 		//
 	}
 
-#### Получение всех переменных запроса:
+#### Получить все переменный запроса
 
-	$input = Input::all();
+	$input = Request::all();
 
-#### Получение некоторых переменных:
+#### Получить избранные переменные
 
-	// Получить только перечисленные:
-	$input = Input::only('username', 'password');
+	$input = Request::only('username', 'password'); // только эти
 
-	// Получить все, кроме перечисленных:
-	$input = Input::except('credit_card');
+	$input = Request::except('credit_card'); // все, кроме этой
 
-> **Примечание:** Некоторые JavaScript-библиотеки, такие как Backbone, могут передавать переменные в виде JSON. Вне зависимости от этого `Input::get` будет работать одинаково.
+C масивами можно работать через нотацию с точкой:
 
-<a name="cookies"></a>
-## Cookies
-
-Все cookie, создаваемые Laravel, шифруются и подписываются специальным кодом - таким образом, если они изменятся на клиенте, то они станут неверными и не будут приниматься фреймворком.
-
-#### Чтение cookie
-
-	$value = Cookie::get('name');
-
-#### Добавление cookie к ответу (response)
-
-	$response = Response::make('Hello World');
-
-	$response->withCookie(Cookie::make('name', 'value', $minutes));
-
-#### Помещение cookie в очередь на выставление
-
-Может возникнуть ситуация, когда вам нужно установить определенную cookie в том месте кода, где response (ответ) еще не создан. В таком случай используйте `Cookie::queue()` - cookie будет автоматически добавлена в response после его окончательного формирования.
-
-	Cookie::queue($name, $value, $minutes);	
-
-#### Создание cookie, которая хранится вечно
-
-	$cookie = Cookie::forever('name', 'value');
+	$input = Request::input('products.0.name');
 
 <a name="old-input"></a>
-## Старые входные данные
+## Предыдущие входные данные
 
-Вам может пригодиться сохранение входных данных между двумя запросами. Например, после проверки формы на корректность вы можете заполнить её старыми значениями в случае ошибки.
+Часто нужно сохранять входные данные для следующего запроса. Например, это нужно для того, чтобы после ошибки пользователя в форме не заставлять его вводить всё заново, а заполнить правильные поля самим.
 
-#### Сохранение всего ввода для следующего запроса
+#### Сохранение запроса во flash-переменных сессии
 
-	Input::flash();
+Метод `flash` сохранит текущие входные данные в [сессии](/docs/master/session), так, что они будут доступны в следующем запросе.
 
-#### Сохранение некоторых переменных для следующего запроса
+	Request::flash();
 
-	// Сохранить только перечисленные:
-	Input::flashOnly('username', 'email');
+#### Сохранение избранных переменных запроса
 
-	// Сохранить все, кроме перечисленных:
-	Input::flashExcept('password');
+	Request::flashOnly('username', 'email');
 
-Обычно требуется сохранить входные данные при переадресации на другую страницу - это делается легко:
+	Request::flashExcept('password');
 
-	return Redirect::to('form')->withInput();
+#### Редирект 
 
-	return Redirect::to('form')->withInput(Input::except('password'));
+Since you often will want to flash input in association with a redirect to the previous page, you may easily chain input flashing onto a redirect.
 
-> **Примечание:** Вы можете сохранять и другие данные внутри сессии, используя класс [Session](/docs/session).
+Чаще всего нам нужно сохранить данные и сделать редирект на урл с формой. В Laravel есть способ записать это просто и коротко:
 
-#### Получение старых входных данных
+	return redirect('form')->withInput();
 
-	Input::old('username');
+	return redirect('form')->withInput(Request::except('password'));
+
+#### Получение предыдущих данных
+
+Чтобы получить сохранённые в сессии данные запроса, используйте метод `old`:
+
+	$username = Request::old('username');
+
+Для использования в шаблонах можно использовать этот простой хэлпер:
+
+	{{ old('username') }}
+
+<a name="cookies"></a>
+## Куки
+
+Все куки, которые пишет Laravel, зашифрованы - это значит, что на клиенте они не могут быть изменены. Изменённую на клиенте куку фреймворк просто не сможет расшифровать и прочесть.
+
+#### Получение значения куки
+
+	$value = Request::cookie('name');
+
+#### Добавить новую куку к запросу
+
+Хэлпер `cookie` создает объект `Symfony\Component\HttpFoundation\Cookie`. Полученный класс может быть добавлен к HTTP-ответу (response) методом `withCookie`:
+
+	$response = new Illuminate\Http\Response('Hello World');
+
+	$response->withCookie(cookie('name', 'value', $minutes));
+
+#### Создание вечной куки
+
+"На самом деле нет". Время жизни "вечной" куки - 5 лет.
+
+	$response->withCookie(cookie()->forever('name', 'value'));
 
 <a name="files"></a>
 ## Файлы
 
-#### Получение объекта загруженного файла
+#### Получение загруженного файла
 
-	$file = Input::file('photo');
+	$file = Request::file('photo');
 
-#### Определение успешной загрузки файла
+#### Определение, загружался ли файл в запросе
 
-	if (Input::hasFile('photo'))
+	if (Request::hasFile('photo'))
 	{
 		//
 	}
 
-Метод `file` возвращает объект класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который в свою очередь расширяет стандартный класс `SplFileInfo`, который предоставляет множество методов для работы с файлами.
+Метод `file` позвращает экземпляр класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который расширяет стандартный PHP-класс `SplFileInfo` и содержит все его методы.
+
+#### Определение валидности загруженного файла
+
+	if (Request::file('photo')->isValid())
+	{
+		//
+	}
 
 #### Перемещение загруженного файла
 
-	Input::file('photo')->move($destinationPath);
+	Request::file('photo')->move($destinationPath);
 
-	Input::file('photo')->move($destinationPath, $fileName);
+	Request::file('photo')->move($destinationPath, $fileName);
 
-#### Получение пути к загруженному файлу
+### Другие методы работы с файлами
 
-	$path = Input::file('photo')->getRealPath();
+Полный список методов класса `Symfony\Component\HttpFoundation\File\UploadedFile` смотрите [справке API](http://api.symfony.com/2.5/Symfony/Component/HttpFoundation/File/UploadedFile.html).
 
-#### Получение имени файла на клиентской системе (до загрузки)
+<a name="other-request-information"></a>
+## Другая информация о запросе
 
-	$name = Input::file('photo')->getClientOriginalName();
+The `Request` class provides many methods for examining the HTTP request for your application and extends the `Symfony\Component\HttpFoundation\Request` class. Here are some of the highlights.
 
-#### Получение расширения загруженного файла
+Класс `Request` содержит много методов, рассказывающих о HTTP-запросе, он также расширяет класс `Symfony\Component\HttpFoundation\Request` и содержит все его методы. Вот некоторые из них:
 
-	$extension = Input::file('photo')->getClientOriginalExtension();
-
-#### Получение размера загруженного файла
-
-	$size = Input::file('photo')->getSize();
-
-#### Определение MIME -типа загруженного файла
-
-	$mime = Input::file('photo')->getMimeType();
-
-<a name="request-information"></a>
-## Информация о запросе (request)
-
-Класс `Request` содержит множество методов для изучения входящего запроса в вашем приложении. Он расширяет класс `Symfony\Component\HttpFoundation\Request`. Ниже - несколько полезных примеров.
-
-#### Получение URI (пути) запроса
+#### URI запроса
 
 	$uri = Request::path();
 
-#### Соответствует ли запрос маске пути?
+#### Метод запроса
+
+	$method = Request::method();
+
+	if (Request::isMethod('post'))
+	{
+		//
+	}
+
+#### Проверка на соответствие урла шаблону
 
 	if (Request::is('admin/*'))
 	{
 		//
 	}
 
-#### Получение URL запроса
+#### URL запроса
 
 	$url = Request::url();
-
-#### Извлечение сегмента URI (пути)
-
-	$segment = Request::segment(1);
-
-#### Чтение заголовка запроса
-
-	$value = Request::header('Content-Type');
-
-#### Чтение значения из $_SERVER
-
-	$value = Request::server('PATH_INFO');
-
-
-#### Используется ли HTTPS ?
-
-	if (Request::secure())
-	{
-		//
-	}
-
-#### Это ajax-запрос ?
-
-	if (Request::ajax())
-	{
-		//
-	}
-
-#### Запрос имеет формат JSON ?
-
-	if (Request::isJson())
-	{
-		//
-	}
-
-#### Ожидается, что ответ будет в формате JSON ?
-
-	if (Request::wantsJson())
-	{
-		//
-	}
-
-#### Определение ожидаемого формата ответа
-
-Метод `Request::format` основывается на данных http-заголовка `Accept`
-
-	if (Request::format() == 'json')
-	{
-		//
-	}
