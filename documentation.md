@@ -1,8 +1,7 @@
-git 278dc5e75a7a45d268c2745a11f12425a9911c9c
+git dde697343cbe75fa7a15505749835640cc28898b
 
 ---
 - Вступление
-    - [Введение](/docs/master/introduction)
     - [Версии фреймворка](/docs/master/releases)
     - [Руководство по обновлению](/docs/master/upgrade)
     - [Участие в разработке](/docs/master/contributions)
@@ -10,7 +9,7 @@ git 278dc5e75a7a45d268c2745a11f12425a9911c9c
     - [Установка](/docs/master/installation)
     - [Настройка](/docs/master/configuration)
     - [Homestead](/docs/master/homestead)
-- HTTP-слой
+- Основы
     - [Routing](/docs/master/routing)
     - [Middleware](/docs/master/middleware)
     - [Controllers](/docs/master/controllers)
