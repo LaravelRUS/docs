@@ -1,4 +1,4 @@
-git 4e44d406b984f09b23bdba826a30acec44b345d6
+git 88b1ecd0b36c62f375af33c2f49fdef24cedfc4e
 
 ---
 
@@ -15,7 +15,6 @@ git 4e44d406b984f09b23bdba826a30acec44b345d6
 - [Удаление (DELETE)](#deletes)
 - [Слияние (UNION)](#unions)
 - [Блокирование (lock) данных](#pessimistic-locking)
-- [Кэширование запросов](#caching-queries)
 
 <a name="introduction"></a>
 ## Введение
@@ -35,6 +34,27 @@ Query Builder - конструктор запросов - предоставля
 	{
 		var_dump($user->name);
 	}
+
+#### Ограничение результатов выборки
+
+Вы можете отобрать некоторое количество результатов из выборки:
+
+	DB::table('users')->chunk(100, function($users)
+	{
+		foreach ($users as $user)
+		{
+			//
+		}
+	});
+
+Вы можете остановить отбор результатов в чанк, вернув `false` из функции-замыкания.
+
+	DB::table('users')->chunk(100, function($users)
+	{
+		//
+
+		return false;
+	});
 
 #### Получение одной записи
 
@@ -206,27 +226,13 @@ Query Builder - конструктор запросов - предоставля
 
 Иногда вам может быть нужно использовать уже готовое SQL-выражение в вашем запросе. Такие выражения вставляются в запрос напрямую в виде строк, поэтому будьте внимательны и не создавайте возможных точек для SQL-инъекций. Для создания сырого выражения используется метод `DB::raw`.
 
-#### Использование сырого выражения
+#### Использование SQL-выражения в конструкторе запросов
 
 	$users = DB::table('users')
 	                     ->select(DB::raw('count(*) as user_count, status'))
 	                     ->where('status', '<>', 1)
 	                     ->groupBy('status')
 	                     ->get();
-
-#### Увеличение или уменьшение значения поля
-
-	DB::table('users')->increment('votes');
-
-	DB::table('users')->increment('votes', 5);
-
-	DB::table('users')->decrement('votes');
-
-	DB::table('users')->decrement('votes', 5);
-
-Вы также можете указать дополнительные поля для изменения:
-
-	DB::table('users')->increment('votes', 1, array('name' => 'Джон'));
 
 <a name="inserts"></a>
 ## Вставка (INSERT)
@@ -237,9 +243,9 @@ Query Builder - конструктор запросов - предоставля
 		array('email' => 'john@example.com', 'votes' => 0)
 	);
 
-Если таблица имеет автоинкрементный индекс, то можно использовать метод `insertGetId` для вставки записи и получения её порядкового номера.
-
 #### Вставка записи и получение её нового ID
+
+Если таблица имеет автоинкрементный индекс, то можно использовать метод `insertGetId` для вставки записи и получения её порядкового номера.
 
 	$id = DB::table('users')->insertGetId(
 		array('email' => 'john@example.com', 'votes' => 0)
@@ -263,6 +269,20 @@ Query Builder - конструктор запросов - предоставля
 	            ->where('id', 1)
 	            ->update(array('votes' => 1));
 
+#### Увеличение или уменьшение значения поля
+
+	DB::table('users')->increment('votes');
+
+	DB::table('users')->increment('votes', 5);
+
+	DB::table('users')->decrement('votes');
+
+	DB::table('users')->decrement('votes', 5);
+
+Вы также можете указать дополнительные поля для изменения:
+
+	DB::table('users')->increment('votes', 1, array('name' => 'Джон'));	            
+
 <a name="deletes"></a>
 ## Удаление (DELETE)
 
@@ -284,8 +304,6 @@ Query Builder - конструктор запросов - предоставля
 ## Слияние (UNION)
 
 Конструктор запросов позволяет создавать слияния двух запросов вместе.
-
-#### Выполнение слияния
 
 	$first = DB::table('users')->whereNull('first_name');
 
