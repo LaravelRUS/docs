@@ -2,7 +2,7 @@ git 103a627268f66b0c4a3002973174670b1ecc19a3
 
 ---
 
-# Еncryption
+# Шифрование
 
 - [Введение](#introduction)
 - [Основы использования](#basic-usage)
