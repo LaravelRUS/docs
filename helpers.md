@@ -1,4 +1,4 @@
-git ab97465c61526178e582d038784455d121862004
+git c3ecb6813a621ff961685220b43cd002b3d67b54
 
 ---
 
@@ -291,6 +291,18 @@ Example:
 
 	$singular = str_singular('cars');
 
+### str_slug
+
+Создать строку-идентификатор (slug) с учётом ограничений URL.
+
+	str_slug($title, $separator);
+
+Пример:
+	
+	$title = str_slug('Laravel 5 Framework', '-');
+	
+	// laravel-5-framework
+	
 ### studly_case
 
 Преобразовать строку в `StudlyCase`.
