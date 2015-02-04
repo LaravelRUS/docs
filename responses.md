@@ -25,7 +25,7 @@ HTTP-Response - это ответ фреймворка, который отда�
 
 #### Создание своих ответов
 
-Однако чаще в контроллерах вы возвращаете объект `Illuminate\Http\Response` или [шаблон](/docs/master/views). Возврат объекта `Response` позволяет изменить HTTP-код и заголовки ответа. Этот объект наследуется от `Symfony\Component\HttpFoundation\Response`, который предоставляет разнобразные методы для построения HTTP-ответа:
+Однако чаще в контроллерах вы возвращаете объект `Illuminate\Http\Response` или [шаблон](/docs/5.0/views). Возврат объекта `Response` позволяет изменить HTTP-код и заголовки ответа. Этот объект наследуется от `Symfony\Component\HttpFoundation\Response`, который предоставляет разнобразные методы для построения HTTP-ответа:
 
 	use Illuminate\Http\Response;
 
@@ -64,7 +64,7 @@ Redirect responses are typically instances of the `Illuminate\Http\RedirectRespo
 
 #### Возвращение редиректа с flash-данными в сессии
 
-Редирект [с flash-данными в сессии](/docs/master/session) - типичная задача в случае, когда после POST-запроса надо перейти на страницу с формой и показать ошибки валидации. Записать flash-данные в сессию можно при помощи метода `with()`:
+Редирект [с flash-данными в сессии](/docs/5.0/session) - типичная задача в случае, когда после POST-запроса надо перейти на страницу с формой и показать ошибки валидации. Записать flash-данные в сессию можно при помощи метода `with()`:
 
 	return redirect('user/login')->with('message', 'Login Failed');
 
@@ -102,7 +102,7 @@ If you are redirecting to a route with an "ID" parameter that is being populated
 
 #### Редирект на метод определённого контроллера
 
-Вы можете также сделать редирект на [экшн](/docs/master/controllers) заданного контроллера:
+Вы можете также сделать редирект на [экшн](/docs/5.0/controllers) заданного контроллера:
 
 	return redirect()->action('App\Http\Controllers\HomeController@index');
 
@@ -119,9 +119,9 @@ If you are redirecting to a route with an "ID" parameter that is being populated
 <a name="other-responses"></a>
 ## Особые HTTP-ответы
 
-The `response` helper may be used to conveniently generate other types of response instances. When the `response` helper is called without arguments, an implementation of the `Illuminate\Contracts\Routing\ResponseFactory` [contract](/docs/master/contracts) is returned. This contract provides several helpful methods for generating responses.
+The `response` helper may be used to conveniently generate other types of response instances. When the `response` helper is called without arguments, an implementation of the `Illuminate\Contracts\Routing\ResponseFactory` [contract](/docs/5.0/contracts) is returned. This contract provides several helpful methods for generating responses.
 
-Если хэлпер `response()` вызывается без параметров, он возвращает имплементацию [контракта](/docs/master/contracts) `Illuminate\Contracts\Routing\ResponseFactory`, которая содержит несколько методов для генерации HTTP-ответа. 
+Если хэлпер `response()` вызывается без параметров, он возвращает имплементацию [контракта](/docs/5.0/contracts) `Illuminate\Contracts\Routing\ResponseFactory`, которая содержит несколько методов для генерации HTTP-ответа. 
 
 #### Отдача JSON
 
@@ -147,7 +147,7 @@ The `response` helper may be used to conveniently generate other types of respon
 
 Вы можете оформить свой вариант HTTP-ответа в виде макроса, чтобы использовать его в других роутах или контроллерах в короткой форме. 
 
-HTTP-макросы определяются в методе `boot()` [сервис-провайдера](/docs/master/providers):
+HTTP-макросы определяются в методе `boot()` [сервис-провайдера](/docs/5.0/providers):
 
 	<?php namespace App\Providers;
 

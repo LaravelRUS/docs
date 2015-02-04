@@ -24,9 +24,9 @@ git 4108ebc0b1aca39e323a42c15c45e81a8d21410c
 
 ### При помощи DI (dependency injection)
 
-To obtain an instance of the current HTTP request via dependency injection, you should type-hint the class on your controller constructor or method. The current request instance will automatically be injected by the [service container](/docs/master/container):
+To obtain an instance of the current HTTP request via dependency injection, you should type-hint the class on your controller constructor or method. The current request instance will automatically be injected by the [service container](/docs/5.0/container):
 
-Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедоение зависимости). Спомоб заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/master/container)) и подает на вход конструктору контроллера:
+Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедоение зависимости). Спомоб заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/5.0/container)) и подает на вход конструктору контроллера:
 
 	<?php namespace App\Http\Controllers;
 
@@ -114,7 +114,7 @@ C масивами можно работать через нотацию с то
 
 #### Сохранение запроса во flash-переменных сессии
 
-Метод `flash` сохранит текущие входные данные в [сессии](/docs/master/session), так, что они будут доступны в следующем запросе.
+Метод `flash` сохранит текущие входные данные в [сессии](/docs/5.0/session), так, что они будут доступны в следующем запросе.
 
 	Request::flash();
 

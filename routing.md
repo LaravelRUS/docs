@@ -308,4 +308,4 @@ HTML-формы не поддерживают методы HTTP-запроса `
 
 Второй - вы можете сами бросить исключение `Symfony\Component\HttpKernel\Exception\NotFoundHttpException`.
 
-Смотрите также секцию [errors](/docs/master/errors#http-exceptions) документации.
+Смотрите также секцию [errors](/docs/5.0/errors#http-exceptions) документации.
