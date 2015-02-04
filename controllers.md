@@ -1,4 +1,4 @@
-git 1d31b7c1b757b0c40e4b985ef1f38e35aa35c081
+git 0bd7ca3bea980bcd2e24315191a3fa257e2f8e7f
 
 ---
 
@@ -7,6 +7,7 @@ git 1d31b7c1b757b0c40e4b985ef1f38e35aa35c081
 - [Введение](#introduction)
 - [Простейшие контроллеры](#basic-controllers)
 - [Использование посредников с контроллерами ](#controller-middleware)
+- [Единые контроллеры](#implicit-controllers)
 - [Фильтры контроллеров](#controller-filters)
 - [RESTful ресурс-контроллеры](#restful-resource-controllers)
 - [Внедрение зависимостей в контроллерах](#dependency-injection-and-controllers)
@@ -110,6 +111,44 @@ git 1d31b7c1b757b0c40e4b985ef1f38e35aa35c081
             
     }
 
+<a name="implicit-controllers"></a>
+## Единые контроллеры
+
+Laravel позволяет вам легко создавать один маршрут для обработки всех действий контроллера. Для начала, зарегистрируйте маршрут методом
+`Route::controller`:
+
+	Route::controller('users', 'UserController');
+
+Метод `controller` принимает два аргумента. Первый - корневой URI (путь), который обрабатывает данный контроллер,
+в то время как второй - имя класса самого контроллера. Далее просто добавьте методы в этот контроллер с префиксом в виде типа HTTP-запроса
+(HTTP verb), который они обрабатывают.
+
+	class UserController extends Controller {
+
+		public function getIndex()
+		{
+			//
+		}
+
+		public function postProfile()
+		{
+			//
+		}
+
+		public function anyLogin()
+		{
+			//
+		}
+
+	}
+
+Методы `index` относятся к корневому URI (пути) контроллера, который, в нашем случае `users`.
+
+Если имя действия вашего контроллера состоит из нескольких слов вы можете обратиться к нему по URI, используя синтаксис с дефисами (-).
+Например, данное действие в нашем классе `UserController` будет доступен по адресу `users/admin-profile`:
+
+	public function getAdminProfile() {}
+	
 <a name="restful-resource-controllers"></a>
 ## RESTful ресурс-контроллеры
 
