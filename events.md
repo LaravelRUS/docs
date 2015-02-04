@@ -1,139 +1,115 @@
-git 596b4a1a37092cc74a045a0e59f4868dbf78cf7f
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
-# События
+# События (events)
 
-- [Простейшее использование](#basic-usage)
-- [Обработчики по шаблону](#wildcard-listeners)
-- [Классы-обработчики](#using-classes-as-listeners)
-- [Запланированные события](#queued-events)
+- [Основы использования](#basic-usage)
+- [Обработка событий в фоне](#queued-event-handlers)
 - [Классы-подписчики](#event-subscribers)
 
 <a name="basic-usage"></a>
-## Простейшее использование
+## Основы использования
 
-Класс `Event` содержит простую реализацию концепции Observer ("Наблюдатель"), что позволяет вам подписываться на уведомления (listen for events) о событиях в вашем приложении.
+Events в Laravel - это простая реализация паттерна Observer, которая позволяет вам подписываться на так называемые события, которые генерируются в некотором месте вашего приложения и обрабатываются как правило в этом же самом запросе. Классы событий по умолчанию находятся в папке `app/Events`, а классы обработчиков событий - в `app/Handlers/Events`.
 
-#### Подписка на событие
+Создать класс события можно artisan-командой `make:event`:
 
-	Event::listen('auth.login', function($user)
-	{
-		$user->last_login = new DateTime;
+	php artisan make:event PodcastWasPurchased
 
-		$user->save();
-	});
+#### Подписка на события
+
+The `EventServiceProvider` included with your Laravel application provides a convenient place to register all event handlers. The `listen` property contains an array of all events (keys) and their handlers (values). Of course, you may add as many events to this array as your application requires. For example, let's add our `PodcastWasPurchased` event:
+
+Сервис-провайдер `EventServiceProvider` - это удобное место для регистрации классов слушателей событий. В массиве `listen` перечисляются названия события (в ключе массива) и название класса, который его обрабатывает. Например, для нашего `PodcastWasPurchased`:
+
+	/**
+	 * The event handler mappings for the application.
+	 *
+	 * @var array
+	 */
+	protected $listen = [
+		'App\Events\PodcastWasPurchased' => [
+			'App\Handlers\Events\EmailPurchaseConfirmation@handle',
+		],
+	];
+
+To generate a handler for an event, use the `handler:event` Artisan CLI command:
+
+Для генерации исполнителя (handler) события используйте artisan-команду `handler:event`:
+
+	php artisan handler:event EmailPurchaseConfirmation --event=PodcastWasPurchased
+
+Of course, manually running the `make:event` and `handler:event` commands each time you need a handler or event is cumbersome. Instead, simply add handlers and events to your `EventServiceProvider` and use the `event:generate` command. This command will generate any events or handlers that are listed in your `EventServiceProvider`:
+
+Но вообще, использование двух команд, `make:event` и `handler:event` каждый раз, когда вам нужно создать обработчик события - это неудобно. Вместо этого можно заполнить массив `listen` в `EventServiceProvider` и выполнить artisan-команду `event:generate`. Эта команда анализирует `listen` и создает все необходимые классы событий и обработчиков событий:
+
+	php artisan event:generate
 
 #### Запуск события
 
-	$event = Event::fire('auth.login', array($user));
+Событие может быть запущено (fire) при помощи фасада `Event`:
 
-При подписывании на событие вы можете указать приоритет. Обработчики с более высоким приоритетом будут вызваны перед теми, чей приоритет ниже, а обработчики с одинаковым приоритетом будут вызываться в порядке их регистрации.
+	$response = Event::fire(new PodcastWasPurchased($podcast));
 
-#### Подписка на событие с приоритетом
+Метод `fire` возвращает массив ответов (responses).
 
-	Event::listen('auth.login', 'LoginHandler', 10);
+Вместо фасада можно использовать хэлпер:
 
-	Event::listen('auth.login', 'OtherHandler', 5);
+	event(new PodcastWasPurchased($podcast));
 
-Иногда вам может быть нужно пропустить вызовы других обработчиков события. Вы можете сделать это, вернув значение `false`:
+#### Слушатели в функциях-замыканиях
 
-#### Прерывание обработки события
+Чтобы упростить себе работу и не создавать два класса, вы можете создать слушателя в виде функции-замыкания. Сделать это можно в методе `boot` сервис-провайдера `EventServiceProvider`:
 
-	Event::listen('auth.login', function($event)
+	Event::listen('App\Events\PodcastWasPurchased', function($event)
 	{
-		// Обработка события
+		// Обработка события...
+	});
+
+#### Остановка распространения события
+
+Sometimes, you may wish to stop the propagation of an event to other listeners. You may do so using by returning `false` from your handler:
+
+Иногда вам нужно остановить распространение события, чтобы до других обработчиков, подписанных на это событие, оно не дошло. Для этого надо вернуть `false` в обработчике события:
+
+	Event::listen('App\Events\PodcastWasPurchased', function($event)
+	{
+		// Обработка события...
 
 		return false;
 	});
 
-### Где писать код ?
+<a name="queued-event-handlers"></a>
+## Обработка события в фоне
 
-Регистрировать обработчики событий можно практически везде - например, в старт-файле `app/start/global.php`. Или, если же этот файл у вас уже слишком сильно разросся, вы можете, например, сделать файл `app/events.php` и подключить (include) его в `app/start/global.php`. Если же вы предпочитаете ООП-подход, вы можете зарегистрировать ваши обработчики событий в одном из ваших сервис-провайдеров. 
+Хотите запустить обработчик события в фоне при помощи [queue](/docs/5.0/queues) ? Это делается очень легко. При создании класса обработчика события добавьте флаг `--queued`:
 
-<a name="wildcard-listeners"></a>
-## Обработчики по шаблону
+	php artisan handler:event SendPurchaseConfirmation --event=PodcastWasPurchased --queued
 
-При регистрации обработчика вы можете использовать звёздочки (*) для привязки его ко всем подходящим событиям.
+Или вручную поставьте реализацию (implements) интерфейса `Illuminate\Contracts\Queue\ShouldBeQueued`. Это всё ! Теперь при возникновении события фреймворк поместит класс обработки этого события в очередь, откуда он будет запущен диспетчером очереди.
 
-#### Регистрация обработчика по шаблону
+Если во время выполнения метода `handle` не будет брошено ни одного непойманного исключения, то обработчик события по завершении сам удалится из очереди. Но если вы хотите иметь доступ к методам задачи в очереди `delete` and `release` (вернуть задачу в очередь), то добавьте в класс обработчика события трейт `Illuminate\Queue\InteractsWithQueue`.
 
-	Event::listen('foo.*', function($param)
+	public function handle(PodcastWasPurchased $event)
 	{
-		// Обработка событий
-	});
-
-Этот обработчик будет вызываться при любом событии, начинающемся `foo.`.
-
-Для определения того, какое именно событие из подходящих под `foo.*` поймано, используйте `Event::firing()`
-
-	Event::listen('foo.*', function($param)
-	{
-		if (Event::firing() == 'foo.bar')
+		if (true)
 		{
-			//
+			$this->release(30);
 		}
-	});
-
-<a name="using-classes-as-listeners"></a>
-## Классы-обработчики
-
-В некоторых случаях вы можете захотеть обрабатывать события внутри класса, а не функции-замыкания. Классы-обработчики берутся из [IoC-контейнера](/docs/ioc), поэтому вы можете использовать все его возможности по автоматическому внедрению зависимостей.
-
-#### Регистрация обработчика в классе
-
-	Event::listen('auth.login', 'LoginHandler');
-
-По умолчанию будет вызываться метод `handle` класса `LoginHandler`.
-
-#### Создание обработчика внутри класса
-
-	class LoginHandler {
-
-		public function handle($data)
-		{
-			//
-		}
-
 	}
 
-Если вы не хотите использовать метод `handle`, вы можете указать другое имя при регистрации.
-
-#### Регистрация обработчика в другом методе
-
-	Event::listen('auth.login', 'LoginHandler@onLogin');
-
-<a name="queued-events"></a>
-## Запланированные события
-
-С помощью методов `queue` и `flush` вы можете запланировать события к запуску, но не запускать их сразу.
-
-#### Регистрация цепочки событий
-
-	Event::queue('foo', array($user));
-
-#### Регистрация "пускателя" событий
-
-	Event::flusher('foo', function($user)
-	{
-		//
-	});
-
-Наконец, вы можете запустить все запланированные события методом `flush`:
-
-	Event::flush('foo');
-
 <a name="event-subscribers"></a>
-## Классы-подписчики
+## Подписчики 
 
-Классы-подписчики содержат обработчики множества событий. Подписчики должны содержать метод `subscribe`, которому будет передан экземпляр обработчика событий для регистрации.
+#### Defining An Event Subscriber
 
-#### Определение класса-подписчика
+Подписчики на события (Event Subscribers) - классы, которые могут быть подписаны на несколько событий и содержать сразу несколько обработчиков событий. Такой класс должен иметь метод `subscribe`, который принимает в аргументах инстанс диспетчера событий:
 
 	class UserEventHandler {
 
 		/**
-		 * Обработка событий входа пользователя в систему.
+		 * Handle user login events.
 		 */
 		public function onUserLogin($event)
 		{
@@ -141,7 +117,7 @@ git 596b4a1a37092cc74a045a0e59f4868dbf78cf7f
 		}
 
 		/**
-		 * Обработка событий выхода из системы.
+		 * Handle user logout events.
 		 */
 		public function onUserLogout($event)
 		{
@@ -149,24 +125,28 @@ git 596b4a1a37092cc74a045a0e59f4868dbf78cf7f
 		}
 
 		/**
-		 * Регистрация всех обработчиков данного подписчика.
+		 * Register the listeners for the subscriber.
 		 *
 		 * @param  Illuminate\Events\Dispatcher  $events
 		 * @return array
 		 */
 		public function subscribe($events)
 		{
-			$events->listen('auth.login', 'UserEventHandler@onUserLogin');
+			$events->listen('App\Events\UserLoggedIn', 'UserEventHandler@onUserLogin');
 
-			$events->listen('user.logout', 'UserEventHandler@onUserLogout');
+			$events->listen('App\Events\UserLoggedOut', 'UserEventHandler@onUserLogout');
 		}
 
 	}
 
-Как только класс-подписчик определён, он может быть зарегистрирован внутри класса `Event`.
+#### Регистрация Event Subscriber
 
-#### Регистрация класса-подписчика
+После того как класс определён, его можно зарегистрировать следующим образом:
 
 	$subscriber = new UserEventHandler;
 
 	Event::subscribe($subscriber);
+
+Вы также можете использовать [сервис-контейнер](/docs/5.0/ioc) для того, чтобы получить объект своего подписчика на события:
+
+	Event::subscribe('UserEventHandler');
