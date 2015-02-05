@@ -1,4 +1,4 @@
-git ed4b8747fd20dc041fe4f3decb9f628f2376fb7f
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
@@ -20,8 +20,6 @@ git ed4b8747fd20dc041fe4f3decb9f628f2376fb7f
 Итак, [установите приложение Laravel 5.0](/docs/5.0/installation) в новую папку на своей локальной машине. Дальше мы рассмотрим процесс миграции поподробнее.
 
 ### Зависимости Composer и пакеты
-
-Don't forget to copy any additional Composer dependencies into your 5.0 application. This includes third-party code such as SDKs.
 
 Отредактируйте composer.json - добавьте туда зависимости и пакеты, которые использует ваше приложение. Убедитесь, что версии laravel-пакетов, которые вы используете, совместимы с Laravel 5.0.
 
@@ -51,7 +49,7 @@ Laravel 5.0 больше не использует систему разгран
 
 ### Роуты
 
-Скопируйте `routes.php` в `app/routes.php`.
+Скопируйте `routes.php` в `app/Http/routes.php`.
 
 ### Контроллеры
 
