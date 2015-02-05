@@ -26,7 +26,7 @@ git 4108ebc0b1aca39e323a42c15c45e81a8d21410c
 
 To obtain an instance of the current HTTP request via dependency injection, you should type-hint the class on your controller constructor or method. The current request instance will automatically be injected by the [service container](/docs/5.0/container):
 
-Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедоение зависимости). Спомоб заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/5.0/container)) и подает на вход конструктору контроллера:
+Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедрение зависимости). Способ заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/5.0/container)) и подает на вход конструктору контроллера:
 
 	<?php namespace App\Http\Controllers;
 
@@ -93,7 +93,7 @@ To obtain an instance of the current HTTP request via dependency injection, you 
 		//
 	}
 
-#### Получить все переменный запроса
+#### Получить все переменные запроса
 
 	$input = Request::all();
 
