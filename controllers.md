@@ -1,4 +1,4 @@
-git 0bd7ca3bea980bcd2e24315191a3fa257e2f8e7f
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
@@ -64,9 +64,9 @@ git 0bd7ca3bea980bcd2e24315191a3fa257e2f8e7f
 
 	Route::get('foo', 'Photos\AdminController@method');
 
-#### Naming Controller Routes
+#### Именованные роуты с контроллерами
 
-Как и в случае с обработчиками-замыканиями, вы можете присвоить имя этому маршруту:
+Как и в случае с обработчиками-замыканиями, вы можете присвоить имя этому роуту:
 
 	Route::get('foo', ['uses' => 'FooController@method', 'as' => 'name']);
 

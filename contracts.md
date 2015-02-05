@@ -1,4 +1,4 @@
-git 11619ec101e66d1feabbc923fda58ce8b5daf763
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
@@ -114,37 +114,37 @@ git 11619ec101e66d1feabbc923fda58ce8b5daf763
 
 Контракт  |  Фасад Laravel 4.x 
 ------------- | -------------
-[Illuminate\Contracts\Auth\Пгфкв](https://github.com/illuminate/contracts/blob/master/Auth/Guard.php) | Auth
-[Illuminate\Contracts\Auth\PasswordBroker](https://github.com/illuminate/contracts/blob/master/Auth/PasswordBroker.php) | Password
-[Illuminate\Contracts\Cache\Repository](https://github.com/illuminate/contracts/blob/master/Cache/Repository.php) | Cache
-[Illuminate\Contracts\Cache\Factory](https://github.com/illuminate/contracts/blob/master/Cache/Factory.php) | Cache::driver()
-[Illuminate\Contracts\Config\Repository](https://github.com/illuminate/contracts/blob/master/Config/Repository.php) | Config
-[Illuminate\Contracts\Container\Container](https://github.com/illuminate/contracts/blob/master/Container/Container.php) | App
-[Illuminate\Contracts\Cookie\Factory](https://github.com/illuminate/contracts/blob/master/Cookie/Factory.php) | Cookie
-[Illuminate\Contracts\Cookie\QueueingFactory](https://github.com/illuminate/contracts/blob/master/Cookie/QueueingFactory.php) | Cookie::queue()
-[Illuminate\Contracts\Encryption\Encrypter](https://github.com/illuminate/contracts/blob/master/Encryption/Encrypter.php) | Crypt
-[Illuminate\Contracts\Events\Dispatcher](https://github.com/illuminate/contracts/blob/master/Events/Dispatcher.php) | Event
-[Illuminate\Contracts\Filesystem\Cloud](https://github.com/illuminate/contracts/blob/master/Filesystem/Cloud.php) |  &nbsp;
-[Illuminate\Contracts\Filesystem\Factory](https://github.com/illuminate/contracts/blob/master/Filesystem/Factory.php) | File
-[Illuminate\Contracts\Filesystem\Filesystem](https://github.com/illuminate/contracts/blob/master/Filesystem/Filesystem.php) | File
-[Illuminate\Contracts\Foundation\Application](https://github.com/illuminate/contracts/blob/master/Foundation/Application.php) | App
-[Illuminate\Contracts\Hashing\Hasher](https://github.com/illuminate/contracts/blob/master/Hashing/Hasher.php) | Hash
-[Illuminate\Contracts\Logging\Log](https://github.com/illuminate/contracts/blob/master/Logging/Log.php) | Log
-[Illuminate\Contracts\Mail\MailQueue](https://github.com/illuminate/contracts/blob/master/Mail/MailQueue.php) | Mail::queue()
-[Illuminate\Contracts\Mail\Mailer](https://github.com/illuminate/contracts/blob/master/Mail/Mailer.php) | Mail
-[Illuminate\Contracts\Queue\Factory](https://github.com/illuminate/contracts/blob/master/Queue/Factory.php) | Queue::driver()
-[Illuminate\Contracts\Queue\Queue](https://github.com/illuminate/contracts/blob/master/Queue/Queue.php) | Queue
-[Illuminate\Contracts\Redis\Database](https://github.com/illuminate/contracts/blob/master/Redis/Database.php) | Redis
-[Illuminate\Contracts\Routing\Registrar](https://github.com/illuminate/contracts/blob/master/Routing/Registrar.php) | Route
-[Illuminate\Contracts\Routing\ResponseFactory](https://github.com/illuminate/contracts/blob/master/Routing/ResponseFactory.php) | Response
-[Illuminate\Contracts\Routing\UrlGenerator](https://github.com/illuminate/contracts/blob/master/Routing/UrlGenerator.php) | URL
-[Illuminate\Contracts\Support\Arrayable](https://github.com/illuminate/contracts/blob/master/Support/Arrayable.php) | &nbsp;
-[Illuminate\Contracts\Support\Jsonable](https://github.com/illuminate/contracts/blob/master/Support/Jsonable.php) | &nbsp;
-[Illuminate\Contracts\Support\Renderable](https://github.com/illuminate/contracts/blob/master/Support/Renderable.php) | &nbsp;
-[Illuminate\Contracts\Validation\Factory](https://github.com/illuminate/contracts/blob/master/Validation/Factory.php) | Validator::make()
-[Illuminate\Contracts\Validation\Validator](https://github.com/illuminate/contracts/blob/master/Validation/Validator.php) | &nbsp;
-[Illuminate\Contracts\View\Factory](https://github.com/illuminate/contracts/blob/master/View/Factory.php) | View::make()
-[Illuminate\Contracts\View\View](https://github.com/illuminate/contracts/blob/master/View/View.php) | &nbsp;
+[Illuminate\Contracts\Auth\Пгфкв](https://github.com/illuminate/contracts/blob/5.0/Auth/Guard.php) | Auth
+[Illuminate\Contracts\Auth\PasswordBroker](https://github.com/illuminate/contracts/blob/5.0/Auth/PasswordBroker.php) | Password
+[Illuminate\Contracts\Cache\Repository](https://github.com/illuminate/contracts/blob/5.0/Cache/Repository.php) | Cache
+[Illuminate\Contracts\Cache\Factory](https://github.com/illuminate/contracts/blob/5.0/Cache/Factory.php) | Cache::driver()
+[Illuminate\Contracts\Config\Repository](https://github.com/illuminate/contracts/blob/5.0/Config/Repository.php) | Config
+[Illuminate\Contracts\Container\Container](https://github.com/illuminate/contracts/blob/5.0/Container/Container.php) | App
+[Illuminate\Contracts\Cookie\Factory](https://github.com/illuminate/contracts/blob/5.0/Cookie/Factory.php) | Cookie
+[Illuminate\Contracts\Cookie\QueueingFactory](https://github.com/illuminate/contracts/blob/5.0/Cookie/QueueingFactory.php) | Cookie::queue()
+[Illuminate\Contracts\Encryption\Encrypter](https://github.com/illuminate/contracts/blob/5.0/Encryption/Encrypter.php) | Crypt
+[Illuminate\Contracts\Events\Dispatcher](https://github.com/illuminate/contracts/blob/5.0/Events/Dispatcher.php) | Event
+[Illuminate\Contracts\Filesystem\Cloud](https://github.com/illuminate/contracts/blob/5.0/Filesystem/Cloud.php) |  &nbsp;
+[Illuminate\Contracts\Filesystem\Factory](https://github.com/illuminate/contracts/blob/5.0/Filesystem/Factory.php) | File
+[Illuminate\Contracts\Filesystem\Filesystem](https://github.com/illuminate/contracts/blob/5.0/Filesystem/Filesystem.php) | File
+[Illuminate\Contracts\Foundation\Application](https://github.com/illuminate/contracts/blob/5.0/Foundation/Application.php) | App
+[Illuminate\Contracts\Hashing\Hasher](https://github.com/illuminate/contracts/blob/5.0/Hashing/Hasher.php) | Hash
+[Illuminate\Contracts\Logging\Log](https://github.com/illuminate/contracts/blob/5.0/Logging/Log.php) | Log
+[Illuminate\Contracts\Mail\MailQueue](https://github.com/illuminate/contracts/blob/5.0/Mail/MailQueue.php) | Mail::queue()
+[Illuminate\Contracts\Mail\Mailer](https://github.com/illuminate/contracts/blob/5.0/Mail/Mailer.php) | Mail
+[Illuminate\Contracts\Queue\Factory](https://github.com/illuminate/contracts/blob/5.0/Queue/Factory.php) | Queue::driver()
+[Illuminate\Contracts\Queue\Queue](https://github.com/illuminate/contracts/blob/5.0/Queue/Queue.php) | Queue
+[Illuminate\Contracts\Redis\Database](https://github.com/illuminate/contracts/blob/5.0/Redis/Database.php) | Redis
+[Illuminate\Contracts\Routing\Registrar](https://github.com/illuminate/contracts/blob/5.0/Routing/Registrar.php) | Route
+[Illuminate\Contracts\Routing\ResponseFactory](https://github.com/illuminate/contracts/blob/5.0/Routing/ResponseFactory.php) | Response
+[Illuminate\Contracts\Routing\UrlGenerator](https://github.com/illuminate/contracts/blob/5.0/Routing/UrlGenerator.php) | URL
+[Illuminate\Contracts\Support\Arrayable](https://github.com/illuminate/contracts/blob/5.0/Support/Arrayable.php) | &nbsp;
+[Illuminate\Contracts\Support\Jsonable](https://github.com/illuminate/contracts/blob/5.0/Support/Jsonable.php) | &nbsp;
+[Illuminate\Contracts\Support\Renderable](https://github.com/illuminate/contracts/blob/5.0/Support/Renderable.php) | &nbsp;
+[Illuminate\Contracts\Validation\Factory](https://github.com/illuminate/contracts/blob/5.0/Validation/Factory.php) | Validator::make()
+[Illuminate\Contracts\Validation\Validator](https://github.com/illuminate/contracts/blob/5.0/Validation/Validator.php) | &nbsp;
+[Illuminate\Contracts\View\Factory](https://github.com/illuminate/contracts/blob/5.0/View/Factory.php) | View::make()
+[Illuminate\Contracts\View\View](https://github.com/illuminate/contracts/blob/5.0/View/View.php) | &nbsp;
 
 <a name="how-to-use-contracts"></a>
 ## Использование контрактов
