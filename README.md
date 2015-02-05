@@ -1,7 +1,7 @@
 Laravel 5
 ====
 
-Документация на русском языке. Перевод официальной документации [https://github.com/laravel/docs](https://github.com/laravel/docs).
+Перевод документации Laravel - [http://laravel.su/docs](http://laravel.su/docs)
 
 ## Соглашения о формате
 
