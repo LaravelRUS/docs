@@ -1,4 +1,4 @@
-git a868114bb1864038dcda7b3190df95a2117de97b
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
@@ -8,6 +8,7 @@ git a868114bb1864038dcda7b3190df95a2117de97b
 - [Файлы шаблонов](#views)
 - [Файлы переводов](#translations)
 - [Файлы конфигов](#configuration)
+- [Публикация групп файлов](#publishing-file-groups)
 - [Файлы роутов](#routing)
 
 <a name="introduction"></a>
@@ -60,6 +61,10 @@ git a868114bb1864038dcda7b3190df95a2117de97b
 
 Теперь, когда пользователь исполнит команду `vendor:publish`, шаблоны пакета будут скопированы в соответствующу папку.
 
+Чтобы перезаписать имеющися файлы используйте флаг `--force`:
+
+	php artisan vendor:publish --force
+
 > **Примечание:** Вы можете использовать `publishes` не только для шаблонов, но и для **любых других файлов**, которые хотите скопировать из пакета в основное приложение пользователя.
 
 <a name="translations"></a>
@@ -98,6 +103,25 @@ git a868114bb1864038dcda7b3190df95a2117de97b
 	$this->mergeConfigFrom(
 		__DIR__.'/path/to/config/courier.php', 'courier'
 	);
+
+<a name="publishing-file-groups"></a>
+## Публикация групп файлов
+
+ВЫ можете разделить файлы, которые можно публиковать в приложение, на группы, и публиковать их раздельно. Например, в пакете есть конфиг и миграции:
+
+	// Публикация конфига
+	$this->publishes([
+		__DIR__.'/../config/package.php', config_path('package.php')
+	], 'config');
+
+	// Публикация миграций
+	$this->publishes([
+		__DIR__.'/../database/migrations/' => base_path('/database/migrations')
+	], 'migrations');
+
+Тепрь пользователь может опубликовать у себя, например, только конфиг:
+
+	php artisan vendor:publish --provider="Vendor\Providers\PackageServiceProvider" --tag="config"
 
 <a name="routing"></a>
 ## Файлы маршрутов
