@@ -1,4 +1,4 @@
-git dde697343cbe75fa7a15505749835640cc28898b
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 - Вступление
@@ -30,6 +30,7 @@ git dde697343cbe75fa7a15505749835640cc28898b
     - [Collections](/docs/5.0/collections)
     - [Command Bus](/docs/5.0/bus)
     - [Расширение ядра](/docs/5.0/extending)
+    - [Elixir](/docs/5.0/elixir)
     - [Encryption](/docs/5.0/encryption)
     - [Ошибки и логирование](/docs/5.0/errors)
     - [Events](/docs/5.0/events)
