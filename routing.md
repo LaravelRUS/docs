@@ -71,7 +71,7 @@ git d8d2bf6703142d3620c800f828ea065f2d06b9c6
 
 Здесь 'foo' - это URI.
 
-a name="csrf-protection"></a>
+<a name="csrf-protection"></a>
 ## Защита от CSRF
 
 Laravel provides an easy method of protecting your application from [cross-site request forgeries](http://en.wikipedia.org/wiki/Cross-site_request_forgery). Cross-site request forgeries are a type of malicious exploit whereby unauthorized commands are performed on behalf of the authenticated user.
