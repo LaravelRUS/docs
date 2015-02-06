@@ -103,7 +103,7 @@ To obtain an instance of the current HTTP request via dependency injection, you 
 
 	$input = Request::except('credit_card'); // все, кроме этой
 
-C масивами можно работать через нотацию с точкой:
+C массивами можно работать через нотацию с точкой:
 
 	$input = Request::input('products.0.name');
 
@@ -181,7 +181,7 @@ Since you often will want to flash input in association with a redirect to the p
 		//
 	}
 
-Метод `file` позвращает экземпляр класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который расширяет стандартный PHP-класс `SplFileInfo` и содержит все его методы.
+Метод `file` возвращает экземпляр класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который расширяет стандартный PHP-класс `SplFileInfo` и содержит все его методы.
 
 #### Определение валидности загруженного файла
 
