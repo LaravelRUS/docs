@@ -1,4 +1,4 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+git 85ff0d51e9fe3cd2bc76cdb02fe92bf63d55e3c0
 
 ---
 
@@ -23,7 +23,7 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 Отредактируйте composer.json - добавьте туда зависимости и пакеты, которые использует ваше приложение. Убедитесь, что версии laravel-пакетов, которые вы используете, совместимы с Laravel 5.0.
 
-После редактирование запустите `composer update`.
+После редактирования запустите `composer update`.
 
 ### Неймспейсы
 
@@ -128,6 +128,8 @@ implements AuthenticatableContract, CanResetPasswordContract
 use Authenticatable, CanResetPassword;
 ```
 
+**Если вы использовали их, удалите `Illuminate\Auth\Reminders\RemindableTrait` и `Illuminate\Auth\UserTrait` из вашего блока use и объявления класса.**
+
 ### Laravel Cashier
 
 Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/5.0/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Larave\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
@@ -144,7 +146,7 @@ use Authenticatable, CanResetPassword;
 
 ### Глобальные IoC-биндинги
 
-Если вы что-то добавляли в [IoC](/docs/5.0/container) в файле `start/global.php`, переместите этот код в метод `register` файла `app/Providers/AppServiceProvider.php`. You may need to import the `App` facade.
+Если вы что-то добавляли в [IoC](/docs/5.0/container) в файле `start/global.php`, переместите этот код в метод `register` файла `app/Providers/AppServiceProvider.php`. Вам, возможно, потребуется импортировать фасад `App`.
 
 Если хотите, можете разложить эти биндинги по разным сервис-провайдерам, исходя из их логической принадлежности.
 
@@ -172,7 +174,7 @@ use Authenticatable, CanResetPassword;
 
 ### Папка Public 
 
-Скопируйте содержимое вашей папки `public` **кроме файла index.php** в папку `public` Laravel 5.0 .
+Скопируйте содержимое вашей папки `public` **кроме файла index.php** в папку `public` Laravel 5.0.
 
 ### Тесты 
 
@@ -184,7 +186,7 @@ use Authenticatable, CanResetPassword;
 
 Вы можете располагать Sass, Less или CoffeeScript файлы в любом месте, но если не можете выбрать - `resources/assets` будет хорошим выбором.
 
-### Формы и  HTML-хелперы
+### Формы и HTML-хелперы
 
 Для работы с фасадами `Form::` и `HTML::` вам нужно установить дополнительный пакет, они теперь не входят во фреймворк. 
 
