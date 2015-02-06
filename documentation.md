@@ -13,8 +13,8 @@ git 1432dcdbc329619c8b1de81ede027a9711b8e35c
   - [Homestead](/docs/4.2/homestead)
   - [Жизненный цикл запроса](/docs/4.2/lifecycle)
   - [Роутинг](/docs/4.2/routing)
-  - [Вход](/docs/4.2/requests)
-  - [Выход](/docs/4.2/responses)
+  - [Запрос](/docs/4.2/requests)
+  - [Ответ](/docs/4.2/responses)
   - [Контроллеры](/docs/4.2/controllers)
   - [Ошибки и логирование](/docs/4.2/errors)
 - Обо всем поподробнее
