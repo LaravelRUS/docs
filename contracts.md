@@ -114,7 +114,7 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 Контракт  |  Фасад Laravel 4.x 
 ------------- | -------------
-[Illuminate\Contracts\Auth\Пгфкв](https://github.com/illuminate/contracts/blob/5.0/Auth/Guard.php) | Auth
+[Illuminate\Contracts\Auth\Guard](https://github.com/illuminate/contracts/blob/5.0/Auth/Guard.php) | Auth
 [Illuminate\Contracts\Auth\PasswordBroker](https://github.com/illuminate/contracts/blob/5.0/Auth/PasswordBroker.php) | Password
 [Illuminate\Contracts\Cache\Repository](https://github.com/illuminate/contracts/blob/5.0/Cache/Repository.php) | Cache
 [Illuminate\Contracts\Cache\Factory](https://github.com/illuminate/contracts/blob/5.0/Cache/Factory.php) | Cache::driver()
