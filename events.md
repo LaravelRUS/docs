@@ -1,4 +1,4 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+git 4c3d4d4675101a3fa18154d1c85cf292a2292b46
 
 ---
 
@@ -147,6 +147,6 @@ Sometimes, you may wish to stop the propagation of an event to other listeners. 
 
 	Event::subscribe($subscriber);
 
-Вы также можете использовать [сервис-контейнер](/docs/5.0/ioc) для того, чтобы получить объект своего подписчика на события:
+Вы также можете использовать [сервис-контейнер](/docs/5.0/container) для того, чтобы получить объект своего подписчика на события:
 
 	Event::subscribe('UserEventHandler');
