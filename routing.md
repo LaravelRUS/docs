@@ -1,8 +1,8 @@
-git b8f6ed467e8e2aa87b834119ad047cf2e96668c9
+git d8d2bf6703142d3620c800f828ea065f2d06b9c6
 
 ---
 
-# HTTP-роуты (маршрутизация)
+# HTTP-маршрутизация
 
 - [Основы](#basic-routing)
 - [Защита от CSRF](#csrf-protection)
@@ -18,7 +18,7 @@ git b8f6ed467e8e2aa87b834119ad047cf2e96668c9
 <a name="basic-routing"></a>
 ## Основы
 
-Большинство роутов (маршруты, routes) вашего приложения будут определены в файле `app/Http/routes.php`, который загружается сервис-провайдером `App\Providers\RouteServiceProvider`. В Laravel простейший роут состоит из URI (урла, пути) и функции-замыкания (она же коллбек).
+Большинство роутов (маршруты, routes) вашего приложения будут определены в файле `app/Http/routes.php`, который загружается сервис-провайдером `App\Providers\RouteServiceProvider`. В Laravel простейший роут состоит из URI (урла, пути) и функции-замыкания.
 
 #### Простейший GET-роут:
 
@@ -71,23 +71,31 @@ git b8f6ed467e8e2aa87b834119ad047cf2e96668c9
 
 Здесь 'foo' - это URI.
 
-a name="csrf-protection"></a>
+<a name="csrf-protection"></a>
 ## Защита от CSRF
 
 Laravel provides an easy method of protecting your application from [cross-site request forgeries](http://en.wikipedia.org/wiki/Cross-site_request_forgery). Cross-site request forgeries are a type of malicious exploit whereby unauthorized commands are performed on behalf of the authenticated user.
 
-Laravel предоставляет встроенное средство защиты от [межсайтовых подделок запросов](https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0_%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0) (cross-site request forgeries). Фреймворк автоатически генерит так называемый CSRF-токен для каждой активной сессии. Этот токен можно проверять при обработке запроса - действительно ли запрос послан с вашего сайта, а не с сайта-злоумышленника. Как правило проверяют только POST, PUT и DELETE запросы, так как они могут изменить состояние приложения (внести изменения в БД).
+Laravel предоставляет встроенное средство защиты от [межсайтовых подделок запросов](https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D1%81%D0%B0%D0%B9%D1%82%D0%BE%D0%B2%D0%B0%D1%8F_%D0%BF%D0%BE%D0%B4%D0%B4%D0%B5%D0%BB%D0%BA%D0%B0_%D0%B7%D0%B0%D0%BF%D1%80%D0%BE%D1%81%D0%B0) (cross-site request forgeries). Фреймворк автоматически генерит так называемый CSRF-токен для каждой активной сессии. Этот токен можно проверять при обработке запроса - действительно ли запрос послан с вашего сайта, а не с сайта-злоумышленника. Как правило проверяют только POST, PUT и DELETE запросы, так как они могут изменить состояние приложения (внести изменения в БД).
 
 #### Вставка CSRF-токена в форму
 
     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
-Вам не нужно проверять вручную соответствие CSRF-токена, пришедшего из формы и хранящегося в сессии, middleware `VerifyCsrfToken` делает это автоматически. Вдобавок с полю `_token`, проверяется еще и HTTP-заголовок `X-XSRF-TOKEN`.
+То же самое, но с использованием шаблонизатора [Blade](/docs/5.0/templates):
+
+	<input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+You do not need to manually verify the CSRF token on POST, PUT, or DELETE requests. The `VerifyCsrfToken` [HTTP middleware](/docs/5.0/middleware) will verify token in the request input matches the token stored in the session.    
+
+Вам не нужно проверять вручную соответствие CSRF-токена сессионному в POST, PUT и DELETE запросах, middleware (посредник) `VerifyCsrfToken` делает это автоматически. Вдобавок к полю `_token`, проверяется еще и HTTP-заголовок `X-XSRF-TOKEN`, который часто используется в Javascript-фреймворках.
 
 <a name="method-spoofing"></a>
 ## Подмена HTTP-метода
 
-HTML-формы не поддерживают методы HTTP-запроса `PUT` или `DELETE`. Для того, чтобы отправить на сервер HTTP-запрос с этими методами, вам нужно добавить в форму скрытый input с именем `_method`. Значение этого поля будет фосприниматься фреймворком как тип HTTP-запроса. Например:
+HTML-формы не поддерживают методы HTTP-запроса `PUT` или `DELETE`. Для того, чтобы отправить на сервер HTTP-запрос с этими методами, вам нужно добавить в форму скрытый input с именем `_method`. 
+
+Значение этого поля будет восприниматься фреймворком как тип HTTP-запроса. Например:
 
 	<form action="/foo/bar" method="POST">
 		<input type="hidden" name="_method" value="PUT">
@@ -184,9 +192,11 @@ HTML-формы не поддерживают методы HTTP-запроса `
 		//
 	}]);
 
-Также можно указать контроллер и его действие:
+Также можно указать контроллер и его метод:
 
-	Route::get('user/profile', ['as' => 'profile', 'uses' => 'UserController@showProfile']);
+	Route::get('user/profile', [
+        'as' => 'profile', 'uses' => 'UserController@showProfile'
+	]);
 
 Теперь вы можете использовать имя маршрута при генерации URL или переадресации:
 
@@ -279,7 +289,7 @@ HTML-формы не поддерживают методы HTTP-запроса `
 		//
 	});
 
-Из-за того, что мы ранее привязали параметр `{user}` к модели `App\User`, то её экземпляр будет передан в маршрут. Таким образом, к примеру, запрос `profile/1` передаст объект `User` , который соответствует ID 1 , полученному из БД.
+Из-за того, что мы ранее привязали параметр `{user}` к модели `App\User`, то её экземпляр будет передан в маршрут. Таким образом, к примеру, запрос `profile/1` передаст объект `User`, который соответствует ID 1, полученному из БД.
 
 > **Внимание:** если переданный ID не соответствует строке в БД, будет брошено исключение (Exception) 404.
 
@@ -308,4 +318,4 @@ HTML-формы не поддерживают методы HTTP-запроса `
 
 Второй - вы можете сами бросить исключение `Symfony\Component\HttpKernel\Exception\NotFoundHttpException`.
 
-Смотрите также секцию [errors](/docs/master/errors#http-exceptions) документации.
+Смотрите также секцию [errors](/docs/5.0/errors#http-exceptions) документации.

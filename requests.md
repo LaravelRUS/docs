@@ -1,4 +1,4 @@
-git 4108ebc0b1aca39e323a42c15c45e81a8d21410c
+git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 ---
 
@@ -24,9 +24,7 @@ git 4108ebc0b1aca39e323a42c15c45e81a8d21410c
 
 ### При помощи DI (dependency injection)
 
-To obtain an instance of the current HTTP request via dependency injection, you should type-hint the class on your controller constructor or method. The current request instance will automatically be injected by the [service container](/docs/master/container):
-
-Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедоение зависимости). Спомоб заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/master/container)) и подает на вход конструктору контроллера:
+Можно получить объект HTTP-запроса при помощи DI (dependency injection, внедрение зависимости). Способ заключается в том, что в аргументы конструктора контроллера помещается (type-hint) объект, который нам нужен, и Laravel, когда создает контроллер, создает этот объект (см. [сервис-контейнер](/docs/5.0/container)) и подает на вход конструктору контроллера:
 
 	<?php namespace App\Http\Controllers;
 
@@ -93,7 +91,7 @@ To obtain an instance of the current HTTP request via dependency injection, you 
 		//
 	}
 
-#### Получить все переменный запроса
+#### Получить все переменные запроса
 
 	$input = Request::all();
 
@@ -103,7 +101,7 @@ To obtain an instance of the current HTTP request via dependency injection, you 
 
 	$input = Request::except('credit_card'); // все, кроме этой
 
-C масивами можно работать через нотацию с точкой:
+C массивами можно работать через нотацию с точкой:
 
 	$input = Request::input('products.0.name');
 
@@ -114,7 +112,7 @@ C масивами можно работать через нотацию с то
 
 #### Сохранение запроса во flash-переменных сессии
 
-Метод `flash` сохранит текущие входные данные в [сессии](/docs/master/session), так, что они будут доступны в следующем запросе.
+Метод `flash` сохранит текущие входные данные в [сессии](/docs/5.0/session), так, что они будут доступны в следующем запросе.
 
 	Request::flash();
 
@@ -181,7 +179,7 @@ Since you often will want to flash input in association with a redirect to the p
 		//
 	}
 
-Метод `file` позвращает экземпляр класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который расширяет стандартный PHP-класс `SplFileInfo` и содержит все его методы.
+Метод `file` возвращает экземпляр класса `Symfony\Component\HttpFoundation\File\UploadedFile`, который расширяет стандартный PHP-класс `SplFileInfo` и содержит все его методы.
 
 #### Определение валидности загруженного файла
 
