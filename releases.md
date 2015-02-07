@@ -1,4 +1,4 @@
-git 3b4dd6d5f6df8fede4794c62236e58d28609c693
+git 4d532eeb29c7ba113f9672c7676e78ba775c8e72
 
 ---
 
@@ -157,9 +157,13 @@ Laravel 5 использует библиотеку [DotEnv](https://github.com/
 
 [Документация по настройке среды приложения](/docs/master/configuration#environment-configuration).
 
-### Laravel Socialite
+### Laravel Elixir
 
-Laravel Socialite is an optional, Laravel 5.0+ compatible package that provides totally painless authentication with OAuth providers. Currently, Socialite supports Facebook, Twitter, Google, and GitHub. Here's what it looks like:
+Laravel Elixir от Jeffrey Way - это инструмент для сборки css и js вашего приложения. Если вы слышали о Grunt или Gulp, но использование их казалось вам слишком сложным - попробуйте Elixir. Elixir представляет собой удобную надстройку над Gulp. С помощью него вы легко сможете компилировать Less, Sass или CoffeeScript. Он даже может автоматически запускать тесты за вас !
+
+[Документация по Laravel Elixir](/docs/5.0/elixir).
+
+### Laravel Socialite
 
 Laravel Socialite - пакет, совместимый с Laravel 5.0+ для аутентификации на сайте через OAuth-провайдеры. Поддерживаются Facebook, Twitter, Google и GitHub:
 
