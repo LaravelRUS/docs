@@ -82,11 +82,11 @@ Laravel предоставляет встроенное средство защ�
 
     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>">
 
-То же самое, но с использованием шаблонизатора [Blade](/docs/5.0/templates):
+То же самое, но с использованием шаблонизатора [Blade](/docs/master/templates):
 
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 
-You do not need to manually verify the CSRF token on POST, PUT, or DELETE requests. The `VerifyCsrfToken` [HTTP middleware](/docs/5.0/middleware) will verify token in the request input matches the token stored in the session.    
+You do not need to manually verify the CSRF token on POST, PUT, or DELETE requests. The `VerifyCsrfToken` [HTTP middleware](/docs/master/middleware) will verify token in the request input matches the token stored in the session.    
 
 Вам не нужно проверять вручную соответствие CSRF-токена сессионному в POST, PUT и DELETE запросах, middleware (посредник) `VerifyCsrfToken` делает это автоматически. Вдобавок к полю `_token`, проверяется еще и HTTP-заголовок `X-XSRF-TOKEN`, который часто используется в Javascript-фреймворках.
 
@@ -318,4 +318,4 @@ HTML-формы не поддерживают методы HTTP-запроса `
 
 Второй - вы можете сами бросить исключение `Symfony\Component\HttpKernel\Exception\NotFoundHttpException`.
 
-Смотрите также секцию [errors](/docs/5.0/errors#http-exceptions) документации.
+Смотрите также секцию [errors](/docs/master/errors#http-exceptions) документации.
