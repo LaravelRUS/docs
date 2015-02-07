@@ -1,4 +1,4 @@
-git 84875d695d25e4653282942d8d57b56bd77fbc52
+git 875cce8f7f24c416299df1e563c429ad899da639
 
 ---
 
@@ -34,7 +34,7 @@ Blade - простой, но мощный шаблонизатор, входящ
 	@extends('layouts.master')
 
 	@section('sidebar')
-		@parent
+		@@parent
 
 		<p>Этот элемент будет добавлен к главному сайдбару.</p>
 	@stop
