@@ -14,7 +14,7 @@ git c344e6ca5495ae9bc3f1cc62559b4a750a6c2515
 
 HTTP-Response - это ответ фреймворка, который отдается клиенту (обычно это браузер), от которого пришел HTTP-запрос.
 
-Наиболее простой создать HTTP-ответ - это возвратить строку в роуте или контроллере.
+Наиболее простой способ создать HTTP-ответ - это возвратить строку в роуте или контроллере.
 
 #### Response в виде возврата строки из роута:
 
@@ -52,7 +52,7 @@ HTTP-Response - это ответ фреймворка, который отда�
 <a name="redirects"></a>
 ## Редиректы
 
-Redirect responses are typically instances of the `Illuminate\Http\RedirectResponse` class, and contain the proper headers needed to redirect the user to another URL.
+Ответы редиректа, обычно, это экземпляры класса `Illuminate\Http\RedirectResponse`, и содержат необходимые заголовки, для того, чтобы перенаправить пользователя на нужный URL.
 
 Редирект - это объект класса `Illuminate\Http\RedirectResponse`, фактически это обычный HTTP-ответ без контента с установленным заголовком `Location`.
 
@@ -88,7 +88,7 @@ Redirect responses are typically instances of the `Illuminate\Http\RedirectRespo
 
 	return redirect()->route('profile', [1]);
 
-If you are redirecting to a route with an "ID" parameter that is being populated from an Eloquent model, you may simply pass the model itself. The ID will be extracted automatically:
+Если вы перенаправляете на роут с параметром "ID", который получается из модели Eloquent, вы можете просто указать саму модель вместо этого. ID будет получен автоматически:
 
 Если параметр роута - это ID некой модели, вы можете передать в аргументе экземпляр этой модели, Laravel возьмет оттуда ID сам:
 
@@ -118,8 +118,6 @@ If you are redirecting to a route with an "ID" parameter that is being populated
 
 <a name="other-responses"></a>
 ## Особые HTTP-ответы
-
-The `response` helper may be used to conveniently generate other types of response instances. When the `response` helper is called without arguments, an implementation of the `Illuminate\Contracts\Routing\ResponseFactory` [contract](/docs/5.0/contracts) is returned. This contract provides several helpful methods for generating responses.
 
 Если хэлпер `response()` вызывается без параметров, он возвращает имплементацию [контракта](/docs/5.0/contracts) `Illuminate\Contracts\Routing\ResponseFactory`, которая содержит несколько методов для генерации HTTP-ответа. 
 
