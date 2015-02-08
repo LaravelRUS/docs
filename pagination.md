@@ -83,6 +83,6 @@ git 68cb89f6ae991b798d839447f48582218585ae81
 Код выше создаст ссылки типа http://example.com/something?page=2#foo
 
 <a name="converting-to-json"></a>
-## Конвертация To JSON
+## Конвертация в JSON
 
 Класс `Paginator` реализует (implements) `Illuminate\Contracts\Support\JsonableInterface`, следовательно, у него есть метод `toJson`, который используется для вывода пагинируемой информации в формате json. Помимо пагинируемых данных, которые располагаются в `data`, этот метод добавляет мета-информацию, а именно: `total`, `current_page` и `last_page`. 
