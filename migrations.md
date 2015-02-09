@@ -20,7 +20,7 @@ git 6f3434990d7bef4030e5397737978b128d83c955
 
 Для создания новой миграции вы можете использовать команду `make:migrate`:
 
-	php artisan make:migrate create_users_table
+	php artisan make:migration create_users_table
 
 Миграция будет помещена в папку `database/migrations` и будет содержать текущее время, которое позволяет библиотеке определять порядок применения миграций.
 
@@ -28,7 +28,7 @@ git 6f3434990d7bef4030e5397737978b128d83c955
 
 Можно также использовать параметры `--table` и `--create` для указания имени таблицы и того факта, что миграция будет создавать новую таблицу, а не изменять существующую.
 
-	php artisan make:migrate create_users_table --table=users --create
+	php artisan make:migration create_users_table --table=users --create
 
 <a name="running-migrations"></a>
 ## Применение миграций
