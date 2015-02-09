@@ -18,7 +18,7 @@ git 6f3434990d7bef4030e5397737978b128d83c955
 <a name="creating-migrations"></a>
 ## Создание миграций
 
-Для создания новой миграции вы можете использовать команду `make:migrate`:
+Для создания новой миграции вы можете использовать команду `make:migration`:
 
 	php artisan make:migration create_users_table
 
