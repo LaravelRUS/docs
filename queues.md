@@ -257,8 +257,6 @@ Laravel имеет средства для контроля над некорр�
 		//
 	});
 
-You may also define a `failed` method directly on a queue job class, allowing you to perform job specific actions when a failure occurs:
-
 Вы также можете создать метод `failed` в классе команды, рядом с `handle`
 
 	public function failed()
