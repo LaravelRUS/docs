@@ -1,4 +1,4 @@
-git f4608bfa5470763193b270c4ceabc32f2a86db35
+git 04a07feb482ea8c735658367f986e6c305027ec0
 
 ---
 
@@ -41,7 +41,7 @@ Laravel Elixir предназначен для сборки файлов ваш�
 <a name="usage"></a>
 ## Использование
 
-Now that you've installed Elixir, you'll be compiling and concatenating in no time!
+Команды elixir записываются в файле `gulpfile.js`.
 
 #### Компиляция Less
 
@@ -208,7 +208,7 @@ elixir(function(mix) {
 
 #### Соединение методов
 
-Of course, you may chain almost all of Elixir's methods together to build your recipe:
+Вы можете образовывать цепочки из методов:
 
 ```javascript
 elixir(function(mix) {
@@ -222,27 +222,27 @@ elixir(function(mix) {
 <a name="gulp"></a>
 ## Gulp
 
-Now that you've told Elixir which tasks to execute, you only need to trigger Gulp from the command line.
+Для выполнения зарегистрированных команд нужно запустить в командной строке `gulp`
 
-#### Execute All Registered Tasks Once
+#### Выполнение всех зарегистрированных команд
 
     gulp
 
-#### Watch Assets For Changes
+#### Запуск команд при изменении файлов
 
     gulp watch
 
-#### Watch Tests And PHP Classes for Changes
+#### Запуск тестов при изменении классов
 
     gulp tdd
 
-> **Note:** All tasks will assume a development environment, and will exclude minification. For production, use `gulp --production`.
+> **Note:** По умолчанию подразумевается, что конамды выполняются в development-окружении и собираемые скрипты не минифицируются. Чтобы добавить минификацию запустите `gulp --production`.
 
 <a name="extensions"></a>
-## Extensions
+## Расширение
 
-You can even create your own Gulp tasks, and hook them into Elixir. Imagine that you want to add a fun task that
- uses the Terminal to verbally notify you with some message. Here's what that might look like:
+Вы можете создавать свои gulp-задачи и добавлять в elixir. 
+Например, сделаем шуточную задачу, которая выводит в терминал некое сообщение:
 
 ```javascript
  var gulp = require("gulp");
@@ -260,23 +260,25 @@ You can even create your own Gulp tasks, and hook them into Elixir. Imagine that
  });
 ```
 
-Notice that we `extend` Elixir's API by passing the key that we will use within our Gulpfile, as well as a callback function that will create the Gulp task.
+Первый аргумент в `extend` - имя задачи, которое мы будет далее использовать в нашем gulpfile.js , а второй - функция-замыкание с собственно кодом задачи, написанной для gulp.
 
-If you want your custom task to be monitored, then register a watcher as well.
+Вы также можете мониторить изменения в заданных файлах:
 
 ```javascript
 this.registerWatcher("message", "**/*.php");
 ```
 
-This lines designates that when any file that matches the regex, `**/*.php` is modified, we want to trigger the `message` task.
+Когда файл с путём, удовлетворяющем регекспу `**/*.php`, будет изменён - запустится задача `message`.
 
 That's it! You may either place this at the top of your Gulpfile, or instead extract it to a custom tasks file. If you choose the latter approach, simply require it into your Gulpfile, like so:
+
+Вы можете разместить этот код в верхней части вашего `gulpfile.js` , или в сыойм файле, и подключить его в `gulpfile.js` следующей конструкцией:
 
 ```javascript
 require("./custom-tasks")
 ```
 
-You're done! Now, you can mix it in.
+Дальше вы можете добавлять свою команду в микс:
 
 ```javascript
 elixir(function(mix) {
@@ -284,4 +286,4 @@ elixir(function(mix) {
 });
 ```
 
-With this addition, each time you trigger Gulp, Picard will request some tea.
+Теперь, как только gulp исполнит какую-либо задачу, в терминал выведется строка "Tea, Earl Grey, Hot".
