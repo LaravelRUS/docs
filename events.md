@@ -33,7 +33,6 @@ Events в Laravel - это простая реализация паттерна 
 		],
 	];
 
-To generate a handler for an event, use the `handler:event` Artisan CLI command:
 
 Для генерации исполнителя (handler) события используйте artisan-команду `handler:event`:
 
