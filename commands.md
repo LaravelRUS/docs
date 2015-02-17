@@ -1,4 +1,4 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+git 5af28da3ac17a272f3390fbc08582fbd1708b42d
 
 ---
 
@@ -46,13 +46,13 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 Массив, определяющий `аргументы`, выглядит так:
 
-	array($name, $mode, $description, $defaultValue)
+	[$name, $mode, $description, $defaultValue
 
 Аргумент `mode` может принимать одно из следующих значений: `InputArgument::REQUIRED` (обязательный) или `InputArgument::OPTIONAL` (необязательный).
 
 Массив, определяющий `опции`, выглядит следующим образом:
 
-	array($name, $shortcut, $mode, $description, $defaultValue)
+	[$name, $shortcut, $mode, $description, $defaultValue]
 
 Для опций, аргумент `mode` может быть: `InputOption::VALUE_REQUIRED` (значение обязательно), `InputOption::VALUE_OPTIONAL` (значение необязательно),
 `InputOption::VALUE_IS_ARRAY` (значение - массив), `InputOption::VALUE_NONE` (нет значения).
