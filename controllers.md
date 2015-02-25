@@ -1,4 +1,4 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+git 77b555a10b132a40fe1f78ae658674cc26b8c95a
 
 ---
 
@@ -140,7 +140,17 @@ Laravel позволяет вам легко создавать один мар�
 Например, данное действие в нашем классе `UserController` будет доступен по адресу `users/admin-profile`:
 
 	public function getAdminProfile() {}
+
+#### Назначение имён 
+
+Если вы хотите задать имена для роутов, регистрируемых при помощи `Route::controller` , вы можете сделать это так:
+
+	Route::controller('users', 'UserController', [
+		'anyLogin' => 'user.login',
+	]);	
 	
+Где `anyLogin` - метод класса `UserController`.
+
 <a name="restful-resource-controllers"></a>
 ## RESTful ресурс-контроллеры
 
@@ -161,13 +171,13 @@ Laravel позволяет вам легко создавать один мар�
 
 Verb      | Путь                        | Действие     | Имя маршрута
 ----------|-----------------------------|--------------|---------------------
-GET       | /resource                   | index        | resource.index
-GET       | /resource/create            | create       | resource.create
-POST      | /resource                   | store        | resource.store
-GET       | /resource/{resource}        | show         | resource.show
-GET       | /resource/{resource}/edit   | edit         | resource.edit
-PUT/PATCH | /resource/{resource}        | update       | resource.update
-DELETE    | /resource/{resource}        | destroy      | resource.destroy
+GET       | /photo                      | index        | resource.index
+GET       | /photo/create               | create       | photo.create
+POST      | /photo                      | store        | photo.store
+GET       | /photo/{photo}              | show         | photo.show
+GET       | /photo/{photo}/edit         | edit         | photo.edit
+PUT/PATCH | /photo/{photo}              | update       | photo.update
+DELETE    | /photo/{photo}              | destroy      | photo.destroy
 
 #### Настройка маршрутов в ресурс-контроллерах
 
@@ -214,7 +224,7 @@ DELETE    | /resource/{resource}        | destroy      | resource.destroy
 Если вдруг необходимо добавить дополнительные маршруты к уже существующим маршрутам ресурс-контроллера, необходимо зарегистрировать эти маршруты
 **перед** вызовом метода `Route::resource`:
 
-	Route::get('photos/popular');
+	Route::get('photos/popular', 'PhotoController@method');
 	
 	Route::resource('photos', 'PhotoController');
 
