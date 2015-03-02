@@ -83,7 +83,7 @@ Sometimes, you may wish to stop the propagation of an event to other listeners. 
 <a name="queued-event-handlers"></a>
 ## Обработка события в фоне
 
-Хотите запустить обработчик события в фоне при помощи [queue](/docs/master/queues) ? Это делается очень легко. При создании класса обработчика события добавьте флаг `--queued`:
+Хотите запустить обработчик события в фоне при помощи [queue](/docs/5.0/queues) ? Это делается очень легко. При создании класса обработчика события добавьте флаг `--queued`:
 
 	php artisan handler:event SendPurchaseConfirmation --event=PodcastWasPurchased --queued
 
@@ -147,6 +147,6 @@ Sometimes, you may wish to stop the propagation of an event to other listeners. 
 
 	Event::subscribe($subscriber);
 
-Вы также можете использовать [сервис-контейнер](/docs/master/container) для того, чтобы получить объект своего подписчика на события:
+Вы также можете использовать [сервис-контейнер](/docs/5.0/container) для того, чтобы получить объект своего подписчика на события:
 
 	Event::subscribe('UserEventHandler');
