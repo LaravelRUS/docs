@@ -19,7 +19,6 @@ Events в Laravel - это простая реализация паттерна 
 
 #### Подписка на события
 
-The `EventServiceProvider` included with your Laravel application provides a convenient place to register all event handlers. The `listen` property contains an array of all events (keys) and their handlers (values). Of course, you may add as many events to this array as your application requires. For example, let's add our `PodcastWasPurchased` event:
 
 Сервис-провайдер `EventServiceProvider` - это удобное место для регистрации классов слушателей событий. В массиве `listen` перечисляются названия события (в ключе массива) и название класса, который его обрабатывает. Например, для нашего `PodcastWasPurchased`:
 
@@ -34,13 +33,11 @@ The `EventServiceProvider` included with your Laravel application provides a con
 		],
 	];
 
-To generate a handler for an event, use the `handler:event` Artisan CLI command:
 
 Для генерации исполнителя (handler) события используйте artisan-команду `handler:event`:
 
 	php artisan handler:event EmailPurchaseConfirmation --event=PodcastWasPurchased
 
-Of course, manually running the `make:event` and `handler:event` commands each time you need a handler or event is cumbersome. Instead, simply add handlers and events to your `EventServiceProvider` and use the `event:generate` command. This command will generate any events or handlers that are listed in your `EventServiceProvider`:
 
 Но вообще, использование двух команд, `make:event` и `handler:event` каждый раз, когда вам нужно создать обработчик события - это неудобно. Вместо этого можно заполнить массив `listen` в `EventServiceProvider` и выполнить artisan-команду `event:generate`. Эта команда анализирует `listen` и создает все необходимые классы событий и обработчиков событий:
 
@@ -68,8 +65,6 @@ Of course, manually running the `make:event` and `handler:event` commands each t
 	});
 
 #### Остановка распространения события
-
-Sometimes, you may wish to stop the propagation of an event to other listeners. You may do so using by returning `false` from your handler:
 
 Иногда вам нужно остановить распространение события, чтобы до других обработчиков, подписанных на это событие, оно не дошло. Для этого надо вернуть `false` в обработчике события:
 

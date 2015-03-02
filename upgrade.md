@@ -1,4 +1,4 @@
-git 85ff0d51e9fe3cd2bc76cdb02fe92bf63d55e3c0
+git 5d31dee0e7ca8e7ab85949bbbda39f15db2678bf
 
 ---
 
@@ -132,7 +132,7 @@ use Authenticatable, CanResetPassword;
 
 ### Laravel Cashier
 
-Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/5.0/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Larave\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
+Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/5.0/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Laravel\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
 
 ### Artisan-команды
 
