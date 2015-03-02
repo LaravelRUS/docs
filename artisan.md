@@ -1,4 +1,4 @@
-git a9035e40c56ffdb31ee1d0ccdf83e16c7cc40867
+git 6bfa0031c86b1c7c2f3b6df16420ec8a1ae85c35
 
 ---
 
@@ -12,8 +12,7 @@ git a9035e40c56ffdb31ee1d0ccdf83e16c7cc40867
 <a name="introduction"></a>
 ## Введение
 
-Artisan - название интерфейса командной строки, входящей в состав Laravel. Он предоставляет полезные команды для использования во время
-разработки вашего приложения. Работает на основе мощного компонента Symfony Console.
+Artisan - название интерфейса командной строки, входящей в состав Laravel. Он предоставляет полезные команды для использования во время разработки вашего приложения. Работает на основе мощного компонента Symfony Console.
 
 <a name="usage"></a>
 ## Использование
@@ -30,7 +29,7 @@ Artisan - название интерфейса командной строки,
 
 	php artisan help migrate
 
-#### Использование среды выполнения
+#### Запуск в заданной среде выполнения
 
 Вы также можете указать среду выполнения, в которой будет выполнена команда, при помощи опции `--env`:
 
@@ -131,6 +130,16 @@ Artisan - название интерфейса командной строки,
 
 	$schedule->command('foo')->monthly();
 
+#### Запуск по дням недели
+
+	$schedule->command('foo')->mondays();
+	$schedule->command('foo')->tuesdays();
+	$schedule->command('foo')->wednesdays();
+	$schedule->command('foo')->thursdays();
+	$schedule->command('foo')->fridays();
+	$schedule->command('foo')->saturdays();
+	$schedule->command('foo')->sundays();	
+
 #### Выполнение задания только в определённой среде выполнения
 
 	$schedule->command('foo')->monthly()->environments('production');
@@ -145,3 +154,15 @@ Artisan - название интерфейса командной строки,
 	{
 		return true;
 	});
+
+#### Отправить вывод на email
+
+	$schedule->command('foo')->emailOutputTo('foo@example.com');
+
+#### Записать вывод в файл
+
+	$schedule->command('foo')->sendOutputTo($filePath);
+
+#### Дернуть url по завершении задачи
+
+	$schedule->command('foo')->thenPing($url);
