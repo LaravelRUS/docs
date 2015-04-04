@@ -34,7 +34,7 @@ Blade - простой, но мощный шаблонизатор, входящ
 	@extends('layouts.master')
 
 	@section('sidebar')
-		@@parent
+		@parent
 
 		<p>Этот элемент будет добавлен к главному сайдбару.</p>
 	@stop
