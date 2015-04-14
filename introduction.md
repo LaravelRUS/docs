@@ -15,8 +15,7 @@ git 944854856b38062fddc64007b51fc9f27a954b34
 - [Установка](/docs/4.2/installation) и [Настройка](/docs/4.2/configuration)
 - [Routing](/docs/4.2/routing)
 - [Requests & Input](/docs/4.2/requests)
-- [Responses](/docs/4.2/responses)
-- [Views](/docs/4.2/views)
+- [Views & Responses](/docs/4.2/responses)
 - [Controllers](/docs/4.2/controllers)
 
 После изучения этих документов вы будете иметь представление о том, как во фреймворке происходит обработка цикла запроса.
