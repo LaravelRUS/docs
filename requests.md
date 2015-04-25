@@ -203,7 +203,7 @@ Since you often will want to flash input in association with a redirect to the p
 
 The `Request` class provides many methods for examining the HTTP request for your application and extends the `Symfony\Component\HttpFoundation\Request` class. Here are some of the highlights.
 
-Класс `Request` содержит много методов, рассказывающих о HTTP-запросе, он также расширяет класс `Symfony\Component\HttpFoundation\Request` и содержит все его методы. Вот некоторые из них:
+Класс `Request` предоставляет множество методов позволяющих работать с HTTP-запросами в вашем приложении, является расширением класса `Symfony\Component\HttpFoundation\Request`. Вот некоторые из основых методов:
 
 #### URI запроса
 
