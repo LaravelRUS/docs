@@ -13,7 +13,7 @@ git a55b92e723313ecf50e8fddc83ad868f33028d3e
 <a name="configuration"></a>
 ## Конфигурация
 
-Логгер регистрируется в [старт-файле](/docs/lifecycle#start-files) `app/start/global.php`. По умолчанию логи пишутся в один файл, но вы можете изменить это поведение. Для ведения логов Laravel использует модуль [Monolog](https://github.com/Seldaek/monolog).
+Логгер регистрируется в [старт-файле](/docs/4.2/lifecycle#start-files) `app/start/global.php`. По умолчанию логи пишутся в один файл, но вы можете изменить это поведение. Для ведения логов Laravel использует модуль [Monolog](https://github.com/Seldaek/monolog).
 
 Например, если вы не хотите, чтобы все логи писались в один огромный файл, а хотите разбивать свои лог-файлы по дням, то вам нужно вписать в `app/start/global.php` следующее:
 
