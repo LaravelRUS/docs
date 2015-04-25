@@ -195,7 +195,7 @@ git fb85738c37ef8da3e0b3ed2c6e059b94d3d0dbac
 
 #### Создание миграций для пакета в `workbench`
 
-Вы можете легко создавать и выполнять [миграции](docs/migrations) для любого из ваших пакетов. Для создания миграции в `workbench` используется команда `--bench` option:
+Вы можете легко создавать и выполнять [миграции](/docs/4.2/migrations) для любого из ваших пакетов. Для создания миграции в `workbench` используется команда `--bench` option:
 
 	php artisan migrate:make create_users_table --bench="vendor/package"
 
