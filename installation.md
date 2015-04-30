@@ -32,7 +32,7 @@ Laravel использует [Composer](http://getcomposer.org) для упра�
 
 Вы можете установить Laravel с помощью команды `create-project`:
 
-	composer create-project laravel/laravel --prefer-dist
+	composer create-project laravel/laravel {directory} 4.2 --prefer-dist
 
 ### Загрузка архива
 
