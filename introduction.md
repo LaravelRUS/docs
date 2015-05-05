@@ -12,16 +12,16 @@ git 53d6a6b5b4c47d274b714a13a03d9a796239b835
 
 Изучать новый незнакомый фреймворк - нелегкое занятие, но учить новое всегда интересно. Вот некоторые рекомендации, что начать читать в первую очередь:
 
-- [Установка](/docs/5.0/installation) и [Настройка](/docs/5.0/configuration)
-- [Routing](/docs/5.0/routing)
-- [Requests & Input](/docs/5.0/requests)
-- [Responses](/docs/5.0/responses)
-- [Views](/docs/5.0/views)
-- [Controllers](/docs/5.0/controllers)
+- [Установка](/docs/{{version}}/installation) и [Настройка](/docs/{{version}}/configuration)
+- [Routing](/docs/{{version}}/routing)
+- [Requests & Input](/docs/{{version}}/requests)
+- [Responses](/docs/{{version}}/responses)
+- [Views](/docs/{{version}}/views)
+- [Controllers](/docs/{{version}}/controllers)
 
 После изучения этих документов вы будете иметь представление о том, как во фреймворке происходит обработка цикла запроса.
 
-Затем можно почитать про [настройку соединения](/docs/database) и [построение запросов](/docs/5.0/queries) к базе данных, а так же про встроенный [Eloquent ORM](/docs/5.0/eloquent), облегчающий работу с БД. А для того, чтобы понять, как реализовать функционал регистрации и логина пользователей - главу [Аутентификация](/docs/5.0/authentication)
+Затем можно почитать про [настройку соединения](/docs/{{version}}/database) и [построение запросов](/docs/{{version}}/queries) к базе данных, а так же про встроенный [Eloquent ORM](/docs/{{version}}/eloquent), облегчающий работу с БД. А для того, чтобы понять, как реализовать функционал регистрации и логина пользователей - главу [Аутентификация](/docs/{{version}}/authentication)
 
 <a name="laravel-philosophy"></a>
 ## Философия Laravel

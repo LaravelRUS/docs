@@ -17,7 +17,7 @@ git 5d31dee0e7ca8e7ab85949bbbda39f15db2678bf
 
 Общие рекомендации к переходу на Laravel 5.0 таковы - нужно создать новое приложение Laravel и скопировать в него классы и файлы из старого приложения Laravel 4.2, а именно контроллеры, роуты, Eloquent-модели, команды Artisan, статические файлы (css/js), отображения (views) и т.п. в новые места, по пути соответственно их изменив.
 
-Итак, [установите приложение Laravel 5.0](/docs/5.0/installation) в новую папку на своей локальной машине. Дальше мы рассмотрим процесс миграции поподробнее.
+Итак, [установите приложение Laravel 5.0](/docs/{{version}}/installation) в новую папку на своей локальной машине. Дальше мы рассмотрим процесс миграции поподробнее.
 
 ### Зависимости Composer и пакеты
 
@@ -37,7 +37,7 @@ git 5d31dee0e7ca8e7ab85949bbbda39f15db2678bf
 
 > **Примечание:** Название среды выполнения теперь задается не в привязке к имени машины как в Laravel 4.х, а в файле `.env` в параметре `APP_ENV`.
 
-[Документация по настройке среды выполнения](/docs/5.0/configuration#environment-configuration).
+[Документация по настройке среды выполнения](/docs/{{version}}/configuration#environment-configuration).
 
 > **Примечание:** Вы должны создать корректный `.env` перед тем как разворачивать (deploy) ваше Laravel 5 приложение на продакшн (основном) сервере.
 
@@ -70,7 +70,7 @@ Laravel 5.0 больше не использует систему разгран
 
 ### Глобальная фильтрация CSRF
 
-Теперь [CSRF защита](/docs/5.0/routing#csrf-protection) включена по дефолту для всех роутов. Чтобы вернуть старое поведение и не проверять CSRF, удалите следующую строку из массива `middleware` класса `App\Http\Kernel`:
+Теперь [CSRF защита](/docs/{{version}}/routing#csrf-protection) включена по дефолту для всех роутов. Чтобы вернуть старое поведение и не проверять CSRF, удалите следующую строку из массива `middleware` класса `App\Http\Kernel`:
 
 	'App\Http\Middleware\VerifyCsrfToken',
 
@@ -80,7 +80,7 @@ Laravel 5.0 больше не использует систему разгран
 
 После этого вы можете использовать в роутах конструкцию `['middleware' => 'csrf']` для проверки CSRF.
 
-[Документация по middleware](/docs/5.0/middleware).
+[Документация по middleware](/docs/{{version}}/middleware).
 
 ### Модели Eloquent
 
@@ -92,7 +92,7 @@ Laravel 5.0 больше не использует систему разгран
 
 Eloquent больше не использует метод `remember()` для кэширования запросов. Вы должны явно кэшировать результаты запросов при помощи `Cache::remember`.
 
-[Документация по кэшированию](/docs/5.0/cache).
+[Документация по кэшированию](/docs/{{version}}/cache).
 
 ### Модель User и аутентификация
 
@@ -132,7 +132,7 @@ use Authenticatable, CanResetPassword;
 
 ### Laravel Cashier
 
-Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/5.0/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Laravel\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
+Имя трейта и интерфейса, которые использует [Laravel Cashier](/docs/{{version}}/billing) теперь изменены. Вместо трейта `BillableTrait` используйте `Laravel\Cashier\Billable`. Вместо имплементации интерфейса `Laravel\Cashier\BillableInterface` используйте `Laravel\Cashier\Contracts\Billable`.
 
 ### Artisan-команды
 
@@ -146,7 +146,7 @@ use Authenticatable, CanResetPassword;
 
 ### Глобальные IoC-биндинги
 
-Если вы что-то добавляли в [IoC](/docs/5.0/container) в файле `start/global.php`, переместите этот код в метод `register` файла `app/Providers/AppServiceProvider.php`. Вам, возможно, потребуется импортировать фасад `App`.
+Если вы что-то добавляли в [IoC](/docs/{{version}}/container) в файле `start/global.php`, переместите этот код в метод `register` файла `app/Providers/AppServiceProvider.php`. Вам, возможно, потребуется импортировать фасад `App`.
 
 Если хотите, можете разложить эти биндинги по разным сервис-провайдерам, исходя из их логической принадлежности.
 
@@ -356,7 +356,7 @@ If `app/controllers/BaseController.php` has a `use` statement at the top, change
 
 ### Password Reminders Updates
 
-Password reminders have been overhauled for greater flexibility. You may examine the new stub controller by running the `php artisan auth:reminders-controller` Artisan command. You may also browse the [updated documentation](/docs/security#password-reminders-and-reset) and update your application accordingly.
+Password reminders have been overhauled for greater flexibility. You may examine the new stub controller by running the `php artisan auth:reminders-controller` Artisan command. You may also browse the [updated documentation](/docs/{{version}}/security#password-reminders-and-reset) and update your application accordingly.
 
 Update your `app/lang/en/reminders.php` language file to match [this updated file](https://github.com/laravel/laravel/blob/master/app/lang/en/reminders.php).
 
