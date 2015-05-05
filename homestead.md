@@ -35,7 +35,7 @@ Homestead работает под любыми версиями Windows, Mac и 
 - Redis
 - Memcached
 - Beanstalkd
-- [Laravel Envoy](/docs/5.0/envoy)
+- [Laravel Envoy](/docs/envoy)
 - Fabric + HipChat Extension
 
 <a name="installation-and-setup"></a>
