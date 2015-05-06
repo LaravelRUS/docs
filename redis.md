@@ -68,7 +68,7 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 	$values = Redis::lrange('names', 5, 10);
 
-> **Примечание:** Laravel поставляется с драйверами Redis для [кэширования](/docs/cache) и [сессий](/docs/session).
+> **Примечание:** Laravel поставляется с драйверами Redis для [кэширования](/docs/{{version}}/cache) и [сессий](/docs/{{version}}/session).
 
 <a name="pipelining"></a>
 ## Конвейер
