@@ -15,32 +15,37 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 #### Создание шаблона Blade
 
-	<!-- resources/views/layouts/master.blade.php -->
-
+	<!-- Stored in resources/views/layouts/master.blade.php -->
+	
 	<html>
-		<body>
-			@section('sidebar')
-				Это - главный сайдбар.
-			@show
-
-			<div class="container">
-				@yield('content')
-			</div>
-		</body>
+	    <head>
+	        <title>App Name - @yield('title')</title>
+	    </head>
+	    <body>
+	        @section('sidebar')
+	            Это - главный сайдбар.
+	        @show
+	
+	        <div class="container">
+	            @yield('content')
+	        </div>
+	    </body>
 	</html>
 
 #### Использование шаблона Blade
 
 	@extends('layouts.master')
 
+	@section('title', 'Заголовок страницы')
+	
 	@section('sidebar')
-		@parent
-
-		<p>Этот элемент будет добавлен к главному сайдбару.</p>
+	    @@parent
+	
+	    <p>Этот элемент будет добавлен к главному сайдбару.</p>
 	@stop
-
+	
 	@section('content')
-		<p>Это - содержимое страницы.</p>
+	    <p>Это - содержимое страницы.</p>
 	@stop
 
 Заметьте, что шаблоны, которые расширяют другой Blade-шаблон с помощью `extend`, просто перекрывают секции последнего. Старое (перекрытое) содержимое может быть выведено директивой `@@parent`.
