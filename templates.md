@@ -1,4 +1,4 @@
-git 47e2cc3f0320c807f37a0ec36fb5c2066abe96f5
+git 52697454e8bb53ca8e77dca20b875bbdafe29c6c
 
 ---
 
@@ -6,7 +6,6 @@ git 47e2cc3f0320c807f37a0ec36fb5c2066abe96f5
 
 - [Шаблоны Blade](#blade-templating)
 - [Другие директивы Blade](#other-blade-control-structures)
-- [Расширение Blade](#extending-blade)
 
 <a name="blade-templating"></a>
 ## Шаблоны Blade
@@ -15,32 +14,37 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 #### Создание шаблона Blade
 
-	<!-- resources/views/layouts/master.blade.php -->
-
+	<!-- Stored in resources/views/layouts/master.blade.php -->
+	
 	<html>
-		<body>
-			@section('sidebar')
-				Это - главный сайдбар.
-			@show
-
-			<div class="container">
-				@yield('content')
-			</div>
-		</body>
+	    <head>
+	        <title>App Name - @yield('title')</title>
+	    </head>
+	    <body>
+	        @section('sidebar')
+	            Это - главный сайдбар.
+	        @show
+	
+	        <div class="container">
+	            @yield('content')
+	        </div>
+	    </body>
 	</html>
 
 #### Использование шаблона Blade
 
 	@extends('layouts.master')
 
+	@section('title', 'Заголовок страницы')
+	
 	@section('sidebar')
-		@@parent
-
-		<p>Этот элемент будет добавлен к главному сайдбару.</p>
+	    @@parent
+	
+	    <p>Этот элемент будет добавлен к главному сайдбару.</p>
 	@stop
-
+	
 	@section('content')
-		<p>Это - содержимое страницы.</p>
+	    <p>Это - содержимое страницы.</p>
 	@stop
 
 Заметьте, что шаблоны, которые расширяют другой Blade-шаблон с помощью `extend`, просто перекрывают секции последнего. Старое (перекрытое) содержимое может быть выведено директивой `@@parent`.
@@ -138,18 +142,6 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 	@choice('language.line', 1);
 
-<a name="extending-blade"></a>
-## Расширение Blade
+#### Комментарии
 
-Blade позволяет создавать свои управляющие структуры. Компилятор Blade располагает двумя хелперами:
-- `createPlainMatcher` используется для директив, не имеющих аргументов, таких, как `@endif` и `@stop`.
-- `createMatcher` используется для директив с аргументами.
-
-Вот, например, код, создающий директиву `@datetime($var)` , которая аналогична вызову метода `format()` у переменной `$var`:
-
-	Blade::extend(function($view, $compiler)
-	{
-		$pattern = $compiler->createMatcher('datetime');
-
-		return preg_replace($pattern, '$1<?php echo $2->format(\'m/d/Y H:i\'); ?>', $view);
-	});
+	{{-- Этот комментарий не будет выведен в HTML коде страницы --}}

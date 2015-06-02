@@ -95,7 +95,7 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 
 	echo Lang::choice('товар|товара|товаров', $count, array(), 'ru');
 
-Благодаря тому, что Laravel использует компонент Symfony Translation cвы можете легко создать более точные правила для проверки числа:
+Благодаря тому, что Laravel использует компонент Symfony Translation вы можете легко создать более точные правила для проверки числа:
 
 	'apples' => '{0} There are none|[1,19] There are some|[20,Inf] There are many',
 
