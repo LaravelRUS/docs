@@ -1,14 +1,106 @@
-git 5d31dee0e7ca8e7ab85949bbbda39f15db2678bf
+git 61de1342a35dd91c0189c67b979afa243edb61db
 
 ---
 
-# Инструкция по обновлению
+# Инструкции по обновлению
 
+- [Обновление до 5.1.0](#upgrade-5.1.0)
+- [Обновление до 5.0.16](#upgrade-5.0.16)
 - [Обновление до 5.0 с 4.2](#upgrade-5.0)
 - [Обновление до 4.2 с 4.1](#upgrade-4.2)
 - [Обновление до 4.1.29 с <= 4.1.x](#upgrade-4.1.29)
 - [Обновление до 4.1.26 с <= 4.1.25](#upgrade-4.1.26)
 - [Обновление до 4.1 с 4.0](#upgrade-4.1)
+
+<a name="upgrade-5.1.0"></a>
+## Обновление до 5.1.0
+
+### Обновите `bootstrap/autoload.php`
+
+Обновите переменную `$compiledPath` в файле `bootstrap/autoload.php`:
+
+	$compiledPath = __DIR__.'/cache/compiled.php';
+
+### Создайте папку `bootstrap/cache`
+
+Внутри папки `bootstrap` создайте папку `cache` directory (`bootstrap/cache`). Положите туда файл `.gitignore` со следующим содержимым:
+
+	*
+	!.gitignore
+
+У этой папки должны быть установлены права на запись, она будет использоваться для хранения различных оптимизированных файлов, таких как `compiled.php`, `routes.php`, `config.php` и `services.json`.
+
+### Аутентификация
+
+Если вы используете `AuthController` с трейтом `AuthenticatesAndRegistersUsers`, то вам нужно сделать несколько изменений. Изменения коснулись валидации и создания новых пользователей.
+
+Во-первых, больше не нужно передавать в контроллер `Guard` и `Registrar`. Вы можете удалить эти зависимости из конструктора контроллера.
+
+Во-вторых, класс `App\Services\Registrar` в 5.1 больше не используется. Вам нужно скопировать и него методы `validator` и `create` и вставить их в `AuthController`. И, разумеется, проследить, чтобы необходимые классы (`Validator` и `User`) были импортированы при помощи конструкции `use`.
+
+### Eloquent
+
+#### Метод `create`
+
+Метод `create` теперь может вызываться без параметров. Если вы переопределили его в своих моделях, то добавьте в параметры дефолтное значение:
+
+	public static function create(array $attributes = [])
+	{
+		// 
+	}
+
+Если вы не переопределяле этот метод, ничего делать не нужно.
+
+#### Метод `find`
+
+Метод `find` теперь принадлежит к Query Builder, а не к Eloquent.
+
+Если вы переопределили метод `find` в своих моделях и делаете `parent::find()` внутри него, вы должны изменить этот вызов следующим образом:
+
+	public static function find($id, $columns = ['*'])
+	{
+		$model = static::query()->find($id, $columns);
+
+		// ...
+
+		return $model;
+	}
+
+Если вы не переопределяле этот метод, ничего делать не нужно.	
+
+#### Форматирование даты
+
+Раньше вы могли задать свой формат полей с датой путём переопределения метода `getDateFormat` в вашей модели. Это по-прежнему возможно. Но теперь это можно сделать более удобнее - просто определите свойство `$dateFormat` в вашей модели.
+
+Обратите внимание, что форматирование дат стало применяться во время сериализации модели в массив или JSON. Это может изменить формат некоторых данных в JSON-файлах в вашем приложении. Чтобы установить нужный формат данных для сериализованных моделей, переопределите метод `serializeDate(DateTime $date)` в вашей модели.
+
+### Коллекции
+
+#### Метод `groupBy`
+
+Метод `groupBy` теперь возвращает объект `Collection`, а не массив, для каждого элемента в родительском `Collection`. Если вы хотите преобразовать их в массивы, воспользуйтесь методом 'map':
+
+	$collection->groupBy('type')->map(function($item)
+	{
+		return $item->all();
+	});
+
+#### Метод `lists`
+
+Метод `lists` тоже возвращает объект `Collection`, а не массив. Если вы хотите преобразовать его в массив, воспользуйтесь методом `all()`:
+
+	$collection->lists('id')->all();
+
+### Amazon SDK
+
+Если вы используете драйвер очереди Amazon SQS или драйвер отправки писем Amazon SES, обновите AWS PHP SDK до версии 3.0
+
+<a name="upgrade-5.0.16"></a>
+## Обновление до 5.0.16
+
+Обновите файл `bootstrap/autoload.php`:
+
+	$compiledPath = __DIR__.'/../vendor/compiled.php';
 
 <a name="upgrade-5.0"></a>
 ## Обновление до 5.0 с 4.2
@@ -188,16 +280,16 @@ use Authenticatable, CanResetPassword;
 
 ### Формы и HTML-хелперы
 
-Для работы с фасадами `Form::` и `HTML::` вам нужно установить дополнительный пакет, они теперь не входят во фреймворк. 
+Для работы с фасадами `Form::` и `HTML::` вам нужно установить дополнительный пакет [Laravel Collective](http://laravelcollective.com/docs/5.0/html), они теперь не входят во фреймворк. 
 
-Для этого добавьте `"illuminate/html": "~5.0"` в секцию `require` файла `composer.json`. Вам также нужно добавить сервис-провайдер в массив 'providers' конфига `config/app.php`:
+Для этого добавьте `"laravelcollective/html": "~5.0"` в секцию `require` файла `composer.json`. Вам также нужно добавить сервис-провайдер в массив 'providers' конфига `config/app.php`:
 
-    'Illuminate\Html\HtmlServiceProvider',
+    'Collective\Html\HtmlServiceProvider',
 
 а также добавить два алиаса туда же:
 
-    'Form'      => 'Illuminate\Html\FormFacade',
-    'Html'      => 'Illuminate\Html\HtmlFacade',
+    'Form'      => 'Collective\Html\FormFacade',
+    'Html'      => 'Collective\Html\HtmlFacade',
 
 ### CacheManager
 
@@ -206,6 +298,10 @@ use Authenticatable, CanResetPassword;
 ### Пагинация
 
 Замените вызовы `$paginator->links()` на `$paginator->render()`.
+
+Замените `$paginator->getFrom()` и `$paginator->getTo()` на `$paginator->firstItem()` и `$paginator->lastItem()` соответственно.
+
+Уберите префикс "get" у `$paginator->getPerPage()`, `$paginator->getCurrentPage()`, `$paginator->getLastPage()` и `$paginator->getTotal()` (т.е. `$paginator->perPage()` и т.д.).
 
 ### Очередь Beanstalk
 
