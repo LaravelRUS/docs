@@ -27,7 +27,7 @@ git 0e29f42d953c6ad1f0c06968a9b043f808f3ed87
 		return 'Hello World';
 	});
 
-#### Простейший роуты различных типов HTTP-запросов:
+#### Простейшие роуты различных типов HTTP-запросов:
 
 	Route::post('foo/bar', function()
 	{
