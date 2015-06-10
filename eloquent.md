@@ -340,11 +340,11 @@ If you need to process thousands of Eloquent records, use the `chunk` command. T
 
 Естественно, вы можете использовать или `$fillable` или `$guarded` - но не оба сразу.
 
-#### Other Creation Methods
+#### Другие способы создания модели
 
-There are two other methods you may use to create models by mass assigning attributes: `firstOrCreate` and `firstOrNew`. The `firstOrCreate` method will attempt to locate a database record using the given column / value pairs. If the model can not be found in the database, a record will be inserted with the given attributes.
+Есть еще два метода создания экземпляра модели, которые используют массовое присваивание - `firstOrCreate` и `firstOrNew`. `firstOrCreate` обращается к БД, используя в качестве условий поданный в аргументы ассоциативный массив. Если запись по таким условиям не найдена в БД, она там создастся.
 
-The `firstOrNew` method, like `firstOrCreate` will attempt to locate a record in the database matching the given attributes. However, if a model is not found, a new model instance will be returned. Note that the model returned by `firstOrNew` has not yet been persisted to the database. You will need to call `save` manually to persist it:
+Метод `firstOrNew`, как и `firstOrCreate` пытается найти запись в БД по переданным условиям, и если не находит - возвращает экземпляр модели с установленными параметрами. Обратите внимание, что этот метод не сохраняет модель в БД.
 
 	// Retrieve the flight by the attributes, or create it if it doesn't exist...
 	$flight = App\Flight::firstOrCreate(['name' => 'Flight 10']);
@@ -353,17 +353,17 @@ The `firstOrNew` method, like `firstOrCreate` will attempt to locate a record in
 	$flight = App\Flight::firstOrNew(['name' => 'Flight 10']);
 
 <a name="deleting-models"></a>
-## Deleting Models
+## Удаление модели
 
-To delete a model, call the `delete` method on a model instance:
+Для того, чтобы удалить модель, вызовите метод `delete()`:
 
 	$flight = App\Flight::find(1);
 
 	$flight->delete();
 
-#### Deleting An Existing Model By Key
+#### Удаление модели по ключу
 
-In the example above, we are retrieving the model from the database before calling the `delete` method. However, if you know the primary key of the model, you may delete the model without retrieving it. To do so, call the `destroy` method:
+В примере выше мы сначала получили модель, а затем удалили её. Но если вам известен primary key модели, необязательно её загружать из БД, можно удалить сразу при помощи метода `destroy`:
 
 	App\Flight::destroy(1);
 
@@ -371,16 +371,18 @@ In the example above, we are retrieving the model from the database before calli
 
 	App\Flight::destroy(1, 2, 3);
 
-#### Deleting Models By Query
+#### Удаление моделей при помощи запроса
 
-Of course, you may also run a delete query on a set of models. In this example, we will delete all flights that are marked as inactive:
+Вы также можете удалить все модели, попадающие под определённые условия:
 
 	$deletedRows = App\Flight::where('votes', '>', 100)->delete();
 
 <a name="soft-deleting"></a>
-### Soft Deleting
+### Псевдоудаление
 
 In addition to actually removing records from your database, Eloquent can also "soft delete" models. When models are soft deleted, they are not actually removed from your database. Instead, a `deleted_at` attribute is set on the model and inserted into the database. If a model has a non-null `deleted_at` value, the model has been soft deleted. To enable soft deletes for a model, use the `Illuminate\Database\Eloquent\SoftDeletes` trait on the model and add the `deleted_at` column to your `$dates` property:
+
+В 
 
 	<?php namespace App;
 
