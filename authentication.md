@@ -1,4 +1,4 @@
-git c183ef46073344b1dc63c68db38e4a8d17176a31
+git b16092e910df2cd465d61711ed06d8bf58e93e76
 
 ---
 
@@ -459,12 +459,12 @@ Laravel предоставляет класс `Auth\PasswordController`, в ко
     'providers' => [
         // Другие сервис-провайдеры
 
-        'Laravel\Socialite\SocialiteServiceProvider',
+        Laravel\Socialite\SocialiteServiceProvider::class,
     ],
 
 Также добавьте фасад `Socialite` в массив `aliases` конфигурации:
 
-    'Socialite' => 'Laravel\Socialite\Facades\Socialite',
+    'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
 Далее вам необходимо указать параметры для того сервиса OAuth, который вы используете. Это можно сделать в файле `config/services.php`. Пока доступно четыре сервиса: `facebook`, `twitter`, `google` и `github`. Пример:
 
