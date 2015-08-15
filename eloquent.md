@@ -977,7 +977,7 @@ Eloquent позволяет вам читать отношения через д
 
 	$comments = [
 		new Comment(['message' => 'A new comment.']),
-		new Comment([message' => 'Another comment.']),
+		new Comment(['message' => 'Another comment.']),
 		new Comment(['message' => 'The latest comment.'])
 	];
 
