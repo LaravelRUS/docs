@@ -1,15 +1,15 @@
-git f82dd3842be2bcd94ff14b26bb1e779a14223b7e
+git 89b2688d0978c162b553ff69e75d658e304a5481
 
 ---
 - Вступление
     - [Версии фреймворка](/docs/{{version}}/releases)
     - [Руководство по обновлению](/docs/{{version}}/upgrade)
     - [Участие в разработке](/docs/{{version}}/contributions)
+    - [API](/api/{{version}})
 - Установка
     - [Установка](/docs/{{version}}/installation)
     - [Homestead](/docs/{{version}}/homestead)    
 - Основы
-    - [Быстрый старт](/docs/{{version}}/quickstart)
     - [Routing](/docs/{{version}}/routing)
     - [Middleware](/docs/{{version}}/middleware)
     - [Controllers](/docs/{{version}}/controllers)
@@ -25,7 +25,8 @@ git f82dd3842be2bcd94ff14b26bb1e779a14223b7e
     - [Контракты](/docs/{{version}}/contracts)
     - [Фасады](/docs/{{version}}/facades)
 - Сервисы
-    - [Authentication](/docs/{{version}}/authentication)
+    - [Аутентификация](/docs/{{version}}/authentication)
+    - [Авторизация](/docs/{{version}}/authorization)
     - [Консольные команды Artisan](/docs/{{version}}/artisan)
     - [Billing](/docs/{{version}}/billing)
     - [Cache](/docs/{{version}}/cache)
