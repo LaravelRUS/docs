@@ -4,6 +4,7 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 
 # Инструкции по обновлению
 
+- [Обновление до 5.1.11](#upgrade-5.1.11)
 - [Обновление до 5.1.0](#upgrade-5.1.0)
 - [Обновление до 5.0.16](#upgrade-5.0.16)
 - [Обновление до 5.0 с 4.2](#upgrade-5.0)
@@ -12,8 +13,75 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 - [Обновление до 4.1.26 с <= 4.1.25](#upgrade-4.1.26)
 - [Обновление до 4.1 с 4.0](#upgrade-4.1)
 
+<a name="upgrade-5.1.11"></a>
+## Обновление до 5.1.11
+
+
+В Laravel 5.1.11 появилась поддержка [авторизации](/docs/{{version}}/authorization) и [классов политик авторизации](/docs/{{version}}/authorization#policies).
+
+> **Примечание:** Этот апгрейд **опционален**, если вы не используете авторизацию Laravel в своем приложении, то можете его не делать.
+
+#### Создание папки для классов политик
+
+Создайте папку `app/Policies`.
+
+#### Create / Register The AuthServiceProvider & Gate Facade
+
+Create a `AuthServiceProvider` within your `app/Providers` directory. You may copy the contents of the default provider [from GitHub](https://raw.githubusercontent.com/laravel/laravel/master/app/Providers/AuthServiceProvider.php). After creating the provider, be sure to register it in your `app.php` configuration file's `providers` array.
+
+Создайте сервис-провайдер `AuthServiceProvider` (контент можно взять [с гитхаба](https://raw.githubusercontent.com/laravel/laravel/master/app/Providers/AuthServiceProvider.php)) в папке `app/Providers`. 
+
+Добавьте `AuthServiceProvider` в массив `providers` в `config/app.php`.
+Там же зарегистрируйте фасад `Gate` в массиве `aliases`:
+
+    'Gate' => Illuminate\Support\Facades\Gate::class,
+
+#### Обновите модель User
+
+Добавьте в модель `User` трейт `Illuminate\Foundation\Auth\Access\Authorizable` и контракт `Illuminate\Contracts\Auth\Access\Authorizable`:
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Auth\Authenticatable;
+    use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Auth\Passwords\CanResetPassword;
+    use Illuminate\Foundation\Auth\Access\Authorizable;
+    use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+    use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+    use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+
+    class User extends Model implements AuthenticatableContract,
+                                        AuthorizableContract,
+                                        CanResetPasswordContract
+    {
+        use Authenticatable, Authorizable, CanResetPassword;
+    }
+
+#### Обновите базовый контроллер
+
+Добавьте в `App\Http\Controllers\Controller` трейт `Illuminate\Foundation\Auth\Access\AuthorizesRequests`:
+
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use Illuminate\Foundation\Bus\DispatchesJobs;
+    use Illuminate\Routing\Controller as BaseController;
+    use Illuminate\Foundation\Validation\ValidatesRequests;
+    use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
+    abstract class Controller extends BaseController
+    {
+        use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    }
+
+
 <a name="upgrade-5.1.0"></a>
 ## Обновление до 5.1.0
+
+#### Ориентировочное время обновления: меньше часа.
 
 ### Обновите `bootstrap/autoload.php`
 
@@ -30,6 +98,10 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 
 У этой папки должны быть установлены права на запись, она будет использоваться для хранения различных оптимизированных файлов, таких как `compiled.php`, `routes.php`, `config.php` и `services.json`.
 
+### Сервис-провайдер BroadcastServiceProvider
+
+В `config/app.php` добавьте `Illuminate\Broadcasting\BroadcastServiceProvider` в массив `providers`.
+
 ### Аутентификация
 
 Если вы используете `AuthController` с трейтом `AuthenticatesAndRegistersUsers`, то вам нужно сделать несколько изменений. Изменения коснулись валидации и создания новых пользователей.
@@ -37,6 +109,16 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 Во-первых, больше не нужно передавать в контроллер `Guard` и `Registrar`. Вы можете удалить эти зависимости из конструктора контроллера.
 
 Во-вторых, класс `App\Services\Registrar` в 5.1 больше не используется. Вам нужно скопировать и него методы `validator` и `create` и вставить их в `AuthController`. И, разумеется, проследить, чтобы необходимые классы (`Validator` и `User`) были импортированы при помощи конструкции `use`.
+
+#### Password Controller
+
+`PasswordController` больше не используется. Вы можете его удалить, если хотите.
+
+### Валидация
+
+Если вы изменили метод `formatValidationErrors` в базовом контроллере, поставьте в аргументах `Illuminate\Contracts\Validation\Validator` вместо `Illuminate\Validation\Validator`.
+
+Если вы изменили метод `formatErrors` в базовом классе запросов, поставьте в аргументах `Illuminate\Contracts\Validation\Validator` вместо `Illuminate\Validation\Validator`.
 
 ### Eloquent
 
@@ -66,7 +148,17 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 		return $model;
 	}
 
-Если вы не переопределяле этот метод, ничего делать не нужно.	
+Если вы не переопределяли этот метод, ничего делать не нужно.	
+
+#### Метод `lists` 
+
+The `lists` method now returns a `Collection` instance instead of a plain array for Eloquent queries. If you would like to convert the `Collection` into a plain array, use the `all` method:
+
+`lists` теперь возвращает коллекцию, а не массив. Если вы хотите получать именно массив, воспользуйтесь методом `all()` после него:
+
+    User::lists('id')->all();
+
+Но имейте в виду, что метод `lists` конструктора запросов по прежнему возвращает массив.
 
 #### Форматирование даты
 
@@ -75,6 +167,12 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 Обратите внимание, что форматирование дат стало применяться во время сериализации модели в массив или JSON. Это может изменить формат некоторых данных в JSON-файлах в вашем приложении. Чтобы установить нужный формат данных для сериализованных моделей, переопределите метод `serializeDate(DateTime $date)` в вашей модели.
 
 ### Коллекции
+
+#### Метод `sortBy`
+
+Метод `sortBy` возвращает не модифицированную прежнюю коллекцию, а созданную с нуля:
+
+    $collection = $collection->sortBy('name');
 
 #### Метод `groupBy`
 
@@ -91,9 +189,52 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 
 	$collection->lists('id')->all();
 
-### Amazon SDK
+### Commands & Handlers
 
-Если вы используете драйвер очереди Amazon SQS или драйвер отправки писем Amazon SES, обновите AWS PHP SDK до версии 3.0
+Переименуйте папку `app/Commands` в `app/Jobs`. However, you are not required to move all of your commands to the new location, and you may continue using the `make:command` and `handler:command` Artisan commands to generate your classes.
+
+Переименуйте `app/Handlers` в `app/Listeners` and now only contains event listeners. However, you are not required to move or rename your existing command and event handlers, and you may continue to use the `handler:event` command to generate event handlers.
+
+By providing backwards compatibility for the Laravel 5.0 folder structure, you may upgrade your applications to Laravel 5.1 and slowly upgrade your events and commands to their new locations when it is convenient for you or your team.
+
+### Blade
+
+The `createMatcher`, `createOpenMatcher`, and `createPlainMatcher` methods have been removed from the Blade compiler. Use the new `directive` method to create custom directives for Blade in Laravel 5.1. Consult the [extending blade](/docs/{{version}}/blade#extending-blade) documentation for more information.
+
+### Tests
+
+Add the protected `$baseUrl` property to the `tests/TestCase.php` file:
+
+    protected $baseUrl = 'http://localhost';
+
+### Translation Files
+
+The default directory for published language files for vendor packages has been moved. Move any vendor package language files from `resources/lang/packages/{locale}/{namespace}` to `resources/lang/vendor/{namespace}/{locale}` directory. For example, `Acme/Anvil` package's `acme/anvil::foo` namespaced English language file would be moved from `resources/lang/packages/en/acme/anvil/foo.php` to `resources/lang/vendor/acme/anvil/en/foo.php`.
+
+### Amazon Web Services SDK
+
+If you are using the AWS SQS queue driver or the AWS SES e-mail driver, you should update your installed AWS PHP SDK to version 3.0.
+
+If you are using the Amazon S3 filesystem driver, you will need to update the corresponding Flysystem package via Composer:
+
+- Amazon S3: `league/flysystem-aws-s3-v3 ~1.0`
+
+### Deprecations
+
+The following Laravel features have been deprecated and will be removed entirely with the release of Laravel 5.2 in December 2015:
+
+<div class="content-list" markdown="1">
+- Route filters have been deprecated in preference of [middleware](/docs/{{version}}/middleware).
+- The `Illuminate\Contracts\Routing\Middleware` contract has been deprecated. No contract is required on your middleware. In addition, the `TerminableMiddleware` contract has also been deprecated. Instead of implementing the interface, simply define a `terminate` method on your middleware.
+- The `Illuminate\Contracts\Queue\ShouldBeQueued` contract has been deprecated in favor of `Illuminate\Contracts\Queue\ShouldQueue`.
+- Iron.io "push queues" have been deprecated in favor of typical Iron.io queues and [queue listeners](/docs/{{version}}/queues#running-the-queue-listener).
+- The `Illuminate\Foundation\Bus\DispatchesCommands` trait has been deprecated and renamed to `Illuminate\Foundation\Bus\DispatchesJobs`.
+- `Illuminate\Container\BindingResolutionException` has been moved to `Illuminate\Contracts\Container\BindingResolutionException`.
+- The service container's `bindShared` method has been deprecated in favor of the `singleton` method.
+- The Eloquent and query builder `pluck` method has been deprecated and renamed to `value`.
+- The collection `fetch` method has been deprecated in favor of the `pluck` method.
+- The `array_fetch` helper has been deprecated in favor of the `array_pluck` method.
+</div>
 
 <a name="upgrade-5.0.16"></a>
 ## Обновление до 5.0.16
