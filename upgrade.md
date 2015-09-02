@@ -16,7 +16,6 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 <a name="upgrade-5.1.11"></a>
 ## Обновление до 5.1.11
 
-
 В Laravel 5.1.11 появилась поддержка [авторизации](/docs/{{version}}/authorization) и [классов политик авторизации](/docs/{{version}}/authorization#policies).
 
 > **Примечание:** Этот апгрейд **опционален**, если вы не используете авторизацию Laravel в своем приложении, то можете его не делать.
@@ -25,9 +24,7 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 
 Создайте папку `app/Policies`.
 
-#### Create / Register The AuthServiceProvider & Gate Facade
-
-Create a `AuthServiceProvider` within your `app/Providers` directory. You may copy the contents of the default provider [from GitHub](https://raw.githubusercontent.com/laravel/laravel/master/app/Providers/AuthServiceProvider.php). After creating the provider, be sure to register it in your `app.php` configuration file's `providers` array.
+#### AuthServiceProvider и фасад Gate
 
 Создайте сервис-провайдер `AuthServiceProvider` (контент можно взять [с гитхаба](https://raw.githubusercontent.com/laravel/laravel/master/app/Providers/AuthServiceProvider.php)) в папке `app/Providers`. 
 
