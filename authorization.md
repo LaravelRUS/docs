@@ -1,4 +1,4 @@
-git 9b8e3b1346f3a205f6d8865b58036f3ee92449d3
+git d2aaa775d7395ac56b96d1a32cbcd9f94ef7f42d
 
 ---
 
@@ -65,7 +65,7 @@ git 9b8e3b1346f3a205f6d8865b58036f3ee92449d3
 
 Помимо функции-замыкания, вы можете определить класс и метод для реализации правила:
 
-    $gate->define('update-post', 'PostPolicy@update');
+    $gate->define('update-post', 'Class@method');
 
 <a name="checking-abilities"></a>
 ## Проверка правил
