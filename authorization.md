@@ -118,8 +118,6 @@ git 9b8e3b1346f3a205f6d8865b58036f3ee92449d3
 
 #### Передача нескольких аргументов
 
-Of course, ability callbacks may receive multiple arguments:
-
 Если в правило вам нужно передать не два аргумента (пользователь и некая сущность), а несколько, то в определении правила перечислите аргументы обычным способом:
 
 	Gate::define('delete-comment', function ($user, $post, $comment) {
@@ -174,8 +172,6 @@ Of course, ability callbacks may receive multiple arguments:
 
 <a name="within-blade-templates"></a>
 ### внутри шаблонов Blade
-
-For convenience, Laravel provides the `@can` Blade directive to quickly check if the currently authenticated user has a given ability. For example:
 
 Для проверки правил для текущего залогиненого пользователя в шаблонах Blade можно использовать директивe `@can`:
 
