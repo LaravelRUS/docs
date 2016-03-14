@@ -1,4 +1,4 @@
-git f3ce27ecc71d9329f1eaede45989ee80d4cabcae
+git 15f8a49789713ba36001f9b690a1be1e6303a4dd
 
 ---
 
@@ -10,6 +10,7 @@ git f3ce27ecc71d9329f1eaede45989ee80d4cabcae
 	- [Расширение лейаута](#extending-a-layout)
 - [Отображение данных](#displaying-data)
 - [Условия и циклы](#control-structures)
+- [Стэк](#stacks)
 - [Внедрение классов](#service-injection)
 - [Расширение Blade](#extending-blade)
 
@@ -25,8 +26,6 @@ Blade - простой, но мощный шаблонизатор, входящ
 
 <a name="defining-a-layout"></a>
 ### Определение лейаута
-
-Two of the primary benefits of using Blade are _template inheritance_ and _sections_. To get started, let's take a look at a simple example. First, we will examine a "master" page layout. Since most web applications maintain the same general layout across various pages, it's convenient to define this layout as a single Blade view:
 
 Два основных преимущества Blade - это _наследование шаблонов_ и _секции_. Чтобы было понятнее, давайте рассмотрим простой пример. Обычно, все веб-приложения имеют базовый шаблон - он же лейаут, макет. В нем происходит подключение css и js, задается базовая верстка и в определенных местах подключаются такие части как хедер (шапка), футер, сайдбар и т.п. Вот он в виде шаблона Blade:
 
@@ -58,7 +57,7 @@ Two of the primary benefits of using Blade are _template inheritance_ and _secti
 
 Чтобы показать, какой именно из лейаутов (их у нас в приложении может быть несколько) мы будем использовать, мы должны использовать директиву `@extends`:
 
-	<!-- Файл resources/views/layouts/child.blade.php -->
+	<!-- Файл resources/views/child.blade.php -->
 
 	@extends('layouts.master')
 
@@ -181,6 +180,31 @@ By default, Blade `{{ }}` statements are automatically send through PHP's `htmle
 		<p>I'm looping forever.</p>
 	@endwhile
 
+В циклах вы можете переходить к следующей итерации и выходить из цикла при помощи директив, которые также очень похожи на соответствующие операторы PHP:
+
+    @foreach ($users as $user)
+        @if($user->type == 1)
+            @continue
+        @endif
+
+        <li>{{ $user->name }}</li>
+
+        @if($user->number == 5)
+            @break
+        @endif
+    @endforeach
+
+Но в blade можно писать такое и в укороченной однострочной форме:
+
+    @foreach ($users as $user)
+        @continue($user->type == 1)
+
+        <li>{{ $user->name }}</li>
+
+        @break($user->number == 5)
+    @endforeach
+
+
 #### Включение страниц
 
 Директива `@include` позволит вам добавить на страницу контент другой страницы без использования секций и `@yield`. Обратите внимание, что при `@include` вам не нужно передавать переменные явным образом - все определённые в данном месте переменные будут доступны в подключаемой вьюхе ! Волшебно, не правда ли ? 
@@ -197,6 +221,20 @@ By default, Blade `{{ }}` statements are automatically send through PHP's `htmle
 
 	@include('view.name', ['some_data' => $someData])
 
+> **Примечание:** В шаблонах blade нельзя использовать константы `__DIR__` и `__FILE__`, так как они будут указывать не на папку с шаблонами, а на папку с кэшем, куда записываются скомпилированные в html шаблоны.
+
+#### Шаблоны для коллекций
+
+Директива `@each` кобинирует в себе директивы цикла и включения страниц:
+
+    @each('view.name', $jobs, 'job')
+
+Первый аргумент - название шаблона, который отображает элемент коллекции. Второй - собственно массив или коллекция, элементы которой будут отображаться. Третий - название переменной, которая в шаблоне представляет собой элемент коллекции.
+
+Есть еще четвертый необязательный аргумент - название шаблона, который показывается, если массив или коллекция пусты.
+
+    @each('view.name', $jobs, 'job', 'view.empty')	
+
 #### Комментарии
 
 Комментарии в Blade задаются следующим образом:
@@ -204,6 +242,25 @@ By default, Blade `{{ }}` statements are automatically send through PHP's `htmle
 	{{-- This comment will not be present in the rendered HTML --}}
 
 Казалось бы, зачем здесь-то юзать шаблонизатор, если можно просто написать `<!-- -->` ? Но фишка в том, в отличие от HTML-комментариев, Blade-комментарии никогда не попадут в результирующий HTML.
+
+<a name="stacks"></a>
+## Стэк
+
+Blade позволяет добавлять html в стэк - затем, чтобы опубликовать этот стэк в главном лейауте или другом шаблоне.
+
+Это нужно, например, если вы используете специфичный javascript в некоторых шаблонах:
+
+    @push('scripts')
+        <script src="/example.js"></script>
+    @endpush
+
+В главном шаблоне вы можете подключить в `head` весь javascript из таких шаблонов разом:
+
+    <head>
+        <!-- Head Contents -->
+
+        @stack('scripts')
+    </head>
 
 <a name="service-injection"></a>
 ## Внедрение классов
@@ -225,7 +282,9 @@ Blade позволяет создавать свои директивы. Для 
 
 Например, создадим директиву `@datetime($var)`, которая будет форматировать дату (объест Carbon) определённым, нужным нам образом.
 
-	<?php namespace App\Providers;
+	<?php 
+
+	namespace App\Providers;
 
 	use Blade;
 	use Illuminate\Support\ServiceProvider;
@@ -260,3 +319,5 @@ Blade позволяет создавать свои директивы. Для 
 В шаблон будет вставлена следующая конструкция:
 
 	<?php echo with($var)->format('m/d/Y H:i'); ?>
+
+Чтобы новые директивы заработали, вам нужно удалить весь кэш шаблонов командой `view:clear`.
