@@ -52,7 +52,7 @@ Before triggering Elixir, you must first ensure that Node.js is installed on you
     node -v
 
 
-По умолчанию, Laravel Homestead все что вам нужно; впрочем, если вы не используете Vagrant, тогда вы сможете легко установить Node.js пройдя по ссылке [ссылка для скачивания Node.js](http://nodejs.org/download/).
+По умолчанию, все что вам нужно это Laravel Homestead; впрочем, если вы не используете Vagrant, тогда вы сможете легко установить Node.js пройдя по ссылке [ссылка для скачивания Node.js](http://nodejs.org/download/).
 
 By default, Laravel Homestead includes everything you need; however, if you aren't using Vagrant, then you can easily install Node by visiting [their download page](http://nodejs.org/download/).
 
@@ -76,50 +76,57 @@ Once you have run this command, feel free to commit the [npm-shrinkwrap.json](ht
 
 ### Laravel Elixir
 
-Остался всего один шаг для установки Elixir! Within a fresh installation of Laravel, you'll find a `package.json` file in the root. Think of this like your `composer.json` file, except it defines Node dependencies instead of PHP. You may install the dependencies it references by running:
+Остался всего один шаг для установки Elixir! После свежей установки Laravel, вы обнаружите файл `package.json` в корневом каталоге. Взгляните на ваш файл composer.json, он описывает зависимости Node вместо PHP. Вы можете установить описанные зависимости используя команду:
 
 The only remaining step is to install Elixir! Within a fresh installation of Laravel, you'll find a `package.json` file in the root. Think of this like your `composer.json` file, except it defines Node dependencies instead of PHP. You may install the dependencies it references by running:
 
     npm install
+
+Если вы ведете разработку на ОС Windows или вы запускаете вашу VM (виртуальную машину) на ОС Windows, возможно вам понадобится запустить команду `npm install` с ключом `--no-bin-links`, чтобы команда запустилась:
 
 If you are developing on a Windows system or you are running your VM on a Windows host system, you may need to run the `npm install` command with the `--no-bin-links` switch enabled:
 
     npm install --no-bin-links
 
 <a name="running-elixir"></a>
-## Running Elixir
+## Запуск Elixir
+
+Elixir использует последнюю версию [Gulp](http://gulpjs.com), поэтому для запуска задач Elixir'a вам всего лишь понадобится запустить команду `gulp` в вашей консоли (терминале). Добавление к команде ключа `--production` запустит Elixir с минифицированием ваших CSS стилей и Javascript скриптов:
 
 Elixir is built on top of [Gulp](http://gulpjs.com), so to run your Elixir tasks you only need to run the `gulp` command in your terminal. Adding the `--production` flag to the command will instruct Elixir to minify your CSS and JavaScript files:
 
-    // Run all tasks...
+    // Запуск всех задач...
     gulp
 
-    // Run all tasks and minify all CSS and JavaScript...
+    // Запуск всех задач и минификация CSS и JavaScript...
     gulp --production
 
-#### Watching Assets For Changes
+#### Наблюдение за изменением ваших медиа файлов и скриптов (assets)
+
+Так как не очень удобно все время запускать команду `gulp` при изменении ваших файлов, вы можете запустить команду `gulp watch`. Эта команда будет будет продолжать работать в вашей консоли и наблюдать за любыми изменениями ваших файлов (assets). Когда произойдут изменения, новые файлы будут автоматически скомпилированы Elixir'ом:
 
 Since it is inconvenient to run the `gulp` command on your terminal after every change to your assets, you may use the `gulp watch` command. This command will continue running in your terminal and watch your assets for any changes. When changes occur, new files will automatically be compiled:
 
     gulp watch
 
 <a name="working-with-stylesheets"></a>
-## Working With Stylesheets
+## Работа со стилями
+
+Файл `gulpfile.js` в корневой папке вашего проекта содержит все задачи Elixir'a. могут быть связаны между собой, что позволяет настроить процесс сборки и компиляции ваших файлов (assets) так как вам надо.
 
 The `gulpfile.js` file in your project's root directory contains all of your Elixir tasks. Elixir tasks can be chained together to define exactly how your assets should be compiled.
 
 <a name="less"></a>
 ### Less
 
-To compile [Less](http://lesscss.org/) into CSS, you may use the `less` method. The `less` method assumes that your Less files are stored in `resources/assets/less`. By default, the task will place the compiled CSS for this example in `public/css/app.css`:
+Для компиляции [Less](http://lesscss.org/) в CSS, вы можете использовать метод `less`. Метод `less` ожидает что ваши Less файлы находятся в папке `resources/assets/less`. По умолчанию задача скомпилирует файлы, указанные в примере, в CSS и сохранит в папку `public/css/app.css`:
 
 ```javascript
 elixir(function(mix) {
     mix.less('app.less');
 });
 ```
-
-You may also combine multiple Less files into a single CSS file. Again, the resulting CSS will be placed in `public/css/app.css`:
+Так же вы можете объединить несколько Less файлов в один CSS файл. И снова скомплированный CSS файл будет сохранен в папке `public/css/app.css`:
 
 ```javascript
 elixir(function(mix) {
@@ -129,15 +136,14 @@ elixir(function(mix) {
     ]);
 });
 ```
-
-If you wish to customize the output location of the compiled CSS, you may pass a second argument to the `less` method:
+Если вам потребуется изменить путь скомпилированного CSS файла, вы можете указать в методе `less` второй аргумент с нужным путем:
 
 ```javascript
 elixir(function(mix) {
     mix.less('app.less', 'public/stylesheets');
 });
 
-// Specifying a specific output filename...
+// Укажем собственное название скомпилированного файла...
 elixir(function(mix) {
     mix.less('app.less', 'public/stylesheets/style.css');
 });
@@ -146,7 +152,7 @@ elixir(function(mix) {
 <a name="sass"></a>
 ### Sass
 
-The `sass` method allows you to compile [Sass](http://sass-lang.com/) into CSS. Assuming your Sass files are stored at `resources/assets/sass`, you may use the method like so:
+Метод `sass` позволяет вам скомпилировать [Sass](http://sass-lang.com/) в CSS. Предполагается что ваши Sass файлы лежат в `resources/assets/sass`, к примеру вы можете использовать метод `sass` так:
 
 ```javascript
 elixir(function(mix) {
@@ -155,6 +161,8 @@ elixir(function(mix) {
 ```
 
 Again, like the `less` method, you may compile multiple Sass files into a single CSS file, and even customize the output directory of the resulting CSS:
+
+И снова, так же как при использовании метода `less`, Вы можете скомпилировать несколько Sass файлов в один CSS файл, и даже изменить папку для скомпилированного CSS:
 
 ```javascript
 elixir(function(mix) {
@@ -166,7 +174,7 @@ elixir(function(mix) {
 ```
 
 <a name="plain-css"></a>
-### Plain CSS
+### Обычный CSS
 
 If you would just like to combine some plain CSS stylesheets into a single file, you may use the `styles` method. Paths passed to this method are relative to the `resources/assets/css` directory and the resulting CSS will be placed in `public/css/all.css`:
 
