@@ -1,30 +1,32 @@
-git 04a07feb482ea8c735658367f986e6c305027ec0
+git 3c1ff42e25c1ac12261636510a1cdb9c75ef0854
 
 ---
 
 # Laravel Elixir
 
-- [Introduction](#introduction)
-- [Installation & Setup](#installation)
-- [Running Elixir](#running-elixir)
-- [Working With Stylesheets](#working-with-stylesheets)
+- [Вступление](#introduction)
+- [Установка и настройка](#installation)
+- [Запуск Elixir](#running-elixir)
+- [Работа со стилями](#working-with-stylesheets)
     - [Less](#less)
     - [Sass](#sass)
-    - [Plain CSS](#plain-css)
+    - [Простой CSS](#plain-css)
     - [Source Maps](#css-source-maps)
-- [Working With Scripts](#working-with-scripts)
+- [Работа со скриптами](#working-with-scripts)
     - [CoffeeScript](#coffeescript)
     - [Browserify](#browserify)
     - [Babel](#babel)
     - [Scripts](#javascript)
-- [Copying Files & Directories](#copying-files-and-directories)
-- [Versioning / Cache Busting](#versioning-and-cache-busting)
+- [Копирование файлов и папок](#copying-files-and-directories)
+- [Добавление версии / Очистка кеша](#versioning-and-cache-busting)
 - [BrowserSync](#browser-sync)
-- [Calling Existing Gulp Tasks](#calling-existing-gulp-tasks)
-- [Writing Elixir Extensions](#writing-elixir-extensions)
+- [Вызов существующих Gulp Tasks](#calling-existing-gulp-tasks)
+- [Пишем расширения Elixir](#writing-elixir-extensions)
 
 <a name="introduction"></a>
-## Introduction
+## Вступление
+
+Laravel Elixir предоставляет простой и гибкий API для определения простых задач [Gulp](http://gulpjs.com) для вашего Laravel приложения. Elixir поддерживает несколько основных CSS и Javascript препроцессоров, и даже инструментов тестирования. Использование цепочки методов Elixir'a позволит вам легко определить ваши скрипты и стили. Например:
 
 Laravel Elixir provides a clean, fluent API for defining basic [Gulp](http://gulpjs.com) tasks for your Laravel application. Elixir supports several common CSS and JavaScript pre-processors, and even testing tools. Using method chaining, Elixir allows you to fluently define your asset pipeline. For example:
 
@@ -34,17 +36,23 @@ elixir(function(mix) {
        .coffee('app.coffee');
 });
 ```
+Если даже вы не поняли сразу как начать работу со сборщиком Gulp и вашими медиа-файлами (assets), вы полюбите Laravel Elixir. Однако вы не обязаны использовать его на этапе разработки вашего приложения. Вы сами свободны в выборе использовании инструментов для ваших медиа-файлов (assets), вы можете не использовать их вовсе.  
 
 If you've ever been confused about how to get started with Gulp and asset compilation, you will love Laravel Elixir. However, you are not required to use it while developing your application. You are free to use any asset pipeline tool you wish, or even none at all.
 
 <a name="installation"></a>
-## Installation & Setup
+## Установка и настройка
 
-### Installing Node
+### Установка Node
+
+Перед вызовом Elixir, вы обязаны убедиться в том что Node.js установлен на вашем компьютере.
 
 Before triggering Elixir, you must first ensure that Node.js is installed on your machine.
 
     node -v
+
+
+По умолчанию, Laravel Homestead все что вам нужно; впрочем, если вы не используете Vagrant, тогда вы сможете легко установить Node.js пройдя по ссылке [ссылка для скачивания Node.js](http://nodejs.org/download/).
 
 By default, Laravel Homestead includes everything you need; however, if you aren't using Vagrant, then you can easily install Node by visiting [their download page](http://nodejs.org/download/).
 
