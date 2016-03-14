@@ -153,7 +153,7 @@ elixir(function(mix) {
 <a name="plain-css"></a>
 ### Обычный CSS
 
-If you would just like to combine some plain CSS stylesheets into a single file, you may use the `styles` method. Paths passed to this method are relative to the `resources/assets/css` directory and the resulting CSS will be placed in `public/css/all.css`:
+Если вы просто хотите объединить некиие обычные CSS стили в один файл, вы можете использовать метод `styles`. Пути указанные в этом методе относительны к папке `resources/assets/css` и объединенный CSS файл будет сохранен, как `public/css/all.css`:
 
 ```javascript
 elixir(function(mix) {
@@ -164,7 +164,7 @@ elixir(function(mix) {
 });
 ```
 
-Of course, you may also output the resulting file to a custom location by passing a second argument to the `styles` method:
+Конечно же, вы так же можете задать альтернативную папку для сохранения в методе `styles`, указав второй аргумент:
 
 ```javascript
 elixir(function(mix) {
@@ -176,11 +176,11 @@ elixir(function(mix) {
 ```
 
 <a name="css-source-maps"></a>
-### Source Maps
+### Source Maps (Карта ресурсов)
 
-Source maps are enabled out of the box. So, for each file that is compiled you will find a companion `*.css.map` file in the same directory. This mapping allows you to trace your compiled stylesheet selectors back to your original Sass or Less while debugging in your browser.
+Source maps (Карты ресурсов) включены и работают из коробки. Для каждого скомпилированного файла вы найдете схожий `*.css.map` файл в папке скомпилированного файла. Эти карты позволяют вам преобразовать скомпилированные Less или Sass файлы для отладки в браузере.
 
-If you do not want source maps generated for your CSS, you may disable them using a simple configuration option:
+Если вам не нужны source maps (карты ресурсов) для ваших CSS файлов, вы можете выключить их используя опцию:
 
 ```javascript
 elixir.config.sourcemaps = false;
@@ -191,7 +191,7 @@ elixir(function(mix) {
 ```
 
 <a name="working-with-scripts"></a>
-## Working With Scripts
+## Работа со скриптами
 
 Elixir also provides several functions to help you work with your JavaScript files, such as compiling ECMAScript 6, compiling CoffeeScript, Browserify, minification, and simply concatenating plain JavaScript files.
 
