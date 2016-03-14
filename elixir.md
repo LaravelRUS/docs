@@ -58,17 +58,25 @@ By default, Laravel Homestead includes everything you need; however, if you aren
 
 ### Gulp
 
+Далее, вы захотите установить [Gulp](http://gulpjs.com) как глобальный NPM пакет:
+
 Next, you'll want to pull in [Gulp](http://gulpjs.com) as a global NPM package:
 
     npm install --global gulp
+
+Если вы используете систему контроля версий, вы возможно захотите использовать `npm shrinkwrap` для блокировки ваших зависимостей NPM:
 
 If you use a version control system, you may wish to run the `npm shrinkwrap` to lock your NPM requirements:
 
      npm shrinkwrap
 
+Выполнив эту команду хотя бы один раз, вы можете свободно добавлять [npm-shrinkwrap.json](https://docs.npmjs.com/cli/shrinkwrap) в контроль версий.
+
 Once you have run this command, feel free to commit the [npm-shrinkwrap.json](https://docs.npmjs.com/cli/shrinkwrap) into source control.
 
 ### Laravel Elixir
+
+Остался всего один шаг для установки Elixir! Within a fresh installation of Laravel, you'll find a `package.json` file in the root. Think of this like your `composer.json` file, except it defines Node dependencies instead of PHP. You may install the dependencies it references by running:
 
 The only remaining step is to install Elixir! Within a fresh installation of Laravel, you'll find a `package.json` file in the root. Think of this like your `composer.json` file, except it defines Node dependencies instead of PHP. You may install the dependencies it references by running:
 
