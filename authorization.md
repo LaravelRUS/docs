@@ -1,4 +1,4 @@
-git d2aaa775d7395ac56b96d1a32cbcd9f94ef7f42d
+git 5d34ebc0a5bd71d95989f0963ff39d9c12016852
 
 ---
 
@@ -21,8 +21,6 @@ git d2aaa775d7395ac56b96d1a32cbcd9f94ef7f42d
 ## Введение
 
 Вместе [аутентификацией](/docs/{{version}}/authentication) пользователей в Laravel есть средства авторизации, т.е. средства управления доступом к различным ресурсам приложения.
-
-> **Примечание:** Авторизация появилась в Laravel 5.1.11, если вы используете версию ниже - обновитесь, как описано в [мануале](/docs/{{version}}/upgrade).
 
 <a name="defining-abilities"></a>
 ## Установка правил авторизации
@@ -48,7 +46,7 @@ git d2aaa775d7395ac56b96d1a32cbcd9f94ef7f42d
 	     */
 	    public function boot(GateContract $gate)
 	    {
-	        parent::registerPolicies($gate);
+	        $this->registerPolicies($gate);
 
 	        $gate->define('update-post', function ($user, $post) {
 	        	return $user->id === $post->user_id;
@@ -66,6 +64,28 @@ git d2aaa775d7395ac56b96d1a32cbcd9f94ef7f42d
 Помимо функции-замыкания, вы можете определить класс и метод для реализации правила:
 
     $gate->define('update-post', 'Class@method');
+
+<a name="intercepting-all-checks"></a>
+<a name="intercepting-authorization-checks"></a>
+#### Перехват проверки авторизации
+
+Иногда вам нужно дать некому пользователю (например, админу) права на все операции. Для этого можно воспользоваться методом `before`, который запускается перед всеми остальными проверками:
+
+    $gate->before(function ($user, $ability) {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+    });
+
+Если функция в `before` возвращает некоторое значение, то это значение становится результатом проверки.
+
+You may use the `after` method to define a callback to be executed after every authorization check. However, you may not modify the result of the authorization check from an `after` callback:
+
+Сужествует также метод `after`, который запускается после всех проверок. При помощи него вы можете модифицировать результат проверки авторизации, если это по каким-то причинам нужно:
+
+    $gate->after(function ($user, $ability, $result, $arguments) {
+        //
+    });
 
 <a name="checking-abilities"></a>
 ## Проверка правил
@@ -224,24 +244,34 @@ You may also combine the `@can` directive with `@else` directive:
 
 	<?php
 
-	namespace App\Providers;
+    namespace App\Providers;
 
-	use App\Post;
-	use App\Policies\PostPolicy;
-	use Illuminate\Contracts\Auth\Access\Gate as GateContract;
-	use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+    use App\Post;
+    use App\Policies\PostPolicy;
+    use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
-	class AuthServiceProvider extends ServiceProvider
-	{
-	    /**
-	     * The policy mappings for the application.
-	     *
-	     * @var array
-	     */
-	    protected $policies = [
-	        Post::class => PostPolicy::class,
-	    ];
-	}
+    class AuthServiceProvider extends ServiceProvider
+    {
+        /**
+         * The policy mappings for the application.
+         *
+         * @var array
+         */
+        protected $policies = [
+            Post::class => PostPolicy::class,
+        ];
+
+        /**
+         * Register any application authentication / authorization services.
+         *
+         * @param  \Illuminate\Contracts\Auth\Access\Gate  $gate
+         * @return void
+         */
+        public function boot(GateContract $gate)
+        {
+            $this->registerPolicies($gate);
+        }
+    }
 
 <a name="writing-policies"></a>
 ### Написание политик
@@ -271,6 +301,20 @@ You may also combine the `@can` directive with `@else` directive:
 	}
 
 > **Примечание:** Классы политик создаются из [сервис-контейнера](/docs/{{version}}/container) Laravel, что означает, что вы можете указывать в аргументах конструктора нужные вам классы - они будут поданы на вход автоматически.
+
+#### Прерывание всех проверок
+
+Иногда вам нужно дать для некого пользователя (админа) разрешение на все права в данном классе политики. Для этого используйте метод `before`:
+
+    public function before($user, $ability)
+    {
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+    }
+
+Если метод возвращает какое-то значение, это значение считается конечным результатом проверки.
+
 
 <a name="checking-policies"></a>
 ### Проверка политик
