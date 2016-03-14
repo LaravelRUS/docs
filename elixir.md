@@ -28,8 +28,6 @@ git 3c1ff42e25c1ac12261636510a1cdb9c75ef0854
 
 Laravel Elixir предоставляет простой и гибкий API для определения простых задач [Gulp](http://gulpjs.com) для вашего Laravel приложения. Elixir поддерживает несколько основных CSS и Javascript препроцессоров, и даже инструментов тестирования. Использование цепочки методов Elixir'a позволит вам легко определить ваши скрипты и стили. Например:
 
-Laravel Elixir provides a clean, fluent API for defining basic [Gulp](http://gulpjs.com) tasks for your Laravel application. Elixir supports several common CSS and JavaScript pre-processors, and even testing tools. Using method chaining, Elixir allows you to fluently define your asset pipeline. For example:
-
 ```javascript
 elixir(function(mix) {
     mix.sass('app.scss')
@@ -37,8 +35,6 @@ elixir(function(mix) {
 });
 ```
 Если даже вы не поняли сразу как начать работу со сборщиком Gulp и вашими медиа-файлами (assets), вы полюбите Laravel Elixir. Однако вы не обязаны использовать его на этапе разработки вашего приложения. Вы сами свободны в выборе использовании инструментов для ваших медиа-файлов (assets), вы можете не использовать их вовсе.  
-
-If you've ever been confused about how to get started with Gulp and asset compilation, you will love Laravel Elixir. However, you are not required to use it while developing your application. You are free to use any asset pipeline tool you wish, or even none at all.
 
 <a name="installation"></a>
 ## Установка и настройка
@@ -54,37 +50,26 @@ Before triggering Elixir, you must first ensure that Node.js is installed on you
 
 По умолчанию, все что вам нужно это Laravel Homestead; впрочем, если вы не используете Vagrant, тогда вы сможете легко установить Node.js пройдя по ссылке [ссылка для скачивания Node.js](http://nodejs.org/download/).
 
-By default, Laravel Homestead includes everything you need; however, if you aren't using Vagrant, then you can easily install Node by visiting [their download page](http://nodejs.org/download/).
-
 ### Gulp
 
 Далее, вы захотите установить [Gulp](http://gulpjs.com) как глобальный NPM пакет:
-
-Next, you'll want to pull in [Gulp](http://gulpjs.com) as a global NPM package:
 
     npm install --global gulp
 
 Если вы используете систему контроля версий, вы возможно захотите использовать `npm shrinkwrap` для блокировки ваших зависимостей NPM:
 
-If you use a version control system, you may wish to run the `npm shrinkwrap` to lock your NPM requirements:
-
      npm shrinkwrap
 
 Выполнив эту команду хотя бы один раз, вы можете свободно добавлять [npm-shrinkwrap.json](https://docs.npmjs.com/cli/shrinkwrap) в контроль версий.
-
-Once you have run this command, feel free to commit the [npm-shrinkwrap.json](https://docs.npmjs.com/cli/shrinkwrap) into source control.
 
 ### Laravel Elixir
 
 Остался всего один шаг для установки Elixir! После свежей установки Laravel, вы обнаружите файл `package.json` в корневом каталоге. Взгляните на ваш файл composer.json, он описывает зависимости Node вместо PHP. Вы можете установить описанные зависимости используя команду:
 
-The only remaining step is to install Elixir! Within a fresh installation of Laravel, you'll find a `package.json` file in the root. Think of this like your `composer.json` file, except it defines Node dependencies instead of PHP. You may install the dependencies it references by running:
 
     npm install
 
 Если вы ведете разработку на ОС Windows или вы запускаете вашу VM (виртуальную машину) на ОС Windows, возможно вам понадобится запустить команду `npm install` с ключом `--no-bin-links`, чтобы команда запустилась:
-
-If you are developing on a Windows system or you are running your VM on a Windows host system, you may need to run the `npm install` command with the `--no-bin-links` switch enabled:
 
     npm install --no-bin-links
 
@@ -92,8 +77,6 @@ If you are developing on a Windows system or you are running your VM on a Window
 ## Запуск Elixir
 
 Elixir использует последнюю версию [Gulp](http://gulpjs.com), поэтому для запуска задач Elixir'a вам всего лишь понадобится запустить команду `gulp` в вашей консоли (терминале). Добавление к команде ключа `--production` запустит Elixir с минифицированием ваших CSS стилей и Javascript скриптов:
-
-Elixir is built on top of [Gulp](http://gulpjs.com), so to run your Elixir tasks you only need to run the `gulp` command in your terminal. Adding the `--production` flag to the command will instruct Elixir to minify your CSS and JavaScript files:
 
     // Запуск всех задач...
     gulp
@@ -105,16 +88,12 @@ Elixir is built on top of [Gulp](http://gulpjs.com), so to run your Elixir tasks
 
 Так как не очень удобно все время запускать команду `gulp` при изменении ваших файлов, вы можете запустить команду `gulp watch`. Эта команда будет будет продолжать работать в вашей консоли и наблюдать за любыми изменениями ваших файлов (assets). Когда произойдут изменения, новые файлы будут автоматически скомпилированы Elixir'ом:
 
-Since it is inconvenient to run the `gulp` command on your terminal after every change to your assets, you may use the `gulp watch` command. This command will continue running in your terminal and watch your assets for any changes. When changes occur, new files will automatically be compiled:
-
     gulp watch
 
 <a name="working-with-stylesheets"></a>
 ## Работа со стилями
 
 Файл `gulpfile.js` в корневой папке вашего проекта содержит все задачи Elixir'a. могут быть связаны между собой, что позволяет настроить процесс сборки и компиляции ваших файлов (assets) так как вам надо.
-
-The `gulpfile.js` file in your project's root directory contains all of your Elixir tasks. Elixir tasks can be chained together to define exactly how your assets should be compiled.
 
 <a name="less"></a>
 ### Less
@@ -159,8 +138,6 @@ elixir(function(mix) {
     mix.sass('app.scss');
 });
 ```
-
-Again, like the `less` method, you may compile multiple Sass files into a single CSS file, and even customize the output directory of the resulting CSS:
 
 И снова, так же как при использовании метода `less`, Вы можете скомпилировать несколько Sass файлов в один CSS файл, и даже изменить папку для скомпилированного CSS:
 
