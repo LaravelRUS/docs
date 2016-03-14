@@ -52,7 +52,7 @@ Before triggering Elixir, you must first ensure that Node.js is installed on you
 
 ### Gulp
 
-Далее, вы захотите установить [Gulp](http://gulpjs.com) как глобальный NPM пакет:
+Далее, вам потребуется [Gulp](http://gulpjs.com) как глобальный NPM пакет:
 
     npm install --global gulp
 
