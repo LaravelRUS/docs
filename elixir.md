@@ -195,12 +195,14 @@ elixir(function(mix) {
 <a name="working-with-scripts"></a>
 ## Работа со скриптами
 
-Elixir also provides several functions to help you work with your JavaScript files, such as compiling ECMAScript 6, compiling CoffeeScript, Browserify, minification, and simply concatenating plain JavaScript files.
+
+Elixir также предлагает несколько функций для работы с вашими JavaScript файлами, такими как компиляцию в ECMAScript 6, CoffeeScript, Browserify, минификацию, и простую конкатенацию в обычный JavaScript файлы.
 
 <a name="coffeescript"></a>
 ### CoffeeScript
 
-The `coffee` method may be used to compile [CoffeeScript](http://coffeescript.org/) into plain JavaScript. The `coffee` function accepts a string or array of CoffeeScript files relative to the `resources/assets/coffee` directory and generates a single `app.js` file in the `public/js` directory:
+Метод `coffee` может быть использован для компиляции [CoffeeScript](http://coffeescript.org/) в обычный Javascript. Этот метод принимает строку или массив CoffeeScript файлов, которые относительны к папке `resources/assets/coffee` и генерирует единственный файл `app.js` в папке `public/js`:
+
 
 ```javascript
 elixir(function(mix) {
