@@ -51,8 +51,6 @@ Laravel предоставляет унифицированное API для р�
         ],
     ],
 
-You may also set the `host` option to a UNIX socket path. If you do this, the `port` option should be set to `0`:
-
 Вы также можете установить параметр `host` для UNIX socket путь. Если вы сделаете это, то опция `port` должна быть установлена в '0':
 
     'memcached' => [
