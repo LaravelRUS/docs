@@ -213,22 +213,22 @@ elixir(function(mix) {
 <a name="browserify"></a>
 ### Browserify
 
-Elixir also ships with a `browserify` method, which gives you all the benefits of requiring modules in the browser and using ECMAScript 6 and JSX.
+Вы можете смело использовать у себя в javascript-коде конструкции из ES6 и JSX - при помощи метода `browserify` Elixir скомпилирует их в стандартный javascript, который понимают все браузеры. 
 
-This task assumes that your scripts are stored in `resources/assets/js` and will place the resulting file in `public/js/main.js`. You may pass a custom output location as an optional second argument:
+Эта задача предполагает что ваши скрипты расположены в папке `resources/assets/js`. Она сохранит скомпилированные файлы в папку `public/js/main.js`. Если вы хотите переопределить путь или название для скомпилированного файла, вы можете указать это в качестве второго аргумента:
+
 
 ```javascript
 elixir(function(mix) {
     mix.browserify('main.js');
 });
 
-// Specifying a specific output filename...
+// Укажем свое имя для скомпилированного файла...
 elixir(function(mix) {
     mix.browserify('main.js', 'public/javascripts/main.js');
 });
 ```
-
-While Browserify ships with the Partialify and Babelify transformers, you're free to install and add more if you wish:
+Browserify поддерживает Partialify и Babelify трансформеры, и вы можете легко выбирать и устанавливать их так как захотите:
 
     npm install aliasify --save-dev
 
@@ -246,7 +246,8 @@ elixir(function(mix) {
 <a name="babel"></a>
 ### Babel
 
-The `babel` method may be used to compile [ECMAScript 6 and 7](https://babeljs.io/docs/learn-es2015/) and [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html) into plain JavaScript. This function accepts an array of files relative to the `resources/assets/js` directory, and generates a single `all.js` file in the `public/js` directory:
+
+Метод `babel` используется для компиляции [ECMAScript 6 and 7](https://babeljs.io/docs/learn-es2015/) и [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html) в обычный JavaScript. Этот метод принимает массив файлов, расположенных относительно папки `resources/assets/js` и генерирует единственный файл `all.js` в папке `public/js`:
 
 ```javascript
 elixir(function(mix) {
@@ -258,15 +259,16 @@ elixir(function(mix) {
 });
 ```
 
-To choose a different output location, simply specify your desired path as the second argument. The signature and functionality of this method are identical to `mix.scripts()`, excluding the Babel compilation.
+Для указания нестадартной папки для сохранения вы как обычно можете указать свой путь в качестве второго аргумента. Принцип работы этого скрипта такая же как у метода `mix.scripts()`, за исключенем компиляции Babel.
 
 
 <a name="javascript"></a>
-### Scripts
+### Скрипты
 
-If you have multiple JavaScript files that you would like to combine into a single file, you may use the `scripts` method.
+Если у вас есть несколько JavaScript файлов и вы бы хотели объединить их в один файл, вы можете воспользоваться методом `scripts`.
 
-The `scripts` method assumes all paths are relative to the `resources/assets/js` directory, and will place the resulting JavaScript in `public/js/all.js` by default:
+Этот метод ожидает что все скрипты расположены в папке `resources/assets/js`, он по умолчанию сохранит объединенный файл JavaScript в папку `public/js/all.js`:
+
 
 ```javascript
 elixir(function(mix) {
