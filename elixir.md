@@ -278,8 +278,8 @@ elixir(function(mix) {
     ]);
 });
 ```
+Если вы хотите объединить ваши JavaScript файлы в разные файлы, вы можете вызвать метод `scripts` несколько раз. С помощью второго аргумента метода определите название файла для каждой операции объединения:
 
-If you need to combine multiple sets of scripts into different files, you may make multiple calls to the `scripts` method. The second argument given to the method determines the resulting file name for each concatenation:
 
 ```javascript
 elixir(function(mix) {
@@ -287,8 +287,8 @@ elixir(function(mix) {
        .scripts(['forum.js', 'threads.js'], 'public/js/forum.js');
 });
 ```
+Если вам нужно объединить все файлы какой-либо папки, вы можете воспользоваться методом `scriptsIn`. Конечный файл будет сохранен по пути `public/js/all.js`:
 
-If you need to combine all of the scripts in a given directory, you may use the `scriptsIn` method. The resulting JavaScript will be placed in `public/js/all.js`:
 
 ```javascript
 elixir(function(mix) {
@@ -297,9 +297,11 @@ elixir(function(mix) {
 ```
 
 <a name="copying-files-and-directories"></a>
-## Copying Files & Directories
+## Копирование файлов и папок
 
 The `copy` method may be used to copy files and directories to new locations. All operations are relative to the project's root directory:
+
+Для копирования файлов и папок существует метод `copy`. Все операции копирования производятся относительно корневой папки вашего проекта.
 
 ```javascript
 elixir(function(mix) {
@@ -312,11 +314,11 @@ elixir(function(mix) {
 ```
 
 <a name="versioning-and-cache-busting"></a>
-## Versioning / Cache Busting
+## Версионирование / Очистка кеша
 
-Many developers suffix their compiled assets with a timestamp or unique token to force browsers to load the fresh assets instead of serving stale copies of the code. Elixir can handle this for you using the `version` method.
+Многие разработчики добавляют суффикс с меткой времени или уникальным токеном к названиям скомпилированных медиа файлов (assets) чтобы заставить браузер загружать не закешированные файлы, а новые при каждой загрузке страницы.  Для данной функции Elixir предоставляет вам метод `version`.
 
-The `version` method accepts a file name relative to the `public` directory, and will append a unique hash to the filename, allowing for cache-busting. For example, the generated file name will look something like: `all-16d570a7.css`:
+Метод `version` может принимает названия файлов относительно папки `public`, и добавляет уникальный хэш к названию файла. К примеру для скомпилированного файла название будет таким: `all-16d570a7.css`:
 
 ```javascript
 elixir(function(mix) {
@@ -324,13 +326,13 @@ elixir(function(mix) {
 });
 ```
 
-After generating the versioned file, you may use Laravel's global `elixir` PHP helper function within your [views](/docs/{{version}}/views) to load the appropriately hashed asset. The `elixir` function will automatically determine the name of the hashed file:
+После создания файла с версией, для корректного подключения этого файла, вы можете использовать глобальный PHP хелпер `elixir` внутри ваших [views](/docs/{{version}}/views). Хелпер `elixir` автоматически определить хешированное название файла:
 
     <link rel="stylesheet" href="{{ elixir('css/all.css') }}">
 
-#### Versioning Multiple Files
+#### Версионирование нескольких файлов
 
-You may pass an array to the `version` method to version multiple files:
+В аргументе метода `version` вы можете указать массив файлов, для которых нужно применить версионирование:
 
 ```javascript
 elixir(function(mix) {
@@ -338,7 +340,7 @@ elixir(function(mix) {
 });
 ```
 
-Once the files have been versioned, you may use the `elixir` helper function to generate links to the proper hashed files. Remember, you only need to pass the name of the un-hashed file to the `elixir` helper function. The helper will use the un-hashed name to determine the current hashed version of the file:
+После того как файлы с версиями будут скомпилированы, вы можете использовать хелпер `elixir` для генерации правильных ссылок хешированных файлов.  Помните, вам нужно всего лишь добавить оригинальное название файла в хелпере `elixir`. Хелпер будет использовать оригинальное имя файла для поиска правильной версии хешированного файла:
 
     <link rel="stylesheet" href="{{ elixir('css/all.css') }}">
 
