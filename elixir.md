@@ -349,15 +349,16 @@ elixir(function(mix) {
 <a name="browser-sync"></a>
 ## BrowserSync
 
-BrowserSync automatically refreshes your web browser after you make changes to your front-end resources. You can use the `browserSync` method to instruct Elixir to start a BrowserSync server when you run the `gulp watch` command:
+BrowserSync автоматически обновит ваш браузер после того как вы что либо измените в ваших медиа файлах (assets). Для того чтобы настроить запуск сервера BrowserSync по команде `gulp watch`, воспользуйтесь методом `browserSync` для Elixir:
+
 
 ```javascript
 elixir(function(mix) {
     mix.browserSync();
 });
 ```
+Чтобы включить синхронизацию с браузером, после запуска `gulp watch` откройте ваше приложение используйте порт 3000: `http://homestead.app:3000`. Если вместо `homestead.app` у вас подключен собственный домен, тогда вы можете указать массив [настроек](http://www.browsersync.io/docs/options/) в качестве первого аргумента метода `browserSync`:
 
-Once you run `gulp watch`, access your web application using port 3000 to enable browser syncing: `http://homestead.app:3000`. If you're using a domain other than `homestead.app` for local development, you may pass an array of [options](http://www.browsersync.io/docs/options/) as the first argument to the `browserSync` method:
 
 ```javascript
 elixir(function(mix) {
@@ -368,7 +369,8 @@ elixir(function(mix) {
 ```
 
 <a name="calling-existing-gulp-tasks"></a>
-## Calling Existing Gulp Tasks
+## Вызов существующих задач gulp
+
 
 If you need to call an existing Gulp task from Elixir, you may use the `task` method. As an example, imagine that you have a Gulp task that simply speaks a bit of text when called:
 
