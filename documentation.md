@@ -1,4 +1,4 @@
-git 89b2688d0978c162b553ff69e75d658e304a5481
+git a4bdc8583d30f5a349c619af59b81092716f4608
 
 ---
 - Вступление
@@ -8,7 +8,11 @@ git 89b2688d0978c162b553ff69e75d658e304a5481
     - [API](/api/{{version}})
 - Установка
     - [Установка](/docs/{{version}}/installation)
-    - [Homestead](/docs/{{version}}/homestead)    
+    - [Настройка](/docs/{{version}}/configuration)    
+    - [Homestead](/docs/{{version}}/homestead)
+- Обучение
+    - [Гайд для начинающих](/docs/{{version}}/quickstart)
+    - [Гайд для продвинутых](/docs/{{version}}/quickstart-intermediate)
 - Основы
     - [Routing](/docs/{{version}}/routing)
     - [Middleware](/docs/{{version}}/middleware)
