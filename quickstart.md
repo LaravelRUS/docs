@@ -2,30 +2,29 @@ git aea1779faa73dd71b969c23a4f7ebe1921227c2a
 
 ---
 
-# Обучение: гайд для начинающих
+# Basic Task List
 
 - [Введение](#introduction)
 - [Установка](#installation)
-- [Prepping The Database](#prepping-the-database)
-	- [Database Migrations](#database-migrations)
-	- [Eloquent Models](#eloquent-models)
-- [Routing](#routing)
-	- [Stubbing The Routes](#stubbing-the-routes)
-	- [Displaying A View](#displaying-a-view)
-- [Building Layouts & Views](#building-layouts-and-views)
-	- [Defining The Layout](#defining-the-layout)
-	- [Defining The Child View](#defining-the-child-view)
-- [Adding Tasks](#adding-tasks)
-	- [Validation](#validation)
-	- [Creating The Task](#creating-the-task)
-	- [Displaying Existing Tasks](#displaying-existing-tasks)
-- [Deleting Tasks](#deleting-tasks)
-	- [Adding The Delete Button](#adding-the-delete-button)
-	- [Deleting The Task](#deleting-the-task)
+- [Подготавливаем базу данных](#prepping-the-database)
+	- [Миграции](#database-migrations)
+	- [Модель Eloquent](#eloquent-models)
+- [Маршрутизация](#routing)
+	- [Создание маршрутов](#stubbing-the-routes)
+	- [Отображение представления](#displaying-a-view)
+- [Создаем структуру макета и представления](#building-layouts-and-views)
+	- [Определение макет структуры](#defining-the-layout)
+	- [Определение унаследованного представления](#defining-the-child-view)
+- [Добавляем задачу](#adding-tasks)
+	- [Проверка ввода](#validation)
+	- [Создаем задачу](#creating-the-task)
+	- [Отображаем задачу](#displaying-existing-tasks)
+- [Удаляем задачу](#deleting-tasks)
+	- [Добавляем кнопку <Удалить>](#adding-the-delete-button)
+	- [Удаляем задачу](#deleting-the-task)
 
 <a name="introduction"></a>
-## Introduction
-
+## Введение
 В данном гайде мы познакомимся с фреймворком, узнаем о миграциях, Eloquent ORM, роутинге, валидации, шаблонах и шаблонизаторе Blade. Это неплохая стартовая точка для тех, кто не знаком с фреймворком и сам PHP знает на среднем уровне. Если вы опытный программист - лучше перейдите к [гайду для продвинутых](/docs/{{version}}/quickstart-intermediate).
 
 В качестве реального приложения, которое мы будем изучать, выступит приложение простейшего todo-листа. Код его [доступен на GitHub](https://github.com/laravel/quickstart-basic).
@@ -40,7 +39,7 @@ git aea1779faa73dd71b969c23a4f7ebe1921227c2a
 
 	composer create-project laravel/laravel quickstart --prefer-dist
 
-#### Установка проекта Quickstart (по желанию)
+#### Установка The Quickstart (Необязательно)
 
 Вы можете продолжать читать этот гайд и применять его на фреймворке, а можете скачать исходный код проекта и исследовать его:
 
@@ -55,19 +54,15 @@ git aea1779faa73dd71b969c23a4f7ebe1921227c2a
 ## Подготавливаем базу данных
 
 <a name="database-migrations"></a>
-### Миграции
+### Миграции баз данных
 
-First, let's use a migration to define a database table to hold all of our tasks. Laravel's database migrations provide an easy way to define your database table structure and modifications using fluent, expressive PHP code. Instead of telling your team members to manually add columns to their local copy of the database, your teammates can simply run the migrations you push into source control.
+Сперва, давайте используем миграции, для того чтобы определить таблицу, для хранения всех наших задач. Миграции БД Laravel обеспечивают просто способ определения структуры таблиц и модификации с использованием PHP кода. Вместо того чтобы постоянно предупреждать вашу команду, о каких либо изменения в БД и им не приходилось вручную модифицировать их локальные копии, они могут просто запустить миграцию, которую вы отправили в вашу систему управления версиями.
 
-Создание и изменение таблиц БД в Laravel осуществляется так называемыми миграциями. Это PHP-файл, в котором описываются изменения в базе данных. Миграции получили широкое распространение благодаря тому, что при помощи них легко поддерживать правильную схему БД внутри команды разработчиков.
-
-So, let's build a database table that will hold all of our tasks. The [Artisan CLI](/docs/{{version}}/artisan) can be used to generate a variety of classes and will save you a lot of typing as you build your Laravel projects. In this case, let's use the `make:migration` command to generate a new database migration for our `tasks` table:
-
-Итак, создадим миграцию с именем create_tasks_table , в которой создадим таблицу `tasks`. 
+Итак, давайте создадим таблицу БД, которая будет содержать все ваши задачи. [Интерфейс Artisan](/docs/{{version}}/artisan) может быть использован для создания различных классов и сэкономить вам много времени, пока вы разрабатываете свои проекты на Laravel. В нашем случае, давайте используем команду `make:migration` , для создания новой миграции БД для нашей таблицы `tasks`:
 
 	php artisan make:migration create_tasks_table --create=tasks
 
-The migration will be placed in the `database/migrations` directory of your project. As you may have noticed, the `make:migration` command already added an auto-incrementing ID and timestamps to the migration file. Let's edit this file and add an additional `string` column for the name of our tasks:
+Миграция будет помещена в папку `database/migrations` вашего проекта. Как вы могли заметить, команда `make:migration` добавляет метку времени, которая позволит фреймворку определить порядок применения миграций. Давайте отредактируем этот файл и добавим дополнительный столбец `string` для названия наших задач:
 
 	<?php
 
@@ -101,22 +96,23 @@ The migration will be placed in the `database/migrations` directory of your proj
 	    }
 	}
 
-To run our migration, we will use the `migrate` Artisan command. If you are using Homestead, you should run this command from within your virtual machine, since your host machine will not have direct access to the database:
+Для запуска наших миграций, мы будем использовать команду Artisan `migrate`. Если вы используете Homestead, вы должны выполнить эту команду из вашей виртуальной машины:
 
 	php artisan migrate
 
-This command will create all of our database tables. If you inspect the database tables using the database client of your choice, you should see a new `tasks` table which contains the columns defined in our migration. Next, we're ready to define an Eloquent ORM model for our tasks!
+Эта команда создаст все наши таблицы БД. Если вы проверите таблицы БД, вы увидите новую таблицу `tasks`, которая содержит столбцы, определенные в нашей миграции. Теперь мы готовы определить модель Eloquent ORM для наших задач!
 
 <a name="eloquent-models"></a>
-### Eloquent Models
+### Модель Eloquent
 
-[Eloquent](/docs/{{version}}/eloquent) is Laravel's default ORM (object-relational mapper). Eloquent makes it painless to retrieve and store data in your database using clearly defined "models". Usually, each Eloquent model corresponds directly with a single database table.
+[ORM Eloquent](/docs/{{version}}/eloquent) - красивая и простая реализация паттерна ActiveRecord для работы с БД.
+Каждая таблица имеет соответствующий класс-модель, который используется для работы с этой таблицей. Модели позволяют читать данные из таблиц и записывать данные в таблицу.
 
-So, let's define a `Task` model that corresponds to our `tasks` database table we just created. Again, we can use an Artisan command to generate this model. In this case, we'll use the `make:model` command:
+Итак, давайте определим модель `Task`, которая соответствует нашей, только что созданной, таблице `tasks`. Мы можем использовать команду Artisan для создания этой модели. В данном случае, мы будем использовать команду `make:model` :
 
 	php artisan make:model Task
 
-The model will be placed in the `app` directory of your application. By default, the model class is empty. We do not have to explicitly tell the Eloquent model which table it corresponds to because it will assume the database table is the plural form of the model name. So, in this case, the `Task` model is assumed to correspond with the `tasks` database table. Here is what our empty model should look like:
+Модель будет помещена в папку `app`. По умолчанию класс модели будет пустой. Мы не должны явно указывать Eloquent какую таблицу должен привязывать к нашей модели, потому что Eloquent будет использовать в качестве названия таблицы имя класса в нижнем регистре и во множественном числе. В нашем случае Eloquent предположит, что модель `Task` хранит свои данные в таблице `tasks`. Вот как будет выглядеть наша модель:
 
 	<?php
 
@@ -129,17 +125,17 @@ The model will be placed in the `app` directory of your application. By default,
 		//
 	}
 
-We'll learn more about how to use Eloquent models as we add routes to our application. Of course, feel free to consult the [complete Eloquent documentation](/docs/{{version}}/eloquent) for more information.
+Мы изучим больше о том как использовать модели Eloquent, когда мы добавим маршруты в наше приложении. Более подробно узнать о Eloquent можно в [документации](/docs/{{version}}/eloquent) 
 
 <a name="routing"></a>
-## Routing
+## Машрутизация
 
 <a name="stubbing-the-routes"></a>
-### Stubbing The Routes
+### Создание маршрутов
 
-Next, we're ready to add a few routes to our application. Routes are used to point URLs to controllers or anonymous functions that should be executed when a user accesses a given page. By default, all Laravel routes are defined in the `app/Http/routes.php` file that is included in every new project.
+Итак, мы готовы добавить несколько роутов(маршрутов, routes) для нашего приложения. Роуты используются для того, чтобы указать URL-адреса для контроллеров или анонимных функций, которые должны выполняться, когда пользователь получает доступ к данной странице. По умолчанию роуты вашего приложения будут определены в файле `app/Http/routes.php`, который есть во всех новых проектах.
 
-For this application, we know we will need at least three routes: a route to display a list of all of our tasks, a route to add new tasks, and a route to delete existing tasks. We'll wrap all of these routes in the `web` middleware so they have session state and CSRF protection. So, let's stub all of these routes in the `app/Http/routes.php` file:
+В нашем приложении, мы знаем что нам потребуется по крайней мере 3 роута: роут для отображения списка задач, роут для добавления новой задачи и роут для удаления существующей задачи. Мы обернем все 3 маршрута в `web` middleware (HTTP Middleware (посредники) - это фильтры обработки HTTP-запроса.), поэтому они будут иметь сессии и защиту от CSRF. Итак, давайте опишим все эти маршруты в файле `app/Http/routes.php`:
 
 	<?php
 
@@ -172,33 +168,34 @@ For this application, we know we will need at least three routes: a route to dis
 
 
 <a name="displaying-a-view"></a>
-### Displaying A View
+### Отображение представления
 
-Next, let's fill out our `/` route. From this route, we want to render an HTML template that contains a form to add new tasks, as well as a list of all current tasks.
+Views (представления, отображения, шаблоны) обычно содержат HTML-код вашего приложения и представляют собой удобный способ разделения бизнес-логики и логики отображения информации. 
+Давайте заполним маршрут `/`. По этому пути, мы сделаем шаблон HTML формы, которая будет добавлять новые задачи, а также выводить список всех текущих задач.
 
-In Laravel, all HTML templates are stored in the `resources/views` directory, and we can use the `view` helper to return one of these templates from our route:
+В Laravel, все HTML шаблоны хранятся в папке `resources/views`, мы будем использовать вспомогательную функцию `view` для возврата одного из шаблонов:
 
 	Route::get('/', function () {
 		return view('tasks');
 	});
 
-Passing `tasks` to the `view` function will create a View object instance that corresponds to the template in `resources/views/tasks.blade.php`. Of course, we need to actually define this view, so let's do that now!
+Функции `view` создает экземпляр объекта представления, который соответствует шаблону resources/views/tasks.blade.php`. Теперь нам нужно создать представление.
 
 <a name="building-layouts-and-views"></a>
-## Building Layouts & Views
+## Создаем структуру макета и представления
 
-This application only has a single view which contains a form for adding new tasks as well as a listing of all current tasks. To help you visualize the view, here is a screenshot of the finished application with basic Bootstrap CSS styling applied:
+Это приложение имеет только одну страницу, которая содержит форму для добавления новых задач, а также список всех текущих задач. Так будет выглядеть наша страница с использованием основных Bootstrap CSS стилей:
 
 ![Application Image](https://laravel.com/assets/img/quickstart/basic-overview.png)
 
 <a name="defining-the-layout"></a>
-### Defining The Layout
+### Определение структуры макета
 
-Almost all web applications share the same layout across pages. For example, this application has a top navigation bar that would be typically present on every page (if we had more than one). Laravel makes it easy to share these common features across every page using Blade **layouts**.
+Почти все веб-приложения используют одну и туже структуру. Например, наше приложение имеет меню навигации одинаковое на всех страницах(если у нас было бы их больше). Laravel позволяет легко разделяет эти общие черты на каждой странице с помощью шаблонизатора Blade.
 
-As we discussed earlier, all Laravel views are stored in `resources/views`. So, let's define a new layout view in `resources/views/layouts/app.blade.php`. The `.blade.php` extension instructs the framework to use the [Blade templating engine](/docs/{{version}}/blade) to render the view. Of course, you may use plain PHP templates with Laravel. However, Blade provides convenient short-cuts for writing clean, terse templates.
+Как мы уже говорили ранее, все шаблоны Laravel хранит в `resources/views`. Итак, давайте определим новый макет в `resources/views/layouts/app.blade.php`. Расширение `.blade.php` инструктирует Laravel использовать [Шаблонизатор Blade](/docs/{{version}}/blade) для отображения представления. Blade - простой, но мощный шаблонизатор, входящий в состав Laravel. В отличие от других шаблонизаторов, он не ограничивает вас в использовании конструкций PHP внутри шаблонов. Шаблоны Blade компилируются в PHP-код и кэшируются фреймворком - Blade не вносит дополнительных тормозов в работу фреймворка.
 
-Our `app.blade.php` view should look like the following:
+Наш`app.blade.php` шаблон должен выглядеть следующим образом:
 
     <!-- resources/views/layouts/app.blade.php -->
 
@@ -221,14 +218,14 @@ Our `app.blade.php` view should look like the following:
 		</body>
 	</html>
 
-Note the `@yield('content')` portion of the layout. This is a special Blade directive that specifies where all child pages that extend the layout can inject their own content. Next, let's define the child view that will use this layout and provide its primary content.
+Обратите внимание на `@yield('content')` часть шаблона. Это специальная директива, которая определяет, где будут находится дочерние шаблоны. Они будут расширять базовый шаблон, нашим собственным контентом. Давайте создадим наш собственный шаблон, который будет наследовать этот макет и содержать основной контент.
 
 <a name="defining-the-child-view"></a>
-### Defining The Child View
+###  Определение унаследованного представления
 
-Next, we need to define a view that contains a form to create a new task as well as a table that lists all existing tasks. Let's define this view in `resources/views/tasks.blade.php`.
+Нам необходимо определить, как будет выглядеть наша форма, в которой мы будем добавлять новые задачи, а также таблицу со всеми нашими существующими задачами. Давайте создадим наш шаблон в `resources/views/tasks.blade.php`.
 
-We'll skip over some of the Bootstrap CSS boilerplate and only focus on the things that matter. Remember, you can download the full source for this application on [GitHub](https://github.com/laravel/quickstart-basic):
+Мы пропустим верстку нашего шаблона и сосредоточимся на более важных вещах. Напоминаем, что весь исходных код вы можете скачать по ссылке на [GitHub](https://github.com/laravel/quickstart-basic):
 
     <!-- resources/views/tasks.blade.php -->
 
@@ -269,29 +266,31 @@ We'll skip over some of the Bootstrap CSS boilerplate and only focus on the thin
 		<!-- TODO: Current Tasks -->
 	@endsection
 
-#### A Few Notes Of Explanation
+#### Несколько объяснений
 
-Before moving on, let's talk about this template a bit. First, the `@extends` directive informs Blade that we are using the layout we defined in `resources/views/layouts/app.blade.php`. All of the content between `@section('content')` and `@endsection` will be injected into the location of the `@yield('content')` directive within the `app.blade.php` layout.
+Прежде чем двигаться дальше, давайте рассмотрим этот шаблон. Во первых, директива `@extends` информирует шаблонизатор Blade, что мы используем шаблон определенный в `resources/views/layouts/app.blade.php`. Все содержимое между `@section('content')` и `@endsection` будет вставлено в директиву `@yield('content')` нашего шаблона `app.blade.php`.
 
-The `@include('common.errors')` directive will load the template located at `resources/views/common/errors.blade.php`. We haven't defined this template, but we will soon!
+Директива `@include('common.errors')` будет загружать шаблон расположенный в `resources/views/common/errors.blade.php`. Пока мы не создавали этот шаблон, но все еще впереди!
 
-Now we have defined a basic layout and view for our application. Remember, we are returning this view from our `/` route like so:
+Мы определили внешний вид нашего приложения. Помните, что мы возвращаем это представление из нашего маршрута `/` :
 
 	Route::get('/', function () {
 		return view('tasks');
 	});
 
-Next, we're ready to add code to our `POST /task` route to handle the incoming form input and add a new task to the database.
+Далее, мы рассмотрим как создать маршрут `POST /task`, чтобы мы могли добавить новую задачу в БД.
 
 <a name="adding-tasks"></a>
-## Adding Tasks
+## Добавляем задачу
 
 <a name="validation"></a>
-### Validation
+### Проверка ввода
 
-Now that we have a form in our view, we need to add code to our `POST /task` route to validate the incoming form input and create a new task. First, let's validate the input.
 
-For this form, we will make the `name` field required and state that it must contain less than `255` characters. If the validation fails, we will redirect the user back to the `/` URL, as well as flash the old input and errors into the [session](/docs/{{version}}/session). Flashing the input into the session will allow us to maintain the user's input even when there are validation errors:
+Теперь, когда мы создали нашу форму, мы должны добавить маршрут для `POST /task`, чтобы проверить правильность ввода и создать новую задачу. Сперва давайте проверим правильность ввода.
+
+Для этой формы, мы создадим поле `name`, которое будет обязательным и которое будет содержать менее `255` символов.
+Если проверка вернет отрицательный результат, мы перенаправим пользователя назад на главную страницу `/`, а также добавим введенные данные в [сессии](/docs/{{version}}/session). Использование сессий  позволит сохранить введенные данные, если наша проверка вернет отрицательный результат:
 
 	Route::post('/task', function (Request $request) {
 		$validator = Validator::make($request->all(), [
@@ -307,11 +306,11 @@ For this form, we will make the `name` field required and state that it must con
 		// Create The Task...
 	});
 
-#### The `$errors` Variable
+#### Переменная `$errors` 
 
-Let's take a break for a moment to talk about the `->withErrors($validator)` portion of this example. The `->withErrors($validator)` call will flash the errors from the given validator instance into the session so that they can be accessed via the `$errors` variable in our view.
+Давайте рассмотрим часть кода `->withErrors($validator)`. Если проверка возвращает отрицательный результат, мы передаем переменную `validator` объекту переадресации `redirect` с помощью метода `withErrors`. Этот метод передает сообщения об ошибках в сессию, которые могут быть доступны с помощью переменной `$errors`.
 
-Remember that we used the `@include('common.errors')` directive within our view to render the form's validation errors. The `common.errors` will allow us to easily show validation errors in the same format across all of our pages. Let's define the contents of this view now:
+Мы использовали директиву `@include('common.errors')` в нашем шаблоне, чтобы могли проверять на ошибки наши формы.`common.errors` позволяет нам легко выводить ошибки валидации. Давайте создадим этот шаблон:
 
     <!-- resources/views/common/errors.blade.php -->
 
@@ -331,12 +330,12 @@ Remember that we used the `@include('common.errors')` directive within our view 
     @endif
 
 
-> **Note:** The `$errors` variable is available in **every** Laravel view. It will simply be an empty instance of `ViewErrorBag` if no validation errors are present.
+> **Примечание:** Переменная `$errors` будет доступна для всех наших шаблонов. Если не будет проблем с проверкой, то она попросту будет пустой.
 
 <a name="creating-the-task"></a>
-### Creating The Task
+### Создаем задачу
 
-Now that input validation is handled, let's actually create a new task by continuing to fill out our route. Once the new task has been created, we will redirect the user back to the `/` URL. To create the task, we may use the `save` method after creating and setting properties on a new Eloquent model:
+Теперь, когда мы разобрались с проверкой данных, давайте создадим новую задачу, продолжая заполнять наш маршрут. После того, как новая задача будет создана, мы будем возвращать пользователя на нашу главную страницу `/`. Для того чтобы создать новую задачу, мы будем использовать метод `save` после того, как создадим и настроим наш новый метод Eloquent:
 
 	Route::post('/task', function (Request $request) {
 		$validator = Validator::make($request->all(), [
@@ -356,12 +355,12 @@ Now that input validation is handled, let's actually create a new task by contin
 		return redirect('/');
 	});
 
-Great! We can now successfully create tasks. Next, let's continue adding to our view by building a list of all existing tasks.
+Отлично! Теперь мы можем добавлять задачи. Теперь, нам нужно вывести список всех существующих задач.
 
 <a name="displaying-existing-tasks"></a>
-### Displaying Existing Tasks
+### Отображаем задачуs
 
-First, we need to edit our `/` route to pass all of the existing tasks to the view. The `view` function accepts a second argument which is an array of data that will be made available to the view, where each key in the array will become a variable within the view:
+Для начала, нам надо немного изменить наш маршрут `/`, чтобы передать все существующие задачи в наш шаблон. Функция `view` принимает второй аргумент, который является массивом данных. Обращаться к массиву мы будем по ключам:
 
 	Route::get('/', function () {
 		$tasks = Task::orderBy('created_at', 'asc')->get();
@@ -371,7 +370,7 @@ First, we need to edit our `/` route to pass all of the existing tasks to the vi
 		]);
 	});
 
-Once the data is passed, we can spin through the tasks in our `tasks.blade.php` view and display them in a table. The `@foreach` Blade construct allows us to write concise loops that compile down into blazing fast plain PHP code:
+Для вывода наших задач в шаблон `tasks.blade.php`, мы будем использовать цикл. Шаблонизатор Blade, позволяет использовать простую конструкцию `@foreach`, которая будет компилироваться в простой PHP код:
 
 	@extends('layouts.app')
 
@@ -415,15 +414,15 @@ Once the data is passed, we can spin through the tasks in our `tasks.blade.php` 
         @endif
 	@endsection
 
-Our task application is almost complete. But, we have no way to delete our existing tasks when they're done. Let's add that next!
+Наше приложение почти готово. Нам осталось только добавить возможность удалять наши задачи. Давайте это сделаем!
 
 <a name="deleting-tasks"></a>
-## Deleting Tasks
+## Удаление задач
 
 <a name="adding-the-delete-button"></a>
-### Adding The Delete Button
+### Добавляем кнопку <Удалить>
 
-We left a "TODO" note in our code where our delete button is supposed to be. So, let's add a delete button to each row of our task listing within the `tasks.blade.php` view. We'll create a small single-button form for each task in the list. When the button is clicked, a `DELETE /task` request will be sent to the application:
+Помните, в нашем шаблоне мы оставляли комментарий <!-- TODO: Delete Button -->, чтоб не забыть добавить кнопку <удалить>? Итак, давайте отредактируем наш шаблон `tasks.blade.php` и добавим кнопку удаления для каждой задачи в нашем списке. Мы создадим небольшую форму для кнопки <удалить>. При нажатии на кнопку, будет отправлен запрос `DELETE /task` на удаление задачи:
 
     <tr>
         <!-- Task Name -->
@@ -445,20 +444,20 @@ We left a "TODO" note in our code where our delete button is supposed to be. So,
     </tr>
 
 <a name="a-note-on-method-spoofing"></a>
-#### A Note On Method Spoofing
+#### ПОДМЕНА HTTP-МЕТОДА
 
-Note that the delete button's form `method` is listed as `POST`, even though we are responding to the request using a `Route::delete` route. HTML forms only allow the `GET` and `POST` HTTP verbs, so we need a way to spoof a `DELETE` request from the form.
+Обратите внимание, HTML-формы не поддерживают методы HTTP-запроса PUT или DELETE. Для того, чтобы отправить на сервер HTTP-запрос с этими методами, вам нужно добавить в форму скрытый input с именем _method.
 
-We can spoof a `DELETE` request by outputting the results of the `method_field('DELETE')` function within our form. This function generates a hidden form input that Laravel recognizes and will use to override the actual HTTP request method. The generated field will look like the following:
+Значение этого поля будет восприниматься фреймворком как тип HTTP-запроса. Например:
 
 	<input type="hidden" name="_method" value="DELETE">
 
 <a name="deleting-the-task"></a>
-### Deleting The Task
+### Удаление задач
 
-Finally, let's add logic to our route to actually delete the given task. We can use [implicit model binding](/docs/{{version}}/routing#route-model-binding) to automatically retrieve the `Task` model that corresponds to the `{task}` route parameter.
+Наконец, давайте добавим логику для нашего маршрута, чтоб на самом деле удалить задачу. Мы можем использовать [параметры роутов](/docs/{{version}}/routing#route-model-binding) для автоматического получения Модели `Task`, которая соответствует параметру маршрута `{task}`.
 
-In our route callback, we will use the `delete` method to delete the record. Once the record is deleted, we will redirect the user back to the `/` URL:
+Для удаления записи, мы будем использовать метод `delete`.После того, как запись будет удалена, мы будем перенаправлять пользователя обратно на URL `/`:
 
 	Route::delete('/task/{task}', function (Task $task) {
 		$task->delete();
