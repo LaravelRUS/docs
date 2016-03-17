@@ -59,9 +59,11 @@ git aea1779faa73dd71b969c23a4f7ebe1921227c2a
 
 First, let's use a migration to define a database table to hold all of our tasks. Laravel's database migrations provide an easy way to define your database table structure and modifications using fluent, expressive PHP code. Instead of telling your team members to manually add columns to their local copy of the database, your teammates can simply run the migrations you push into source control.
 
-Создание и изменение таблиц БД в Laravel осуществляется так называемыми миграциями. Это PHP-файл, в котором описываются изменения в базе данных. Миграции получили широкое распространение благодаря тому, что при помощи них ленко поддерживать правильную схему БД внутри команды разработчиков.
+Создание и изменение таблиц БД в Laravel осуществляется так называемыми миграциями. Это PHP-файл, в котором описываются изменения в базе данных. Миграции получили широкое распространение благодаря тому, что при помощи них легко поддерживать правильную схему БД внутри команды разработчиков.
 
 So, let's build a database table that will hold all of our tasks. The [Artisan CLI](/docs/{{version}}/artisan) can be used to generate a variety of classes and will save you a lot of typing as you build your Laravel projects. In this case, let's use the `make:migration` command to generate a new database migration for our `tasks` table:
+
+Итак, создадим миграцию с именем create_tasks_table , в которой создадим таблицу `tasks`. 
 
 	php artisan make:migration create_tasks_table --create=tasks
 
