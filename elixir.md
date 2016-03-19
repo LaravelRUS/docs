@@ -99,7 +99,7 @@ Elixir использует последнюю версию [Gulp](http://gulpjs
 <a name="less"></a>
 ### Less
 
-Для компиляции [Less](http://lesscss.org/) в CSS, вы можете использовать метод `less`. Метод `less` ожидает что ваши Less файлы находятся в папке `resources/assets/less`. По умолчанию задача скомпилирует файлы, указанные в примере, в CSS и сохранит в папку `public/css/app.css`:
+Для компиляции [Less](http://lesscss.org/) в CSS, вы можете использовать метод `less`. Метод `less` ожидает что ваши Less файлы находятся в папке `resources/assets/less`. По умолчанию задача скомпилирует файлы, указанные в примере, в CSS и сохранит в папку `public/css/app.css`: 
 
 ```javascript
 elixir(function(mix) {
