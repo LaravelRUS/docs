@@ -372,7 +372,8 @@ elixir(function(mix) {
 ## Вызов существующих задач gulp
 
 
-If you need to call an existing Gulp task from Elixir, you may use the `task` method. As an example, imagine that you have a Gulp task that simply speaks a bit of text when called:
+Если вам нужно вызвать существующую Gulp задачу с помощью Elixir, вы можете воспользоваться методом `task`. В качестве примера представьте что у вас уже есть Gulp задача, которая просто печатает текст при вызове:
+
 
 ```javascript
 gulp.task('speak', function() {
@@ -382,7 +383,8 @@ gulp.task('speak', function() {
 });
 ```
 
-If you wish to call this task from Elixir, use the `mix.task` method and pass the name of the task as the only argument to the method:
+Если вы хотите вызвать эту задачу с помощью Elixir, тогда метод `mix.task` указав только имя вашей задачи в качестве аргумента метода:
+
 
 ```javascript
 elixir(function(mix) {
@@ -390,9 +392,10 @@ elixir(function(mix) {
 });
 ```
 
-#### Custom Watchers
+#### Собственные наблюдатели (watchers)
 
-If you need to register a watcher to run your custom task each time some files are modified, pass a regular expression as the second argument to the `task` method:
+Если вам нужно зарегистрировать наблюдатель чтобы запускать какую то собственную задачу при модификации файлов, укажите регулярное выражение во втором параметре метода `task`: 
+
 
 ```javascript
 elixir(function(mix) {
@@ -401,9 +404,10 @@ elixir(function(mix) {
 ```
 
 <a name="writing-elixir-extensions"></a>
-## Writing Elixir Extensions
+## Пишем расширения Elixir
 
-If you need more flexibility than Elixir's `task` method can provide, you may create custom Elixir extensions. Elixir extensions allow you to pass arguments to your custom tasks. For example, you could write an extension like so:
+Если вам нужно еще больше гибкости, то метод Elixir'а `task` поможет вам создать собственные расширения для Elixir. Расширения Elixir'a позволяют вам указать аргументы ваших сторонниз задач. Например, вы можете написать такое расширение:
+
 
 ```javascript
 // File: elixir-extensions.js
@@ -425,7 +429,8 @@ Elixir.extend('speak', function(message) {
 // mix.speak('Hello World');
 ```
 
-That's it! Notice that your Gulp-specific logic should be placed within the function passed as the second argument to the `Task` constructor. You may either place this at the top of your Gulpfile, or instead extract it to a custom tasks file. For example, if you place your extensions in `elixir-extensions.js`, you may require the file from your main `Gulpfile` like so:
+И это всё! Обратите внимание что специальную логику Gulp, следует разместить в функции-замыкании, которая указана в качестве второго параметра в конструкторе `Task`. Вы можете разместить её в начале вашего Gulp файла, или извлечь в отдельный файл задачи. Например, если вы разместите ваши расширения в файле `elixir-extensions.js`, вы можете потребовать (require) файл из вашего основного файла `Gulpfile`:
+
 
 ```javascript
 // File: Gulpfile.js
@@ -439,9 +444,9 @@ elixir(function(mix) {
 });
 ```
 
-#### Custom Watchers
+#### Собственные наблюдатели (watchers)
 
-If you would like your custom task to be re-triggered while running `gulp watch`, you may register a watcher:
+Если вы хотите вызывать вашу собственную задачу тогда когда запущена команда `gulp watch`, вы можете зарегестрировать наблюдатель так:
 
 ```javascript
 new Task('speak', function() {
