@@ -45,7 +45,6 @@ elixir(function(mix) {
 
 Перед вызовом Elixir, вы обязаны убедиться в том что Node.js установлен на вашем компьютере.
 
-Before triggering Elixir, you must first ensure that Node.js is installed on your machine.
 
     node -v
 
