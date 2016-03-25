@@ -2,7 +2,7 @@ git b1d293216e13a68917ae3ab4ef2b4235101610d0
 
 ---
 
-# Eloquent: Serialization
+# Eloquent: Сериализация
 
 - [Введение](#introduction)
 - [Основы использования](#basic-usage)
