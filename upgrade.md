@@ -1,9 +1,10 @@
-git 61de1342a35dd91c0189c67b979afa243edb61db
+git 2ed0909076c159034fe773a0e1012583cc151e5a
 
 ---
 
 # Инструкции по обновлению
 
+- [Обновление до 5.2.0 с 5.1](#upgrade-5.2.0)
 - [Обновление до 5.1.11](#upgrade-5.1.11)
 - [Обновление до 5.1.0](#upgrade-5.1.0)
 - [Обновление до 5.0.16](#upgrade-5.0.16)
@@ -12,6 +13,276 @@ git 61de1342a35dd91c0189c67b979afa243edb61db
 - [Обновление до 4.1.29 с <= 4.1.x](#upgrade-4.1.29)
 - [Обновление до 4.1.26 с <= 4.1.25](#upgrade-4.1.26)
 - [Обновление до 4.1 с 4.0](#upgrade-4.1)
+
+
+<a name="upgrade-5.2.0"></a>
+## Обновление до 5.2.0 с 5.1
+
+#### Предполагаемое время обновления: меньше часа
+
+> **Примечание:** гайд по обновлению довольно большой только потому, что здесь описаны все критические изменения, которые могут затронуть поведение вашего приложения. Скорее всего вам нужно будет сделать лишь небольшую часть их.
+
+### Обновление зависимостей
+
+Обновите `composer.json`: 
+
+1. Укажите новую версию фреймворка: `laravel/framework 5.2.*`.
+
+2. Добавьте `"symfony/dom-crawler": "~3.0"` and `"symfony/css-selector": "~3.0"` в секцию `require-dev`.
+
+### Аутентификация
+
+#### Файл конфигурации
+
+Обновите `config/auth.php` следующим содержимым: [https://github.com/laravel/laravel/blob/master/config/auth.php](https://github.com/laravel/laravel/blob/master/config/auth.php)
+
+Отредактируйте тип механизма аутентификации. Если вы использовали дефолтную аутентифкацию через Eloquent, скорее всего ничего редактировать не придется. Единственно, проверьте опцию `passwords.users.email` и путь до шаблонов.
+
+#### Контракты
+
+Если вы имплементируете где-либо у себя `Illuminate\Contracts\Auth\Authenticatable` и **не** используете внутри `Authenticatable` трейт, вы должны добавить метод `getAuthIdentifierName` в ваш класс. Этот метод должен возвращать название столбца в вашем хранилище юзеров, который является `primary key`. Обычно это `'id'`.
+
+#### Свои драйвера аутентификации
+
+Если вы создавали собственный драйвер аутентификации при помощи `Auth::extend`, теперь вы должны создать провайдер аутентификации при помощи `Auth::provider`, и после этого добавить его в `config/auth.php`. За подробностями обратитесь к [документации аутентификации](/docs/{{version}}/authentication).
+
+#### Редиректы
+
+Метод `loginPath()` удалён из `Illuminate\Foundation\Auth\AuthenticatesUsers`, поэтому свойство `$loginPath` в классе `AuthController` теперь указывать не нужно. По умолчанию, если при аутентификации возникают ошибки, трейт будет редиректить пользователей на предыдущую страницу.
+
+### Авторизация
+
+Класс `Illuminate\Auth\Access\UnauthorizedException` переименован в  `Illuminate\Auth\Access\AuthorizationException`. Вряд ли это как-то затронет ваше приложение, если вы не ловите это исключение у себя.
+
+### Коллекции
+
+#### Eloquent-коллекции
+
+Eloquent-коллекции в методах `pluck`, `keys`, `zip`, `collapse`, `flatten`, `flip` теперь возвращают коллекцию (объект класса `Illuminate\Support\Collection`)
+
+#### Key Preservation
+
+Методы `slice`, `chunk` и `reverse` теперь сохраняют ключи от исходной коллекции. Если вам не нужно такое поведение и вы хотите вернуться к старому, добавляйте `->values()` к коллекции-результату.
+
+### Класс Composer
+
+Класс `Illuminate\Foundation\Composer` переименован в `Illuminate\Support\Composer`. Это вряд ли затронет ваше приложение, если вы не используете этот класс у себя.
+
+### Команды и хэндлеры команд
+
+#### Self-Handling команды
+
+Все команды теперь self-handling по умолчанию, т.е. имеют внутри себя метод `handle`. Не нужно у них теперь имплементить интерфейс `SelfHandling`.
+
+#### Разделение комманд и хэндлеров (исполнителей команд)
+
+В Laravel 5.2 шина комманд поддерживает исключительно команды со встроенными исполнителями (self-handling). Разделение больше не поддерживается.
+
+Если вы хотите продолжать использовать разделенные команды, воспользуйтесь этим пакетом: [https://github.com/LaravelCollective/bus](https://github.com/laravelcollective/bus)
+
+### Настройка
+
+#### Рабочее окружение (Environment)
+
+Добавьте параметр `env` в `config/app.php` для определения названия среды выполнения:
+
+    'env' => env('APP_ENV', 'production'),
+
+#### Кэширование конфигов
+
+Если вы используете `config:cache` в процессе разработки, вы должны вызывать функцию `env()` **только** внутри ваших конфигов. Внутри основного приложения эту функцию использовать нельзя.
+
+Если же вам в приложении нужно знать результат выполнения `env()`, название текущей среды выполнения, то вам нужно присвоить это значение в конфиге и затем читать его из конфига.
+
+#### Компилированные классы
+
+If present, remove the following lines from `config/compile.php` in the `files` array:
+
+Удалите следующие строки из массива `files` файла `config/compile.php`, если они там присутствуют:
+
+    realpath(__DIR__.'/../app/Providers/BusServiceProvider.php'),
+    realpath(__DIR__.'/../app/Providers/ConfigServiceProvider.php'),
+
+### Проверка CSRF
+
+Проверка CSRF теперь не делается во время юнит-тестов. Вряд ли это как-то затронет ваше приложение.
+
+### База данных
+
+#### Даты в MySQL
+
+Начиная с MySQL 5.7 в strict mode, который там теперь включён по умолчанию, `0000-00-00 00:00:00` - больше не валидная дата. Вам нужно настроить столбцы `timestamp` при помощи миграций. Вы можете использовать метод `useCurrent()` для вставки текущего времени по дефолту, или `nullable()`, который разрешает вставку `null`:
+
+
+    $table->timestamp('foo')->nullable();
+
+    $table->timestamp('foo')->useCurrent();
+
+    $table->nullableTimestamps();
+
+#### Столбец типа JSON в MySQL
+
+Столбец типа `json` доступен только в MySQL 5.7 и выше. Для юолее низкх версий используйте тип `text`.
+
+#### Сидинг (наполнение данными после миграции)
+
+Теперь при запуске `db:seed` не нужно делать `Model::unguard()`, если вы используете в сидерах Eloquent-модели. Если вам нужно, чтобы модели были защищены как раньше, используйте `Model::reguard()` в начале вашего сидера.
+
+### Eloquent
+
+#### Преобразование данных в модели
+
+Атрибуты, которые вы определили в свойстве `$casts` модели как `date` или `datetime`, при вызове обработчика `toArray` будут конвертироваться в строки.
+
+#### Глобальные условия (global scopes)
+
+Реализация глобальных условий (global scopes) была переделана в сторону упрощения использования. Теперь в них не нужно реализовывать метод `remove`, можете удалить его из ваших global scopes, если таковые есть.
+
+Если вы в вызываете `getQuery` чтобы получить доступ к инстансу билдера, заменяйте его на `toBase`.
+
+Если вы вызываете у себя `remove` - заменяйте этот вызов на `$eloquentBuilder->withoutGlobalScope($scope)`
+
+В билдер добавлены новые методы `withoutGlobalScope` и `withoutGlobalScopes`. Вызовы `$model->removeGlobalScopes($builder)` можно заменить на `$builder->withoutGlobalScopes()`.
+
+#### Первичные ключи (primary keys)
+
+По умолчанию Eloquent предполагает, что первичные ключи должны быть целочисленными значениями и принудительно приводит их к ним. Если в качестве первичных ключей у вас что-то другое, например, вручную генерируемые uuid, поставьте в можели свой свойство `incrementing` в `false`:
+
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = false;
+
+### События
+
+#### События ядра
+
+Some of the core events fired by Laravel now use event objects instead of string event names and dynamic parameters. Below is a list of the old event names and their new object based counterparts:
+
+Некоторые из событий ядра фреймворка теперь используют название объектов-событий вместо строк с динамическими параметрами. Вот список старых названий событий и их соответствие новым классам:
+
+Old  | New
+------------- | -------------
+`artisan.start`  |  `Illuminate\Console\Events\ArtisanStarting`
+`auth.attempting`  |  `Illuminate\Auth\Events\Attempting`
+`auth.login`  |  `Illuminate\Auth\Events\Login`
+`auth.logout`  |  `Illuminate\Auth\Events\Logout`
+`cache.missed`  |  `Illuminate\Cache\Events\CacheMissed`
+`cache.hit`  |  `Illuminate\Cache\Events\CacheHit`
+`cache.write`  |  `Illuminate\Cache\Events\KeyWritten`
+`cache.delete`  |  `Illuminate\Cache\Events\KeyForgotten`
+`connection.{name}.beginTransaction`  |  `Illuminate\Database\Events\TransactionBeginning`
+`connection.{name}.committed`  |  `Illuminate\Database\Events\TransactionCommitted`
+`connection.{name}.rollingBack`  |  `Illuminate\Database\Events\TransactionRolledBack`
+`illuminate.query`  |  `Illuminate\Database\Events\QueryExecuted`
+`illuminate.queue.before`  |  `Illuminate\Queue\Events\JobProcessing`
+`illuminate.queue.after`  |  `Illuminate\Queue\Events\JobProcessed`
+`illuminate.queue.failed`  |  `Illuminate\Queue\Events\JobFailed`
+`illuminate.queue.stopping`  |  `Illuminate\Queue\Events\WorkerStopping`
+`mailer.sending`  |  `Illuminate\Mail\Events\MessageSending`
+`router.matched`  |  `Illuminate\Routing\Events\RouteMatched`
+
+Каждый из этих объектов событий принимает в точности те же аргументы, что и обрадотчик соответствующих событий в Laravel 5.1. Например, если вы используете `DB::listen` в 5.1.*, вам нужно обновить свой код для 5.2.* примерно так:
+
+    DB::listen(function ($event) {
+        dump($event->sql);
+        dump($event->bindings);
+    });
+
+Хорошей идеей будет изучить исходники этих классов на предмет публичных свойств.
+
+### Обработка исключений
+
+Откройте ваш класс `App\Exceptions\Handler` и обновите свойство `$dontReport` следующим образом:
+
+    use Illuminate\Validation\ValidationException;
+    use Illuminate\Auth\Access\AuthorizationException;
+    use Illuminate\Database\Eloquent\ModelNotFoundException;
+    use Symfony\Component\HttpKernel\Exception\HttpException;
+
+    /**
+     * A list of the exception types that should not be reported.
+     *
+     * @var array
+     */
+    protected $dontReport = [
+        AuthorizationException::class,
+        HttpException::class,
+        ModelNotFoundException::class,
+        ValidationException::class,
+    ];
+
+### Функции-хелперы
+
+Хелпер `url()` возвращает объект `Illuminate\Routing\UrlGenerator`, если путь не указан
+
+### Неявная привязка модели
+
+Laravel 5.2 includes "implicit model binding", a convenient new feature to automatically inject model instances into routes and controllers based on the identifier present in the URI. However, this does change the behavior of routes and controllers that type-hint model instances.
+
+В Laravel 5.2 существует неявное внедрение моделей в роуты или контроллеры, основываясь на ID, переданном в урле.
+
+If you were type-hinting a model instance in your route or controller and were expecting an **empty** model instance to be injected, you should remove this type-hint and create an empty model instance directly within your route or controller; otherwise, Laravel will attempt to retrieve an existing model instance from the database based on the identifier present in the route's URI.
+
+### IronMQ
+
+The IronMQ queue driver has been moved into its own package and is no longer shipped with the core framework.
+
+[http://github.com/LaravelCollective/iron-queue](http://github.com/laravelcollective/iron-queue)
+
+### Jobs / Queue
+
+The `php artisan make:job` command now creates a "queued" job class definition by default. If you would like to create a "sync" job, use the `--sync` option when issuing the command.
+
+### Mail
+
+The `pretend` mail configuration option has been removed. Instead, use the `log` mail driver, which performs the same function as `pretend` and logs even more information about the mail message.
+
+### Pagination
+
+To be consistent with other URLs generated by the framework, the paginator URLs no longer contain a trailing slash. This is unlikely to affect your application.
+
+### Service Providers
+
+The `Illuminate\Foundation\Providers\ArtisanServiceProvider` should be removed from your service provider list in your `app.php` configuration file.
+
+The `Illuminate\Routing\ControllerServiceProvider` should be removed from your service provider list in your `app.php` configuration file.
+
+### Sessions
+
+Because of changes to the authentication system, any existing sessions will be invalidated when you upgrade to Laravel 5.2.
+
+#### Database Session Driver
+
+A new `database` session driver has been written for the framework which includes more information about the user such as their user ID, IP address, and user-agent. If you would like to continue using the old driver you may specify the `legacy-database` driver in your `session.php` configuration file.
+
+If you would like to use the new driver, you should add the `user_id (nullable integer)`, `ip_address (nullable string)`, and `user_agent (text)` columns to your session database table.
+
+### Stringy
+
+The "Stringy" library is no longer included with the framework. You may install it manually via Composer if you wish to use it in your application.
+
+### Validation
+
+#### Exception Types
+
+The `ValidatesRequests` trait now throws an instance of `Illuminate\Foundation\Validation\ValidationException` instead of throwing an instance of `Illuminate\Http\Exception\HttpResponseException`. This is unlikely to affect your application unless you were manually catching this exception.
+
+### Deprecations
+
+The following features are deprecated in 5.2 and will be removed in the 5.3 release in June 2016:
+
+- `Illuminate\Contracts\Bus\SelfHandling` contract. Can be removed from jobs.
+- The `lists` method on the Collection, query builder and Eloquent query builder objects has been renamed to `pluck`. The method signature remains the same.
+- Implicit controller routes using `Route::controller` have been deprecated. Please use explicit route registration in your routes file. This will likely be extracted into a package.
+- The `get`, `post`, and other route helper functions have been removed. You may use the `Route` facade instead.
+- The `database` session driver from 5.1 has been renamed to `legacy-database` and will be removed. Consult notes on the "database session driver" above for more information.
+- The `Str::randomBytes` function has been deprecated in favor of the `random_bytes` native PHP function.
+- The `Str::equals` function has been deprecated in favor of the `hash_equals` native PHP function.
+- `Illuminate\View\Expression` has been deprecated in favor of `Illuminate\Support\HtmlString`.
+- The `WincacheStore` cache driver has been removed.
 
 <a name="upgrade-5.1.11"></a>
 ## Обновление до 5.1.11
