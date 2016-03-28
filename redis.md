@@ -1,86 +1,165 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+git e25837a6d7ac39d1c864ed6f317a323a4fef447d
 
 ---
 
 # Redis
 
 - [Введение](#introduction)
-- [Настройка](#configuration)
-- [Использование](#usage)
-- [Конвейер](#pipelining)
+- [Использование](#basic-usage)
+    - [Команды конвейера](#pipelining-commands)
+- [Pub / Sub](#pubsub)
 
 <a name="introduction"></a>
 ## Введение
 
-[Redis](http://redis.io) - продвинутое хранилище пар ключ/значение. Его часто называют сервисом структур данных, так как ключи могут содержать [строки](http://redis.io/topics/data-types#strings), [хэши](http://redis.io/topics/data-types#hashes), [списки](http://redis.io/topics/data-types#lists), [наборы](http://redis.io/topics/data-types#sets), and [сортированные наборы](http://redis.io/topics/data-types#sorted-sets).
-
-Прежде чем использовать Redis, необходимо установить пакет `predis/predis` версии `~1.0` через Composer.
-
-> **Внимание:** Если у вас установлено расширение Redis через PECL, вам нужно переименовать псевдоним в файле `config/app.php`.
+[Redis](http://redis.io) - продвинутое хранилище пар ключ/значение. Его часто называют сервисом структур данных, так как ключи могут содержать [строки](http://redis.io/topics/data-types#strings), [хэши](http://redis.io/topics/data-types#hashes), [списки](http://redis.io/topics/data-types#lists), [наборы](http://redis.io/topics/data-types#sets), and [сортированные наборы](http://redis.io/topics/data-types#sorted-sets). Прежде чем использовать Redis вместе с Laravel, вам потребуется установить пакет `predis/predis`  (~1.0) через Composer.
 
 <a name="configuration"></a>
-## Настройка
+### Настройка
 
 Настройки вашего подключения к Redis хранятся в файле `app/config/database.php`. В нём вы найдёте массив `redis`, содержащий список серверов, используемых приложением:
 
-	'redis' => [
+    'redis' => [
 
-		'cluster' => true,
+        'cluster' => false,
 
-		'default' => ['host' => '127.0.0.1', 'port' => 6379],
+        'default' => [
+            'host'     => '127.0.0.1',
+            'port'     => 6379,
+            'database' => 0,
+        ],
 
-	],
+    ],
 
-Если у вас Redis установлен на других портах, или есть несколько redis-серверов, дайте имя каждому подключению к Redis и укажите серверные хост и порт.
+Конфигурация установленная по умолчанию, должна быть достаточной для разработки. Тем не менее, вы можете изменять настройки в этом массиве на вашем сервере разработки. Если у вас несколько серверов, дайте имя каждому подключению к Redis и укажите серверные хост и порт.
 
 Параметр `cluster` ообщает клиенту Redis Laravel, что нужно выполнить фрагментацию узлов Redis (client-side sharding), что позволит вам обращаться к ним и увеличить доступную RAM. Однако заметьте, что фрагментация не справляется с падениями, поэтому она в основном используется для кэшировании данных, которые доступны из основного источника.
 
-Если ваш сервер Redis требует авторизацию, вы можете указать пароль, добавив к параметрам подключения пару ключ/значение `password`.
+Дополнительно, вы можете определить массив настроек `options` в общем массиве настроек подключения вашего Redis, что позволяет определить настройки пакета Predis [документация клиентских настроек](https://github.com/nrk/predis/wiki/Client-Options).
 
-<a name="usage"></a>
+Если ваш сервер Redis требует авторизацию, вы можете указать пароль, добавив к параметрам подключения пару ключ/значение.
+
+> **Внимание:** Если у вас установлено расширение Redis через PECL, вам нужно переименовать псевдоним в файле `config/app.php`.
+
+<a name="basic-usage"></a>
 ## Использование
 
-Вы можете получить экземпляр Redis методом `Redis::connection`:
+Вы можете взаимодействовать с Redis с помощью различных методов используя [фассад](/docs/{{version}}/facades) `Redis`. Фассад `Redis` поддерживает динамические методы, что означает что любые [команды Redis](http://redis.io/commands) этого фассада и все команды будут напрямую отправлены к Redis. К примеру мы вызовем команду `GET` Redis с помощью метода `get` в фассаде `Redis`:
 
-	$redis = Redis::connection();
+    <?php
 
-Так вы получите экземпляр подключения по умолчанию. Если вы не используете фрагментацию, то можно передать этому методу имя сервера для получения конкретного подключения, как оно определено в файле настроек.
+    namespace App\Http\Controllers;
 
-	$redis = Redis::connection('other');
+    use Redis;
+    use App\Http\Controllers\Controller;
 
-Как только у вас есть экземпляр клиента Redis вы можете выполнить любую [команду Redis](http://redis.io/commands).Laravel использует магические методы PHP для передачи команд на сервер:
+    class UserController extends Controller
+    {
+        /**
+         * Show the profile for the given user.
+         *
+         * @param  int  $id
+         * @return Response
+         */
+        public function showProfile($id)
+        {
+            $user = Redis::get('user:profile:'.$id);
 
-	$redis->set('name', 'Тейлор');
+            return view('user.profile', ['user' => $user]);
+        }
+    }
 
-	$name = $redis->get('name');
+Конечно же, как было озвучено ранее, вы можете вызвать любую из команд Redis используя фассад `Redis`. Laravel использует магические методы для передачи команд к серверу Redis, так что просто передайте аргументы команды Redis примерно так:
 
-	$values = $redis->lrange('names', 5, 10);
+    Redis::set('name', 'Taylor');
 
-Как вы видите, параметры команд просто передаются магическому методу. Конечно, вам не обязательно использовать эти методы - вы можете передавать команды на сервер методом `command`:
+    $values = Redis::lrange('names', 5, 10);
 
-	$values = $redis->command('lrange', array(5, 10));
+В качестве альтернативы, вы можете передать команды серверу Redis используя метод `сommand`, который принимает имя команды в качестве первого аргумента, и массив значения в качестве второго аргумента:
 
-Если у вас в конфиге определено одно дефолтное подключение, то вы можете использовать статические методы:
+    $values = Redis::command('lrange', ['name', 5, 10]);
 
-	Redis::set('name', 'Тейлор');
+#### Использование несколько подключений Redis
 
-	$name = Redis::get('name');
+Вы можете получить экземпляр Redis с помощью вызова метода `Redis::connection`:
 
-	$values = Redis::lrange('names', 5, 10);
+    $redis = Redis::connection();
 
-> **Примечание:** Laravel поставляется с драйверами Redis для [кэширования](/docs/{{version}}/cache) и [сессий](/docs/{{version}}/session).
+Таким образом вы получите экземпляр сервера, установленного по умолчанию. Если вы не используете кластеризацию, вы можете указать имя сервера Redis в аргументе метода `connection`, для получения экземпляра специфичного сервера. Название сервера должно совпадать с названием, указанным в ваших настройках подключения с Redis:
 
-<a name="pipelining"></a>
-## Конвейер
+    $redis = Redis::connection('other');
 
-Конвейер (pipelining) должен использоваться, когда вы отправляете много команд на сервер за одну операцию. Для начала выполните команду `pipeline`:
+<a name="pipelining-commands"></a>
+### Команды конвейера
 
-#### Отправка конвейером набора команд на сервер
+Конвейер следует использовать тогда, когда вам нужно послать много команд серверу в одной операции. Метод `pipeline` принимает 1 аргумент: замыкание `Closure`, которое возвращает экземпляр Redis. Вы можете выполнять все ваши команды к этому экземпляру Redis, и они будут выполнены в одной операции:
 
-	Redis::pipeline(function($pipe)
-	{
-		for ($i = 0; $i < 1000; $i++)
-		{
-			$pipe->set("key:$i", $i);
-		}
-	});
+    Redis::pipeline(function ($pipe) {
+        for ($i = 0; $i < 1000; $i++) {
+            $pipe->set("key:$i", $i);
+        }
+    });
+
+<a name="pubsub"></a>
+## Pub / Sub
+
+Laravel поддерживает удобный интерфейс `publish` и `subscribe` команд. Эти команды позволят вам слушать сообщения конкретного канала. Вы можете публиковать сообщения на канал с помощью другого приложения, или даже использовать другой язык программирования, позволяющий легко связываться между приложниями / процессами.
+
+В начале давайте настроим слушатель (listener) канала с помощью Redis используя метод `subscribe`. Мы поместим вызов этого метода в  [Artisan команду](/docs/{{version}}/artisan), так как вызов метода `subscribe` запускает длительный процесс:
+
+    <?php
+
+    namespace App\Console\Commands;
+
+    use Redis;
+    use Illuminate\Console\Command;
+
+    class RedisSubscribe extends Command
+    {
+        /**
+         * Это название и сигнатура консольной команды.
+         *
+         * @var string
+         */
+        protected $signature = 'redis:subscribe';
+
+        /**
+         * Описание консольной команды.
+         *
+         * @var string
+         */
+        protected $description = 'Подписка на канал Redis';
+
+        /**
+         * Выполнение команды.
+         *
+         * @return mixed
+         */
+        public function handle()
+        {
+            Redis::subscribe(['test-channel'], function($message) {
+                echo $message;
+            });
+        }
+    }
+
+Теперь мы можем публиковать сообщения на канал используя метод `publish`:
+
+    Route::get('publish', function () {
+        // Логика роута...
+
+        Redis::publish('test-channel', json_encode(['foo' => 'bar']));
+    });
+
+
+#### Подстановки в подписках (Wildcards)
+
+Используйте метод, для подписки на канал с шаблоном подстановки (Wildcard), что очень удобно для приема всех сообщений на всех каналах. Значение имени `$channel` будет помещено во второй аргумент замыкания `Closure`
+
+    Redis::psubscribe(['*'], function($message, $channel) {
+        echo $message;
+    });
+
+    Redis::psubscribe(['users.*'], function($message, $channel) {
+        echo $message;
+    });
