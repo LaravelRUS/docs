@@ -1,35 +1,65 @@
-git 103a627268f66b0c4a3002973174670b1ecc19a3
+git 13313dae8d36b15430a74f683c5da59d04b82a32
 
 ---
 
 # Шифрование
 
-- [Введение](#introduction)
+- [Настройка](#configuration)
 - [Основы использования](#basic-usage)
 
-<a name="introduction"></a>
-## Введение
+<a name="configuration"></a>
+## Настройка
 
-Laravel предоставляет удобный механизм для использования стойкого шифрования алгоритмом AES на основе PHP-модуля Mcrypt.
+Перед использованием шифрования в Laravel, вы должны указать опцию `key` в вашем конфигурационном файле `config/app.php`, которая должна состоять из 32 символов (случайный набор символов). Если это значение не задано или задано неправильно, то все значения, зашифрованные с помощью Laravel будут не безопасными. 
 
 <a name="basic-usage"></a>
 ## Основы использования
 
-#### Шифрование
+#### Шифрование значений
 
-	$encrypted = Crypt::encrypt('secret');
+Вы можете зашифровать какое либо значение используя [фасад](/docs/{{version}}/facades) `Crypt`. Все шифрованные значения будут зашифрованы с использованием OpenSSL и шифра `AES-256-CBC`. Более того, все шифрованные данные помечаются сообщением с кодом аутентификации (MAC) для обнаружения изменений в зашифрованной строке.
 
-> **Примечание:** Обязательно укажите строку из случайных символов длиной в 16, 24, или 32 символа в параметре `key` файла `config/app.php`.
-В противном случае, зашифрованное значение будет не очень стойким к взлому.
+Например, мы можем использовать метод `encrypt` для шифрования секретных данных и сохранить их в [модели Eloquent](/docs/{{version}}/eloquent):
 
-#### Дешифровка
+    <?php
 
-	$decrypted = Crypt::decrypt($encryptedValue);
+    namespace App\Http\Controllers;
 
-#### Настройка алгоритма шифрования и режима работы
+    use Crypt;
+    use App\User;
+    use Illuminate\Http\Request;
+    use App\Http\Controllers\Controller;
 
-Вы можете указать [алгоритм шифрования](http://php.net/manual/en/mcrypt.ciphers.php) и [режим работы](http://php.net/manual/en/mcrypt.constants.php):
+    class UserController extends Controller
+    {
+        /**
+         * Store a secret message for the user.
+         *
+         * @param  Request  $request
+         * @param  int  $id
+         * @return Response
+         */
+        public function storeSecret(Request $request, $id)
+        {
+            $user = User::findOrFail($id);
 
-	Crypt::setMode('cfb');
+            $user->fill([
+                'secret' => Crypt::encrypt($request->secret)
+            ])->save();
+        }
+    }
 
-	Crypt::setCipher($cipher);
+> **Примечание:** Зашифрованные значения проходят сериализацию `serialize` во время шифрования, что позволяет нам шифровать объекты и массивы. Таким образом не-PHP клиентам, которые получают шифрованные данные, понадобится десериализовать данные.
+
+
+#### Расшифровка значений. 
+
+Конечно же, вы можете расшифровать значения используя метод `decrypt` фасада `Crypt`. Если значение не может быть правильно расшифровано, из-за невалидного MAC, то будет выброшено исключение `Illuminate\Contracts\Encryption\DecryptException`:
+
+    use Illuminate\Contracts\Encryption\DecryptException;
+
+    try {
+        $decrypted = Crypt::decrypt($encryptedValue);
+    } catch (DecryptException $e) {
+        //
+    }
