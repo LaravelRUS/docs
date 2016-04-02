@@ -19,8 +19,6 @@ git 13313dae8d36b15430a74f683c5da59d04b82a32
 
 Вы можете зашифровать какое либо значение используя [фассад](/docs/{{version}}/facades) `Crypt`. Все шифрованные значения будут зашифрованы с использованием OpenSSL и шифра `AES-256-CBC`. Более того, все шифрованные данные помечаются сообщением с кодом аутентификации (MAC) для обнаружения изменений в зашифрованной строке.
 
-You may encrypt a value using the `Crypt` [facade](/docs/{{version}}/facades). All encrypted values are encrypted using OpenSSL and the `AES-256-CBC` cipher. Furthermore, all encrypted values are signed with a message authentication code (MAC) to detect any modifications to the encrypted string.
-
 Например, мы можем использовать метод `encrypt` для шифрования секретных данных и сохранить их в [модели Eloquent](/docs/{{version}}/eloquent):
 
     <?php
