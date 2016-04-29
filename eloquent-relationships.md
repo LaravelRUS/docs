@@ -1,15 +1,15 @@
 git 83e3a8bf0d19850fc5dd83de9e636ae4d91c85c7 
 
-# Связи Eloquent:
+# Отношения Eloquent:
 
 - [Вступление](#introduction)
-- [Определение связей](#defining-relationships)
+- [Определение отношений](#defining-relationships)
     - [Один к одному](#one-to-one)
     - [Один ко многим](#one-to-many)
     - [Многие ко многим](#many-to-many)
     - [Многие ко многим через посредника (Has Many Through)](#has-many-through)
-    - [Полиморфические связи](#polymorphic-relations)
-    - [Полиморфические связи многие ко многим](#many-to-many-polymorphic-relations)
+    - [Полиморфические отношения](#polymorphic-relations)
+    - [Полиморфические отношения многие ко многим](#many-to-many-polymorphic-relations)
 - [Запросы к отношениям](#querying-relations)
     - [Жадная загрузка (eager loading)](#eager-loading)
     - [Ограничение жадной загрузки](#constraining-eager-loads)
@@ -27,8 +27,8 @@ git 83e3a8bf0d19850fc5dd83de9e636ae4d91c85c7
     - [Один ко многим](#one-to-many)
     - [Многие ко многим](#many-to-many)
     - [Has Many Through](#has-many-through)
-    - [Полиморфические связи](#polymorphic-relations)
-    - [Полиморфические связи многие ко многим](#many-to-many-polymorphic-relations)
+    - [Полиморфические отношения](#polymorphic-relations)
+    - [Полиморфические отношения многие ко многим](#many-to-many-polymorphic-relations)
 
 <a name="defining-relationships"></a>
 ##  Определение отношений
