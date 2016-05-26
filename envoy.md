@@ -3,40 +3,40 @@ git ce0ff9bad2c550dd52d8a9219fbd499dd3a6794e
 ---
 # Envoy Task Runner
 
-- [Introduction](#introduction)
-- [Writing Tasks](#writing-tasks)
-	- [Task Variables](#task-variables)
-	- [Multiple Servers](#envoy-multiple-servers)
-	- [Task Macros](#envoy-task-macros)
-- [Running Tasks](#envoy-running-tasks)
-- [Notifications](#envoy-notifications)
+- [Введение](#introduction)
+- [Написание задач](#writing-tasks)
+	- [Переменные задач](#task-variables)
+	- [Множественные серверы](#envoy-multiple-servers)
+	- [Макросы задач](#envoy-task-macros)
+- [Запуск задач](#envoy-running-tasks)
+- [Уведомления](#envoy-notifications)
 	- [HipChat](#hipchat)
 	- [Slack](#slack)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-[Laravel Envoy](https://github.com/laravel/envoy) provides a clean, minimal syntax for defining common tasks you run on your remote servers. Using a Blade style syntax, you can easily setup tasks for deployment, Artisan commands, and more. Currently, Envoy only supports the Mac and Linux operating systems.
+[Laravel Envoy](https://github.com/laravel/envoy) предоставляет четкий, минимальный синтаксис для определения типичных задач, которые вы запускаете на Ваших удаленных серверах. Используя синтаксис в стиле Blade, вы можете легко настроить задачи для деплоя, команды Artisan и многое другое. На данный момент Envoy поддерживает только операционные системы Mac и Linux.
 
 <a name="envoy-installation"></a>
-### Installation
+### Установка
 
-First, install Envoy using the Composer `global` command:
+Первым делом, установите Envoy используя `global`-команду Composer:
 
 	composer global require "laravel/envoy=~1.0"
 
-Make sure to place the `~/.composer/vendor/bin` directory in your PATH so the `envoy` executable is found when you run the `envoy` command in your terminal.
+Убедитесь, что директория `~/.composer/vendor/bin` находится в PATH, чтобы ОС имела возможность найти исполняемый файл `envoy`, когда вы напишете команду `envoy` в своем терминале.
 
-#### Updating Envoy
+#### Обновление Envoy
 
-You may also use Composer to keep your Envoy installation up to date:
+Вы также можете использовать Composer, чтобы обновлять Envoy до последней версии:
 
 	composer global update
 
 <a name="writing-tasks"></a>
-## Writing Tasks
+## Написание задач
 
-All of your Envoy tasks should be defined in an `Envoy.blade.php` file in the root of your project. Here's an example to get you started:
+Все ваши задачи Envoy должны быть определены внутри файла `Envoy.blade.php` в корне проекта. Вот пример конфигурации:
 
 	@servers(['web' => '192.168.1.1'])
 
@@ -44,11 +44,11 @@ All of your Envoy tasks should be defined in an `Envoy.blade.php` file in the ro
 		ls -la
 	@endtask
 
-As you can see, an array of `@servers` is defined at the top of the file, allowing you to reference these servers in the `on` option of your task declarations. Within your `@task` declarations, you should place the Bash code that will be run on your server when the task is executed.
+Как вы можете видеть, массив `@servers` определен в верхней части файла, позволяя Вам указывать сервера в опции `on` описания задачи. Внутри декларации `@task` вы можете задать Bash-код, который будет выполнен на удаленном сервере при исполнении задачи.
 
-#### Bootstrapping
+#### Предзагрузка
 
-Sometimes, you may need to execute some PHP code before evaluating your Envoy tasks. You may use the ```@setup``` directive to declare variables and do general PHP work inside the Envoy file:
+Иногда вам может потребоваться выполнить некоторый PHP-код перед исполнением задач Envoy. Вы можете использовать директиву ```@setup```, чтобы объявить переменные и выполнить PHP-код внутри файла Envoy:
 
 	@setup
 		$now = new DateTime();
@@ -56,13 +56,13 @@ Sometimes, you may need to execute some PHP code before evaluating your Envoy ta
 		$environment = isset($env) ? $env : "testing";
 	@endsetup
 
-You may also use ```@include``` to include any outside PHP files:
+Вы можете также использовать ```@include``` для подключения внешних PHP-файлов:
 
 	@include('vendor/autoload.php');
 
-#### Confirming Tasks
+#### Подтверждение задач
 
-If you would like to be prompted for confirmation before running a given task on your servers, you may add the `confirm` directive to your task declaration:
+Если вы хотели бы видеть запрос подтверждения перед выполнением определенной задачи на ваших серверах, вы можете добавить директиву `confirm` в декларацию задачи:
 
 	@task('deploy', ['on' => 'web', 'confirm' => true])
 		cd site
@@ -71,13 +71,13 @@ If you would like to be prompted for confirmation before running a given task on
 	@endtask
 
 <a name="task-variables"></a>
-### Task Variables
+### Переменные задач
 
-If needed, you may pass variables into the Envoy file using command line switches, allowing you to customize your tasks:
+При необходимости вы можете передавать переменные в файл Envoy, используя параметры командной строки для кастомизации своих задач:
 
 	envoy run deploy --branch=master
 
-You may use the options in your tasks via Blade's "echo" syntax:
+Вы можете использовать опции в задачах посредством "echo"-синтаксиса Blade:
 
 	@servers(['web' => '192.168.1.1'])
 
@@ -88,9 +88,9 @@ You may use the options in your tasks via Blade's "echo" syntax:
 	@endtask
 
 <a name="envoy-multiple-servers"></a>
-### Multiple Servers
+### Множественные серверы
 
-You may easily run a task across multiple servers. First, add additional servers to your `@servers` declaration. Each server should be assigned a unique name. Once you have defined your additional servers, simply list the servers in the task declaration's `on` array:
+Вы можете без труда запустить задачу на нескольких серверах. Для начала, добавьте дополнительные серверы в декларацию `@servers`. Каждому серверу должно быть назначено уникальное имя. После определения дополнительных серверов, просто укажите список серверов в массиве `on` внутри декларации задачи:
 
 	@servers(['web-1' => '192.168.1.1', 'web-2' => '192.168.1.2'])
 
@@ -100,11 +100,10 @@ You may easily run a task across multiple servers. First, add additional servers
 		php artisan migrate
 	@endtask
 
-By default, the task will be executed on each server serially. Meaning, the task will finish running on the first server before proceeding to execute on the next server.
+По умолчанию задачи исполняются последовательно. То есть задача завершится на первом сервере до начала ее выполнения на втором.
 
-#### Parallel Execution
-
-If you would like to run a task across multiple servers in parallel, add the `parallel` option to your task declaration:
+#### Параллельное выполнение
+Для параллельного запуска задачи на нескольких серверах, добавьте опцию `parallel` в декларацию задачи:
 
 	@servers(['web-1' => '192.168.1.1', 'web-2' => '192.168.1.2'])
 
@@ -115,9 +114,9 @@ If you would like to run a task across multiple servers in parallel, add the `pa
 	@endtask
 
 <a name="envoy-task-macros"></a>
-### Task Macros
+### Макросы задач
 
-Macros allow you to define a set of tasks to be run in sequence using a single command. For instance, a `deploy` macro may run the `git` and `composer` tasks:
+Макросы позволяют вам выполнять несколько задач по очереди, используя одну команду. К примеру, макрос `deploy` может запускать задачи `git` и `composer`:
 
 	@servers(['web' => '192.168.1.1'])
 
@@ -134,25 +133,25 @@ Macros allow you to define a set of tasks to be run in sequence using a single c
 		composer install
 	@endtask
 
-Once the macro has been defined, you may run it via single, simple command:
+Как только макрос определен, вы можете запустить его, используя одну простую команду:
 
 	envoy run deploy
 
 <a name="envoy-running-tasks"></a>
-## Running Tasks
+## Запуск задач
 
-To run a task from your `Envoy.blade.php` file, execute Envoy's `run` command, passing the command the name of the task or macro you would like to execute. Envoy will run the task and display the output from the servers as the task is running:
+Чтобы запустить задачу из файла `Envoy.blade.php`, выполните команду Envoy `run` с указанием имени команды или макроса, который  хотите запустить. Envoy выполнит задачу и отобразит вывод с серверов по ходу выполнения:
 
 	envoy run task
 
 <a name="envoy-notifications"></a>
 <a name="envoy-hipchat-notifications"></a>
-## Notifications
+## Уведомления
 
 <a name="hipchat"></a>
 ### HipChat
 
-After running a task, you may send a notification to your team's HipChat room using Envoy's `@hipchat` directive. The directive accepts an API token, the name of the room, and the username to be displayed as the sender of the message:
+После запуска задачи, вы можете отправить уведомление в чат-комнату своей команды на HipChat используя директиву под названием `@hipchat`. Она принимает API токен, имя комнаты и имя пользователя, которое будет использоваться в качестве имени отправителя:
 
 	@servers(['web' => '192.168.1.1'])
 
@@ -164,27 +163,27 @@ After running a task, you may send a notification to your team's HipChat room us
 		@hipchat('token', 'room', 'Envoy')
 	@endafter
 
-If you wish, you may also pas a custom message to send to the HipChat room. Any variables available to your Envoy tasks will also be available when constructing the message:
+По желанию, вы можете также передать произвольное сообщение для отправки в комнату HipChat. При составлении сообщения вам будут доступны любые переменные, определенные в файле Envoy.
 
 	@after
-		@hipchat('token', 'room', 'Envoy', "{$task} ran in the {$env} environment.")
+		@hipchat('token', 'room', 'Envoy', "Команда {$task} была запущена в окружении {$env}.")
 	@endafter
 
 <a name="slack"></a>
 ### Slack
 
-In addition to HipChat, Envoy also supports sending notifications to [Slack](https://slack.com). The `@slack` directive accepts a Slack hook URL, a channel name, and the message you wish to send to the channel:
+Вдобавок к HipChat, Envoy также поддерживает отправку уведомлений в [Slack](https://slack.com). Директива `@slack` принимает URL хука, имя канала и сообщение для отправки на канал:
 
 	@after
 		@slack('hook', 'channel', 'message')
 	@endafter
 
-You may retrieve your webhook URL by creating an `Incoming WebHooks` integration on Slack's website. The `hook` argument should be the entire webhook URL provided by the Incoming Webhooks Slack Integration. For example:
+Вы можете получить URL вебхука при создании интеграции `Incoming WebHooks` на сайте Slack. Аргумент `hook` должен представлять из себя URL, полученный от этой интеграции. Например:
 
 	https://hooks.slack.com/services/ZZZZZZZZZ/YYYYYYYYY/XXXXXXXXXXXXXXX
 
-You may provide one of the following as the channel argument:
+В качестве аргумента `channel` вы можете передать:
 
-- To send the notification to a channel: `#channel`
-- To send the notification to a user: `@user`
+- Для отправки сообщения на канал: `#channel`
+- Для отправки уведомления пользователю: `@user`
  
