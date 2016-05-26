@@ -13,7 +13,7 @@ git aea1779faa73dd71b969c23a4f7ebe1921227c2a
 	- [Создание маршрутов](#stubbing-the-routes)
 	- [Отображение представления](#displaying-a-view)
 - [Создаем структуру макета и представления](#building-layouts-and-views)
-	- [Определение макет структуры](#defining-the-layout)
+	- [Определение макета структуры](#defining-the-layout)
 	- [Определение унаследованного представления](#defining-the-child-view)
 - [Добавляем задачу](#adding-tasks)
 	- [Проверка ввода](#validation)
