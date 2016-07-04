@@ -1,6 +1,7 @@
 git 83e3a8bf0d19850fc5dd83de9e636ae4d91c85c7 
 
 ---
+
 # Отношения Eloquent:
 
 - [Вступление](#introduction)
