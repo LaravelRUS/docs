@@ -19,8 +19,6 @@ git 4c3d4d4675101a3fa18154d1c85cf292a2292b46
 <a name="introduction"></a>
 ## Введение
 
-Laravel's events provides a simple observer implementation, allowing you to subscribe and listen for events in your application. Event classes are typically stored in the `app/Events` directory, while their listeners are stored in `app/Listeners`.
-
 Events в Laravel - это простая реализация паттерна Observer. Вкратце - вы можете генерить события и подписываться на события по их имени. Классы событий по умолчанию находятся в папке `app/Events`, а классы обработчиков событий (listeners) - в app/Listeners.
 
 <a name="registering-events-and-listeners"></a>
