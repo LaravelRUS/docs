@@ -13,7 +13,7 @@ git 5b9dd1842df9560b4fa022cb9fe26fd909fa9882
 
 Аксессоры (accessors) и мутаторы (mutators) - это специальные методы моделей Eloquent, которые позволяют вам преобразовывать данные на лету в процессе получения или записи данных в модель. Например, вы хотите шифровать данные в базе данных при помощи [Laravel encrypter](/docs/{{version}}/encryption), и дешифровать их в момент чтения из базы данных. При помощи аксессоров и мутаторов вы можете сделать этот процесс прозрачным для всей остальной логики приложения.
 
-In addition to custom accessors and mutators, Eloquent can also automatically cast date fields to [Carbon](https://github.com/briannesbitt/Carbon) instances or even [cast text fields to JSON](#attribute-casting).
+В дополнение к пользовательским аксессорам и мутаторам, Eloquent может автоматически приводить поля типа "дата" к экземплярам формата [Carbon](https://github.com/briannesbitt/Carbon) или совокупно [осуществлять приведение полей текстового типа к JSON](#attribute-casting).
 
 Eloquent подобным образом прозрачно преобразует дату в полях `created_at`, `updated_at`, `deleted_at` в объект [Carbon](https://github.com/briannesbitt/Carbon), а также при каждом [преобразовании полей в JSON](#attribute-casting).
 
@@ -73,7 +73,7 @@ Eloquent подобным образом прозрачно преобразуе
 		}
 	}
 
-The mutator will receive the value that is being set on the attribute, allowing you to manipulate the value and set the manipulated value on the Eloquent model's internal `$attributes` property. So, for example, if we attempt to set the `first_name` attribute to `Sally`:
+Мутатор будет получать значение в момент присвоения атрибута, что позволит вам изменять его и присваивать измененное значение внутреннему свойству `$attributes` модели Eloquent. Например, попытаемся назначить атрибуту `first_name` значение `Sally`:
 
 Мутатор принимает значение, которое надо присвоить полю и присваивает его, используя внутреннее свойство модели Eloquent `$attributes`.
 
