@@ -1,4 +1,4 @@
-git f421873828fd993cd8e15a24f443d202b76df813
+git 75651ca9298f282475c849265173f9180055fc19
 
 ---
 
@@ -10,32 +10,61 @@ git f421873828fd993cd8e15a24f443d202b76df813
 <a name="introduction"></a>
 ## Введение
 
-Фасад `Hash` предоставляет механизм для защищённого хэширования паролей алгоритмом Bcrypt.
-Если вы используете контроллер `AuthController`, идущий «из коробки», то он уже позаботился о сверке сохранённого
-хэша пароля и пароля, введённого пользователем, используя для этого трейт `AuthenticatesAndRegistersUsers` и сервис `Registrar`.
+[Фасад](/docs/{{version}}/facades) `Hash` предоставляет механизм для защищённого хэширования паролей алгоритмом Bcrypt. Если вы используете контроллер `AuthController`, идущий «из коробки», то он уже применяет Bcrypt для регистрации и аутентификации. 
 
+> **Примечание:** Bcrypt является отличным выбором для хэширования паролей так как его "рабочий фактор" является настраиваемым, что означает, что время, требуемое для генерации хэша, может быть увеличено вместе с ростом вычислительных мощностей.
 
 <a name="basic-usage"></a>
 ## Основы использования
 
-#### Хэширование пароля
+Вы можете захэшировать пароль вызвав метод `make` фасада `Hash`:
 
-	$password = Hash::make('secret');
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use Hash;
+    use App\User;
+    use Illuminate\Http\Request;
+    use App\Http\Controllers\Controller;
+
+    class UserController extends Controller
+    {
+        /**
+         * Update the password for the user.
+         *
+         * @param  Request  $request
+         * @param  int  $id
+         * @return Response
+         */
+        public function updatePassword(Request $request, $id)
+        {
+            $user = User::findOrFail($id);
+
+            // Validate the new password length...
+
+            $user->fill([
+                'password' => Hash::make($request->newPassword)
+            ])->save();
+        }
+    }
 
 Так же можно использовать функцию-хелпер `bcrypt`:
 
-	$password = bcrypt('secret');
+    bcrypt('plain-text');
 
 #### Сверка пароля и хэша
 
-	if (Hash::check('secret', $hashedPassword))
-	{
-		// Пароль верен...
-	}
+Метод `check` позволяет проверить соответствие переданной в него исходной строки и хэша. Однако, если вы используете `AuthController` [идущий в Laravel](/docs/{{version}}/authentication), вам скорее всего не потребуется делать это вручную, так как данный контроллер автоматически выполняет вызов этого метода:
+
+    if (Hash::check('plain-text', $hashedPassword)) {
+        // Пароль верен...
+    }
 
 #### Проверка на необходимость рехэша пароля
 
-	if (Hash::needsRehash($hashed))
-	{
-		$hashed = Hash::make('secret');
-	}
+Метод `needsRehash` позволяет вам определить изменился ли используемый рабочий фактор с момента формирования данного хэша:
+
+    if (Hash::needsRehash($hashed)) {
+        $hashed = Hash::make('plain-text');
+    }
