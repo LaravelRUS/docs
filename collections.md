@@ -1,4 +1,4 @@
-git c371ae71711379a7f88f7d7852cad6590f7f62d8
+git 9683536c234cb7838450f02bb9c6ca98d4c7e4c7
 
 ---
 
@@ -54,14 +54,17 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
 [avg](#method-avg)
 [chunk](#method-chunk)
 [collapse](#method-collapse)
+[combine](#method-combine)
 [contains](#method-contains)
 [count](#method-count)
 [diff](#method-diff)
+[diffKeys](#method-diffkeys)
 [each](#method-each)
 [every](#method-every)
 [except](#method-except)
 [filter](#method-filter)
 [first](#method-first)
+[flatMap](#method-flatmap)
 [flatten](#method-flatten)
 [flip](#method-flip)
 [forget](#method-forget)
@@ -103,6 +106,7 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
 [toArray](#method-toarray)
 [toJson](#method-tojson)
 [transform](#method-transform)
+[union](#method-union)
 [unique](#method-unique)
 [values](#method-values)
 [where](#method-where)
@@ -190,6 +194,19 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
 
     // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+<a name="method-combine"></a>
+#### `combine()` {#collection-method}
+
+Метод `combine` комбинирует ключи из одной коллекции со значениями из другой коллекции или массива:
+
+    $collection = collect(['name', 'age']);
+
+    $combined = $collection->combine(['George', 29]);
+
+    $combined->all();
+
+    // ['name' => 'George', 'age' => 29]
+
 <a name="method-contains"></a>
 #### `contains()` {#collection-method}
 
@@ -249,6 +266,30 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
     $diff->all();
 
     // [1, 3, 5]
+    
+<a name="method-diffkeys"></a>
+#### `diffKeys()` {#collection-method}
+
+Метод `diffKeys` сравнивает коллекцию с другой коллекцией или простым PHP `array` по ключам:
+
+    $collection = collect([
+        'one' => 10,
+        'two' => 20,
+        'three' => 30,
+        'four' => 40,
+        'five' => 50,
+    ]);
+
+    $diff = $collection->diffKeys([
+        'two' => 2,
+        'four' => 4,
+        'six' => 6,
+        'eight' => 8,
+    ]);
+
+    $diff->all();
+
+    // ['one' => 10, 'three' => 30, 'five' => 50]
 
 <a name="method-each"></a>
 #### `each()` {#collection-method}
@@ -332,6 +373,25 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
     collect([1, 2, 3, 4])->first();
 
     // 1
+    
+<a name="method-flatmap"></a>
+#### `flatMap()` {#collection-method}
+
+Метод `flatMap` итерируется по коллекции и передает каждое значение в функцию обратного вызова. Эта функция может модифицировать значение и вернуть его для формирования новой коллекции, которая будет одномерной:
+
+    $collection = collect([
+        ['name' => 'Sally'],
+        ['school' => 'Arkansas'],
+        ['age' => 28]
+    ]);
+
+    $flattened = $collection->flatMap(function ($values) {
+        return array_map('strtoupper', $values);
+    });
+
+    $flattened->all();
+
+    // ['name' => 'SALLY', 'school' => 'ARKANSAS', 'age' => '28'];
 
 <a name="method-flatten"></a>
 #### `flatten()` {#collection-method}
@@ -345,6 +405,28 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
     $flattened->all();
 
     // ['taylor', 'php', 'javascript'];
+    
+Если требуется, вы можете передать аргумент "глубины":
+
+    $collection = collect([
+        'Apple' => [
+            ['name' => 'iPhone 6S', 'brand' => 'Apple'],
+        ],
+        'Samsung' => [
+            ['name' => 'Galaxy S7', 'brand' => 'Samsung']
+        ],
+    ]);
+
+    $products = $collection->flatten(1);
+
+    $products->values()->all();
+
+    /*
+        [
+            ['name' => 'iPhone 6S', 'brand' => 'Apple'],
+            ['name' => 'Galaxy S7', 'brand' => 'Samsung'],
+        ]
+    */
 
 <a name="method-flip"></a>
 #### `flip()` {#collection-method}
@@ -370,7 +452,7 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
 
     $collection->all();
 
-    // [framework' => 'laravel']
+    // ['framework' => 'laravel']
 
 > ** Примечание: ** В отличие от большинства других методов коллекции, `forget` не возвращает новую модифицированную коллекцию; он изменяет коллекцию при вызове.
 
@@ -1142,6 +1224,20 @@ git c371ae71711379a7f88f7d7852cad6590f7f62d8
 
 > ** Примечание: ** В отличие от большинства других методов коллекции, `transform` изменяет саму коллекцию. Если вы хотите создать новую коллекцию вместо этого использовать метод [`map`](#method-map).
 
+
+<a name="method-union"></a>
+#### `union()` {#collection-method}
+
+Метод `union` добавляет переданный в него массив в коллекцию. Если в ключ элемента из переданного массива совпадает с элементом, который уже находится в коллекции, значение заменено не будет:
+
+    $collection = collect([1 => ['a'], 2 => ['b']]);
+
+    $union = $collection->union([3 => ['c'], 1 => ['b']]);
+
+    $union->all();
+
+    // [1 => ['a'], 2 => ['b'], [3 => ['c']]
+    
 <a name="method-unique"></a>
 #### `unique()` {#collection-method}
 
