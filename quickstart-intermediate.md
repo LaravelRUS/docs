@@ -93,7 +93,7 @@ git 363af42789f8de1eb4df1384cebe78fe5e428f86
         {
             Schema::create('tasks', function (Blueprint $table) {
                 $table->increments('id');
-                $table->integer('user_id')->index();
+                $table->integer('user_id')->unsigned()->index();
                 $table->string('name');
                 $table->timestamps();
             });
