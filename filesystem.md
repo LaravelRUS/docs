@@ -102,7 +102,7 @@ Laravel предоставляет чудесную абстракцию для 
 	// И из всех поддиректорий - рекурсивно...
 	$files = Storage::allFiles($directory);
 
-#### Получить все поддиректори
+#### Получить все поддиректории
 
 	$directories = Storage::directories($directory);
 
