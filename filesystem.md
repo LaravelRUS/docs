@@ -73,7 +73,7 @@ Laravel предоставляет чудесную абстракцию для 
 
 	Storage::append('file.log', 'Appended Text');
 
-#### Удвление файла
+#### Удаление файла
 
 	Storage::delete('file.jpg');
 
