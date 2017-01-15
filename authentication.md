@@ -1,4 +1,4 @@
-git cc0e4076b273b35ef98c1291133f2ebe4e9fb88f
+git ae321319ee005632fcfe4a5bf8f3607dbb198855
 
 ---
 
@@ -157,7 +157,7 @@ if (Auth::check()) {
 [Посредник маршрутов](/docs/{{version}}/middleware) может быть использован, чтобы позволить получить доступ к данному маршруту только пользователям прошедшим аутентификацию. Laravel поставляется с посредником `auth`, который описан в классе `Illuminate\Auth\Middleware\Authenticate`. Так как этот посредник уже зарегистрирован в HTTP kernel, все, что вам нужно сделать, это привязать посредник к конкретному маршруту:
 
 ```php
-Route::get('profile', function() {
+Route::get('profile', function () {
     // только аутентифицированные пользователи могут войти...
 })->middleware('auth');
 ```
@@ -314,7 +314,7 @@ if (Auth::once($credentials)) {
 
 [HTTP Basic Authentication] (http://en.wikipedia.org/wiki/Basic_access_authentication) обеспечивает быстрый способ для аутентификации пользователей вашего приложения без создания специальной страницы входа. Чтобы приступить к работе, установите `auth.basic` [посредник](/docs/{{version}}/middleware) для маршрута. Посредник `auth.basic` входит в поставку фреймворка Laravel, так что вам не нужно определять его:
 ```php
-Route::get('profile', function() {
+Route::get('profile', function () {
     // только аутентифицированные пользователи могут войти...
 })->middleware('auth.basic');
 ```
@@ -359,7 +359,7 @@ class AuthenticateOnceWithBasicAuth
 Теперь, [зарегистрируйте посредник маршрута](/docs/{{version}}/middleware#registering-middleware) и привяжите его к маршруту:
 
 ```php
-Route::get('api/user', function() {
+Route::get('api/user', function () {
     // Only authenticated users may enter...
 })->middleware('auth.basic.once');
 ```
@@ -388,7 +388,7 @@ Route::get('api/user', function() {
         {
             $this->registerPolicies();
 
-            Auth::extend('jwt', function($app, $name, array $config) {
+            Auth::extend('jwt', function ($app, $name, array $config) {
                 // Return an instance of Illuminate\Contracts\Auth\Guard...
 
                 return new JwtGuard(Auth::createUserProvider($config['provider']));
@@ -433,7 +433,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Auth::provider('riak', function($app, array $config) {
+        Auth::provider('riak', function ($app, array $config) {
             // Return an instance of Illuminate\Contracts\Auth\UserProvider...
 
             return new RiakUserProvider($app->make('riak.connection'));
