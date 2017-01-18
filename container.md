@@ -258,12 +258,21 @@ Service Container (сервис-контейнер, ранее IoC-контей�
 <a name="contextual-binding"></a>
 ## Контекстное связывание
 
-Иногда у вас может быть несколько реализаций одного интерфейса и вы хотите внедрять каждую из них в свой класс. Например, когда
-делается новый заказ, вам нужно отправлять сообщение в [PubNub](http://www.pubnub.com/) вместо Pusher. Вы можете сделать это следующим образом:
+Иногда у вас может быть два класса, использующих один и тот же интерфейс, и при этом у вас есть желание сделать для каждого из классов свой вариант реализации. Например, когда делается новый заказ, вам нужно отправлять сообщение в Pusher, а когда заказ удаляется, вам нужно отправлять сообщение в [PubNub](http://www.pubnub.com/). Вы можете сделать это следующим образом:
 
-    $this->app->when('App\Handlers\Commands\CreateOrderHandler')
-              ->needs('App\Contracts\EventPusher')
-              ->give('App\Services\PubNubEventPusher');
+	use App\Handlers\Commands\CreateOrderHandler;
+	use App\Handlers\Commands\DeleteOrderHandler;
+	use App\Contracts\EventPusher;
+	use App\Services\PubNubEventPusher;
+	use App\Services\PusherEventPusher;
+
+	$this->app->when('App\Handlers\Commands\CreateOrderHandler')
+	      ->needs('App\Contracts\EventPusher')
+	      ->give('App\Services\PusherEventPusher');
+
+	$this->app->when('App\Handlers\Commands\DeleteOrderHandler')
+	      ->needs('App\Contracts\EventPusher')
+	      ->give('App\Services\PubNubEventPusher');
 
 <a name="tagging"></a>
 ## Тэгирование
