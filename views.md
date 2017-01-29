@@ -1,209 +1,200 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+# Views
 
----
+- [Creating Views](#creating-views)
+- [Passing Data To Views](#passing-data-to-views)
+    - [Sharing Data With All Views](#sharing-data-with-all-views)
+- [View Composers](#view-composers)
 
-# Шаблоны (views)
+<a name="creating-views"></a>
+## Creating Views
 
-- [Основы использования](#views)
-- [Композеры](#view-composers)
+Views contain the HTML served by your application and separate your controller / application logic from your presentation logic. Views are stored in the `resources/views` directory. A simple view might look something like this:
 
-<a name="basic-usage"></a>
-## Основы использования
+    <!-- View stored in resources/views/greeting.blade.php -->
 
-Views (представления, отображения, шаблоны) обычно содержат HTML-код вашего приложения и представляют собой удобный способ разделения бизнес-логики и логики отображения информации. Шаблоны хранятся в папке `resources/views`.
+    <html>
+        <body>
+            <h1>Hello, {{ $name }}</h1>
+        </body>
+    </html>
 
-Простой шаблон выглядит примерно так:
+Since this view is stored at `resources/views/greeting.blade.php`, we may return it using the global `view` helper like so:
 
-	<!-- resources/views/greeting.php -->
+    Route::get('/', function () {
+        return view('greeting', ['name' => 'James']);
+    });
 
-	<html>
-		<body>
-			<h1>Hello, <?php echo $name; ?></h1>
-		</body>
-	</html>
+As you can see, the first argument passed to the `view` helper corresponds to the name of the view file in the `resources/views` directory. The second argument is an array of data that should be made available to the view. In this case, we are passing the `name` variable, which is displayed in the view using [Blade syntax](/docs/{{version}}/blade).
 
-Из данного шаблона можно сформировать ответ в браузер примерно так:
+Of course, views may also be nested within sub-directories of the `resources/views` directory. "Dot" notation may be used to reference nested views. For example, if your view is stored at `resources/views/admin/profile.blade.php`, you may reference it like so:
 
-	Route::get('/', function()
-	{
-		return view('greeting', ['name' => 'James']);
-	});	
+    return view('admin.profile', $data);
 
-Как вы можете видеть, первый аргумент хелпера `view` - имя файла шаблона в папке `resources/views`, а второй - данные, которые будут переданы в отображение.
+#### Determining If A View Exists
 
-Конечно, вы можете делать поддиректории в `resources/views`. Например, если ваш шаблон находится в файле `resources/views/admin/profile.php`, то вызов хэлпера будет выглядеть так:
+If you need to determine if a view exists, you may use the `View` facade. The `exists` method will return `true` if the view exists:
 
-	return view('admin.profile', $data); 
+    use Illuminate\Support\Facades\View;
 
-Или так: 
+    if (View::exists('emails.customer')) {
+        //
+    }
 
-	return view('admin/profile', $data);	
+<a name="passing-data-to-views"></a>
+## Passing Data To Views
 
-#### Передача данных в шаблон
+As you saw in the previous examples, you may pass an array of data to views:
 
-Следующие примеры делают доступным в шаблоне переменную `$name` и присваивают ей значение 'Victoria':
+    return view('greetings', ['name' => 'Victoria']);
 
-	// используя with()
-	$view = view('greeting')->with('name', 'Victoria');
+When passing information in this manner, `$data` should be an array with key/value pairs. Inside your view, you can then access each value using its corresponding key, such as `<?php echo $key; ?>`. As an alternative to passing a complete array of data to the `view` helper function, you may use the `with` method to add individual pieces of data to the view:
 
-	// используя "магический" метод 
-	$view = view('greeting')->withName('Victoria');	
+    return view('greeting')->with('name', 'Victoria');
 
-	// при помощи второго параметра хэлпера
-	$view = view('greetings', ['name' => 'Victoria']);
+<a name="sharing-data-with-all-views"></a>
+#### Sharing Data With All Views
 
-#### Передача данных во все шаблоны
+Occasionally, you may need to share a piece of data with all views that are rendered by your application. You may do so using the view facade's `share` method. Typically, you should place calls to `share` within a service provider's `boot` method. You are free to add them to the `AppServiceProvider` or generate a separate service provider to house them:
 
-Иногда вам нужно передать данные во все шаблоны (например, это может быть залогиненый пользователь). Вы можете сделать это несколькими путями: при помощи хэлпера view(), используя `Illuminate\Contracts\View\Factory` [contract](/docs/{{version}}/contracts) или при помощи общего шаблона (wildcard) композера.
+    <?php
 
-При помощи хэлпера это можно сделать вот так:
+    namespace App\Providers;
 
-	view()->share('data', [1, 2, 3]);
+    use Illuminate\Support\Facades\View;
 
-Или, если вы хотите использовать фасад, как в Laravel 4.x:
- 
-	View::share('data', [1, 2, 3]);
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            View::share('key', 'value');
+        }
 
-Этот код вы можете положить в метод `boot()` сервис-провайдера - или общего сервис-провайдера приложения `AppServiceProvider` или своего собственного.
-
-> **Примечание:** Когда хэлпер `view()` вызывается без аргументов, он возвращает имплементацию контракта `Illuminate\Contracts\View\Factory`
-
-#### Определение наличия шаблона
-
-Чтобы определить, есть ли заданный файл шаблона на диске, используйте метод `exist()`
-
-	if (view()->exists('emails.customer'))
-	{
-		//
-	}
-
-#### Получение шаблона по полному пути 
-
-Вы можете взять файл шаблона по полному пути до него в файловой системе:
-
-	return view()->file($pathToFile, $data);
+        /**
+         * Register the service provider.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            //
+        }
+    }
 
 <a name="view-composers"></a>
-## Композеры
+## View Composers
 
-Композеры (view composers) - функции-замыкания или методы класса, которые вызываются, когда шаблон рендерится в строку. Если у вас есть данные, которые вы хотите привязать к шаблону при каждом его рендеринге, то композеры помогут вам выделить такую логику в отдельное место. 
+View composers are callbacks or class methods that are called when a view is rendered. If you have data that you want to be bound to a view each time that view is rendered, a view composer can help you organize that logic into a single location.
 
-### Определение композера
+For this example, let's register the view composers within a [service provider](/docs/{{version}}/providers). We'll use the `View` facade to access the underlying `Illuminate\Contracts\View\Factory` contract implementation. Remember, Laravel does not include a default directory for view composers. You are free to organize them however you wish. For example, you could create an `App\Http\ViewComposers` directory:
 
-Регистрировать композеры можно внутри [сервис-провайдера](/docs/{{version}}/providers). Мы будем использовать фасад `View` для того, чтобы получить доступ к имплементации контракта `Illuminate\Contracts\View\Factory`:
+    <?php
 
-	<?php namespace App\Providers;
+    namespace App\Providers;
 
-	use View;
-	use Illuminate\Support\ServiceProvider;
+    use Illuminate\Support\Facades\View;
+    use Illuminate\Support\ServiceProvider;
 
-	class ComposerServiceProvider extends ServiceProvider {
+    class ComposerServiceProvider extends ServiceProvider
+    {
+        /**
+         * Register bindings in the container.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            // Using class based composers...
+            View::composer(
+                'profile', 'App\Http\ViewComposers\ProfileComposer'
+            );
 
-		/**
-		 * Register bindings in the container.
-		 *
-		 * @return void
-		 */
-		public function boot()
-		{
-			// Если композер реализуется при помощи класса:
-			View::composer('profile', 'App\Http\ViewComposers\ProfileComposer');
+            // Using Closure based composers...
+            View::composer('dashboard', function ($view) {
+                //
+            });
+        }
 
-			// Если композер реализуется в функции-замыкании:
-			View::composer('dashboard', function()
-			{
+        /**
+         * Register the service provider.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            //
+        }
+    }
 
-			});
-		}
-		
-		/**
-	     	* Register
-	     	*
-	     	* @return void
-	     	*/
-	    	public function register()
-	    	{
-	        	//
-	    	}
+> {note} Remember, if you create a new service provider to contain your view composer registrations, you will need to add the service provider to the `providers` array in the `config/app.php` configuration file.
 
-	}
+Now that we have registered the composer, the `ProfileComposer@compose` method will be executed each time the `profile` view is being rendered. So, let's define the composer class:
 
-> **Примечание:** В Laravel нет папки, в которой должны находиться классы композеров, вы можете создать её сами там, где вам будет удобно. Например, это может быть `App\Http\Composers`.
+    <?php
 
-Допустим, мы хотим, чтобы композер `profile` был реализован в классе (см. код выше). Метод `ProfileComposer@compose` будет вызываться каждый раз перед тем, как шаблон `profile` будет рендерится в строку.
-Давайте определим класс композера:
+    namespace App\Http\ViewComposers;
 
+    use Illuminate\View\View;
+    use App\Repositories\UserRepository;
 
-	<?php namespace App\Http\Composers;
+    class ProfileComposer
+    {
+        /**
+         * The user repository implementation.
+         *
+         * @var UserRepository
+         */
+        protected $users;
 
-	use Illuminate\Contracts\View\View;
-	use Illuminate\Users\Repository as UserRepository;
+        /**
+         * Create a new profile composer.
+         *
+         * @param  UserRepository  $users
+         * @return void
+         */
+        public function __construct(UserRepository $users)
+        {
+            // Dependencies automatically resolved by service container...
+            $this->users = $users;
+        }
 
-	class ProfileComposer {
+        /**
+         * Bind data to the view.
+         *
+         * @param  View  $view
+         * @return void
+         */
+        public function compose(View $view)
+        {
+            $view->with('count', $this->users->count());
+        }
+    }
 
-		/**
-		 * The user repository implementation.
-		 *
-		 * @var UserRepository
-		 */
-		protected $users;
+Just before the view is rendered, the composer's `compose` method is called with the `Illuminate\View\View` instance. You may use the `with` method to bind data to the view.
 
-		/**
-		 * Create a new profile composer.
-		 *
-		 * @param  UserRepository  $users
-		 * @return void
-		 */
-		public function __construct(UserRepository $users)
-		{
-			// Зависимости разрешаются автоматически службой контейнера...
-			$this->users = $users;
-		}
+> {tip} All view composers are resolved via the [service container](/docs/{{version}}/container), so you may type-hint any dependencies you need within a composer's constructor.
 
-		/**
-		 * Bind data to the view.
-		 *
-		 * @param  View  $view
-		 * @return void
-		 */
-		public function compose(View $view)
-		{
-			$view->with('count', $this->users->count());
-		}
+#### Attaching A Composer To Multiple Views
 
-	}
+You may attach a view composer to multiple views at once by passing an array of views as the first argument to the `composer` method:
 
-Метод `compose` должен получать в качестве аргумента инстанс `Illuminate\Contracts\View\View`. Для передачи переменных в шаблон используйте метод `with()`.
+    View::composer(
+        ['profile', 'dashboard'],
+        'App\Http\ViewComposers\MyViewComposer'
+    );
 
-> **Примечание:** Все композеры берутся из [сервис-контейнера](/docs/{{version}}/container), поэтому вы можете указать необходимые зависимости в конструкторе композера - они будут автоматически поданы ему.
+The `composer` method also accepts the `*` character as a wildcard, allowing you to attach a composer to all views:
 
-#### Wildcards имен шаблонов композеров
+    View::composer('*', function ($view) {
+        //
+    });
 
-В названии шаблонов можно использовать wildcards (паттерны). Например, вот так можно назначить композер для всех шаблонов:
+#### View Creators
 
-	View::composer('*', function()
-	{
-		//
-	});
+View **creators** are very similar to view composers; however, they are executed immediately after the view is instantiated instead of waiting until the view is about to render. To register a view creator, use the `creator` method:
 
-#### Назначение композера для нескольких шаблонов
-
-Вместо одного имени шаблона вы можете использовать массив имен:
-
-	View::composer(['profile', 'dashboard'], 'App\Http\ViewComposers\MyViewComposer');
-
-#### Регистрация нескольких композеров
-
-Вы можете использовать метод `composers` чтобы зарегистрировать несколько композеров одновременно:	
-
-	View::composers([
-		'App\Http\ViewComposers\AdminComposer' => ['admin.index', 'admin.profile'],
-		'App\Http\ViewComposers\UserComposer' => 'user',
-		'App\Http\ViewComposers\ProductComposer' => 'product'
-	]);
-
-### Создатель (view creators)
-
-Создатели шаблонов работают почти так же, как композеры, но вызываются сразу после создания объекта шаблона, а не во время его рендеринга в строку. Для регистрации используйте метод `creator`:
-
-	View::creator('profile', 'App\Http\ViewCreators\ProfileCreator');	
+    View::creator('profile', 'App\Http\ViewCreators\ProfileCreator');

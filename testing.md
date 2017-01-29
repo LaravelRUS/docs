@@ -1,206 +1,57 @@
-git fb1cb8292f4c85218bb202c94a4b543779725c65
+# Testing: Getting Started
 
----
-
-# Юнит-тесты
-
-- [Введение](#introduction)
-- [Написание и запуск тестов](#defining-and-running-tests)
-- [Тестовое окружение](#test-environment)
-- [Обращение к URL](#calling-routes-from-tests)
-- [Тестирование фасадов](#mocking-facades)
-- [Проверки (assertions)](#framework-assertions)
-- [Вспомогательные методы](#helper-methods)
-- [Ресет IoC-контейнера Laravel](#refreshing-the-application)
+- [Introduction](#introduction)
+- [Environment](#environment)
+- [Creating & Running Tests](#creating-and-running-tests)
 
 <a name="introduction"></a>
-## Введение
+## Introduction
 
-Laravel построен с учётом того, что современная профессиональная разработка немыслима без юнит-тестирования. Поддержка PHPUnit доступна "из коробки", а файл `phpunit.xml` уже настроен для вашего приложения. 
+Laravel is built with testing in mind. In fact, support for testing with PHPUnit is included out of the box and a `phpunit.xml` file is already setup for your application. The framework also ships with convenient helper methods that allow you to expressively test your applications.
 
-Папка `tests` уже содержит файл теста для примера. После установки нового приложения Laravel просто выполните команду `phpunit` для запуска процесса тестирования.
+By default, your application's `tests` directory contains two directories: `Feature` and `Unit`. Unit tests are tests that focus on a very small, isolated portion of your code. In fact, most unit tests probably focus on a single method. Feature tests may test a larger portion of your code, including how several objects interact with each other or even a full HTTP request to a JSON endpoint.
 
-<a name="defining-and-running-tests"></a>
-## Написание и запуск тестов
+An `ExampleTest.php` file is provided in both the `Feature` and `Unit` test directories. After installing a new Laravel application, simply run `phpunit` on the command line to run your tests.
 
-Для создания теста просто создайте новый файл в папке `tests`. Класс теста должен наследовать класс `TestCase`. Вы можете объявлять методы тестов как вы обычно объявляете их для PHPUnit.
+<a name="environment"></a>
+## Environment
 
-#### Пример тестового класса
+When running tests via `phpunit`, Laravel will automatically set the configuration environment to `testing` because of the environment variables defined in the `phpunit.xml` file. Laravel also automatically configures the session and cache to the `array` driver while testing, meaning no session or cache data will be persisted while testing.
 
-	class FooTest extends TestCase {
+You are free to define other testing environment configuration values as necessary. The `testing` environment variables may be configured in the `phpunit.xml` file, but make sure to clear your configuration cache using the `config:clear` Artisan command before running your tests!
 
-		public function testSomethingIsTrue()
-		{
-			$this->assertTrue(true);
-		}
+<a name="creating-and-running-tests"></a>
+## Creating & Running Tests
 
-	}
+To create a new test case, use the `make:test` Artisan command:
 
-Вы можете запустить все тесты в вашем приложении командой `phpunit` в терминале.
+    // Create a test in the Feature directory...
+    php artisan make:test UserTest
 
-> **Примечание:** если вы определили собственный метод `setUp`, не забудьте вызвать `parent::setUp`.
+    // Create a test in the Unit directory...
+    php artisan make:test UserTest --unit
 
-<a name="test-environment"></a>
-## Тестовое окружение
+Once the test has been generated, you may define test methods as you normally would using PHPUnit. To run your tests, simply execute the `phpunit` command from your terminal:
 
-Во время выполнения тестов Laravel автоматически установит текущую среду в `testing`. Кроме этого Laravel подключит настройки тестовой среды для сессии (`session`) и кэширования (`cache`). Оба эти драйвера устанавливаются в `array`, что позволяет данным существовать в памяти, пока работают тесты. Вы можете свободно создать любое другое тестовое окружение по необходимости.
+    <?php
 
-Переменные тестовой среды исполнения (`testing`) можно изменить в файле `phpunit.xml`.
+    namespace Tests\Unit;
 
-<a name="calling-routes-from-tests"></a>
-## Обращение к URL
+    use Tests\TestCase;
+    use Illuminate\Foundation\Testing\DatabaseMigrations;
+    use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-#### Вызов URL из теста
-
-Вы можете легко вызвать любой ваш URL методом `call`:
-
-	$response = $this->call('GET', 'user/profile');
-
-	$response = $this->call($method, $uri, $parameters, $files, $server, $content);
-
-После этого вы можете обращаться к свойствам объекта `Illuminate\Http\Response`:
-
-	$this->assertEquals('Hello World', $response->getContent());
-
-#### Вызов контроллера из теста
-
-Вы также можете вызвать из теста любой контроллер.
-
-	$response = $this->action('GET', 'HomeController@index');
-
-	$response = $this->action('GET', 'UserController@profile', array('user' => 1));
-
-> **Примечание:** Нет необходимости указывать полный неймспейс в методе `action` - `App\Http\Controllers` можно опустить.
-
-Метод `getContent` вернёт содержимое-строку ответа роута или контроллера. Если был возвращён `View` вы можете получить его через свойство `original`:
-
-	$view = $response->original;
-
-	$this->assertEquals('John', $view['name']);
-
-Для вызова HTTPS-маршрута можно использовать метод `callSecure`:
-
-	$response = $this->callSecure('GET', 'foo/bar');
-
-<a name="mocking-facades"></a>
-## Тестирование фасадов
-
-При тестировании вам может потребоваться отловить вызов (mock a call) к одному из статических классов-фасадов Laravel. К примеру, у вас есть такой контроллер:
-
-	public function getIndex()
-	{
-		Event::fire('foo', ['name' => 'Дейл']);
-
-		return 'All done!';
-	}
-
-Вы можете отловить обращение к `Event` с помощью метода `shouldReceive` этого фасада, который вернёт объект [Mockery](https://github.com/padraic/mockery).
-
-#### Мок (mocking) фасада `Event`
-
-	public function testGetIndex()
-	{
-		Event::shouldReceive('fire')->once()->with(['name' => 'Дейл']);
-
-		$this->call('GET', '/');
-	}
-
-> **Примечание:** не делайте этого для объекта `Request`. Вместо этого передайте желаемый ввод методу `call` во время выполнения вашего теста.
-
-<a name="framework-assertions"></a>
-## Проверки (assertions)
-
-Laravel предоставляет несколько `assert`-методов, чтобы сделать ваши тесты немного проще.
-
-#### Проверка на успешный запрос
-
-	public function testMethod()
-	{
-		$this->call('GET', '/');
-
-		$this->assertResponseOk();
-	}
-
-#### Проверка статуса ответа
-
-	$this->assertResponseStatus(403);
-
-#### Проверка переадресации в ответе
-
-	$this->assertRedirectedTo('foo');
-
-	$this->assertRedirectedToRoute('route.name');
-
-	$this->assertRedirectedToAction('Controller@method');
-
-#### Проверка наличия данных в шаблоне
-
-	public function testMethod()
-	{
-		$this->call('GET', '/');
-
-		$this->assertViewHas('name');
-		$this->assertViewHas('age', $value);
-	}
-
-#### Проверка наличия данных в сессии
-
-	public function testMethod()
-	{
-		$this->call('GET', '/');
-
-		$this->assertSessionHas('name');
-		$this->assertSessionHas('age', $value);
-	}
-
-#### Проверка на наличие ошибок в сессии 
-
-    public function testMethod()
+    class ExampleTest extends TestCase
     {
-        $this->call('GET', '/');
-
-        $this->assertSessionHasErrors();
-
-        // Asserting the session has errors for a given key...
-        $this->assertSessionHasErrors('name');
-
-        // Asserting the session has errors for several keys...
-        $this->assertSessionHasErrors(array('name', 'age'));
+        /**
+         * A basic test example.
+         *
+         * @return void
+         */
+        public function testBasicTest()
+        {
+            $this->assertTrue(true);
+        }
     }
 
-#### Проверка на наличие "старого пользовательского ввода"
-
-	public function testMethod()
-	{
-		$this->call('GET', '/');
-
-		$this->assertHasOldInput();
-	}
-
-<a name="helper-methods"></a>
-## Вспомогательные методы
-
-Класс `TestCase` содержит несколько вспомогательных методов для упрощения тестирования вашего приложения.
-
-#### Установка текущего авторизованного пользователя
-
-Вы можете установить текущего авторизованного пользователя с помощью метода `be`:
-
-	$user = new User(array('name' => 'John'));
-
-	$this->be($user);
-
-Вы можете заполнить вашу БД начальными данными изнутри теста методом `seed`.
-
-**Заполнение БД тестовыми данными
-
-	$this->seed();
-
-	$this->seed($connection);
-
-Больше информации на тему начальных данных доступно в разделе [Миграции и начальные данные](/docs/{{version}}/migrations#database-seeding).
-
-<a name="refreshing-the-application"></a>
-## Ресет IoC-контейнера Laravel
-
-Как вы уже знаете, в любой части теста вы можете получить доступ к IoC-контейнеру приложения Laravel при помощи `$this->app`. Объект приложения Laravel обновляется для каждого тестового класса, но не метода. Если вы хотите вручную ресетить объект приложения Laravel в произвольном месте, вы можете это сделать при помощи метода `refreshApplication`. Это сбросит все моки (mock) и другие дополнительные биндинги, которые были сделаны с момента запуска тест-сессии.
+> {note} If you define your own `setUp` method within a test class, be sure to call `parent::setUp`.

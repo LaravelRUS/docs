@@ -1,163 +1,160 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
-
----
-
 # Service Providers
 
-- [Введение](#introduction)
-- [Использование провайдеров](#basic-provider-example)
-- [Регистрация провайдеров](#registering-providers)
-- [Отложенные провайдеры](#deferred-providers)
+- [Introduction](#introduction)
+- [Writing Service Providers](#writing-service-providers)
+    - [The Register Method](#the-register-method)
+    - [The Boot Method](#the-boot-method)
+- [Registering Providers](#registering-providers)
+- [Deferred Providers](#deferred-providers)
 
 <a name="introduction"></a>
-## Введение
+## Introduction
 
-Service providers (сервис-провайдеры, дословно - «поставщики услуг») занимают центральное место в архитектуре Laravel. Они предназначены для первоначальной загрузки (bootstraping) приложения. Ваше приложение, а также сервисы самого фреймворка загружаются через сервис-провайдеры.
+Service providers are the central place of all Laravel application bootstrapping. Your own application, as well as all of Laravel's core services are bootstrapped via service providers.
 
-Что конкретно означает термин «первоначальная загрузка» или «bootsraping»? Главным образом это **регистрация** некоторых вещей - таких как биндинги в IoC-контейнер (фасадов и т.д.), слушателей событий (event listeners), фильтров роутов (route filters) и самих роутов (routes). Сервис-провайдеры - центральное место для конфигурирования вашего приложения. 
+But, what do we mean by "bootstrapped"? In general, we mean **registering** things, including registering service container bindings, event listeners, middleware, and even routes. Service providers are the central place to configure your application.
 
-Если вы откроете файл `config/app.php`, вы увидите массив `providers`. В нем перечислены все классы сервис-провайдеров, которые загружаются при старте вашего приложения (конечно, кроме тех, которые являются «отложенными» (deferred), т.е. загружаются по требованию другого сервис-провайдера).
+If you open the `config/app.php` file included with Laravel, you will see a `providers` array. These are all of the service provider classes that will be loaded for your application. Of course, many of these are "deferred" providers, meaning they will not be loaded on every request, but only when the services they provide are actually needed.
 
-Можно и нужно создавать свои собственные сервис-провайдеры для загрузки и настройки различных частей своего приложения.
+In this overview you will learn how to write your own service providers and register them with your Laravel application.
 
-<a name="basic-provider-example"></a>
-## Использование провайдеров
+<a name="writing-service-providers"></a>
+## Writing Service Providers
 
-Сервис-провайдеры должны расширять (extends) класс `Illuminate\Support\ServiceProvider`. Это абстрактный класс, который требует, чтобы в наследуемом классе был метод `register()`. В методе `register()` вы можете **только** регистрировать свои классы (bindings) в [сервис-контейнере](/docs/{{version}}/container). Слушателей событий (event listeners), роуты и фильтры роутов там регистрировать **нельзя**.
+All service providers extend the `Illuminate\Support\ServiceProvider` class. Most service providers contain a `register` and a `boot` method. Within the `register` method, you should **only bind things into the [service container](/docs/{{version}}/container)**. You should never attempt to register any event listeners, routes, or any other piece of functionality within the `register` method.
 
-С помощью Artisan можно легко создать нового провайдера, используя команду `make:provider`:
+The Artisan CLI can generate a new provider via the `make:provider` command:
 
-	php artisan make:provider RiakServiceProvider
-	
-### Метод register()
+    php artisan make:provider RiakServiceProvider
 
-Вот так может выглядеть простейший сервис-провайдер:
+<a name="the-register-method"></a>
+### The Register Method
 
-	<?php namespace App\Providers;
+As mentioned previously, within the `register` method, you should only bind things into the [service container](/docs/{{version}}/container). You should never attempt to register any event listeners, routes, or any other piece of functionality within the `register` method. Otherwise, you may accidentally use a service that is provided by a service provider which has not loaded yet.
 
-	use Riak\Connection;
-	use Illuminate\Support\ServiceProvider;
+Let's take a look at a basic service provider. Within any of your service provider methods, you always have access to the `$app` property which provides access to the service container:
 
-	class RiakServiceProvider extends ServiceProvider {
+    <?php
 
-		/**
-		 * Register bindings in the container.
-		 *
-		 * @return void
-		 */
-		public function register()
-		{
-			$this->app->singleton('Riak\Contracts\Connection', function($app)
-			{
-				return new Connection($app['config']['riak']);
-			});
-		}
+    namespace App\Providers;
 
-	}
+    use Riak\Connection;
+    use Illuminate\Support\ServiceProvider;
 
-В `register()` мы регистрируем (bind) как singleton (т.е. класс не будет переинициализироваться после вызова из контейнера) в сервис-контейнере класс работы с базой данных Riak. Если для вас этот код выглядит абракадаброй, не беспокойтесь, работу [сервис-контейнера](/docs/{{version}}/container) мы рассмотрим позже.
+    class RiakServiceProvider extends ServiceProvider
+    {
+        /**
+         * Register bindings in the container.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            $this->app->singleton(Connection::class, function ($app) {
+                return new Connection(config('riak'));
+            });
+        }
+    }
 
-Неймспейс `App\Providers`, в котором находится этот класс сервис-провайдера - дефолтное место для хранения сервис-провайдеров вашего Laravel-приложения, но вы можете располагать свои сервис-провайдеры где угодно внутри вашей PSR-4 папки (если вы не меняли `composer.json`, то это папка `app`).
+This service provider only defines a `register` method, and uses that method to define an implementation of `Riak\Connection` in the service container. If you don't understand how the service container works, check out [its documentation](/docs/{{version}}/container).
 
-### Метод boot()
+<a name="the-boot-method"></a>
+### The Boot Method
 
-Когда вызвались методы `register()` всех сервис-провайдеров приложения, вызываются их же методы `boot()`. Там уже можно использовать весь существующий функционал классов фреймворка и вашего приложения - регистрировать слушателей событий, подключать роуты и т.п.
+So, what if we need to register a view composer within our service provider? This should be done within the `boot` method. **This method is called after all other service providers have been registered**, meaning you have access to all other services that have been registered by the framework:
 
-	<?php namespace App\Providers;
+    <?php
 
-    use Event;
-	use Illuminate\Support\ServiceProvider;
+    namespace App\Providers;
 
-	class EventServiceProvider extends ServiceProvider {
+    use Illuminate\Support\ServiceProvider;
 
-		/**
-		 * Perform post-registration booting of services.
-		 *
-		 * @return void
-		 */
-		public function boot(Dispatcher $events)
-		{
-			Event::listen('SomeEvent', 'SomeEventHandler');
-		}
+    class ComposerServiceProvider extends ServiceProvider
+    {
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            view()->composer('view', function () {
+                //
+            });
+        }
+    }
 
-		/**
-		 * Register bindings in the container.
-		 *
-		 * @return void
-		 */
-		public function register()
-		{
-			//
-		}
+#### Boot Method Dependency Injection
 
-	}
+You may type-hint dependencies for your service provider's `boot` method. The [service container](/docs/{{version}}/container) will automatically inject any dependencies you need:
 
-Обратите внимание, что сервис-контейнер, вызывая метод `boot()`, сам внедрит те зависимости, которые вы зададите, в частности, Dispatcher.
+    use Illuminate\Contracts\Routing\ResponseFactory;
 
-	use Illuminate\Contracts\Events\Dispatcher;
+    public function boot(ResponseFactory $response)
+    {
+        $response->macro('caps', function ($value) {
+            //
+        });
+    }
 
-	public function boot(Dispatcher $events)
-	{
-		$events->listen('SomeEvent', 'SomeEventHandler');
-	}
-	
 <a name="registering-providers"></a>
-## Регистрация провайдеров
+## Registering Providers
 
-Все сервис-провайдеры регистрируются в файле `config/app.php` путем добавления в массив `providers`. Все сервис-провайдеры фреймворка находятся там. 
+All service providers are registered in the `config/app.php` configuration file. This file contains a `providers` array where you can list the class names of your service providers. By default, a set of Laravel core service providers are listed in this array. These providers bootstrap the core Laravel components, such as the mailer, queue, cache, and others.
 
-Чтобы зарегистрировать свой сервис-провайдер, добавьте название класса в этот массив:
+To register your provider, simply add it to the array:
 
-	'providers' => [
-		// другие сервис-провайдеры
+    'providers' => [
+        // Other Service Providers
 
-		'App\Providers\AppServiceProvider',
-	],
+        App\Providers\ComposerServiceProvider::class,
+    ],
 
 <a name="deferred-providers"></a>
-## Отложенные провайдеры
+## Deferred Providers
 
-Если ваш провайдер **только** регистрирует (bind) классы в [сервис-контейнере](/docs/{{version}}/container), то вы можете отложить вызов его метода `register()` до момента, когда эти классы будут затребованы из сервис-контейнера. Это позволит не дергать файловую систему каждый запрос в попытках загрузить файл с нужным классом с диска.
+If your provider is **only** registering bindings in the [service container](/docs/{{version}}/container), you may choose to defer its registration until one of the registered bindings is actually needed. Deferring the loading of such a provider will improve the performance of your application, since it is not loaded from the filesystem on every request.
 
-Для того, чтобы сделать сервис-провайдер отложенным, установите свойство `defer` в `true` и определите метод `provides()`, чтобы фреймворк знал, какие классы биндятся (регистрируются в сервис-контейнере, «связываются») в вашем провайдере.
+Laravel compiles and stores a list of all of the services supplied by deferred service providers, along with the name of its service provider class. Then, only when you attempt to resolve one of these services does Laravel load the service provider.
 
-	<?php namespace App\Providers;
+To defer the loading of a provider, set the `defer` property to `true` and define a `provides` method. The `provides` method should return the service container bindings registered by the provider:
 
-	use Riak\Connection;
-	use Illuminate\Support\ServiceProvider;
+    <?php
 
-	class RiakServiceProvider extends ServiceProvider {
+    namespace App\Providers;
 
-		/**
-		 * Indicates if loading of the provider is deferred.
-		 *
-		 * @var bool
-		 */
-		protected $defer = true;
+    use Riak\Connection;
+    use Illuminate\Support\ServiceProvider;
 
-		/**
-		 * Register the service provider.
-		 *
-		 * @return void
-		 */
-		public function register()
-		{
-			$this->app->singleton('Riak\Contracts\Connection', function($app)
-			{
-				return new Connection($app['config']['riak']);
-			});
-		}
+    class RiakServiceProvider extends ServiceProvider
+    {
+        /**
+         * Indicates if loading of the provider is deferred.
+         *
+         * @var bool
+         */
+        protected $defer = true;
 
-		/**
-		 * Get the services provided by the provider.
-		 *
-		 * @return array
-		 */
-		public function provides()
-		{
-			return ['Riak\Contracts\Connection'];
-		}
+        /**
+         * Register the service provider.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            $this->app->singleton(Connection::class, function ($app) {
+                return new Connection($app['config']['riak']);
+            });
+        }
 
-	}
+        /**
+         * Get the services provided by the provider.
+         *
+         * @return array
+         */
+        public function provides()
+        {
+            return [Connection::class];
+        }
 
-Laravel в процессе запуска собирает данные об отложенных сервис-провайдерах и классах, которые ими регистрируются, и когда в процессе работы приложению понадобится класс `Riak\Contracts\Connection`, он вызовет метод `register()` сервис провайдера `RiakServiceProvider`.
+    }

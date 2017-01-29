@@ -1,138 +1,232 @@
-git 95882d3ea3b9cc3617e605011b9b7044f8a9ed64
+# Database: Getting Started
 
----
+- [Introduction](#introduction)
+    - [Configuration](#configuration)
+    - [Read & Write Connections](#read-and-write-connections)
+    - [Using Multiple Database Connections](#using-multiple-database-connections)
+- [Running Raw SQL Queries](#running-queries)
+    - [Listening For Query Events](#listening-for-query-events)
+- [Database Transactions](#database-transactions)
 
-# Основы работы с базой данных
+<a name="introduction"></a>
+## Introduction
 
-- [Настройка](#configuration)
-- [Раздельное чтение и запись](#read-write-connections)
-- [Выполнение запросов](#running-queries)
-- [Транзакции](#database-transactions)
-- [Доступ к соединениям](#accessing-connections)
-- [Журнал запросов](#query-logging)
+Laravel makes interacting with databases extremely simple across a variety of database backends using either raw SQL, the [fluent query builder](/docs/{{version}}/queries), and the [Eloquent ORM](/docs/{{version}}/eloquent). Currently, Laravel supports four databases:
+
+<div class="content-list" markdown="1">
+- MySQL
+- Postgres
+- SQLite
+- SQL Server
+</div>
 
 <a name="configuration"></a>
-## Настройка
+### Configuration
 
-Laravel делает процесс соединенеия с БД и выполнение запросов очень простым. Настройки работы с БД хранятся в файле `config/database.php`. Здесь вы можете указать все используемые вами соединения к БД, а также указать, какое из них будет использоваться по умолчанию. Примеры настройки всех возможных видов подключений находятся в этом же файле.
+The database configuration for your application is located at `config/database.php`. In this file you may define all of your database connections, as well as specify which connection should be used by default. Examples for most of the supported database systems are provided in this file.
 
-На данный момент Laravel поддерживает 4 СУБД: MySQL, Postgres, SQLite и SQL Server.
+By default, Laravel's sample [environment configuration](/docs/{{version}}/configuration#environment-configuration) is ready to use with [Laravel Homestead](/docs/{{version}}/homestead), which is a convenient virtual machine for doing Laravel development on your local machine. Of course, you are free to modify this configuration as needed for your local database.
 
-<a name="read-write-connections"></a>
-## Раздельное чтение и запись
+#### SQLite Configuration
 
-Возможно, иногда вам понадобится использовать одно соединения для выполнения запроса SELECT, а другое для запросов INSERT, UPDATE и DELETE. Laravel максимально упрощает этот процесс, причем не важно, что вы используете - сырые запросы, например `DB::select()`, Query Builder или Eloquent ORM.
+After creating a new SQLite database using a command such as `touch database/database.sqlite`, you can easily configure your environment variables to point to this newly created database by using the database's absolute path:
 
-Рассмотрим пример конфигурации:
+    DB_CONNECTION=sqlite
+    DB_DATABASE=/absolute/path/to/database.sqlite
 
-	'mysql' => [
-		'read' => [
-			'host' => '192.168.1.1',
-		],
-		'write' => [
-			'host' => '196.168.1.2'
-		],
-		'driver'    => 'mysql',
-		'database'  => 'database',
-		'username'  => 'root',
-		'password'  => '',
-		'charset'   => 'utf8',
-		'collation' => 'utf8_unicode_ci',
-		'prefix'    => '',
-	],
+#### SQL Server Configuration
 
-Заметьте, два ключа были добавлены в массив настроек: `read` и `write`. Оба из них содержат единственный ключ: `host`. Остальные настройки для обеих этих операций одинаковы и берутся из массива `mysql`.  При необходимости изменения и других настроек (не только `host`), просто добавьте и другие ключи в `read` и  `write`, которые перезапишут такие же настройки в главном массиве. Таким образом, `192.168.1.1` будет использоваться для чтения, а `192.168.1.2` - для записи. Остальные настройки совпадают.
+Laravel supports SQL Server out of the box; however, you will need to add the connection configuration for the database to your `config/database.php` configuration file:
+
+    'sqlsrv' => [
+        'driver' => 'sqlsrv',
+        'host' => env('DB_HOST', 'localhost'),
+        'database' => env('DB_DATABASE', 'forge'),
+        'username' => env('DB_USERNAME', 'forge'),
+        'password' => env('DB_PASSWORD', ''),
+        'charset' => 'utf8',
+        'prefix' => '',
+    ],
+
+<a name="read-and-write-connections"></a>
+### Read & Write Connections
+
+Sometimes you may wish to use one database connection for SELECT statements, and another for INSERT, UPDATE, and DELETE statements. Laravel makes this a breeze, and the proper connections will always be used whether you are using raw queries, the query builder, or the Eloquent ORM.
+
+To see how read / write connections should be configured, let's look at this example:
+
+    'mysql' => [
+        'read' => [
+            'host' => '192.168.1.1',
+        ],
+        'write' => [
+            'host' => '196.168.1.2'
+        ],
+        'driver'    => 'mysql',
+        'database'  => 'database',
+        'username'  => 'root',
+        'password'  => '',
+        'charset'   => 'utf8',
+        'collation' => 'utf8_unicode_ci',
+        'prefix'    => '',
+    ],
+
+Note that two keys have been added to the configuration array: `read` and `write`. Both of these keys have array values containing a single key: `host`. The rest of the database options for the `read` and `write` connections will be merged from the main `mysql` array.
+
+You only need to place items in the `read` and `write` arrays if you wish to override the values from the main array. So, in this case, `192.168.1.1` will be used as the host for the "read" connection, while `192.168.1.2` will be used for the "write" connection. The database credentials, prefix, character set, and all other options in the main `mysql` array will be shared across both connections.
+
+<a name="using-multiple-database-connections"></a>
+### Using Multiple Database Connections
+
+When using multiple connections, you may access each connection via the `connection` method on the `DB` facade. The `name` passed to the `connection` method should correspond to one of the connections listed in your `config/database.php` configuration file:
+
+    $users = DB::connection('foo')->select(...);
+
+You may also access the raw, underlying PDO instance using the `getPdo` method on a connection instance:
+
+    $pdo = DB::connection()->getPdo();
 
 <a name="running-queries"></a>
-## Выполнение запросов
+## Running Raw SQL Queries
 
-Как только вы настроили соединение с базой данных, вы можете выполнять запросы используя фасад `DB`.
+Once you have configured your database connection, you may run queries using the `DB` facade. The `DB` facade provides methods for each type of query: `select`, `update`, `insert`, `delete`, and `statement`.
 
-#### Выполнение запроса SELECT
+#### Running A Select Query
 
-	$results = DB::select('select * from users where id = ?', [1]);
+To run a basic query, you may use the `select` method on the `DB` facade:
 
-Метод `select` всегда возвращает массив результатов.
+    <?php
 
-#### Выполнение запроса INSERT
+    namespace App\Http\Controllers;
 
-	DB::insert('insert into users (id, name) values (?, ?)', [1, 'Dayle']);
+    use Illuminate\Support\Facades\DB;
+    use App\Http\Controllers\Controller;
 
-#### Выполнение запроса UPDATE
+    class UserController extends Controller
+    {
+        /**
+         * Show a list of all of the application's users.
+         *
+         * @return Response
+         */
+        public function index()
+        {
+            $users = DB::select('select * from users where active = ?', [1]);
 
-	DB::update('update users set votes = 100 where name = ?', ['John']);
+            return view('user.index', ['users' => $users]);
+        }
+    }
 
-#### Выполнение запроса DELETE
+The first argument passed to the `select` method is the raw SQL query, while the second argument is any parameter bindings that need to be bound to the query. Typically, these are the values of the `where` clause constraints. Parameter binding provides protection against SQL injection.
 
-	DB::delete('delete from users');
+The `select` method will always return an `array` of results. Each result within the array will be a PHP `StdClass` object, allowing you to access the values of the results:
 
-> **Примечание:** запросы `update` и `delete` возвращают число затронутых строк.
+    foreach ($users as $user) {
+        echo $user->name;
+    }
 
-#### Выполнение запроса другого типа
+#### Using Named Bindings
 
-	DB::statement('drop table users');
+Instead of using `?` to represent your parameter bindings, you may execute a query using named bindings:
 
-#### Реагирование на выполнение запросов
+    $results = DB::select('select * from users where id = :id', ['id' => 1]);
 
-Вы можете добавить собственный обработчик, вызываемый при выполнении очередного запроса, с помощью метода `DB::listen`:
+#### Running An Insert Statement
 
-	DB::listen(function($sql, $bindings, $time)
-	{
-		//
-	});
+To execute an `insert` statement, you may use the `insert` method on the `DB` facade. Like `select`, this method takes the raw SQL query as its first argument and bindings as its second argument:
+
+    DB::insert('insert into users (id, name) values (?, ?)', [1, 'Dayle']);
+
+#### Running An Update Statement
+
+The `update` method should be used to update existing records in the database. The number of rows affected by the statement will be returned:
+
+    $affected = DB::update('update users set votes = 100 where name = ?', ['John']);
+
+#### Running A Delete Statement
+
+The `delete` method should be used to delete records from the database. Like `update`, the number of rows affected will be returned:
+
+    $deleted = DB::delete('delete from users');
+
+#### Running A General Statement
+
+Some database statements do not return any value. For these types of operations, you may use the `statement` method on the `DB` facade:
+
+    DB::statement('drop table users');
+
+<a name="listening-for-query-events"></a>
+### Listening For Query Events
+
+If you would like to receive each SQL query executed by your application, you may use the `listen` method. This method is useful for logging queries or debugging. You may register your query listener in a [service provider](/docs/{{version}}/providers):
+
+    <?php
+
+    namespace App\Providers;
+
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\ServiceProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            DB::listen(function ($query) {
+                // $query->sql
+                // $query->bindings
+                // $query->time
+            });
+        }
+
+        /**
+         * Register the service provider.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            //
+        }
+    }
 
 <a name="database-transactions"></a>
-## Транзакции
+## Database Transactions
 
-Для выполнения запросов внутри одной транзакции, воспользуйтесь методом `transaction`:
+You may use the `transaction` method on the `DB` facade to run a set of operations within a database transaction. If an exception is thrown within the transaction `Closure`, the transaction will automatically be rolled back. If the `Closure` executes successfully, the transaction will automatically be committed. You don't need to worry about manually rolling back or committing while using the `transaction` method:
 
-	DB::transaction(function()
-	{
-		DB::table('users')->update(['votes' => 1]);
+    DB::transaction(function () {
+        DB::table('users')->update(['votes' => 1]);
 
-		DB::table('posts')->delete();
-	});
+        DB::table('posts')->delete();
+    });
 
-> **Примечание:** Любая ошибка, полученная при выполнении запросов транзакции, отменит все изменения, вызванные ей.
+#### Handling Deadlocks
 
-Иногда вам понадобится начать транзакцию вручную:
+The `transaction` method accepts an optional second argument which defines the number of times a transaction should be reattempted when a deadlock occurs. Once these attempts have been exhausted, an exception will be thrown:
 
-	DB::beginTransaction();
+    DB::transaction(function () {
+        DB::table('users')->update(['votes' => 1]);
 
-Отмена транзакции и изменений, вызванных её выполнением:
+        DB::table('posts')->delete();
+    }, 5);
 
-	DB::rollback();
+#### Manually Using Transactions
 
-Завершение и подтверждение транзакцию:
+If you would like to begin a transaction manually and have complete control over rollbacks and commits, you may use the `beginTransaction` method on the `DB` facade:
 
-	DB::commit();
+    DB::beginTransaction();
 
-<a name="accessing-connections"></a>
-## Доступ к соединениям
+You can rollback the transaction via the `rollBack` method:
 
-При использовании нескольких подключений к БД, вы можете получить к ним достум через метод `DB::connection`:
+    DB::rollBack();
 
-	$users = DB::connection('foo')->select(...);
+Lastly, you can commit a transaction via the `commit` method:
 
-Вы также можете получить низкоуровневый объект PDO этого подключения:
+    DB::commit();
 
-	$pdo = DB::connection()->getPdo();
-
-Иногда вам может понадобиться переподключиться к БД и вы можете сделать это так:
-
-	DB::reconnect('foo');
-
-Если вам нужно отключиться от БД - например, чтобы не превысить лимит `max_connections` в БД, вы можете воспользоваться методом `disconnect`:
-
-	DB::disconnect('foo');
-
-<a name="query-logging"></a>
-## Журнал запросов
-
-По умолчанию, Laravel записывает все SQL-запросы в памяти, выполненные в рамках текущего HTTP-запроса. Однако, в некоторых случаях, как например при вставке большого количества записей, это может быть слишком ресурсозатратно. Для отключения журнала вы можете использовать метод `disableQueryLog`:
-
-	DB::connection()->disableQueryLog();
-
-Для получения массива выполненных запросов используйте метод `getQueryLog`:
-
-       $queries = DB::getQueryLog();
+> {tip} Using the `DB` facade's transaction methods also controls transactions for the [query builder](/docs/{{version}}/queries) and [Eloquent ORM](/docs/{{version}}/eloquent).

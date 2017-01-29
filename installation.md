@@ -1,89 +1,122 @@
-git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
+# Installation
 
----
+- [Installation](#installation)
+    - [Server Requirements](#server-requirements)
+    - [Installing Laravel](#installing-laravel)
+    - [Configuration](#configuration)
+- [Web Server Configuration](#web-server-configuration)
+    - [Pretty URLs](#pretty-urls)
 
-# Установка
+<a name="installation"></a>
+## Installation
 
-- [Установка Composer](#install-composer)
-- [Установка Laravel](#install-laravel)
-- [Требования к серверу](#server-requirements)
-- [Настройка](#configuration)
-
-<a name="install-composer"></a>
-## Установка Composer
-
-Laravel использует [Composer](http://getcomposer.org) для управления зависимостями. Поэтому прежде чем ставить Laravel вы должны установить Composer.
-
-<a name="install-laravel"></a>
-## Установка Laravel
-
-### При помощи установщика Laravel
-
-Используя Composer скачайте установщик Laravel.
-
-	composer global require "laravel/installer=~1.1"
-
-Указав в качестве PATH директорию `~/.composer/vendor/bin`, станет возможным использование команды `laravel`.
-
-После установки, простая команда `laravel new` создаст свеженькое Laravel приложение в директории, которую вы укажете. Например, `laravel new blog` создаст директорию `blog` и установит туда Laravel со всеми зависимостями. Этот метод установки намного быстрее, чем установка через Composer:
-
-	laravel new blog
-
-### При помощи Composer 
-
-Вы также можете установить Laravel используя команду Composer `create-project`:
-
-	composer create-project laravel/laravel --prefer-dist
+> {video} Are you a visual learner? Laracasts provides a [free, thorough introduction to Laravel](https://laracasts.com/series/laravel-from-scratch-2017) for newcomers to the framework. It's a great place to start your journey.
 
 <a name="server-requirements"></a>
-## Требования к серверу
+### Server Requirements
 
-У Laravel всего несколько требований к вашему серверу:
+The Laravel framework has a few system requirements. Of course, all of these requirements are satisfied by the [Laravel Homestead](/docs/{{version}}/homestead) virtual machine, so it's highly recommended that you use Homestead as your local Laravel development environment.
 
-- PHP >= 5.4
-- Mcrypt PHP Extension
+However, if you are not using Homestead, you will need to make sure your server meets the following requirements:
+
+<div class="content-list" markdown="1">
+- PHP >= 5.6.4
 - OpenSSL PHP Extension
+- PDO PHP Extension
 - Mbstring PHP Extension
+- Tokenizer PHP Extension
+- XML PHP Extension
+</div>
 
-Начиная с PHP 5.5, в некоторых операционных системах может понадобиться ручная установка PHP JSON extension. В Ubuntu, например, это можно сделать при помощи `sudo apt-get install php5-json`.
+<a name="installing-laravel"></a>
+### Installing Laravel
+
+Laravel utilizes [Composer](https://getcomposer.org) to manage its dependencies. So, before using Laravel, make sure you have Composer installed on your machine.
+
+#### Via Laravel Installer
+
+First, download the Laravel installer using Composer:
+
+    composer global require "laravel/installer"
+
+Make sure to place the `$HOME/.composer/vendor/bin` directory (or the equivalent directory for your OS) in your $PATH so the `laravel` executable can be located by your system.
+
+Once installed, the `laravel new` command will create a fresh Laravel installation in the directory you specify. For instance, `laravel new blog` will create a directory named `blog` containing a fresh Laravel installation with all of Laravel's dependencies already installed:
+
+    laravel new blog
+
+#### Via Composer Create-Project
+
+Alternatively, you may also install Laravel by issuing the Composer `create-project` command in your terminal:
+
+    composer create-project --prefer-dist laravel/laravel blog
+
+#### Local Development Server
+
+If you have PHP installed locally and you would like to use PHP's built-in development server to serve your application, you may use the `serve` Artisan command. This command will start a development server at `http://localhost:8000`:
+
+    php artisan serve
+
+Of course, more robust local development options are available via [Homestead](/docs/{{version}}/homestead) and [Valet](/docs/{{version}}/valet).
 
 <a name="configuration"></a>
-## Настройка
+### Configuration
 
-Первое, что вы должны сделать после установки Laravel - установить ключ шифрования сессий и кук. Это случайная строка из 32 символов, находится в файле `.env`, параметр 'APP_KEY'. Если вы устанавливали Laravel при помощи Composer, то ключ уже сгенерен. Вы можете сгенерить его вручную artisan-командой `key:generate`. **Если ключ шифрования отсутствует, ваши сессии, куки другая шифруемая информация не будет зашифрована надежным образом.**.
+#### Public Directory
 
-Laravel практически не требует другой начальной настройки - вы можете сразу начинать разработку. Однако может быть полезным изучить файл `config/app.php` - он содержит несколько настроек вроде `timezone` и `locale`, которые вам может потребоваться изменить в соответствии с нуждами вашего приложения.
+After installing Laravel, you should configure your web server's document / web root to be the `public` directory. The `index.php` in this directory serves as the front controller for all HTTP requests entering your application.
 
-Далее вы можете сконфигурить [настройки среды выполнения](/docs/{{version}}/configuration#environment-configuration).
+#### Configuration Files
 
-> **Примечание:** Никогда не устанавливайте настройку `app.debug` в `true` на рабочем (продакшн) окружении.
+All of the configuration files for the Laravel framework are stored in the `config` directory. Each option is documented, so feel free to look through the files and get familiar with the options available to you.
 
-### Права на запись
+#### Directory Permissions
 
-Папки внутри `storage` должны быть доступны веб-серверу для записи. Если вы устанавливаете фреймворк на Linux или MacOS - открыть папки на запись можно командой `chmod -R 777 storage`
+After installing Laravel, you may need to configure some permissions. Directories within the `storage` and the `bootstrap/cache` directories should be writable by your web server or Laravel will not run. If you are using the [Homestead](/docs/{{version}}/homestead) virtual machine, these permissions should already be set.
+
+#### Application Key
+
+The next thing you should do after installing Laravel is set your application key to a random string. If you installed Laravel via Composer or the Laravel installer, this key has already been set for you by the `php artisan key:generate` command.
+
+Typically, this string should be 32 characters long. The key can be set in the `.env` environment file. If you have not renamed the `.env.example` file to `.env`, you should do that now. **If the application key is not set, your user sessions and other encrypted data will not be secure!**
+
+#### Additional Configuration
+
+Laravel needs almost no other configuration out of the box. You are free to get started developing! However, you may wish to review the `config/app.php` file and its documentation. It contains several options such as `timezone` and `locale` that you may wish to change according to your application.
+
+You may also want to configure a few additional components of Laravel, such as:
+
+<div class="content-list" markdown="1">
+- [Cache](/docs/{{version}}/cache#configuration)
+- [Database](/docs/{{version}}/database#configuration)
+- [Session](/docs/{{version}}/session#configuration)
+</div>
+
+<a name="web-server-configuration"></a>
+## Web Server Configuration
 
 <a name="pretty-urls"></a>
-## Красивые URL
+### Pretty URLs
 
-### Apache
+#### Apache
 
-Laravel поставляется вместе с файлом `public/.htaccess`, который настроен для обработки URL без указания `index.php`. Если вы используете Apache в качестве веб-сервера обязательно включите модуль `mod_rewrite`.
+Laravel includes a `public/.htaccess` file that is used to provide URLs without the `index.php` front controller in the path. Before serving Laravel with Apache, be sure to enable the `mod_rewrite` module so the `.htaccess` file will be honored by the server.
 
-Если стандартный `.htaccess` не работает для вашего Apache, попробуйте следующий:
+If the `.htaccess` file that ships with Laravel does not work with your Apache installation, try this alternative:
 
-	Options +FollowSymLinks
-	RewriteEngine On
+    Options +FollowSymLinks
+    RewriteEngine On
 
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule ^ index.php [L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 
-### Nginx
+#### Nginx
 
-Если вы используете в качестве веб-сервера Nginx, то используйте для ЧПУ следующую конструкцию:
+If you are using Nginx, the following directive in your site configuration will direct all requests to the `index.php` front controller:
 
-	location / {
-		try_files $uri $uri/ /index.php?$query_string;
-	}
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
 
-Если вы используете [Homestead](/docs/{{version}}/homestead), то вам ничего делать не нужно, там всё это уже настроено.
+Of course, when using [Homestead](/docs/{{version}}/homestead) or [Valet](/docs/{{version}}/valet), pretty URLs will be automatically configured.
