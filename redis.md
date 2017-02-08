@@ -12,7 +12,7 @@ git 4deba2bfca6636d5cdcede3f2068eff3b59c15ce
 <a name="introduction"></a>
 ## Введение
 
-[Redis](http://redis.io) - продвинутое хранилище пар ключ/значение. Его часто называют сервисом структур данных, так как ключи могут содержать [строки](http://redis.io/topics/data-types#strings), [хэши](http://redis.io/topics/data-types#hashes), [списки](http://redis.io/topics/data-types#lists), [наборы](http://redis.io/topics/data-types#sets), and [сортированные наборы](http://redis.io/topics/data-types#sorted-sets).
+[Redis](http://redis.io) - продвинутое хранилище пар ключ/значение. Его часто называют сервисом структур данных, так как ключи могут содержать [строки](http://redis.io/topics/data-types#strings), [хэши](http://redis.io/topics/data-types#hashes), [списки](http://redis.io/topics/data-types#lists), [наборы](http://redis.io/topics/data-types#sets), и [сортированные наборы](http://redis.io/topics/data-types#sorted-sets).
 
 Прежде чем использовать Redis, необходимо установить пакет `predis/predis` версии `~1.0` через Composer.
 
