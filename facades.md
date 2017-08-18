@@ -24,7 +24,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
         return Cache::get('key');
     });
 
-В документации Laravel фасады будут использоваться во многих примерах, чтобы продемонстрировать различный функционал фреймфорка.
+В документации Laravel фасады будут использоваться во многих примерах, чтобы продемонстрировать различный функционал фреймворка.
 
 <a name="when-to-use-facades"></a>
 ## Когда использовать фасады
@@ -191,4 +191,3 @@ Validator  |  [Illuminate\Validation\Factory](https://laravel.com/api/{{version}
 Validator (Instance)  |  [Illuminate\Validation\Validator](https://laravel.com/api/{{version}}/Illuminate/Validation/Validator.html) |  &nbsp;
 View  |  [Illuminate\View\Factory](https://laravel.com/api/{{version}}/Illuminate/View/Factory.html)  |  `view`
 View (Instance)  |  [Illuminate\View\View](https://laravel.com/api/{{version}}/Illuminate/View/View.html)  |  &nbsp;
-
