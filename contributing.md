@@ -1,3 +1,7 @@
-# Contribution Guidelines
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-If you are submitting documentation for the **current stable release**, submit it to the corresponding branch. For example, documentation for Laravel 5.1 would be submitted to the `5.1` branch. Documentation intended for the next release of Laravel should be submitted to the `master` branch.
+---
+
+# Участие в создании документации
+
+При отправлении документации для **текущего стабильного релиза**, выбирайте соответствующую ветку. Например, документация для Laravel 5.1 должна быть отправлена в ветку `5.1`. Документация, предназначенная для следующего релиза Laravel отправляется в ветку `master`. 
