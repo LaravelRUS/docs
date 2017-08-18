@@ -1,15 +1,19 @@
-# Helpers
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Available Methods](#available-methods)
+---
+
+# Хелперы
+
+- [Введение](#introduction)
+- [Доступные методы](#available-methods)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel includes a variety of global "helper" PHP functions. Many of these functions are used by the framework itself; however, you are free to use them in your own applications if you find them convenient.
+Laravel включает множество глобальных вспомогательных PHP-функций ("хелперов"). Большинство таких функций используются самим фреймворком; однако, вы можете использовать их в собственных приложениях, если сочтете их удобными.
 
 <a name="available-methods"></a>
-## Available Methods
+## Доступные методы
 
 <style>
     .collection-method-list > p {
@@ -22,7 +26,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
     }
 </style>
 
-### Arrays
+### Массивы
 
 <div class="collection-method-list" markdown="1">
 
@@ -50,7 +54,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 [last](#method-last)
 </div>
 
-### Paths
+### Пути
 
 <div class="collection-method-list" markdown="1">
 
@@ -65,7 +69,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 
 </div>
 
-### Strings
+### Строки
 
 <div class="collection-method-list" markdown="1">
 
@@ -92,7 +96,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 
 </div>
 
-### URLs
+### URL
 
 <div class="collection-method-list" markdown="1">
 
@@ -105,7 +109,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 
 </div>
 
-### Miscellaneous
+### Прочее
 
 <div class="collection-method-list" markdown="1">
 
@@ -140,7 +144,7 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 </div>
 
 <a name="method-listing"></a>
-## Method Listing
+## Список методов
 
 <style>
     #collection-method code {
@@ -153,12 +157,12 @@ Laravel includes a variety of global "helper" PHP functions. Many of these funct
 </style>
 
 <a name="arrays"></a>
-## Arrays
+## Массивы
 
 <a name="method-array-add"></a>
 #### `array_add()` {#collection-method .first-collection-method}
 
-The `array_add` function adds a given key / value pair to the array if the given key doesn't already exist in the array:
+Функция `array_add` добавляет указанную пару ключ/значение в массив, если она там еще не существует:
 
     $array = array_add(['name' => 'Desk'], 'price', 100);
 
@@ -167,7 +171,7 @@ The `array_add` function adds a given key / value pair to the array if the given
 <a name="method-array-collapse"></a>
 #### `array_collapse()` {#collection-method}
 
-The `array_collapse` function collapses an array of arrays into a single array:
+Функция `array_collapse` собирает массив массивов в единый массив:
 
     $array = array_collapse([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
 
@@ -176,7 +180,7 @@ The `array_collapse` function collapses an array of arrays into a single array:
 <a name="method-array-divide"></a>
 #### `array_divide()` {#collection-method}
 
-The `array_divide` function returns two arrays, one containing the keys, and the other containing the values of the original array:
+Функция `array_divide` возвращает два массива — один с ключами, другой со значениями оригинального массива:
 
     list($keys, $values) = array_divide(['name' => 'Desk']);
 
@@ -187,7 +191,7 @@ The `array_divide` function returns two arrays, one containing the keys, and the
 <a name="method-array-dot"></a>
 #### `array_dot()` {#collection-method}
 
-The `array_dot` function flattens a multi-dimensional array into a single level array that uses "dot" notation to indicate depth:
+Функция `array_dot` делает многоуровневый массив одноуровневым, объединяя вложенные массивы с помощью точки в именах:
 
     $array = array_dot(['foo' => ['bar' => 'baz']]);
 
@@ -196,7 +200,7 @@ The `array_dot` function flattens a multi-dimensional array into a single level 
 <a name="method-array-except"></a>
 #### `array_except()` {#collection-method}
 
-The `array_except` function removes the given key / value pairs from the array:
+Функция `array_except` удаляет указанную пару ключ/значение из массива:
 
     $array = ['name' => 'Desk', 'price' => 100];
 
@@ -207,7 +211,7 @@ The `array_except` function removes the given key / value pairs from the array:
 <a name="method-array-first"></a>
 #### `array_first()` {#collection-method}
 
-The `array_first` function returns the first element of an array passing a given truth test:
+Функция `array_first` возвращает первый элемент массива, удовлетворяющий требуемому условию:
 
     $array = [100, 200, 300];
 
@@ -217,14 +221,14 @@ The `array_first` function returns the first element of an array passing a given
 
     // 200
 
-A default value may also be passed as the third parameter to the method. This value will be returned if no value passes the truth test:
+Третьим параметром можно передать значение по умолчанию на случай, если ни одно значение не пройдет условие:
 
     $value = array_first($array, $callback, $default);
 
 <a name="method-array-flatten"></a>
 #### `array_flatten()` {#collection-method}
 
-The `array_flatten` function will flatten a multi-dimensional array into a single level.
+Функция `array_flatten` сделает многоуровневый массив плоским.
 
     $array = ['name' => 'Joe', 'languages' => ['PHP', 'Ruby']];
 
@@ -235,7 +239,7 @@ The `array_flatten` function will flatten a multi-dimensional array into a singl
 <a name="method-array-forget"></a>
 #### `array_forget()` {#collection-method}
 
-The `array_forget` function removes a given key / value pair from a deeply nested array using "dot" notation:
+Функция `array_forget` удалит указанную пару ключ/значение из многоуровневого массива, используя синтаксис имени с точкой:
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
@@ -246,7 +250,7 @@ The `array_forget` function removes a given key / value pair from a deeply neste
 <a name="method-array-get"></a>
 #### `array_get()` {#collection-method}
 
-The `array_get` function retrieves a value from a deeply nested array using "dot" notation:
+Функция `array_get` вернет значение из многоуровневого массива, используя синтаксис имени с точкой:
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
@@ -254,14 +258,14 @@ The `array_get` function retrieves a value from a deeply nested array using "dot
 
     // ['price' => 100]
 
-The `array_get` function also accepts a default value, which will be returned if the specific key is not found:
+Также третьим аргументом функции `array_get` можно передать значение по умолчанию на случай, если указанный ключ не будет найден:
 
     $value = array_get($array, 'names.john', 'default');
 
 <a name="method-array-has"></a>
 #### `array_has()` {#collection-method}
 
-The `array_has` function checks that a given item or items exists in an array using "dot" notation:
+Функция `array_has` проверяет существование данного элемента или элементов в массиве, используя синтаксис имени с точкой:
 
     $array = ['product' => ['name' => 'desk', 'price' => 100]];
 
@@ -276,7 +280,7 @@ The `array_has` function checks that a given item or items exists in an array us
 <a name="method-array-last"></a>
 #### `array_last()` {#collection-method}
 
-The `array_last` function returns the last element of an array passing a given truth test:
+Функция `array_last` возвращает последний элемент массива, удовлетворяющий требуемому условию:
 
     $array = [100, 200, 300, 110];
 
@@ -289,7 +293,7 @@ The `array_last` function returns the last element of an array passing a given t
 <a name="method-array-only"></a>
 #### `array_only()` {#collection-method}
 
-The `array_only` function will return only the specified key / value pairs from the given array:
+Функция `array_only` вернет из массива только указанные пары ключ/значения:
 
     $array = ['name' => 'Desk', 'price' => 100, 'orders' => 10];
 
@@ -300,7 +304,7 @@ The `array_only` function will return only the specified key / value pairs from 
 <a name="method-array-pluck"></a>
 #### `array_pluck()` {#collection-method}
 
-The `array_pluck` function will pluck a list of the given key / value pairs from the array:
+Функция `array_pluck` извлекает значения из многоуровневого массива, соответствующие переданному ключу:
 
     $array = [
         ['developer' => ['id' => 1, 'name' => 'Taylor']],
@@ -311,7 +315,7 @@ The `array_pluck` function will pluck a list of the given key / value pairs from
 
     // ['Taylor', 'Abigail'];
 
-You may also specify how you wish the resulting list to be keyed:
+Также вы можете указать ключ для полученного списка:
 
     $array = array_pluck($array, 'developer.name', 'developer.id');
 
@@ -320,7 +324,7 @@ You may also specify how you wish the resulting list to be keyed:
 <a name="method-array-prepend"></a>
 #### `array_prepend()` {#collection-method}
 
-The `array_prepend` function will push an item onto the beginning of an array:
+Функция `array_prepend` поместит элемент в начало массива:
 
     $array = ['one', 'two', 'three', 'four'];
 
@@ -331,7 +335,7 @@ The `array_prepend` function will push an item onto the beginning of an array:
 <a name="method-array-pull"></a>
 #### `array_pull()` {#collection-method}
 
-The `array_pull` function returns and removes a key / value pair from the array:
+Функция `array_pull` извлечет значения из многоуровневого массива, соответствующие переданному ключу, и удалит их:
 
     $array = ['name' => 'Desk', 'price' => 100];
 
@@ -344,7 +348,7 @@ The `array_pull` function returns and removes a key / value pair from the array:
 <a name="method-array-set"></a>
 #### `array_set()` {#collection-method}
 
-The `array_set` function sets a value within a deeply nested array using "dot" notation:
+Функция `array_set` установит значение в многоуровневом массиве, используя синтаксис имени с точкой:
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
@@ -355,7 +359,7 @@ The `array_set` function sets a value within a deeply nested array using "dot" n
 <a name="method-array-sort"></a>
 #### `array_sort()` {#collection-method}
 
-The `array_sort` function sorts the array by the results of the given Closure:
+Функция `array_sort` отсортирует массив по результатам вызовов переданной функции-замыкания:
 
     $array = [
         ['name' => 'Desk'],
@@ -376,7 +380,7 @@ The `array_sort` function sorts the array by the results of the given Closure:
 <a name="method-array-sort-recursive"></a>
 #### `array_sort_recursive()` {#collection-method}
 
-The `array_sort_recursive` function recursively sorts the array using the `sort` function:
+Функция `array_sort_recursive` рекурсивно сортирует массив с помощью функции `sort`:
 
     $array = [
         [
@@ -411,7 +415,7 @@ The `array_sort_recursive` function recursively sorts the array using the `sort`
 <a name="method-array-where"></a>
 #### `array_where()` {#collection-method}
 
-The `array_where` function filters the array using the given Closure:
+Функция `array_where` фильтрует массив с помощью переданной функции-замыкания:
 
     $array = [100, '200', 300, '400', 500];
 
@@ -424,7 +428,7 @@ The `array_where` function filters the array using the given Closure:
 <a name="method-array-wrap"></a>
 #### `array_wrap()` {#collection-method}
 
-The `array_wrap` function will wrap the given value in an array. If the given value is already an array it will not be changed:
+Функция `array_wrap` поместит заданное значение в массив. Если это значение уже в массиве, то функция никак его не изменит:
 
     $string = 'Laravel';
 
@@ -435,7 +439,7 @@ The `array_wrap` function will wrap the given value in an array. If the given va
 <a name="method-head"></a>
 #### `head()` {#collection-method}
 
-The `head` function returns the first element in the given array:
+Функция `head` вернет первый элемент массива:
 
     $array = [100, 200, 300];
 
@@ -446,7 +450,7 @@ The `head` function returns the first element in the given array:
 <a name="method-last"></a>
 #### `last()` {#collection-method}
 
-The `last` function returns the last element in the given array:
+Функция `last` вернет последний элемент массива:
 
     $array = [100, 200, 300];
 
@@ -455,12 +459,12 @@ The `last` function returns the last element in the given array:
     // 300
 
 <a name="paths"></a>
-## Paths
+## Пути
 
 <a name="method-app-path"></a>
 #### `app_path()` {#collection-method}
 
-The `app_path` function returns the fully qualified path to the `app` directory. You may also use the `app_path` function to generate a fully qualified path to a file relative to the application directory:
+Функция `app_path` возвращает полный путь к директории `app`. Также можно использовать функцию `app_path` для получения полного пути к указанному файлу относительно каталога приложения:
 
     $path = app_path();
 
@@ -469,7 +473,7 @@ The `app_path` function returns the fully qualified path to the `app` directory.
 <a name="method-base-path"></a>
 #### `base_path()` {#collection-method}
 
-The `base_path` function returns the fully qualified path to the project root. You may also use the `base_path` function to generate a fully qualified path to a given file relative to the project root directory:
+Функция `base_path` возвращает полный путь к корневой папке приложения. Также можно использовать функцию `base_path` для получения полного пути к указанному файлу относительно корня проекта:
 
     $path = base_path();
 
@@ -478,35 +482,35 @@ The `base_path` function returns the fully qualified path to the project root. Y
 <a name="method-config-path"></a>
 #### `config_path()` {#collection-method}
 
-The `config_path` function returns the fully qualified path to the application configuration directory:
+Функция `config_path` возвращает полный путь к папке настройки приложения:
 
     $path = config_path();
 
 <a name="method-database-path"></a>
 #### `database_path()` {#collection-method}
 
-The `database_path` function returns the fully qualified path to the application's database directory:
+Функция `database_path` возвращает полный путь к папке базы данных приложения:
 
     $path = database_path();
 
 <a name="method-mix"></a>
 #### `mix()` {#collection-method}
 
-The `mix` function gets the path to a [versioned Mix file](/docs/{{version}}/mix):
+Функция `mix` получает путь к [версионированному файлу Mix](/docs/{{version}}/mix):
 
     mix($file);
 
 <a name="method-public-path"></a>
 #### `public_path()` {#collection-method}
 
-The `public_path` function returns the fully qualified path to the `public` directory:
+Функция `public_path` возвращает полный путь к папке `public`:
 
     $path = public_path();
 
 <a name="method-resource-path"></a>
 #### `resource_path()` {#collection-method}
 
-The `resource_path` function returns the fully qualified path to the `resources` directory. You may also use the `resource_path` function to generate a fully qualified path to a given file relative to the resources directory:
+Функция `resource_path` возвращает полный путь к папке `resources`. Также можно использовать функцию `resource_path` для получения полного пути к указанному файлу относительно каталога с ресурсами:
 
     $path = resource_path();
 
@@ -515,19 +519,19 @@ The `resource_path` function returns the fully qualified path to the `resources`
 <a name="method-storage-path"></a>
 #### `storage_path()` {#collection-method}
 
-The `storage_path` function returns the fully qualified path to the `storage` directory. You may also use the `storage_path` function to generate a fully qualified path to a given file relative to the storage directory:
+Функция `storage_path` возвращает полный путь к папке `storage`. Также можно использовать функцию `storage_path` для получения полного пути к указанному файлу относительно каталога хранилища:
 
     $path = storage_path();
 
     $path = storage_path('app/file.txt');
 
 <a name="strings"></a>
-## Strings
+## Строки
 
 <a name="method-camel-case"></a>
 #### `camel_case()` {#collection-method}
 
-The `camel_case` function converts the given string to `camelCase`:
+Функция `camel_case` преобразует строку в `camelCase`:
 
     $camel = camel_case('foo_bar');
 
@@ -536,7 +540,7 @@ The `camel_case` function converts the given string to `camelCase`:
 <a name="method-class-basename"></a>
 #### `class_basename()` {#collection-method}
 
-The `class_basename` returns the class name of the given class with the class' namespace removed:
+`class_basename` возвращает имя переданного класса без пространства имен:
 
     $class = class_basename('Foo\Bar\Baz');
 
@@ -545,7 +549,7 @@ The `class_basename` returns the class name of the given class with the class' n
 <a name="method-e"></a>
 #### `e()` {#collection-method}
 
-The `e` function runs PHP's `htmlspecialchars` function with the `double_encode` option set to `false`:
+Функция `e` выполняет функцию PHP `htmlspecialchars` с опцией `double_encode`, равной `false`:
 
     echo e('<html>foo</html>');
 
@@ -554,7 +558,7 @@ The `e` function runs PHP's `htmlspecialchars` function with the `double_encode`
 <a name="method-ends-with"></a>
 #### `ends_with()` {#collection-method}
 
-The `ends_with` function determines if the given string ends with the given value:
+Функция `ends_with` определяет заканчивается ли строка переданной подстрокой:
 
     $value = ends_with('This is my name', 'name');
 
@@ -563,7 +567,7 @@ The `ends_with` function determines if the given string ends with the given valu
 <a name="method-kebab-case"></a>
 #### `kebab_case()` {#collection-method}
 
-The `kebab_case` function converts the given string to `kebab-case`:
+Функция `kebab_case` преобразует строку в `kebab-case`:
 
     $value = kebab_case('fooBar');
 
@@ -573,7 +577,7 @@ The `kebab_case` function converts the given string to `kebab-case`:
 <a name="method-snake-case"></a>
 #### `snake_case()` {#collection-method}
 
-The `snake_case` function converts the given string to `snake_case`:
+Функция `snake_case` преобразует строку в `snake_case`:
 
     $snake = snake_case('fooBar');
 
@@ -582,7 +586,7 @@ The `snake_case` function converts the given string to `snake_case`:
 <a name="method-str-limit"></a>
 #### `str_limit()` {#collection-method}
 
-The `str_limit` function limits the number of characters in a string. The function accepts a string as its first argument and the maximum number of resulting characters as its second argument:
+Функция `str_limit` ограничивает число сиволов в строке. Функция принимает строку первым аргументом, а вторым — максимальное число символов:
 
     $value = str_limit('The PHP framework for web artisans.', 7);
 
@@ -591,7 +595,7 @@ The `str_limit` function limits the number of characters in a string. The functi
 <a name="method-starts-with"></a>
 #### `starts_with()` {#collection-method}
 
-The `starts_with` function determines if the given string begins with the given value:
+Функция `starts_with` определяет начинается ли строка с переданной подстроки:
 
     $value = starts_with('This is my name', 'This');
 
@@ -600,7 +604,7 @@ The `starts_with` function determines if the given string begins with the given 
 <a name="method-str-after"></a>
 #### `str_after()` {#collection-method}
 
-The `str_after` function returns everything after the given value in a string:
+Функция `str_after` возвращает все, что содержится в строке после переданной подстроки:
 
     $value = str_after('This is: a test', 'This is:');
 
@@ -609,13 +613,13 @@ The `str_after` function returns everything after the given value in a string:
 <a name="method-str-contains"></a>
 #### `str_contains()` {#collection-method}
 
-The `str_contains` function determines if the given string contains the given value:
+Функция `str_contains` определяет содержит ли строка переданную подстроку:
 
     $value = str_contains('This is my name', 'my');
 
     // true
 
-You may also pass an array of values to determine if the given string contains any of the values:
+Также вы можете передать массив значений, чтобы определить, содержит ли строка любое из них:
 
     $value = str_contains('This is my name', ['my', 'foo']);
 
@@ -624,7 +628,7 @@ You may also pass an array of values to determine if the given string contains a
 <a name="method-str-finish"></a>
 #### `str_finish()` {#collection-method}
 
-The `str_finish` function adds a single instance of the given value to a string if it does not already end with it:
+Функция `str_finish` добавляет одно вхождение подстроки в конец переданной строки, если она уже не заканчивается этим вхождением:
 
     $string = str_finish('this/string', '/');
     $string2 = str_finish('this/string/', '/');
@@ -634,7 +638,7 @@ The `str_finish` function adds a single instance of the given value to a string 
 <a name="method-str-is"></a>
 #### `str_is()` {#collection-method}
 
-The `str_is` function determines if a given string matches a given pattern. Asterisks may be used to indicate wildcards:
+Функция `str_is` определяет соответствует ли строка маске. Можно использовать звёздочки (*) как символы подстановки:
 
     $value = str_is('foo*', 'foobar');
 
@@ -647,7 +651,7 @@ The `str_is` function determines if a given string matches a given pattern. Aste
 <a name="method-str-plural"></a>
 #### `str_plural()` {#collection-method}
 
-The `str_plural` function converts a string to its plural form. This function currently only supports the English language:
+Функция `str_plural` преобразовывает слово-строку во множественное число. На данные момент функция поддерживает только английский язык:
 
     $plural = str_plural('car');
 
@@ -657,7 +661,7 @@ The `str_plural` function converts a string to its plural form. This function cu
 
     // children
 
-You may provide an integer as a second argument to the function to retrieve the singular or plural form of the string:
+Вы можете указать число вторым аргументом функции для получения единственного или множественного числа строки:
 
     $plural = str_plural('child', 2);
 
@@ -670,14 +674,14 @@ You may provide an integer as a second argument to the function to retrieve the 
 <a name="method-str-random"></a>
 #### `str_random()` {#collection-method}
 
-The `str_random` function generates a random string of the specified length. This function uses PHP's `random_bytes` function:
+Функция `str_random` создает последовательность случайных символов заданной длины. Эта функция использует PHP-функцию `random_bytes`:
 
     $string = str_random(40);
 
 <a name="method-str-singular"></a>
 #### `str_singular()` {#collection-method}
 
-The `str_singular` function converts a string to its singular form. This function currently only supports the English language:
+Функция `str_singular` преобразует слово-строку в единственное число. Функция поддерживает только английский язык:
 
     $singular = str_singular('cars');
 
@@ -686,7 +690,7 @@ The `str_singular` function converts a string to its singular form. This functio
 <a name="method-str-slug"></a>
 #### `str_slug()` {#collection-method}
 
-The `str_slug` function generates a URL friendly "slug" from the given string:
+Функция `str_slug` генерирует подходящую для URL "заготовку" из переданной строки:
 
     $title = str_slug('Laravel 5 Framework', '-');
 
@@ -695,7 +699,7 @@ The `str_slug` function generates a URL friendly "slug" from the given string:
 <a name="method-studly-case"></a>
 #### `studly_case()` {#collection-method}
 
-The `studly_case` function converts the given string to `StudlyCase`:
+Функция `studly_case` преобразует строку в `StudlyCase`:
 
     $value = studly_case('foo_bar');
 
@@ -704,73 +708,73 @@ The `studly_case` function converts the given string to `StudlyCase`:
 <a name="method-title-case"></a>
 #### `title_case()` {#collection-method}
 
-The `title_case` function converts the given string to `Title Case`:
+The `title_case` преобразует строку в `Title Case`:
 
-    $title = title_case('a nice title uses the correct case');
+    $title = title_case('хороший заголовок пишется в правильном регистре');
 
-    // A Nice Title Uses The Correct Case
+    // Хороший Заголовок Пишется В Правильном Регистре
 
 <a name="method-trans"></a>
 #### `trans()` {#collection-method}
 
-The `trans` function translates the given language line using your [localization files](/docs/{{version}}/localization):
+Функция `trans` переводит переданную языковую строку с помощью ваших [файлов локализации](/docs/{{version}}/localization):
 
     echo trans('validation.required'):
 
 <a name="method-trans-choice"></a>
 #### `trans_choice()` {#collection-method}
 
-The `trans_choice` function translates the given language line with inflection:
+Функция `trans_choice` переводит переданную языковую строку с изменениями:
 
     $value = trans_choice('foo.bar', $count);
 
 <a name="urls"></a>
-## URLs
+## URL
 
 <a name="method-action"></a>
 #### `action()` {#collection-method}
 
-The `action` function generates a URL for the given controller action. You do not need to pass the full namespace to the controller. Instead, pass the controller class name relative to the `App\Http\Controllers` namespace:
+Функция `action` генерирует URL для заданного действия контроллера. Вам не надо передавать полное пространство имён в контроллер. Вместо этого передайте имя класса контроллера в пространстве имён `App\Http\Controllers`:
 
     $url = action('HomeController@getIndex');
 
-If the method accepts route parameters, you may pass them as the second argument to the method:
+Если метод принимает параметры маршрута, вы можете передать их вторым аргументом:
 
     $url = action('UserController@profile', ['id' => 1]);
 
 <a name="method-asset"></a>
 #### `asset()` {#collection-method}
 
-Generate a URL for an asset using the current scheme of the request (HTTP or HTTPS):
+Генерирует URL к ресурсу (изображению и пр.) на основе текущей схемы запроса (HTTP или HTTPS):
 
     $url = asset('img/photo.jpg');
 
 <a name="method-secure-asset"></a>
 #### `secure_asset()` {#collection-method}
 
-Generate a URL for an asset using HTTPS:
+Генерирует URL для ресурса с использованием HTTPS:
 
     echo secure_asset('foo/bar.zip', $title, $attributes = []);
 
 <a name="method-route"></a>
 #### `route()` {#collection-method}
 
-The `route` function generates a URL for the given named route:
+Функция `route` генерирует URL для заданного именованного роута:
 
     $url = route('routeName');
 
-If the route accepts parameters, you may pass them as the second argument to the method:
+Если роут принимает параметры, вы можете передать их вторым аргументом:
 
     $url = route('routeName', ['id' => 1]);
 
-By default, the `route` function generates an absolute URL. If you wish to generate a relative URL, you may pass `false` as the third parameter:
+По-умолчанию функция `route` генерирует абсолютный URL-адрес. Если вы хотите сгенерировать относительный URL-адрес, можно передать `false` в качестве третьего параметра:
 
     $url = route('routeName', ['id' => 1], false);
 
 <a name="method-secure-url"></a>
 #### `secure_url()` {#collection-method}
 
-The `secure_url` function generates a fully qualified HTTPS URL to the given path:
+Функция `secure_url` генерирует полный HTTPS URL по заданному пути:
 
     echo secure_url('user/profile');
 
@@ -779,77 +783,77 @@ The `secure_url` function generates a fully qualified HTTPS URL to the given pat
 <a name="method-url"></a>
 #### `url()` {#collection-method}
 
-The `url` function generates a fully qualified URL to the given path:
+Функция `url` генерирует полный URL по заданному пути:
 
     echo url('user/profile');
 
     echo url('user/profile', [1]);
 
-If no path is provided, a `Illuminate\Routing\UrlGenerator` instance is returned:
+Если путь не указан, вернется экземпляр `Illuminate\Routing\UrlGenerator`:
 
     echo url()->current();
     echo url()->full();
     echo url()->previous();
 
 <a name="miscellaneous"></a>
-## Miscellaneous
+## Прочее
 
 <a name="method-abort"></a>
 #### `abort()` {#collection-method}
 
-The `abort` function throws a HTTP exception which will be rendered by the exception handler:
+Функция `abort` выбрасывает HTTP-исключение, которое будет отображено обработчиком исключений:
 
     abort(401);
 
-You may also provide the exception's response text:
+Вы можете передать текст для вывода при ответе с этим исключением:
 
     abort(401, 'Unauthorized.');
 
 <a name="method-abort-if"></a>
 #### `abort_if()` {#collection-method}
 
-The `abort_if` function throws an HTTP exception if a given boolean expression evaluates to `true`:
+Функция `abort_if` выбрасывает HTTP-исключение, если заданное логическое выражение равно `true`:
 
     abort_if(! Auth::user()->isAdmin(), 403);
 
 <a name="method-abort-unless"></a>
 #### `abort_unless()` {#collection-method}
 
-The `abort_unless` function throws an HTTP exception if a given boolean expression evaluates to `false`:
+Функция `abort_unless` выбрасывает HTTP-исключение, если заданное логическое выражение равно `false`:
 
     abort_unless(Auth::user()->isAdmin(), 403);
 
 <a name="method-auth"></a>
 #### `auth()` {#collection-method}
 
-The `auth` function returns an authenticator instance. You may use it instead of the `Auth` facade for convenience:
+Функция `auth` возвращает экземпляр аутентификатора. Вы можете использовать ее вместо фасада `Auth` для удобства:
 
     $user = auth()->user();
 
 <a name="method-back"></a>
 #### `back()` {#collection-method}
 
-The `back()` function generates a redirect response to the user's previous location:
+Функция `back()` создает отклик-переадресацию на предыдущую страницу пользователя:
 
     return back();
 
 <a name="method-bcrypt"></a>
 #### `bcrypt()` {#collection-method}
 
-The `bcrypt` function hashes the given value using Bcrypt. You may use it as an alternative to the `Hash` facade:
+Функция `bcrypt` хеширует переданное значение с помощью Bcrypt. Вы можете использовать ее вместо фасада `Hash`:
 
     $password = bcrypt('my-secret-password');
 
 <a name="method-cache"></a>
 #### `cache()` {#collection-method}
 
-The `cache` function may be used to get values from the cache. If the given key does not exist in the cache, an optional default value will be returned:
+Функцию `cache` можно использовать для получения значений из кэша. Если в кэше нет заданного ключа, будет возвращено необязательное значение по умолчанию:
 
     $value = cache('key');
 
     $value = cache('key', 'default');
 
-You may add items to the cache by passing an array of key / value pairs to the function. You should also pass the number of minutes or duration the cached value should be considered valid:
+Вы можете добавить элементы в кэш, передав массив пар ключ/значение. Также вам надо передать количество минут или время, в течение которого кэшированные значения будут считаться действительными:
 
     cache(['key' => 'value'], 5);
 
@@ -858,61 +862,61 @@ You may add items to the cache by passing an array of key / value pairs to the f
 <a name="method-collect"></a>
 #### `collect()` {#collection-method}
 
-The `collect` function creates a [collection](/docs/{{version}}/collections) instance from the given array:
+Функция `collect` создает экземпляр [коллекции](/docs/{{version}}/collections) из переданного массива:
 
     $collection = collect(['taylor', 'abigail']);
 
 <a name="method-config"></a>
 #### `config()` {#collection-method}
 
-The `config` function gets the value of a configuration variable. The configuration values may be accessed using "dot" syntax, which includes the name of the file and the option you wish to access. A default value may be specified and is returned if the configuration option does not exist:
+Функция `config` получает значение переменной из конфигурации. К значениям конфигурации можно обращаться с помощью "точечного" синтаксиса, в котором указывается имя файла и необходимый параметр. Можно указать значение по умолчанию, которое будет возвращено, если параметра не существует:
 
     $value = config('app.timezone');
 
     $value = config('app.timezone', $default);
 
-The `config` helper may also be used to set configuration variables at runtime by passing an array of key / value pairs:
+Хелпер `config` можно использовать для задания переменных конфигурации во время выполнения, передав массив пар ключ/значение:
 
     config(['app.debug' => true]);
 
 <a name="method-csrf-field"></a>
 #### `csrf_field()` {#collection-method}
 
-The `csrf_field` function generates an HTML `hidden` input field containing the value of the CSRF token. For example, using [Blade syntax](/docs/{{version}}/blade):
+Функция `csrf_field` создаёт скрытое поле ввода HTML `hidden`, содержащее значение CSRF-последовательности. Например, используя [синтаксис Blade](/docs/{{version}}/blade):
 
     {{ csrf_field() }}
 
 <a name="method-csrf-token"></a>
 #### `csrf_token()` {#collection-method}
 
-The `csrf_token` function retrieves the value of the current CSRF token:
+Функция `csrf_token` позволяет получить текущее значение CSRF-последовательности:
 
     $token = csrf_token();
 
 <a name="method-dd"></a>
 #### `dd()` {#collection-method}
 
-The `dd` function dumps the given variables and ends execution of the script:
+Функция `dd` выводит дамп переменных и завершает выполнение скрипта:
 
     dd($value);
 
     dd($value1, $value2, $value3, ...);
 
-If you do not want to halt the execution of your script, use the `dump` function instead:
+Если вы не хотите останавливать выполнение скрипта, вместо этого используйте функцию `dump`:
 
     dump($value);
 
 <a name="method-dispatch"></a>
 #### `dispatch()` {#collection-method}
 
-The `dispatch` function pushes a new job onto the Laravel [job queue](/docs/{{version}}/queues):
+Функция `dispatch` помещает новую задачу в [список задач](/docs/{{version}}/queues) Laravel:
 
     dispatch(new App\Jobs\SendEmails);
 
 <a name="method-env"></a>
 #### `env()` {#collection-method}
 
-The `env` function gets the value of an environment variable or returns a default value:
+Функция `env` позволяет получить значение переменной среды или вернуть значение по умолчанию:
 
     $env = env('APP_ENV');
 
@@ -922,47 +926,47 @@ The `env` function gets the value of an environment variable or returns a defaul
 <a name="method-event"></a>
 #### `event()` {#collection-method}
 
-The `event` function dispatches the given [event](/docs/{{version}}/events) to its listeners:
+Функция `event` отправляет указанное [событие](/docs/{{version}}/events) его слушателям:
 
     event(new UserRegistered($user));
 
 <a name="method-factory"></a>
 #### `factory()` {#collection-method}
 
-The `factory` function creates a model factory builder for a given class, name, and amount. It can be used while [testing](/docs/{{version}}/database-testing#writing-factories) or [seeding](/docs/{{version}}/seeding#using-model-factories):
+Функция `factory` создает построитель фабрики моделей для данного класса, имени и количества. Его можно использовать при [тестировании](/docs/{{version}}/database-testing#writing-factories) или [заполнении БД](/docs/{{version}}/seeding#using-model-factories):
 
     $user = factory(App\User::class)->make();
 
 <a name="method-info"></a>
 #### `info()` {#collection-method}
 
-The `info` function will write information to the log:
+Функция `info` будет записывать информацию в журнал:
 
-    info('Some helpful information!');
+    info('Некая полезная информация!');
 
-An array of contextual data may also be passed to the function:
+В функцию можно передать массив контекстных данных:
 
-    info('User login attempt failed.', ['id' => $user->id]);
+    info('Неудачная попытка входа пользователя.', ['id' => $user->id]);
 
 <a name="method-logger"></a>
 #### `logger()` {#collection-method}
 
-The `logger` function can be used to write a `debug` level message to the log:
+Функцию `logger` можно использовать, чтобы записать в журнал сообщение уровня `debug`:
 
-    logger('Debug message');
+    logger('Отладочное сообщение');
 
-An array of contextual data may also be passed to the function:
+В функцию можно передать массив контекстных данных:
 
-    logger('User has logged in.', ['id' => $user->id]);
+    logger('Вход пользователя.', ['id' => $user->id]);
 
-A [logger](/docs/{{version}}/errors#logging) instance will be returned if no value is passed to the function:
+Если в функцию не переданы значения, будет возвращен экземпляр [логгера](/docs/{{version}}/errors#logging):
 
-    logger()->error('You are not allowed here.');
+    logger()->error('Вам сюда нельзя.');
 
 <a name="method-method-field"></a>
 #### `method_field()` {#collection-method}
 
-The `method_field` function generates an HTML `hidden` input field containing the spoofed value of the form's HTTP verb. For example, using [Blade syntax](/docs/{{version}}/blade):
+Функция `method_field` создаёт скрытое поле ввода HTML `hidden`, содержащее подмененное значение HTTP-типа формы. Например, используя [синтаксис Blade](/docs/{{version}}/blade):
 
     <form method="POST">
         {{ method_field('DELETE') }}
@@ -971,7 +975,7 @@ The `method_field` function generates an HTML `hidden` input field containing th
 <a name="method-old"></a>
 #### `old()` {#collection-method}
 
-The `old` function [retrieves](/docs/{{version}}/requests#retrieving-input) an old input value flashed into the session:
+Функция `old` [получает](/docs/{{version}}/requests#retrieving-input) значение "старого" ввода, переданного в сессию:
 
     $value = old('value');
 
@@ -980,7 +984,7 @@ The `old` function [retrieves](/docs/{{version}}/requests#retrieving-input) an o
 <a name="method-redirect"></a>
 #### `redirect()` {#collection-method}
 
-The `redirect` function returns a redirect HTTP response, or returns the redirector instance if called with no arguments:
+Функция `redirect` возвращает HTTP-отклик переадресации, или экземпляр переадресатора, если вызывается без аргументов:
 
     return redirect('/home');
 
@@ -989,7 +993,7 @@ The `redirect` function returns a redirect HTTP response, or returns the redirec
 <a name="method-request"></a>
 #### `request()` {#collection-method}
 
-The `request` function returns the current [request](/docs/{{version}}/requests) instance or obtains an input item:
+Функция `request` возвращает экземпляр текущего [запроса](/docs/{{version}}/requests) или получает элемент ввода:
 
     $request = request();
 
@@ -998,7 +1002,7 @@ The `request` function returns the current [request](/docs/{{version}}/requests)
 <a name="method-response"></a>
 #### `response()` {#collection-method}
 
-The `response` function creates a [response](/docs/{{version}}/responses) instance or obtains an instance of the response factory:
+Функция `response` создает экземпляр [ответа](/docs/{{version}}/responses) или получает экземпляр фабрики ответов:
 
     return response('Hello World', 200, $headers);
 
@@ -1007,24 +1011,24 @@ The `response` function creates a [response](/docs/{{version}}/responses) instan
 <a name="method-retry"></a>
 #### `retry()` {#collection-method}
 
-The `retry` function attempts to execute the given callback until the given maximum attempt threshold is met. If the callback does not throw an exception, it's return value will be returned. If the callback throws an exception, it will automatically be retried. If the maximum attempt count is exceeded, the exception will be thrown:
+Функция `retry` пытается выполнить заданную функцию до тех пор, пока не будет достигнут заданный максимальный порог попыток. Если функция не бросает исключение, возвращается возвращаемое ею значение. Если функция бросает исключение, она будет автоматически выполнена еще раз. Если превышено максимальное количество попыток, будет брошено исключение:
 
     return retry(5, function () {
-        // Attempt 5 times while resting 100ms in between attempts...
+        // максимум 5 попыток на выполнение с паузой 100мс между попытками
     }, 100);
 
 <a name="method-session"></a>
 #### `session()` {#collection-method}
 
-The `session` function may be used to get or set session values:
+Функция `session` используется для получения или задания значений сессии:
 
     $value = session('key');
 
-You may set values by passing an array of key / value pairs to the function:
+Вы можете задать значения, передав массив пар ключ/значение в функцию:
 
     session(['chairs' => 7, 'instruments' => 3]);
 
-The session store will be returned if no value is passed to the function:
+Если в функцию не было передано значение, то она вернет значения сессии:
 
     $value = session()->get('key');
 
@@ -1033,7 +1037,7 @@ The session store will be returned if no value is passed to the function:
 <a name="method-value"></a>
 #### `value()` {#collection-method}
 
-The `value` function's behavior will simply return the value it is given. However, if you pass a `Closure` to the function, the `Closure` will be executed then its result will be returned:
+Поведение функции `value` просто вернет данное функции значение. Однако, если передать `Closure` функции, будет выполнено `Closure` и возвращен результат:
 
     $value = value(function () {
         return 'bar';
@@ -1042,6 +1046,6 @@ The `value` function's behavior will simply return the value it is given. Howeve
 <a name="method-view"></a>
 #### `view()` {#collection-method}
 
-The `view` function retrieves a [view](/docs/{{version}}/views) instance:
+Функция `view` получает экземпляр [шаблона](/docs/{{version}}/views):
 
     return view('auth.login');
