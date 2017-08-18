@@ -107,10 +107,11 @@ Job classes are very simple, normally containing only a `handle` method which is
     use Illuminate\Queue\SerializesModels;
     use Illuminate\Queue\InteractsWithQueue;
     use Illuminate\Contracts\Queue\ShouldQueue;
+    use Illuminate\Foundation\Bus\Dispatchable;
 
     class ProcessPodcast implements ShouldQueue
     {
-        use InteractsWithQueue, Queueable, SerializesModels;
+        use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
         protected $podcast;
 
@@ -305,6 +306,8 @@ However, you may take a more granular approach by defining the maximum number of
 
 #### Timeout
 
+> {note} The `timeout` feature is optimized for PHP 7.1+ and the `pcntl` PHP extension.
+
 Likewise, the maximum number of seconds that jobs can run may be specified using the `--timeout` switch on the Artisan command line:
 
     php artisan queue:work --timeout=30
@@ -341,6 +344,12 @@ Laravel includes a queue worker that will process new jobs as they are pushed on
 
 Remember, queue workers are long-lived processes and store the booted application state in memory. As a result, they will not notice changes in your code base after they have been started. So, during your deployment process, be sure to [restart your queue workers](#queue-workers-and-deployment).
 
+#### Processing A Single Job
+
+The `--once` option may be used to instruct the worker to only process a single job from the queue:
+
+    php artisan queue:work --once
+
 #### Specifying The Connection & Queue
 
 You may also specify which queue connection the worker should utilize. The connection name passed to the `work` command should correspond to one of the connections defined in your `config/queue.php` configuration file:
@@ -375,6 +384,8 @@ Since queue workers are long-lived processes, they will not pick up changes to y
 
 This command will instruct all queue workers to gracefully "die" after they finish processing their current job so that no existing jobs are lost. Since the queue workers will die when the `queue:restart` command is executed, you should be running a process manager such as [Supervisor](#supervisor-configuration) to automatically restart the queue workers.
 
+> {tip} The queue uses the [cache](/docs/{{version}}/cache) to store restart signals, so you should verify a cache driver is properly configured for your application before using this feature.
+
 <a name="job-expirations-and-timeouts"></a>
 ### Job Expirations & Timeouts
 
@@ -396,7 +407,7 @@ The `retry_after` configuration option and the `--timeout` CLI option are differ
 
 #### Worker Sleep Duration
 
-When jobs are available on the queue, the worker will keep processing jobs with no delay in between them. However, the `sleep` option determines how long the worker will "sleep" if there are no new jobs available:
+When jobs are available on the queue, the worker will keep processing jobs with no delay in between them. However, the `sleep` option determines how long the worker will "sleep" if there are no new jobs available. While sleeping, the worker will not process any new jobs - the jobs will be processed after the worker wakes up again.
 
     php artisan queue:work --sleep=3
 

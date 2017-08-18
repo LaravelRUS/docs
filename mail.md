@@ -9,6 +9,7 @@
     - [View Data](#view-data)
     - [Attachments](#attachments)
     - [Inline Attachments](#inline-attachments)
+    - [Customizing The SwiftMailer Message](#customizing-the-swiftmailer-message)
 - [Markdown Mailables](#markdown-mailables)
     - [Generating Markdown Mailables](#generating-markdown-mailables)
     - [Writing Markdown Messages](#writing-markdown-messages)
@@ -298,6 +299,8 @@ Embedding inline images into your emails is typically cumbersome; however, Larav
         <img src="{{ $message->embed($pathToFile) }}">
     </body>
 
+> {note} `$message` variable is not available in markdown messages.
+
 #### Embedding Raw Data Attachments
 
 If you already have a raw data string you wish to embed into an email template, you may use the `embedData` method on the `$message` variable:
@@ -307,6 +310,26 @@ If you already have a raw data string you wish to embed into an email template, 
 
         <img src="{{ $message->embedData($data, $name) }}">
     </body>
+
+<a name="customizing-the-swiftmailer-message"></a>
+### Customizing The SwiftMailer Message
+
+The `withSwiftMessage` method of the `Mailable` base class allows you to register a callback which will be invoked with the raw SwiftMailer message instance before sending the message. This gives you an opportunity to customize the message before it is delivered:
+
+        /**
+         * Build the message.
+         *
+         * @return $this
+         */
+        public function build()
+        {
+            $this->view('emails.orders.shipped');
+
+            $this->withSwiftMessage(function ($message) {
+                $message->getHeaders()
+                        ->addTextHeader('Custom-Header', 'HeaderValue');
+            });
+        }
 
 <a name="markdown-mailables"></a>
 ## Markdown Mailables
@@ -350,6 +373,8 @@ Markdown mailables use a combination of Blade components and Markdown syntax whi
     Thanks,<br>
     {{ config('app.name') }}
     @endcomponent
+
+> {tip} Do not use excess indentation when writing Markdown emails. Markdown parsers will render indented content as code blocks.
 
 #### Button Component
 
@@ -520,4 +545,3 @@ Laravel fires an event just before sending mail messages. Remember, this event i
             'App\Listeners\LogSentMessage',
         ],
     ];
-

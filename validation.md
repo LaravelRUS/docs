@@ -6,6 +6,7 @@
     - [Creating The Controller](#quick-creating-the-controller)
     - [Writing The Validation Logic](#quick-writing-the-validation-logic)
     - [Displaying The Validation Errors](#quick-displaying-the-validation-errors)
+    - [A Note On Optional Fields](#a-note-on-optional-fields)
 - [Form Request Validation](#form-request-validation)
     - [Creating Form Requests](#creating-form-requests)
     - [Authorizing Form Requests](#authorizing-form-requests)
@@ -111,11 +112,11 @@ As you can see, we simply pass the incoming HTTP request and desired validation 
 Sometimes you may wish to stop running validation rules on an attribute after the first validation failure. To do so, assign the `bail` rule to the attribute:
 
     $this->validate($request, [
-        'title' => 'bail|required|unique:posts|max:255',
+        'title' => 'bail|unique:posts|max:255',
         'body' => 'required',
     ]);
 
-In this example, if the `required` rule on the `title` attribute fails, the `unique` rule will not be checked. Rules will be validated in the order they are assigned.
+In this example, if the `unique` rule on the `title` attribute fails, the `max` rule will not be checked. Rules will be validated in the order they are assigned.
 
 #### A Note On Nested Attributes
 
@@ -142,7 +143,7 @@ So, in our example, the user will be redirected to our controller's `create` met
 
     <h1>Create Post</h1>
 
-    @if (count($errors) > 0)
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -153,6 +154,19 @@ So, in our example, the user will be redirected to our controller's `create` met
     @endif
 
     <!-- Create Post Form -->
+
+<a name="a-note-on-optional-fields"></a>
+### A Note On Optional Fields
+
+By default, Laravel includes the `TrimStrings` and `ConvertEmptyStringsToNull` middleware in your application's global middleware stack. These middleware are listed in the stack by the `App\Http\Kernel` class. Because of this, you will often need to mark your "optional" request fields as `nullable` if you do not want the validator to consider `null` values as invalid. For example:
+
+    $this->validate($request, [
+        'title' => 'required|unique:posts|max:255',
+        'body' => 'required',
+        'publish_at' => 'nullable|date',
+    ]);
+
+In this example, we are specifying that the `publish_at` field may be either `null` or a valid date representation. If the `nullable` modifier is not added to the rule definition, the validator would consider `null` an invalid date.
 
 <a name="quick-customizing-the-flashed-error-format"></a>
 #### Customizing The Flashed Error Format
@@ -614,7 +628,7 @@ The field under validation must be a value preceding or equal to the given date.
 <a name="rule-between"></a>
 #### between:_min_,_max_
 
-The field under validation must have a size between the given _min_ and _max_. Strings, numerics, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
+The field under validation must have a size between the given _min_ and _max_. Strings, numerics, arrays, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
 
 <a name="rule-boolean"></a>
 #### boolean
@@ -777,7 +791,7 @@ The field under validation must be a valid JSON string.
 <a name="rule-max"></a>
 #### max:_value_
 
-The field under validation must be less than or equal to a maximum _value_. Strings, numerics, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
+The field under validation must be less than or equal to a maximum _value_. Strings, numerics, arrays, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
 
 <a name="rule-mimetypes"></a>
 #### mimetypes:_text/plain_,...
@@ -804,7 +818,7 @@ A full listing of MIME types and their corresponding extensions may be found at 
 <a name="rule-min"></a>
 #### min:_value_
 
-The field under validation must have a minimum _value_. Strings, numerics, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
+The field under validation must have a minimum _value_. Strings, numerics, arrays, and files are evaluated in the same fashion as the [`size`](#rule-size) rule.
 
 <a name="rule-nullable"></a>
 #### nullable
@@ -814,7 +828,16 @@ The field under validation may be `null`. This is particularly useful when valid
 <a name="rule-not-in"></a>
 #### not_in:_foo_,_bar_,...
 
-The field under validation must not be included in the given list of values.
+The field under validation must not be included in the given list of values. The `Rule::notIn` method may be used to fluently construct the rule:
+
+    use Illuminate\Validation\Rule;
+
+    Validator::make($data, [
+        'toppings' => [
+            'required',
+            Rule::notIn(['sprinkles', 'cherries']),
+        ],
+    ]);
 
 <a name="rule-numeric"></a>
 #### numeric
@@ -957,6 +980,8 @@ In some situations, you may wish to run validation checks against a field **only
 
 In the example above, the `email` field will only be validated if it is present in the `$data` array.
 
+> {tip} If you are attempting to validate a field that should always be present but may be empty, check out [this note on optional fields](#a-note-on-optional-fields)
+
 #### Complex Conditional Validation
 
 Sometimes you may wish to add validation rules based on more complex conditional logic. For example, you may wish to require a given field only if another field has a greater value than 100. Or, you may need two fields to have a given value only when another field is present. Adding these validation rules doesn't have to be a pain. First, create a `Validator` instance with your _static rules_ that never change:
@@ -983,7 +1008,13 @@ The first argument passed to the `sometimes` method is the name of the field we 
 <a name="validating-arrays"></a>
 ## Validating Arrays
 
-Validating array based form input fields doesn't have to be a pain. For example, to validate that each e-mail in a given array input field is unique, you may do the following:
+Validating array based form input fields doesn't have to be a pain. You may use "dot notation" to validate attributes within an array. For example, if the incoming HTTP request contains a `photos[profile]` field, you may validate it like so:
+
+    $validator = Validator::make($request->all(), [
+        'photos.profile' => 'required|image',
+    ]);
+
+You may also validate each element of an array. For example, to validate that each e-mail in a given array input field is unique, you may do the following:
 
     $validator = Validator::make($request->all(), [
         'person.*.email' => 'email|unique:users',

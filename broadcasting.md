@@ -1,4 +1,4 @@
-# Event Broadcasting
+# Broadcasting
 
 - [Introduction](#introduction)
     - [Configuration](#configuration)
@@ -9,6 +9,7 @@
     - [Broadcast Name](#broadcast-name)
     - [Broadcast Data](#broadcast-data)
     - [Broadcast Queue](#broadcast-queue)
+    - [Broadcast Conditions](#broadcast-conditions)
 - [Authorizing Channels](#authorizing-channels)
     - [Defining Authorization Routes](#defining-authorization-routes)
     - [Defining Authorization Callbacks](#defining-authorization-callbacks)
@@ -57,7 +58,7 @@ Before broadcasting any events, you will first need to register the `App\Provide
 
 If you are broadcasting your events over [Pusher](https://pusher.com), you should install the Pusher PHP SDK using the Composer package manager:
 
-    composer require pusher/pusher-php-server
+    composer require pusher/pusher-php-server "~2.6"
 
 Next, you should configure your Pusher credentials in the `config/broadcasting.php` configuration file. An example Pusher configuration is already included in this file, allowing you to quickly specify your Pusher key, secret, and application ID. The `config/broadcasting.php` file's `pusher` configuration also allows you to specify additional `options` that are supported by Pusher, such as the cluster:
 
@@ -69,6 +70,8 @@ Next, you should configure your Pusher credentials in the `config/broadcasting.p
 When using Pusher and [Laravel Echo](#installing-laravel-echo), you should specify `pusher` as your desired broadcaster when instantiating the Echo instance in your `resources/assets/js/bootstrap.js` file:
 
     import Echo from "laravel-echo"
+
+    window.Pusher = require('pusher-js');
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
@@ -242,6 +245,13 @@ By default, Laravel will broadcast the event using the event's class name. Howev
         return 'server.created';
     }
 
+If you customize the broadcast name using the `broadcastAs` method, you should make sure to register your listener with a leading `.` character. This will instruct Echo to not prepend the application's namespace to the event:
+
+    .listen('.server.created', function (e) {
+        ....
+    });
+
+
 <a name="broadcast-data"></a>
 ### Broadcast Data
 
@@ -278,6 +288,31 @@ By default, each broadcast event is placed on the default queue for the default 
      * @var string
      */
     public $broadcastQueue = 'your-queue-name';
+
+If you want to broadcast your event using the `sync` queue instead of the default queue driver, you can implement the `ShouldBroadcastNow` interface instead of `ShouldBroadcast`:
+
+    <?php
+
+    use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+
+    class ShippingStatusUpdated implements ShouldBroadcastNow
+    {
+        //
+    }
+<a name="broadcast-conditions"></a>
+### Broadcast Conditions
+
+Sometimes you want to broadcast your event only if a given condition is true. You may define these conditions by adding a `broadcastWhen` method to your event class:
+
+    /**
+     * Determine if this event should broadcast.
+     *
+     * @return bool
+     */
+    public function broadcastWhen()
+    {
+        return $this->value > 100;
+    }
 
 <a name="authorizing-channels"></a>
 ## Authorizing Channels
@@ -437,7 +472,7 @@ All presence channels are also private channels; therefore, users must be [autho
 
 The data returned by the authorization callback will be made available to the presence channel event listeners in your JavaScript application. If the user is not authorized to join the presence channel, you should return `false` or `null`:
 
-    Broadcast::channel('chat.*', function ($user, $roomId) {
+    Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
         if ($user->canJoinRoom($roomId)) {
             return ['id' => $user->id, 'name' => $user->name];
         }

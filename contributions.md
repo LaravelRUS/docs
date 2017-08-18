@@ -17,21 +17,23 @@ However, if you file a bug report, your issue should contain a title and a clear
 
 Remember, bug reports are created in the hope that others with the same problem will be able to collaborate with you on solving it. Do not expect that the bug report will automatically see any activity or that others will jump to fix it. Creating a bug report serves to help yourself and others start on the path of fixing the problem.
 
-The Laravel source code is managed on Github, and there are repositories for each of the Laravel projects:
+The Laravel source code is managed on GitHub, and there are repositories for each of the Laravel projects:
 
-- [Laravel Framework](https://github.com/laravel/framework)
+<div class="content-list" markdown="1">
 - [Laravel Application](https://github.com/laravel/laravel)
+- [Laravel Art](https://github.com/laravel/art)
 - [Laravel Documentation](https://github.com/laravel/docs)
 - [Laravel Cashier](https://github.com/laravel/cashier)
 - [Laravel Cashier for Braintree](https://github.com/laravel/cashier-braintree)
 - [Laravel Envoy](https://github.com/laravel/envoy)
+- [Laravel Framework](https://github.com/laravel/framework)
 - [Laravel Homestead](https://github.com/laravel/homestead)
 - [Laravel Homestead Build Scripts](https://github.com/laravel/settler)
 - [Laravel Passport](https://github.com/laravel/passport)
 - [Laravel Scout](https://github.com/laravel/scout)
 - [Laravel Socialite](https://github.com/laravel/socialite)
 - [Laravel Website](https://github.com/laravel/laravel.com)
-- [Laravel Art](https://github.com/laravel/art)
+</div>
 
 <a name="core-development-discussion"></a>
 ## Core Development Discussion

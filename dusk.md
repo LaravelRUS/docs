@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
     - [Using Other Browsers](#using-other-browsers)
+    - [ChromeDriver Options](#chromedriver-options)
 - [Getting Started](#getting-started)
     - [Generating Tests](#generating-tests)
     - [Running Tests](#running-tests)
@@ -25,6 +26,9 @@
     - [Navigating To Pages](#navigating-to-pages)
     - [Shorthand Selectors](#shorthand-selectors)
     - [Page Methods](#page-methods)
+- [Continuous Integration](#continuous-integration)
+    - [Travis CI](#running-tests-on-travis-ci)
+    - [CircleCI](#running-tests-on-circle-ci)
 
 <a name="introduction"></a>
 ## Introduction
@@ -36,9 +40,9 @@ Laravel Dusk provides an expressive, easy-to-use browser automation and testing 
 
 To get started, you should add the `laravel/dusk` Composer dependency to your project:
 
-    composer require laravel/dusk
+    composer require --dev laravel/dusk
 
-Once Dusk is installed, you should register the `Laravel\Dusk\DuskServiceProvider` service provider. You should register the provider within the `register` method of your `AppServiceProvider` in order to limit the environments in which Dusk is available, since it exposes the ability to login as other users:
+Once Dusk is installed, you should register the `Laravel\Dusk\DuskServiceProvider` service provider. You should register the provider within the `register` method of your `AppServiceProvider` in order to limit the environments in which Dusk is available, since it exposes the ability to log in as other users:
 
     use Laravel\Dusk\DuskServiceProvider;
 
@@ -92,7 +96,30 @@ Next, you may simply modify the `driver` method to connect to the URL and port o
     protected function driver()
     {
         return RemoteWebDriver::create(
-            'http://localhost:4444', DesiredCapabilities::phantomjs()
+            'http://localhost:4444/wd/hub', DesiredCapabilities::phantomjs()
+        );
+    }
+
+<a name="chromedriver-options"></a>
+### ChromeDriver Options
+
+To customize the ChromeDriver session, you may modify the `driver` method of the `DuskTestCase` class:
+
+    use Facebook\WebDriver\Chrome\ChromeOptions;
+
+    /**
+     * Create the RemoteWebDriver instance.
+     *
+     * @return \Facebook\WebDriver\Remote\RemoteWebDriver
+     */
+    protected function driver()
+    {
+        $options = (new ChromeOptions)->addArguments(['--headless']);
+
+        return RemoteWebDriver::create(
+            'http://localhost:9515', DesiredCapabilities::chrome()->setCapability(
+                ChromeOptions::CAPABILITY, $options
+            )
         );
     }
 
@@ -115,7 +142,7 @@ To run your browser tests, use the `dusk` Artisan command:
 
 The `dusk` command accepts any argument that is normally accepted by the PHPUnit test runner, allowing you to only run the tests for a given [group](https://phpunit.de/manual/current/en/appendixes.annotations.html#appendixes.annotations.group), etc:
 
-    php artisan dusk --group foo
+    php artisan dusk --group=foo
 
 #### Manually Starting ChromeDriver
 
@@ -225,6 +252,8 @@ Often, you will be testing pages that require authentication. You can use Dusk's
               ->visit('/home');
     });
 
+> {note} After using the `loginAs` method, the user session will be maintained for all tests within the file.
+
 <a name="interacting-with-elements"></a>
 ## Interacting With Elements
 
@@ -283,6 +312,10 @@ To select a value in a dropdown selection box, you may use the `select` method. 
 
     $browser->select('size', 'Large');
 
+You may select a random option by omitting the second parameter:
+
+    $browser->select('size');
+
 #### Checkboxes
 
 To "check" a checkbox field, you may use the `check` method. Like many other input related methods, a full CSS selector is not required. If an exact selector match can't be found, Dusk will search for a checkbox with a matching `name` attribute:
@@ -337,6 +370,13 @@ The `mouseover` method may be used when you need to move the mouse over an eleme
 The `drag` method may be used to drag an element matching the given selector to another element:
 
     $browser->drag('.from-selector', '.to-selector');
+
+Or, you may drag an element in a single direction:
+
+    $browser->dragLeft('.selector', 10);
+    $browser->dragRight('.selector', 10);
+    $browser->dragUp('.selector', 10);
+    $browser->dragDown('.selector', 10);
 
 <a name="scoping-selectors"></a>
 ### Scoping Selectors
@@ -404,6 +444,20 @@ The `waitForLink` method may be used to wait until the given link text is displa
     // Wait a maximum of one second for the link...
     $browser->waitForLink('Create', 1);
 
+#### Waiting On The Page Location
+
+When making a path assertion such as `$browser->assertPathIs('/home')`, the assertion can fail if `window.location.pathname` is being updated asynchronously. You may use the `waitForLocation` method to wait for the location to be a given value:
+
+    $browser->waitForLocation('/secret');
+
+#### Waiting for Page Reloads
+
+If you need to make assertions after a page has been reloaded, use the `waitForReload` method:
+
+    $browser->click('.some-action')
+            ->waitForReload()
+            ->assertSee('something');
+
 #### Waiting On JavaScript Expressions
 
 Sometimes you may wish to pause the execution of a test until a given JavaScript expression evaluates to `true`. You may easily accomplish this using the `waitUntil` method. When passing an expression to this method, you do not need to include the `return` keyword or an ending semi-colon:
@@ -416,6 +470,14 @@ Sometimes you may wish to pause the execution of a test until a given JavaScript
     // Wait a maximum of one second for the expression to be true...
     $browser->waitUntil('App.data.servers.length > 0', 1);
 
+#### Waiting With A Callback
+
+Many of the "wait" methods in Dusk rely on the underlying `waitUsing` method. You may use this method directly to wait for a given callback to return `true`. The `waitUsing` method accepts the maximum number of seconds to wait, the interval at which the Closure should be evaluated, the Closure, and an optional failure message:
+
+    $browser->waitUsing(10, 1, function () use ($something) {
+        return $something->isReady();
+    }, "Something wasn't ready in time.");
+
 <a name="available-assertions"></a>
 ## Available Assertions
 
@@ -425,7 +487,13 @@ Assertion  | Description
 ------------- | -------------
 `$browser->assertTitle($title)`  |  Assert the page title matches the given text.
 `$browser->assertTitleContains($title)`  |  Assert the page title contains the given text.
+`$browser->assertPathBeginsWith($path)`  |  Assert that the current URL path begins with given path.
 `$browser->assertPathIs('/home')`  |  Assert the current path matches the given path.
+`$browser->assertPathIsNot('/home')`  |  Assert the current path does not match the given path.
+`$browser->assertRouteIs($name, $parameters)`  |  Assert the current URL matches the given named route's URL.
+`$browser->assertQueryStringHas($name, $value)`  |  Assert the given query string parameter is present and has a given value.
+`$browser->assertQueryStringMissing($name)`  |  Assert the given query string parameter is missing.
+`$browser->assertHasQueryStringParameter($name)`  |  Assert that the given query string parameter is present.
 `$browser->assertHasCookie($name)`  |  Assert the given cookie is present.
 `$browser->assertCookieValue($name, $value)`  |  Assert a cookie has a given value.
 `$browser->assertPlainCookieValue($name, $value)`  |  Assert an unencrypted cookie has a given value.
@@ -433,17 +501,26 @@ Assertion  | Description
 `$browser->assertDontSee($text)`  |  Assert the given text is not present on the page.
 `$browser->assertSeeIn($selector, $text)`  |  Assert the given text is present within the selector.
 `$browser->assertDontSeeIn($selector, $text)`  |  Assert the given text is not present within the selector.
+`$browser->assertSourceHas($code)`  |  Assert that the given source code is present on the page.
+`$browser->assertSourceMissing($code)`  |  Assert that the given source code is not present on the page.
 `$browser->assertSeeLink($linkText)`  |  Assert the given link is present on the page.
 `$browser->assertDontSeeLink($linkText)`  |  Assert the given link is not present on the page.
+`$browser->assertSeeLink($link)`  |  Determine if the given link is visible.
 `$browser->assertInputValue($field, $value)`  |  Assert the given input field has the given value.
 `$browser->assertInputValueIsNot($field, $value)`  |  Assert the given input field does not have the given value.
 `$browser->assertChecked($field)`  |  Assert the given checkbox is checked.
 `$browser->assertNotChecked($field)`  |  Assert the given checkbox is not checked.
+`$browser->assertRadioSelected($field, $value)`  |  Assert the given radio field is selected.
+`$browser->assertRadioNotSelected($field, $value)` |  Assert the given radio field is not selected.
 `$browser->assertSelected($field, $value)`  |  Assert the given dropdown has the given value selected.
 `$browser->assertNotSelected($field, $value)`  |  Assert the given dropdown does not have the given value selected.
+`$browser->assertSelectHasOptions($field, $values)`  |  Assert that the given array of values are available to be selected.
+`$browser->assertSelectMissingOptions($field, $values)`  |  Assert that the given array of values are not available to be selected.
+`$browser->assertSelectHasOption($field, $value)`  |  Assert that the given value is available to be selected on the given field.
 `$browser->assertValue($selector, $value)`  |  Assert the element matching the given selector has the given value.
 `$browser->assertVisible($selector)`  |  Assert the element matching the given selector is visible.
 `$browser->assertMissing($selector)`  |  Assert the element matching the given selector is not visible.
+`$browser->assertDialogOpened($message)`  |  Assert that a JavaScript dialog with given message has been opened.
 
 <a name="pages"></a>
 ## Pages
@@ -460,7 +537,7 @@ To generate a page object, use the `dusk:page` Artisan command. All page objects
 <a name="configuring-pages"></a>
 ### Configuring Pages
 
-By default, pages have three methods: `url`, `assert`, and `selectors`. We will discuss the `url` and `assert` methods now. The `selectors` method will be [discussed in more detail below](#shorthand-selectors).
+By default, pages have three methods: `url`, `assert`, and `elements`. We will discuss the `url` and `assert` methods now. The `elements` method will be [discussed in more detail below](#shorthand-selectors).
 
 #### The `url` Method
 
@@ -511,7 +588,7 @@ Sometimes you may already be on a given page and need to "load" the page's selec
 <a name="shorthand-selectors"></a>
 ### Shorthand Selectors
 
-The `selectors` method of pages allows you to define quick, easy-to-remember shortcuts for any CSS selector on your page. For example, let's define a shortcut for the "email" input field of the application's login page:
+The `elements` method of pages allows you to define quick, easy-to-remember shortcuts for any CSS selector on your page. For example, let's define a shortcut for the "email" input field of the application's login page:
 
     /**
      * Get the element shortcuts for the page.
@@ -582,3 +659,62 @@ Once the method has been defined, you may use it within any test that utilizes t
     $browser->visit(new Dashboard)
             ->createPlaylist('My Playlist')
             ->assertSee('My Playlist');
+
+<a name="continuous-integration"></a>
+## Continuous Integration
+
+<a name="running-tests-on-travis-ci"></a>
+### Travis CI
+
+To run your Dusk tests on Travis CI, we will need to use the "sudo-enabled" Ubuntu 14.04 (Trusty) environment. Since Travis CI is not a graphical environment, we will need to take some extra steps in order to launch a Chrome browser. In addition, we will use `php artisan serve` to launch PHP's built-in web server:
+
+    sudo: required
+    dist: trusty
+
+    before_script:
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
+        - ./vendor/laravel/dusk/bin/chromedriver-linux &
+        - cp .env.testing .env
+        - php artisan serve > /dev/null 2>&1 &
+
+    script:
+        - php artisan dusk
+
+<a name="running-tests-on-circle-ci"></a>
+### CircleCI
+
+#### CircleCI 1.0
+
+If you are using CircleCI 1.0 to run your Dusk tests, you may use this configuration file as a starting point. Like TravisCI, we will use the `php artisan serve` command to launch PHP's built-in web server:
+
+    test:
+        pre:
+            - "./vendor/laravel/dusk/bin/chromedriver-linux":
+                background: true
+            - cp .env.testing .env
+            - "php artisan serve":
+                background: true
+
+        override:
+            - php artisan dusk
+
+ #### CircleCI 2.0
+
+ If you are using CircleCI 2.0 to run your Dusk tests, you may add these steps to your build:
+
+     version: 2
+     jobs:
+         build:
+             steps:
+                  - run:
+                      name: Start Chrome Driver
+                      command: ./vendor/laravel/dusk/bin/chromedriver-linux
+                      background: true
+                 - run:
+                     name: Run Laravel Server
+                     command: php artisan serve
+                     background: true
+                 - run:
+                     name: Run Laravel Dusk Tests
+                     command: php artisan dusk

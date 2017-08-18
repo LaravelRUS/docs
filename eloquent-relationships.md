@@ -120,6 +120,41 @@ If your parent model does not use `id` as its primary key, or you wish to join t
         return $this->belongsTo('App\User', 'foreign_key', 'other_key');
     }
 
+<a name="default-models"></a>
+#### Default Models
+
+The `belongsTo` relationship allows you to define a default model that will be returned if the given relationship is `null`. This pattern is often referred to as the [Null Object pattern](https://en.wikipedia.org/wiki/Null_Object_pattern) and can help remove conditional checks in your code. In the following example, the `user` relation will return an empty `App\User` model if no `user` is attached to the post:
+
+    /**
+     * Get the author of the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User')->withDefault();
+    }
+
+To populate the default model with attributes, you may pass an array or Closure to the `withDefault` method:
+
+    /**
+     * Get the author of the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User')->withDefault([
+            'name' => 'Guest Author',
+        ]);
+    }
+
+    /**
+     * Get the author of the post.
+     */
+    public function user()
+    {
+        return $this->belongsTo('App\User')->withDefault(function ($user) {
+            $user->name = 'Guest Author';
+        });
+    }
+
 <a name="one-to-many"></a>
 ### One To Many
 
@@ -307,7 +342,7 @@ You can also filter the results returned by `belongsToMany` using the `wherePivo
 
 #### Defining Custom Intermediate Table Models
 
-If you would like to define a custom model to represent the intermediate table of your relationship, you may call the `using` method when defining the relationship. All custom models used to represent intermediate tables of relationships must extend the `Illuminate\Database\Eloquent\Relations\Pivot` class:
+If you would like to define a custom model to represent the intermediate table of your relationship, you may call the `using` method when defining the relationship. All custom models used to represent intermediate tables of relationships must extend the `Illuminate\Database\Eloquent\Relations\Pivot` class. For example, we may define a `Role` which uses a custom `UserRole` pivot model:
 
     <?php
 
@@ -324,6 +359,19 @@ If you would like to define a custom model to represent the intermediate table o
         {
             return $this->belongsToMany('App\User')->using('App\UserRole');
         }
+    }
+
+When defining the `UserRole` model, we will extend the `Pivot` class:
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Database\Eloquent\Relations\Pivot;
+
+    class UserRole extends Pivot
+    {
+        //
     }
 
 <a name="has-many-through"></a>
@@ -675,6 +723,19 @@ You may add the "counts" for multiple relations as well as add constraints to th
     echo $posts[0]->votes_count;
     echo $posts[0]->comments_count;
 
+You may also alias the relationship count result, allowing multiple counts on the same relationship:
+
+    $posts = Post::withCount([
+        'comments',
+        'comments AS pending_comments' => function ($query) {
+            $query->where('approved', false);
+        }
+    ])->get();
+
+    echo $posts[0]->comments_count;
+
+    echo $posts[0]->pending_comments_count;
+
 <a name="eager-loading"></a>
 ## Eager Loading
 
@@ -725,7 +786,7 @@ For this operation, only two queries will be executed:
 
 Sometimes you may need to eager load several different relationships in a single operation. To do so, just pass additional arguments to the `with` method:
 
-    $books = App\Book::with('author', 'publisher')->get();
+    $books = App\Book::with(['author', 'publisher'])->get();
 
 #### Nested Eager Loading
 
@@ -801,7 +862,20 @@ In addition to the `save` and `saveMany` methods, you may also use the `create` 
         'message' => 'A new comment.',
     ]);
 
-Before using the `create` method, be sure to review the documentation on attribute [mass assignment](/docs/{{version}}/eloquent#mass-assignment).
+> {tip} Before using the `create` method, be sure to review the documentation on attribute [mass assignment](/docs/{{version}}/eloquent#mass-assignment).
+
+You may use the `createMany` method to create multiple related models:
+
+    $post = App\Post::find(1);
+
+    $post->comments()->createMany([
+        [
+            'message' => 'A new comment.',
+        ],
+        [
+            'message' => 'Another new comment.',
+        ],
+    ]);
 
 <a name="updating-belongs-to-relationships"></a>
 ### Belongs To Relationships
@@ -849,7 +923,10 @@ For convenience, `attach` and `detach` also accept arrays of IDs as input:
 
     $user->roles()->detach([1, 2, 3]);
 
-    $user->roles()->attach([1 => ['expires' => $expires], 2, 3]);
+    $user->roles()->attach([
+        1 => ['expires' => $expires],
+        2 => ['expires' => $expires]
+    ]);
 
 #### Syncing Associations
 

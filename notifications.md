@@ -60,7 +60,21 @@ This command will place a fresh notification class in your `app/Notifications` d
 <a name="using-the-notifiable-trait"></a>
 ### Using The Notifiable Trait
 
-Notifications may be sent in two ways: using the `notify` method of the `Notifiable` trait or using the `Notification` [facade](/docs/{{version}}/facades). First, let's examine the `Notifiable` trait. This trait is used by the default `App\User` model and contains one method that may be used to send notifications: `notify`. The `notify` method expects to receive a notification instance:
+Notifications may be sent in two ways: using the `notify` method of the `Notifiable` trait or using the `Notification` [facade](/docs/{{version}}/facades). First, let's explore using the trait:
+
+    <?php
+
+    namespace App;
+
+    use Illuminate\Notifications\Notifiable;
+    use Illuminate\Foundation\Auth\User as Authenticatable;
+
+    class User extends Authenticatable
+    {
+        use Notifiable;
+    }
+
+This trait is utilized by the default `App\User` model and contains one method that may be used to send notifications: `notify`. The `notify` method expects to receive a notification instance:
 
     use App\Notifications\InvoicePaid;
 
@@ -159,6 +173,38 @@ In this example, we register a greeting, a line of text, a call to action, and t
 <img src="https://laravel.com/assets/img/notification-example.png" width="551" height="596">
 
 > {tip} When sending mail notifications, be sure to set the `name` value in your `config/app.php` configuration file. This value will be used in the header and footer of your mail notification messages.
+
+#### Other Notification Formatting Options
+
+Instead of defining the "lines" of text in the notification class, you may use the `view` method to specify a custom template that should be used to render the notification email:
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        return (new MailMessage)->view(
+            'emails.name', ['invoice' => $this->invoice]
+        );
+    }
+
+In addition, you may return a [mailable object](/docs/{{version}}/mail) from the `toMail` method:
+
+    use App\Mail\InvoicePaid as Mailable;
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return Mailable
+     */
+    public function toMail($notifiable)
+    {
+        return (new Mailable($this->invoice))->to($this->user->email);
+    }
 
 <a name="error-messages"></a>
 #### Error Messages
@@ -436,7 +482,7 @@ The `broadcast` channel broadcasts notifications using Laravel's [event broadcas
 
 All broadcast notifications are queued for broadcasting. If you would like to configure the queue connection or queue name that is used to the queue the broadcast operation, you may use the `onConnection` and `onQueue` methods of the `BroadcastMessage`:
 
-    return new BroadcastMessage($data)
+    return (new BroadcastMessage($data))
                     ->onConnection('sqs')
                     ->onQueue('broadcasts');
 
@@ -471,13 +517,11 @@ If you would like to customize which channels a notifiable entity receives its b
         /**
          * The channels the user receives notification broadcasts on.
          *
-         * @return array
+         * @return string
          */
         public function receivesBroadcastNotificationsOn()
         {
-            return [
-                new PrivateChannel('users.'.$this->id),
-            ];
+            return 'users.'.$this->id;
         }
     }
 
@@ -586,7 +630,7 @@ Before you can send notifications via Slack, you must install the Guzzle HTTP li
 
     composer require guzzlehttp/guzzle
 
-You will also need to configure an "Incoming Webhook" integration for your Slack team. This integration will provide you with a URL you may use when [routing Slack notifications](#routing-slack-notifications).
+You will also need to configure an ["Incoming Webhook"](https://api.slack.com/incoming-webhooks) integration for your Slack team. This integration will provide you with a URL you may use when [routing Slack notifications](#routing-slack-notifications).
 
 <a name="formatting-slack-notifications"></a>
 ### Formatting Slack Notifications
@@ -625,6 +669,22 @@ You may use the `from` and `to` methods to customize the sender and recipient. T
                     ->from('Ghost', ':ghost:')
                     ->to('#other')
                     ->content('This will be sent to #other');
+    }
+
+You may also use an image as your logo instead of an emoji:
+
+    /**
+     * Get the Slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return SlackMessage
+     */
+    public function toSlack($notifiable)
+    {
+        return (new SlackMessage)
+                    ->from('Laravel')
+                    ->image('https://laravel.com/favicon.png')
+                    ->content('This will display the Laravel logo next to the message');
     }
 
 <a name="slack-attachments"></a>
@@ -704,7 +764,7 @@ If some of your attachment fields contain Markdown, you may use the `markdown` m
                     ->content('Whoops! Something went wrong.')
                     ->attachment(function ($attachment) use ($url) {
                         $attachment->title('Exception: File Not Found', $url)
-                                   ->content('File [background.jpg] was **not found**.')
+                                   ->content('File [background.jpg] was *not found*.')
                                    ->markdown(['title', 'text']);
                     });
     }

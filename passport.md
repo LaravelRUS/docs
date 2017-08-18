@@ -3,6 +3,7 @@
 - [Introduction](#introduction)
 - [Installation](#installation)
     - [Frontend Quickstart](#frontend-quickstart)
+    - [Deploying Passport](#deploying-passport)
 - [Configuration](#configuration)
     - [Token Lifetimes](#token-lifetimes)
 - [Issuing Access Tokens](#issuing-access-tokens)
@@ -27,6 +28,7 @@
     - [Checking Scopes](#checking-scopes)
 - [Consuming Your API With JavaScript](#consuming-your-api-with-javascript)
 - [Events](#events)
+- [Testing](#testing)
 
 <a name="introduction"></a>
 ## Introduction
@@ -152,6 +154,13 @@ After registering the components, make sure to run `npm run dev` to recompile yo
     <passport-clients></passport-clients>
     <passport-authorized-clients></passport-authorized-clients>
     <passport-personal-access-tokens></passport-personal-access-tokens>
+
+<a name="deploying-passport"></a>
+### Deploying Passport
+
+When deploying Passport to your production servers for the first time, you will likely need to run the `passport:keys` command. This command generates the encryption keys Passport needs in order to generate access token. The generated keys are not typically kept in source control:
+
+    php artisan passport:keys
 
 <a name="configuration"></a>
 ## Configuration
@@ -417,7 +426,21 @@ Once a grant has been enabled, developers may use their client ID to request an 
 <a name="client-credentials-grant-tokens"></a>
 ## Client Credentials Grant Tokens
 
-The client credentials grant is suitable for machine-to-machine authentication. For example, you might use this grant in a scheduled job which is performing maintenance tasks over an API. To retrieve a token, make a request to the `oauth/token` endpoint:
+The client credentials grant is suitable for machine-to-machine authentication. For example, you might use this grant in a scheduled job which is performing maintenance tasks over an API. To use this method you first need to add new middleware to your `$routeMiddleware` in `app/Http/Kernel.php`:
+
+    use Laravel\Passport\Http\Middleware\CheckClientCredentials::class;
+
+    protected $routeMiddleware = [
+        'client' => CheckClientCredentials::class,
+    ];
+
+Then attach this middleware to a route:
+
+    Route::get('/user', function(Request $request) {
+        ...
+    })->middleware('client');
+
+To retrieve a token, make a request to the `oauth/token` endpoint:
 
     $guzzle = new GuzzleHttp\Client;
 
@@ -476,7 +499,7 @@ This route returns all of the [scopes](#token-scopes) defined for your applicati
 
 #### `GET /oauth/personal-access-tokens`
 
-This route returns all of the personal access tokens that the authenticated user has created. This is primarily useful for listing all of the user's token so that they may edit or delete them:
+This route returns all of the personal access tokens that the authenticated user has created. This is primarily useful for listing all of the user's tokens so that they may edit or delete them:
 
     axios.get('/oauth/personal-access-tokens')
         .then(response => {
@@ -622,7 +645,7 @@ Typically, if you want to consume your API from your JavaScript application, you
 
 This Passport middleware will attach a `laravel_token` cookie to your outgoing responses. This cookie contains an encrypted JWT that Passport will use to authenticate API requests from your JavaScript application. Now, you may make requests to your application's API without explicitly passing an access token:
 
-    axios.get('/user')
+    axios.get('/api/user')
         .then(response => {
             console.log(response.data);
         });
@@ -657,3 +680,20 @@ protected $listen = [
     ],
 ];
 ```
+
+<a name="testing"></a>
+## Testing
+
+Passport's `actingAs` method may be used to specify the currently authenticated user as well as its scopes. The first argument given to the `actingAs` method is the user instance and the second is an array of scopes that should be granted to the user's token:
+
+    public function testServerCreation()
+    {
+        Passport::actingAs(
+            factory(User::class)->create(),
+            ['create-servers']
+        );
+
+        $response = $this->post('/api/create-server');
+
+        $response->assertStatus(200);
+    }
