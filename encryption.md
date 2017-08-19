@@ -1,25 +1,29 @@
-# Encryption
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-- [Using The Encrypter](#using-the-encrypter)
+---
+
+# Шифрование
+
+- [Введение](#introduction)
+- [Настройка](#configuration)
+- [Использование шифратора](#using-the-encrypter)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel's encrypter uses OpenSSL to provide AES-256 and AES-128 encryption. You are strongly encouraged to use Laravel's built-in encryption facilities and not attempt to roll your own "home grown" encryption algorithms. All of Laravel's encrypted values are signed using a message authentication code (MAC) so that their underlying value can not be modified once encrypted.
+Шифратор Laravel использует OpenSSL для шифрования по алгоритмам AES-256 и AES-128. Настоятельно призываем вас использовать встроенные в Laravel возможности шифрования и не пытаться применять свои "самодельные" алгоритмы шифрования. Все шифрованные значения подписаны кодом аутентификации сообщения (MAC) для предотвращения любых изменений в зашифрованной строке.
 
 <a name="configuration"></a>
-## Configuration
+## Настройка
 
-Before using Laravel's encrypter, you must set a `key` option in your `config/app.php` configuration file. You should use the `php artisan key:generate` command to generate this key since this Artisan command will use PHP's secure random bytes generator to build your key. If this value is not properly set, all values encrypted by Laravel will be insecure.
+Перед использованием шифрования Laravel обязательно задайте ключ `key` в конфиге `config/app.php`. Для этого вам надо использовать команду `php artisan key:generate`, которая использует надёжный генератор случайных чисел для создания вашего ключа. Без этого ключа все зашифрованные Laravel значения не будут безопасными.
 
 <a name="using-the-encrypter"></a>
-## Using The Encrypter
+## Использование шифратора
 
-#### Encrypting A Value
+#### Шифрование значения
 
-You may encrypt a value using the `encrypt` helper. All encrypted values are encrypted using OpenSSL and the `AES-256-CBC` cipher. Furthermore, all encrypted values are signed with a message authentication code (MAC) to detect any modifications to the encrypted string:
+Вы можете зашифровать значение с помощью хелпера `encrypt`. Все значения шифруются с помощью OpenSSL и шифра `AES-256-CBC`. Более того, все шифрованные значения подписаны кодом аутентификации сообщения (MAC) для обнаружения любых изменений в зашифрованной строке:
 
     <?php
 
@@ -32,7 +36,7 @@ You may encrypt a value using the `encrypt` helper. All encrypted values are enc
     class UserController extends Controller
     {
         /**
-         * Store a secret message for the user.
+         * Сохранение секретного сообщения для пользователя.
          *
          * @param  Request  $request
          * @param  int  $id
@@ -48,9 +52,9 @@ You may encrypt a value using the `encrypt` helper. All encrypted values are enc
         }
     }
 
-#### Encrypting Without Serialization
+#### Шифрование без сериализации
 
-Encrypted values are passed through `serialize` during encryption, which allows for encryption of objects and arrays. Thus, non-PHP clients receiving encrypted values will need to `unserialize` the data. If you would like to encrypt and decrypt values without serialization, you may use the `encryptString` and `decryptString` methods of the `Crypt` facade:
+При шифровании значения подвергаются "сериализации", что позволяет шифровать объекты и массивы. Поэтому при получении шифрованных значений не-PHP клиентам необходимо будет "десериализовать" данные. Если вы хотите зашифровать и расшифровать данные без сериализации, то можете использовать методы `encryptString` и `decryptString` фасада `Crypt`:
 
     use Illuminate\Support\Facades\Crypt;
 
@@ -58,9 +62,9 @@ Encrypted values are passed through `serialize` during encryption, which allows 
 
     $decrypted = Crypt::decryptString($encrypted);
 
-#### Decrypting A Value
+#### Расшифровка значения
 
-You may decrypt values using the `decrypt` helper. If the value can not be properly decrypted, such as when the MAC is invalid, an `Illuminate\Contracts\Encryption\DecryptException` will be thrown:
+Вы можете расшифровать значение при помощи хелпера `decrypt`. Если значение не может быть корректно расшифровано, например, при неверном MAC, будет выброшено исключение `Illuminate\Contracts\Encryption\DecryptException`:
 
     use Illuminate\Contracts\Encryption\DecryptException;
 
