@@ -1,19 +1,23 @@
-# Hashing
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Basic Usage](#basic-usage)
+---
+
+# Хеширование
+
+- [Введение](#introduction)
+- [Основы использования](#basic-usage)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-The Laravel `Hash` [facade](/docs/{{version}}/facades) provides secure Bcrypt hashing for storing user passwords. If you are using the built-in `LoginController` and `RegisterController` classes that are included with your Laravel application, they will automatically use Bcrypt for registration and authentication.
+[Фасад](/docs/{{version}}/facades) `Hash` в Laravel обеспечивает надёжное Bcrypt-хеширование для хранения паролей пользователей. Если вы используете встроенные классы `LoginController` и `RegisterController`, включённые в ваше Laravel-приложение, они будут автоматически использовать Bcrypt для регистрации и авторизации.
 
-> {tip} Bcrypt is a great choice for hashing passwords because its "work factor" is adjustable, which means that the time it takes to generate a hash can be increased as hardware power increases.
+> {tip} отличный выбор для хеширования паролей, потому что сложность его вычисления настраивается. Это значит, что можно увеличить время генерации хеша, если вы располагаете мощным железом.
 
 <a name="basic-usage"></a>
-## Basic Usage
+## Основы использования
 
-You may hash a password by calling the `make` method on the `Hash` facade:
+Вы можете хешировать пароль, вызвав метод `make` фасада `Hash`:
 
     <?php
 
@@ -26,14 +30,14 @@ You may hash a password by calling the `make` method on the `Hash` facade:
     class UpdatePasswordController extends Controller
     {
         /**
-         * Update the password for the user.
+         * Обновление пароля пользователя.
          *
          * @param  Request  $request
          * @return Response
          */
         public function update(Request $request)
         {
-            // Validate the new password length...
+            // Проверка длины нового пароля...
 
             $request->user()->fill([
                 'password' => Hash::make($request->newPassword)
@@ -41,17 +45,17 @@ You may hash a password by calling the `make` method on the `Hash` facade:
         }
     }
 
-#### Verifying A Password Against A Hash
+#### Сверка пароля с хешем
 
-The `check` method allows you to verify that a given plain-text string corresponds to a given hash. However, if you are using the `LoginController` [included with Laravel](/docs/{{version}}/authentication), you will probably not need to use this directly, as this controller automatically calls this method:
+Метод `check` позволяет сверить текстовую строку и имеющийся хеш. Но если вы используете [встроенный в Laravel](/docs/{{version}}/authentication)`LoginController`, то вам не нужно использовать этот метод, так как этот контроллер автоматически вызывает этот метод:
 
     if (Hash::check('plain-text', $hashedPassword)) {
-        // The passwords match...
+        // Пароли совпадают...
     }
 
-#### Checking If A Password Needs To Be Rehashed
+#### Проверка необходимости повторного хеширования пароля
 
-The `needsRehash` function allows you to determine if the work factor used by the hasher has changed since the password was hashed:
+Функция `needsRehash` позволяет определить, изменилась ли используемая сложность хеширования с момента создания хеша для пароля:
 
     if (Hash::needsRehash($hashed)) {
         $hashed = Hash::make('plain-text');
