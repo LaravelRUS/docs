@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git 131b0d33e10ac5516abb203f5744eb75f17697c7
 
 ---
 
@@ -82,6 +82,7 @@ Laravel включает множество глобальных вспомог�
 [str_limit](#method-str-limit)
 [starts_with](#method-starts-with)
 [str_after](#method-str-after)
+[str_before](#method-str-before)
 [str_contains](#method-str-contains)
 [str_finish](#method-str-finish)
 [str_is](#method-str-is)
@@ -134,10 +135,12 @@ Laravel включает множество глобальных вспомог�
 [method_field](#method-method-field)
 [old](#method-old)
 [redirect](#method-redirect)
+[report](#method-report)
 [request](#method-request)
 [response](#method-response)
 [retry](#method-retry)
 [session](#method-session)
+[tap](#method-tap)
 [value](#method-value)
 [view](#method-view)
 
@@ -610,6 +613,15 @@ Laravel включает множество глобальных вспомог�
 
     // ' a test'
 
+<a name="method-str-before"></a>
+#### `str_before()` {#collection-method}
+
+Функция `str_before` возвращает все, что содержится в строке до переданной подстроки:
+
+    $value = str_before('Test :it before', ':it before');
+
+    // 'Test '
+
 <a name="method-str-contains"></a>
 #### `str_contains()` {#collection-method}
 
@@ -990,6 +1002,13 @@ The `title_case` преобразует строку в `Title Case`:
 
     return redirect()->route('route.name');
 
+<a name="method-report"></a>
+#### `report()` {#collection-method}
+
+Функция `report` сообщит об исключении, используя метод` report` обработчика исключения:
+
+    report($e);
+
 <a name="method-request"></a>
 #### `request()` {#collection-method}
 
@@ -1033,6 +1052,24 @@ The `title_case` преобразует строку в `Title Case`:
     $value = session()->get('key');
 
     session()->put('key', $value);
+
+<a name="method-tap"></a>
+#### `tap()` {#collection-method}
+
+Функция `tap` принимает два аргумента: некоторую переменную `$value` и функцию. Эта переменная передается в функцию-аргумент в виде аргумента. Эта же переменная возвращается какрезультат выполнения хелпера. Возвращаемое значение функции-аргумента игнорируется:
+
+    $user = tap(User::first(), function ($user) {
+        $user->name = 'taylor';
+
+        $user->save();
+    });
+
+Если функция-аргумент не передается в хелпер, вы можете вызвать любой метод данного `$value`. Возвращаемое значение будет всегда `$value`, несмотря на то, что возвращает этот метод на самом деле. Например, метод Eloquent `update()` возвращает целое число. Но мы при помощи хелпера `tap` можем заставить возвращать его собственно модель:
+
+    $user = tap($user)->update([
+        'name' => $name,
+        'email' => $email
+    ]);
 
 <a name="method-value"></a>
 #### `value()` {#collection-method}
