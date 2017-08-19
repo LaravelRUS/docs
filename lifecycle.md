@@ -1,50 +1,54 @@
-# Request Lifecycle
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Lifecycle Overview](#lifecycle-overview)
-- [Focus On Service Providers](#focus-on-service-providers)
+---
+
+# Жизненный цикл запроса
+
+- [Введение](#introduction)
+- [Обзор жизненного цикла](#lifecycle-overview)
+- [Фокус на сервис-провайдеры](#focus-on-service-providers)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-When using any tool in the "real world", you feel more confident if you understand how that tool works. Application development is no different. When you understand how your development tools function, you feel more comfortable and confident using them.
+При использовании любого инструмента в "реальном мире" вы чувствуете больше уверенности, когда понимаете, как он устроен. Разработка приложений — не исключение. Когда вы понимаете каким образом функционируют ваши средства разработки, то чувствуете себя более комфортно и уверенно.
 
-The goal of this document is to give you a good, high-level overview of how the Laravel framework works. By getting to know the overall framework better, everything feels less "magical" and you will be more confident building your applications. If you don't understand all of the terms right away, don't lose heart! Just try to get a basic grasp of what is going on, and your knowledge will grow as you explore other sections of the documentation.
+Задача этого документа - дать вам хороший поверхностный обзор того, как работает фреймворк Laravel. Чем лучше вы узнаете фреймворк, тем меньше в нем остается "волшебства", и тем более уверенно вы будете создавать приложения. Не отчаивайтесь, если не поймете всё сразу! Постарайтесь просто получить базовое понимание того, что происходит, и ваши знания будут расти по мере изучения других разделов документации.
 
 <a name="lifecycle-overview"></a>
-## Lifecycle Overview
+## Обзор жизненного цикла
 
-### First Things
+### Первые шаги
 
-The entry point for all requests to a Laravel application is the `public/index.php` file. All requests are directed to this file by your web server (Apache / Nginx) configuration. The `index.php` file doesn't contain much code. Rather, it is simply a starting point for loading the rest of the framework.
+Входная точка для всех запросов к приложению Laravel - файл `public/index.php`. Все запросы направляются в этот файл настройками вашего веб-сервера (Apache / nginx). Файл `index.php` не содержит много кода. Скорее, это просто отправная точка для загрузки всего остального фреймворка.
 
-The `index.php` file loads the Composer generated autoloader definition, and then retrieves an instance of the Laravel application from `bootstrap/app.php` script. The first action taken by Laravel itself is to create an instance of the application / [service container](/docs/{{version}}/container).
+Файл `index.php` загружает автозагрузчик, который сгенерировал Composer, а затем извлекает экземпляр Laravel-приложения из скрипта `bootstrap/app.php`. Первое действие самого Laravel -  создать экземпляр приложения / [сервис-контейнера](/docs/{{version}}/container).
 
-### HTTP / Console Kernels
+### Ядра HTTP / Console
 
-Next, the incoming request is sent to either the HTTP kernel or the console kernel, depending on the type of request that is entering the application. These two kernels serve as the central location that all requests flow through. For now, let's just focus on the HTTP kernel, which is located in `app/Http/Kernel.php`.
+Затем входящий запрос посылается либо в HTTP-ядро, либо в ядро консоли, в зависимости от типа этого запроса. Эти два ядра служат центральным местом, через которое протекают все запросы. Пока давайте рассмотрим HTTP-ядро, которое расположено в `app/Http/Kernel.php`.
 
-The HTTP kernel extends the `Illuminate\Foundation\Http\Kernel` class, which defines an array of `bootstrappers` that will be run before the request is executed. These bootstrappers configure error handling, configure logging, [detect the application environment](/docs/{{version}}/configuration#environment-configuration), and perform other tasks that need to be done before the request is actually handled.
+HTTP-ядро наследует класс `Illuminate\Foundation\Http\Kernel`, который определяет массив загрузчиков `bootstrappers`, которые будут запущены перед выполнением запроса. Эти загрузчики настраивают обработку ошибок, ведение журналов, [определяют среду приложения](/docs/{{version}}/configuration#environment-configuration) и выполняют другие задачи, которые надо выполнить перед самой обработкой запроса.
 
-The HTTP kernel also defines a list of HTTP [middleware](/docs/{{version}}/middleware) that all requests must pass through before being handled by the application. These middleware handle reading and writing the [HTTP session](/docs/{{version}}/session), determining if the application is in maintenance mode, [verifying the CSRF token](/docs/{{version}}/csrf), and more.
+HTTP-ядро также определяет список HTTP [посредников](/docs/{{version}}/middleware), через которые должны пройти все запросы, прежде чем будут обработаны приложением. Эти посредники обрабатывают чтение и запись [HTTP-сессии](/docs/{{version}}/session), определяя, находится ли приложение в режиме обслуживания, [проверяя CSRF-токен](/docs/{{version}}/csrf) и др.
 
-The method signature for the HTTP kernel's `handle` method is quite simple: receive a `Request` and return a `Response`. Think of the Kernel as being a big black box that represents your entire application. Feed it HTTP requests and it will return HTTP responses.
+Принцип действия метода `handle` HTTP-ядра довольно прост: получить `Request` и вернуть `Response`. Представьте ядро в виде большого черного ящика, который представляет собой всё ваше приложение. Наполняйте его HTTP-запросами и он будет возвращать HTTP-ответы.
 
-#### Service Providers
+#### Сервис-провайдеры
 
-One of the most important Kernel bootstrapping actions is loading the [service providers](/docs/{{version}}/providers) for your application. All of the service providers for the application are configured in the `config/app.php` configuration file's `providers` array. First, the `register` method will be called on all providers, then, once all providers have been registered, the `boot` method will be called.
+Одно из важнейших действий ядра при загрузке — загрузка [сервис-провайдеров](/docs/{{version}}/providers) для вашего приложения. Все сервис-провайдеры настраиваются в конфиге `config/app.php` массива `providers`. Сначала будет вызван метод `register` для всех сервис-провайдеров, а когда все они будут зарегистрированы, будет вызван метод `boot`.
 
-Service providers are responsible for bootstrapping all of the framework's various components, such as the database, queue, validation, and routing components. Since they bootstrap and configure every feature offered by the framework, service providers are the most important aspect of the entire Laravel bootstrap process.
+Сервис-провайдеры отвечают за начальную загрузку всевозможных компонентов фреймворка: таких как БД, очередь, проверка ввода и маршрутизация. Сервис-провайдеры — важнейший элемент всего процесса начальной загрузки Laravel, так как они отвечают за загрузку и настройку всех возможностей фреймворка.
 
-#### Dispatch Request
+#### Выполнение запроса
 
-Once the application has been bootstrapped and all service providers have been registered, the `Request` will be handed off to the router for dispatching. The router will dispatch the request to a route or controller, as well as run any route specific middleware.
+Как только все сервис-провайдеры зарегистрированы и приложение загружено, `Request` поступает в роутер для обработки. Роутер отправит запрос по роуту или контроллеру, а также запустит посредника, соответствующего роуту.
 
 <a name="focus-on-service-providers"></a>
-## Focus On Service Providers
+## Фокус на сервис-провайдеры
 
-Service providers are truly the key to bootstrapping a Laravel application. The application instance is created, the service providers are registered, and the request is handed to the bootstrapped application. It's really that simple!
+Сервис-провайдеры — поистине ключ к инициализации и настройке Laravel-приложения. Создаётся экземпляр приложения, регистрируются сервис-провайдеры, и запрос передается в загруженное приложение. Всё действительно просто!
 
-Having a firm grasp of how a Laravel application is built and bootstrapped via service providers is very valuable. Of course, your application's default service providers are stored in the `app/Providers` directory.
+Очень важно иметь хорошее понимание того, как Laravel-приложение строится и загружается через сервис-провайдеры. Конечно, сервис-провайдеры вашего приложения по-умолчанию хранятся в директории `app/Providers`.
 
-By default, the `AppServiceProvider` is fairly empty. This provider is a great place to add your application's own bootstrapping and service container bindings. Of course, for large applications, you may wish to create several service providers, each with a more granular type of bootstrapping.
+Основной файл, на который вам надо обратить внимание - `AppServiceProvider`. По умолчанию он почти пустой. Этот провайдер является отличным местом для добавления в ваше приложение собственной начальной загрузки и привязок сервис-контейнера. Конечно, в случае больших приложений, возможно вы захотите создать несколько файлов сервис-провайдеров, каждый со своей специализацией.
