@@ -1,48 +1,52 @@
-# Configuration
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Environment Configuration](#environment-configuration)
-    - [Retrieving Environment Configuration](#retrieving-environment-configuration)
-    - [Determining The Current Environment](#determining-the-current-environment)
-- [Accessing Configuration Values](#accessing-configuration-values)
-- [Configuration Caching](#configuration-caching)
-- [Maintenance Mode](#maintenance-mode)
+---
+
+# Настройка
+
+- [Введение](#introduction)
+- [Настройка среды](#environment-configuration)
+    - [Чтение настроек среды](#retrieving-environment-configuration)
+    - [Определение текущей среды](#determining-the-current-environment)
+- [Чтение значений настроек](#accessing-configuration-values)
+- [Кэширование настроек](#configuration-caching)
+- [Режим обслуживания](#maintenance-mode)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-All of the configuration files for the Laravel framework are stored in the `config` directory. Each option is documented, so feel free to look through the files and get familiar with the options available to you.
+Все файлы настроек Laravel хранятся в папке `config`. Каждая настройка задокументирована, поэтому не стесняйтесь изучить эти файлы и познакомиться с доступными возможностями конфигурирования.
 
 <a name="environment-configuration"></a>
-## Environment Configuration
+## Настройка среды
 
-It is often helpful to have different configuration values based on the environment where the application is running. For example, you may wish to use a different cache driver locally than you do on your production server.
+Часто необходимо иметь разные значения для различных настроек в зависимости от среды, в которой выполняется приложение. Например, вы можете захотеть использовать разные драйвера кэша на локальном и продакшн-сервере.
 
-To make this a cinch, Laravel utilizes the [DotEnv](https://github.com/vlucas/phpdotenv) PHP library by Vance Lucas. In a fresh Laravel installation, the root directory of your application will contain a `.env.example` file. If you install Laravel via Composer, this file will automatically be renamed to `.env`. Otherwise, you should rename the file manually.
+Для этого в Laravel используется PHP-библиотека [DotEnv](https://github.com/vlucas/phpdotenv) от Ванса Лукаса. В свежей инсталляции Laravel в корне вашего приложения будет файл `.env.example`. Если вы установили Laravel с помощью Composer, этот файл будет автоматически переименован в `.env`. Если же этого не произошло - вам необходимо сделать это вручную.
 
-Your `.env` file should not be committed to your application's source control, since each developer / server using your application could require a different environment configuration. Furthermore, this would be a security risk in the event an intruder gain access to your source control repository, since any sensitive credentials would get exposed.
+Ваш файл `.env` не должен быть включён в систему контроля версий вашего приложения, так как каждому использующему ваше приложение разработчику/серверу может потребоваться разная настройка среды. Кроме того, это будет угрозой безопасности в случае, если злоумышленник получит доступ к вашему репозиторию управления версиями, так как будут обнаружены все конфиденциальные учетные данные.
 
-If you are developing with a team, you may wish to continue including a `.env.example` file with your application. By putting place-holder values in the example configuration file, other developers on your team can clearly see which environment variables are needed to run your application. You may also create a `.env.testing` file. This file will override values from the `.env` file when running PHPUnit tests or executing Artisan commands with the `--env=testing` option.
+Если вы работаете в команде, то, возможно, вам захочется и дальше поставлять файл `.env.example` с вашим приложением. Поместив примеры значений в этот файл, вы дадите понять другим разработчикам, какие переменные среды необходимы для запуска вашего приложения. Также вы можете создать файл `.env.testing`. Этот файл переопределит значения файла `.env` при запуске тестов PHPUnit и при выполнении Artisan-команд с ключом `--env=testing`.
 
-> {tip} Any variable in your `.env` file can be overridden by external environment variables such as server-level or system-level environment variables.
+> {tip} Любую переменную в вашем `.env` файле можно переопределить при помощи переменных внешней среды, таких как переменные на уровне сервера или на системном уровне.
 
 <a name="retrieving-environment-configuration"></a>
-### Retrieving Environment Configuration
+### Чтение настроек среды
 
-All of the variables listed in this file will be loaded into the `$_ENV` PHP super-global when your application receives a request. However, you may use the `env` helper to retrieve values from these variables in your configuration files. In fact, if you review the Laravel configuration files, you will notice several of the options already using this helper:
+Все перечисленные в этом файле переменные будут загружены в супер-глобальную переменную PHP `$_ENV` , когда ваше приложение получит запрос. Но вы можете использовать хелпер `env` для получения значений этих переменных в ваших конфигурационных файлах. На самом деле, если вы заглянете в файлы настроек Laravel, то заметите несколько опций, уже использующих эту функцию:
 
     'debug' => env('APP_DEBUG', false),
 
-The second value passed to the `env` function is the "default value". This value will be used if no environment variable exists for the given key.
+Второе значение, передаваемое функции `env` - значение по-умолчанию. Оно будет использовано, если нет такой переменной среды для переданного ключа.
 
 <a name="determining-the-current-environment"></a>
-### Determining The Current Environment
+### Определение текущей среды
 
-The current application environment is determined via the `APP_ENV` variable from your `.env` file. You may access this value via the `environment` method on the `App` [facade](/docs/{{version}}/facades):
+Текущая среда приложения определяется по переменной `APP_ENV` файла `.env`.  Вы можете получить это значение методом `environment` [фасада](/docs/{{version}}/facades) `App`:
 
     $environment = App::environment();
 
-You may also pass arguments to the `environment` method to check if the environment matches a given value. The method will return `true` if the environment matches any of the given values:
+Также вы можете передавать аргументы в метод `environment` , чтобы проверить — совпадает ли имя среды с заданным значением. Метод вернёт `true`, если среда совпадёт с любым из них:
 
     if (App::environment('local')) {
         // The environment is local
@@ -52,51 +56,51 @@ You may also pass arguments to the `environment` method to check if the environm
         // The environment is either local OR staging...
     }
 
-> {tip} The current application environment detection can be overriden by a server-level `APP_ENV` environment variable. This can be useful when you need to share the same application for different environment configurations, so you can set up a given host to match a given environment in your server's configurations.
+> {tip} Определение текущей среды приложения можно переопределить переменной среды `APP_ENV` на уровне сервера. Это может быть полезно, когда вам нужно использовать одно и то же приложение для разных настроек среды, поэтому вы можете настроить переданный хост для соответствия данной среде в настройках вашего сервера.
 
 <a name="accessing-configuration-values"></a>
-## Accessing Configuration Values
+## Чтение значений настроек
 
-You may easily access your configuration values using the global `config` helper function from anywhere in your application. The configuration values may be accessed using "dot" syntax, which includes the name of the file and option you wish to access. A default value may also be specified and will be returned if the configuration option does not exist:
+Вы можете легко обращаться к значениям настроек с помощью глобального хелпера `config` из любого места в вашем приложении. К значениям настроек можно обращаться, используя "точечный" синтаксис, в который входит имя файла и название опции. При этом можно указать значение по умолчанию, которое будет возвращено при отсутствии запрашиваемой опции:
 
     $value = config('app.timezone');
 
-To set configuration values at runtime, pass an array to the `config` helper:
+Для задания значений настроек во время выполнения передайте массив в хелпер `config`:
 
     config(['app.timezone' => 'America/Chicago']);
 
 <a name="configuration-caching"></a>
-## Configuration Caching
+## Кэширование настроек
 
-To give your application a speed boost, you should cache all of your configuration files into a single file using the `config:cache` Artisan command. This will combine all of the configuration options for your application into a single file which will be loaded quickly by the framework.
+Для повышения скорости работы вашего приложения вы можете кэшировать все файлы настроек в единый файл с помощью Artisan-команды `config:cache`. Она объединит все параметры настроек вашего приложения в единый файл, который будет быстро загружен фреймворком.
 
-You should typically run the `php artisan config:cache` command as part of your production deployment routine. The command should not be run during local development as configuration options will frequently need to be changed during the course of your application's development.
+У вас должно войти в привычку запускать команду `php artisan config:cache` как типичную часть разработки. Не стоит запускать эту команду в процессе локальной разработки, так как при этом часто требуется изменять параметры настроек в процессе разработки вашего приложения.
 
-> {note} If you execute the `config:cache` command during your deployment process, you should be sure that you are only calling the `env` function from within your configuration files.
+> {note} Если вы выполняете команду `config:cache` во время процесса развёртывания, вы должны быть уверены, что вызываете функцию `env` только из ваших файлов настроек.
 
 <a name="maintenance-mode"></a>
-## Maintenance Mode
+## Режим обслуживания
 
-When your application is in maintenance mode, a custom view will be displayed for all requests into your application. This makes it easy to "disable" your application while it is updating or when you are performing maintenance. A maintenance mode check is included in the default middleware stack for your application. If the application is in maintenance mode, a `MaintenanceModeException` will be thrown with a status code of 503.
+Когда ваше приложение находится в режиме обслуживания, для всех запросов в вашем приложении будет отображаться специальный шаблон. Это позволяет легко «отключать» приложение во время его обновления или при обслуживании. Проверка режима обслуживания включена в стандартный набор посредников для вашего приложения. Когда приложение находится в режиме обслуживания, будет брошено исключение `MaintenanceModeException` с кодом состояния 503.
 
-To enable maintenance mode, simply execute the `down` Artisan command:
+Для включения этого режима просто выполните Artisan-команду `down`:
 
     php artisan down
 
-You may also provide `message` and `retry` options to the `down` command. The `message` value may be used to display or log a custom message, while the `retry` value will be set as the `Retry-After` HTTP header's value:
+Также вы можете передать в команду `down` опции `message` и `retry`. Значение `message` можно использовать для вывода или записи в журнал необходимого сообщения, а значение `retry` будет задано в качестве значения HTTP-заголовка `Retry-After`:
 
     php artisan down --message="Upgrading Database" --retry=60
 
-To disable maintenance mode, use the `up` command:
+Чтобы выйти из режима обслуживания выполните команду `up`:
 
     php artisan up
 
-> {tip} You may customize the default maintenance mode template by defining your own template at `resources/views/errors/503.blade.php`.
+> {tip} Вы можете кастомизировать шаблон режима по-умолчанию, определив собственный шаблон в `resources/views/errors/503.blade.php`.
 
-#### Maintenance Mode & Queues
+#### Режим обслуживания и очереди
 
-While your application is in maintenance mode, no [queued jobs](/docs/{{version}}/queues) will be handled. The jobs will continue to be handled as normal once the application is out of maintenance mode.
+Пока ваше приложение находится в режиме обслуживания, не будут обрабатываться никакие [задачи очередей](/docs/{{version}}/queues). Задачи продолжат обрабатываться как обычно, как только приложение выйдет из режима обслуживания.
 
-#### Alternatives To Maintenance Mode
+#### Альтернативы режиму обслуживания
 
-Since maintenance mode requires your application to have several seconds of downtime, consider alternatives like [Envoyer](https://envoyer.io) to accomplish zero-downtime deployment with Laravel.
+Поскольку для режима обслуживания необходима остановка вашего приложения на несколько секунд, рассмотрите такие альтернативы, как [Envoyer](https://envoyer.io), чтобы обеспечить обновление на лету с Laravel.
