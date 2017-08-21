@@ -1,15 +1,19 @@
-# Eloquent: Collections
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Available Methods](#available-methods)
-- [Custom Collections](#custom-collections)
+---
+
+# Eloquent: Коллекции
+
+- [Введение](#introduction)
+- [Доступные методы](#available-methods)
+- [Пользовательские коллекции](#custom-collections)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-All multi-result sets returned by Eloquent are instances of the `Illuminate\Database\Eloquent\Collection` object, including results retrieved via the `get` method or accessed via a relationship. The Eloquent collection object extends the Laravel [base collection](/docs/{{version}}/collections), so it naturally inherits dozens of methods used to fluently work with the underlying array of Eloquent models.
+Все наборы результатов, возвращаемые Eloquent, являются экземплярами объекта `Illuminate\Database\Eloquent\Collection` , в том числе результаты, получаемые с помощью метода `get` или доступные через отношения. Объект коллекции Eloquent наследует [базовую коллекцию](/docs/{{version}}/collections) Laravel, поэтому он наследует десятки методов, используемых для гибкой работы с базовым набором моделей Eloquent.
 
-Of course, all collections also serve as iterators, allowing you to loop over them as if they were simple PHP arrays:
+Конечно же, все коллекции также служат в качестве итераторов, позволяя вам перебирать их в цикле, как будто они простые PHP-массивы:
 
     $users = App\User::where('active', 1)->get();
 
@@ -17,7 +21,7 @@ Of course, all collections also serve as iterators, allowing you to loop over th
         echo $user->name;
     }
 
-However, collections are much more powerful than arrays and expose a variety of map / reduce operations that may be chained using an intuitive interface. For example, let's remove all inactive models and gather the first name for each remaining user:
+Тем не менее, коллекции гораздо мощнее, чем массивы и предоставляют различные варианты операций map/reduce, которые могут быть сцеплены с использованием интуитивно понятного интерфейса. Например, давайте удалим все неактивные модели и возвратим имена для каждого оставшегося пользователя:
 
     $users = App\User::where('active', 1)->get();
 
@@ -28,14 +32,14 @@ However, collections are much more powerful than arrays and expose a variety of 
         return $user->name;
     });
 
-> {note} While most Eloquent collection methods return a new instance of an Eloquent collection, the `pluck`, `keys`, `zip`, `collapse`, `flatten` and `flip` methods return a [base collection](/docs/{{version}}/collections) instance. Likewise, if a `map` operation returns a collection that does not contain any Eloquent models, it will be automatically cast to a base collection.
+> {note} Хотя большинство методов для работы с коллекциями Eloquent возвращают новый экземпляр коллекции Eloquent, методы `pluck`, `keys`, `zip`, `collapse`, `flatten` и `flip` возвращают экземпляр [базовой коллекции](/docs/{{version}}/collections). Более того, если операция `map` вернёт коллекцию, в которой нет моделей Eloquent, она будет автоматически приведена к базовой коллекции.
 
 <a name="available-methods"></a>
-## Available Methods
+## Доступные методы
 
-### The Base Collection
+### Базовая коллекция
 
-All Eloquent collections extend the base [Laravel collection](/docs/{{version}}/collections) object; therefore, they inherit all of the powerful methods provided by the base collection class:
+Все коллекции Eloquent наследуют объект базовой [коллекции Laravel](/docs/{{version}}/collections); поэтому они наследуют все мощные методы, предоставляемые базовым классом коллекции:
 
 <style>
     #collection-method-list > p {
@@ -133,9 +137,9 @@ All Eloquent collections extend the base [Laravel collection](/docs/{{version}}/
 </div>
 
 <a name="custom-collections"></a>
-## Custom Collections
+## Пользовательские коллекции
 
-If you need to use a custom `Collection` object with your own extension methods, you may override the `newCollection` method on your model:
+Если вам нужно использовать пользовательский объект `Collection` со своими собственными методами наследования, вы можете переопределить метод `newCollection` в своей модели:
 
     <?php
 
@@ -147,7 +151,7 @@ If you need to use a custom `Collection` object with your own extension methods,
     class User extends Model
     {
         /**
-         * Create a new Eloquent Collection instance.
+         * Создание экземпляра новой Eloquent коллекции.
          *
          * @param  array  $models
          * @return \Illuminate\Database\Eloquent\Collection
@@ -158,4 +162,4 @@ If you need to use a custom `Collection` object with your own extension methods,
         }
     }
 
-Once you have defined a `newCollection` method, you will receive an instance of your custom collection anytime Eloquent returns a `Collection` instance of that model. If you would like to use a custom collection for every model in your application, you should override the `newCollection` method on a base model class that is extended by all of your models.
+После определения метода `newCollection` вы получите экземпляр пользовательской коллекции при любом обращении к экземпляру `Collection` этой модели. Если вы хотите использовать собственную коллекцию для каждой модели в вашем приложении, вы должны переопределить метод `newCollection` в базовом классе модели, наследуемой всеми вашими моделями.
