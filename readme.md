@@ -24,6 +24,11 @@ Laravel 5
 - **action** — метод контроллера
 - **alias** — псевдоним
 
+**B**
+
+- **(http) basic authentication** — http-аутентификация
+- **binding** — связывание
+
 **C**
 
 - **callback** — функция обратного вызова, анонимная функция, или просто функция
@@ -32,6 +37,7 @@ Laravel 5
 **D**
 
 - **dependency injection** — внедрение зависимостей
+- **deploying** — развёртывание
 
 **F**
 
@@ -58,6 +64,7 @@ Laravel 5
 
 - **middleware** — посредник
 - **migration** — миграция
+- **module bundler** — сборщик модулей
 
 **Q**
 
@@ -67,7 +74,10 @@ Laravel 5
 
 - **redirect** — редирект
 - **render** — отображение
-- **render a view** — отображаение шаблона
+- **render a view** — отображение шаблона
+- **request** — запрос
+- **resolver** — обработчик
+- **response** — ответ
 - **route** — роут
 
 **S**
@@ -76,9 +86,13 @@ Laravel 5
 - **service container** — сервис-контейнер
 - **service provider** — сервис-провайдер
 - **signature** — сигнатура
+- **source control** — система контроля версий
+- **stateful** — с сохранением состояния
+- **stateless** — без сохранения состояния
 
 **T**
 
+- **throttling** — органичение числа попыток
 - **throw an exception** — бросить исключение
 - **trait** — трейт
 - **truth test** — проверка на истинность
