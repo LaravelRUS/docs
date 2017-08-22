@@ -20,7 +20,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 - [Макрос отклика](#response-macros)
 
 <a name="creating-responses"></a>
-## Создание откликов (responce)
+## Создание откликов (response)
 
 #### Строки и массивы
 
