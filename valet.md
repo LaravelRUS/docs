@@ -1,28 +1,32 @@
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+
+---
+
 # Laravel Valet
 
-- [Introduction](#introduction)
-    - [Valet Or Homestead](#valet-or-homestead)
-- [Installation](#installation)
-    - [Upgrading](#upgrading)
-- [Serving Sites](#serving-sites)
-    - [The "Park" Command](#the-park-command)
-    - [The "Link" Command](#the-link-command)
-    - [Securing Sites With TLS](#securing-sites)
-- [Sharing Sites](#sharing-sites)
-- [Custom Valet Drivers](#custom-valet-drivers)
-    - [Local Drivers](#local-drivers)
-- [Other Valet Commands](#other-valet-commands)
+- [Введение](#introduction)
+    - [Valet или Homestead](#valet-or-homestead)
+- [Установка](#installation)
+    - [Обновление](#upgrading)
+- [Обслуживание сайтов](#serving-sites)
+    - [Команда "Park"](#the-park-command)
+    - [Команда "Link"](#the-link-command)
+    - [Защита сайтов при помощи TLS](#securing-sites)
+- [Общий доступ к сайтам](#sharing-sites)
+- [Пользовательские драйверы Valet](#custom-valet-drivers)
+    - [Локальные драйверы](#local-drivers)
+- [Другие команды Valet](#other-valet-commands)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Valet is a Laravel development environment for Mac minimalists. No Vagrant, no `/etc/hosts` file. You can even share your sites publicly using local tunnels. _Yeah, we like it too._
+Valet — среда для разработки в Laravel для минималистов, работающих на Mac. Без Vagrant, без файла `/etc/hosts`. Можно даже расшаривать сайты в общий доступ через локальные туннели. _Да, нам тоже это нравится._
 
-Laravel Valet configures your Mac to always run [Nginx](https://www.nginx.com/) in the background when your machine starts. Then, using [DnsMasq](https://en.wikipedia.org/wiki/Dnsmasq), Valet proxies all requests on the `*.dev` domain to point to sites installed on your local machine.
+Laravel Valet включает на вашем Mac фоновую автозагрузку [nginx](https://www.nginx.com/). Затем с помощью [DnsMasq](https://en.wikipedia.org/wiki/Dnsmasq), Valet настраивает прокси для всех запросов к домену `*.dev` для переадресации их на сайты на вашей локальной машине.
 
-In other words, a blazing fast Laravel development environment that uses roughly 7 MB of RAM. Valet isn't a complete replacement for Vagrant or Homestead, but provides a great alternative if you want flexible basics, prefer extreme speed, or are working on a machine with a limited amount of RAM.
+Другими словами, это молниеносное окружение для разработки в Laravel, которое использует около 7 Мб RAM. Valet не является полной заменой для Vagrant или Homestead, но предоставляет отличную альтернативу, когда вам нужна база для гибкой настройки, максимальная скорость, или вы работаете на машине с ограниченным объёмом RAM.
 
-Out of the box, Valet support includes, but is not limited to:
+Изначально Valet поддерживает, но не ограничивается только ими:
 
 <div class="content-list" markdown="1">
 - [Laravel](https://laravel.com)
@@ -41,143 +45,143 @@ Out of the box, Valet support includes, but is not limited to:
 - [Sculpin](https://sculpin.io/)
 - [Slim](https://www.slimframework.com)
 - [Statamic](https://statamic.com)
-- Static HTML
+- Статический HTML
 - [Symfony](https://symfony.com)
 - [WordPress](https://wordpress.org)
 - [Zend](https://framework.zend.com)
 </div>
 
-However, you may extend Valet with your own [custom drivers](#custom-valet-drivers).
+Также вы можете дополнить Valet своими [собственными драйверами](#custom-valet-drivers).
 
 <a name="valet-or-homestead"></a>
-### Valet Or Homestead
+### Valet или Homestead
 
-As you may know, Laravel offers [Homestead](/docs/{{version}}/homestead), another local Laravel development environment. Homestead and Valet differ in regards to their intended audience and their approach to local development. Homestead offers an entire Ubuntu virtual machine with automated Nginx configuration. Homestead is a wonderful choice if you want a fully virtualized Linux development environment or are on Windows / Linux.
+Как вы знаете, Laravel предлагает [Homestead](/docs/{{version}}/homestead) — другую локальную среду разработки. Valet и Homestead отличаются целевой аудиторией и подходом к локальной разработке. Homestead включает в себя целую виртуальную машину с Ubuntu и автоматической настройкой Nginx. Homestead — отличный выбор, если вам нужна полностью виртуальная среда разработки на Linux или на Windows / Linux.
 
-Valet only supports Mac, and requires you to install PHP and a database server directly onto your local machine. This is easily achieved by using [Homebrew](http://brew.sh/) with commands like `brew install php71` and `brew install mysql`. Valet provides a blazing fast local development environment with minimal resource consumption, so it's great for developers who only require PHP / MySQL and do not need a fully virtualized development environment.
+Valet поддерживает только Mac и требует установки PHP и сервера базы данных непосредственно на вашу локальную машину. Это легко делается при помощи [Homebrew](http://brew.sh/) такими командами, как `brew install php71` и `brew install mysql`. Valet обеспечивает молниеносную среду разработки с минимальным потреблением ресурсов, поэтому идеально подходит для разработчиков, использующих только PHP / MySQL и не нуждающихся в полностью виртуальной среде разработки.
 
-Both Valet and Homestead are great choices for configuring your Laravel development environment. Which one you choose will depend on your personal taste and your team's needs.
+И Valet, и Homestead являются отличным выбором для настройки среды разработки в Laravel. Выбор зависит от ваших личных предпочтений и потребностей вашей команды.
 
 <a name="installation"></a>
-## Installation
+## Установка
 
-**Valet requires macOS and [Homebrew](http://brew.sh/). Before installation, you should make sure that no other programs such as Apache or Nginx are binding to your local machine's port 80.**
+**Valet требует macOS и [Homebrew](http://brew.sh/). Перед установкой необходимо убедиться, что другие программы, такие как Apache и Nginx, не используют 80 порт вашей локальной машины.**
 
 <div class="content-list" markdown="1">
-- Install or update [Homebrew](http://brew.sh/) to the latest version using `brew update`.
-- Install PHP 7.1 using Homebrew via `brew install homebrew/php/php71`.
-- Install Valet with Composer via `composer global require laravel/valet`. Make sure the `~/.composer/vendor/bin` directory is in your system's "PATH".
-- Run the `valet install` command. This will configure and install Valet and DnsMasq, and register Valet's daemon to launch when your system starts.
+- Установите или обновите [Homebrew](http://brew.sh/) до последней версии с помощью `brew update`.
+- Установите PHP 7.1 с помощью Homebrew командой `brew install homebrew/php/php71`.
+- Установите Valet через Composer при помощи команды `composer global require laravel/valet`. Убедитесь, что в вашей системной переменной "PATH" есть директория `~/.composer/vendor/bin`.
+- Выполните команду `valet install`. Она установит и настроит Valet и DnsMasq, и пропишет демон Valet в автозагрузку.
 </div>
 
-Once Valet is installed, try pinging any `*.dev` domain on your terminal using a command such as `ping foobar.dev`. If Valet is installed correctly you should see this domain responding on `127.0.0.1`.
+Послу установки Valet, попробуйте запинговать любой домен `*.dev` на своем терминале при помощи команды `ping foobar.dev`. Если Valet установлен корректно, то вы увидите, что этот домен соответствует `127.0.0.1`.
 
-Valet will automatically start its daemon each time your machine boots. There is no need to run `valet start` or `valet install` ever again once the initial Valet installation is complete.
+Valet автоматически запустит своего демона при запуске ОС. После начальной установки Valet больше не потребуется выполнять `valet start` или `valet install`.
 
-#### Using Another Domain
+#### Использование другого домена
 
-By default, Valet serves your projects using the `.dev` TLD. If you'd like to use another domain, you can do so using the `valet domain tld-name` command.
+По умолчанию Valet использует для ваших проектов домен верхнего уровня `.dev`. Если вы хотите использовать другой домен, используйте команду `valet domain tld-name`.
 
-For example, if you'd like to use `.app` instead of `.dev`, run `valet domain app` and Valet will start serving your projects at `*.app` automatically.
+Например, чтобы использовать `.app` вместо `.dev`, выполните `valet domain app`, и Valet начнет атоматически использовать ваши проекты на `*.app`.
 
-#### Database
+#### База данных
 
-If you need a database, try MySQL by running `brew install mysql` on your command line. Once MySQL has been installed, you may start it using the `brew services start mysql` command. You can then connect to the database at `127.0.0.1` using the `root` username and an empty string for the password.
+Если вам нужна база данных, попробуйте MySQL с помощью команды `brew install mysql`. После установки MySQL, вы можете запустить её командой `brew services start mysql`. Затем вы можете подключиться к БД на `127.0.0.1`, используя имя пользователя `root` и пароль - пустая строка.
 
 <a name="upgrading"></a>
-### Upgrading
+### Обновление
 
-You may update your Valet installation using the `composer global update` command in your terminal. After upgrading, it is good practice to run the `valet install` command so Valet can make additional upgrades to your configuration files if necessary.
+Вы можете обновить установленный Valet терминальной командой `composer global update`. После обновления рекомендуется выполнить команду `valet install`, чтобы Valet сделал дополнительные обновления ваших конфигурационных файлов при необходимости.
 
-#### Upgrading To Valet 2.0
+#### Обновление до Valet 2.0
 
-Valet 2.0 transitions Valet's underlying web server from Caddy to Nginx. Before upgrading to this version you should run the following commands to stop and uninstall the existing Caddy daemon:
+В Valet 2.0 изменён базовый веб-сервер с Caddy на Nginx. Перед обновлением на эту версию вы должны выполнить следующие команды, чтобы остановить и удалить существующий демон Caddy:
 
     valet stop
     valet uninstall
 
-Next, you should upgrade to the latest version of Valet. Depending on how you installed Valet, this is typically done through Git or Composer. If you installed Valet via Composer, you should use the following command to update to the latest major version:
+Далее вам надо обновить Valet до последней версии. Это делается с помощью Git или Composer, в зависимости от того, как вы устанавливали Valet изначально. Если вы устанавливали его через Composer, то вам надо использовать следующие команды для обновления до последней мажорной версии:
 
     composer global require laravel/valet
 
-Once the fresh Valet source code has been downloaded, you should run the `install` command:
+Когда будет скачан свежий исходный код Valet, вы должны выполнить команду `install`:
 
     valet install
     valet restart
 
-After upgrading, it may be necessary to re-park or re-link your sites.
+После обновления может понадобиться пере-разместить или пере-привязать ваши сайты.
 
 <a name="serving-sites"></a>
-## Serving Sites
+## Обслуживание сайтов
 
-Once Valet is installed, you're ready to start serving sites. Valet provides two commands to help you serve your Laravel sites: `park` and `link`.
+После установки Valet можно начать обслуживать сайты. Valet предоставляет две команды для помощи в обслуживании Laravel-сайтов: `park` и `link`.
 
 <a name="the-park-command"></a>
-**The `park` Command**
+**Команда `park`**
 
 <div class="content-list" markdown="1">
-- Create a new directory on your Mac by running something like `mkdir ~/Sites`. Next, `cd ~/Sites` and run `valet park`. This command will register your current working directory as a path that Valet should search for sites.
-- Next, create a new Laravel site within this directory: `laravel new blog`.
-- Open `http://blog.dev` in your browser.
+- Создайте новый каталог на своём Mac с помощью команды `mkdir ~/Sites`. Далее, перейдите к ней  `cd ~/Sites` и выполните `valet park`. Эта команда зарегистрирует текущий каталог как путь, по которому Valet будет искать сайты.
+- Теперь создайте новый Laravel-сайт в этом каталоге: `laravel new blog`.
+- Откройте `http://blog.dev` в своём браузере.
 </div>
 
-**That's all there is to it.** Now, any Laravel project you create within your "parked" directory will automatically be served using the `http://folder-name.dev` convention.
+**Вот и всё.** Теперь все проекты, которые вы разместите в каталоге "парковки", будут обслуживаться автоматически с адресами в соответствии с названиями их папок в конвенции `http://folder-name.dev` convention.
 
 <a name="the-link-command"></a>
-**The `link` Command**
+**Команда `link`**
 
-The `link` command may also be used to serve your Laravel sites. This command is useful if you want to serve a single site in a directory and not the entire directory.
+Для обслуживания Laravel-сайтов также можно использовать команду `link`. Эта команда полезна, когда вы хотите обслуживать один сайт в каталоге, а не весь каталог.
 
 <div class="content-list" markdown="1">
-- To use the command, navigate to one of your projects and run `valet link app-name` in your terminal. Valet will create a symbolic link in `~/.valet/Sites` which points to your current working directory.
-- After running the `link` command, you can access the site in your browser at `http://app-name.dev`.
+- Для использования команды перейдите к одному из своих проектов и выполните `valet link app-name` в терминале. Valet создаст в `~/.valet/Sites` символьную ссылку на ваш текущий каталог.
+- После запуска команды `link` вы можете перейти на сайт `http://app-name.dev` в своём браузере.
 </div>
 
-To see a listing of all of your linked directories, run the `valet links` command. You may use `valet unlink app-name` to destroy the symbolic link.
+Для просмотра списка всех привязанных каталогов выполните команд `valet links`. Для удаления символьной ссылки используйте `valet unlink app-name`.
 
-> {tip} You can use `valet link` to serve the same project from multiple (sub)domains. To add a subdomain or another domain to your project run `valet link subdomain.app-name` from the project folder.
+> {tip} Вы можете использовать команду `valet link` для обслуживания одного проекта из нескольких (под)доменов. Чтобы добавить поддомен или другой домен в свой проект, выполните `valet link subdomain.app-name` в папке проекта.
 
 <a name="securing-sites"></a>
-**Securing Sites With TLS**
+**Защита сайтов при помощи TLS**
 
-By default, Valet serves sites over plain HTTP. However, if you would like to serve a site over encrypted TLS using HTTP/2, use the `secure` command. For example, if your site is being served by Valet on the `laravel.dev` domain, you should run the following command to secure it:
+По умолчанию Valet обслуживает сайты через чистый HTTP. Но при желании вы можете включить шифрование TLS, используя HTTP/2, с помощью команды `secure`. Например, если Valet обслуживает ваш сайт на домене `laravel.dev`, то для его защиты вам надо выполнить команду:
 
     valet secure laravel
 
-To "unsecure" a site and revert back to serving its traffic over plain HTTP, use the `unsecure` command. Like the `secure` command, this command accepts the host name that you wish to unsecure:
+Чтобы отключить защиту и перевести трафик обратно на чистый HTTP, используйте команду `unsecure`. Как и команда `secure`, эта команда принимает имя хоста, для которого необходимо отключить защиту:
 
     valet unsecure laravel
 
 <a name="sharing-sites"></a>
-## Sharing Sites
+## Общий доступ к сайтам
 
-Valet even includes a command to share your local sites with the world. No additional software installation is required once Valet is installed.
+Valet имеет команду для открытия доступа к вашим локальным сайтам для всех. Кроме Valet не нужно никакое ПО.
 
-To share a site, navigate to the site's directory in your terminal and run the `valet share` command. A publicly accessible URL will be inserted into your clipboard and is ready to paste directly into your browser. That's it.
+Для открытия доступа к сайту перейдите в терминале в его каталог и выполните команду `valet share`. URL для общего доступа будет помещён в буфер обмена, и его можно вставить в браузер. Вот и всё.
 
-To stop sharing your site, hit `Control + C` to cancel the process.
+Для закрытия общего доступа нажмите `Control + C`, чтобы отменить процесс.
 
-> {note} `valet share` does not currently support sharing sites that have been secured using the `valet secure` command.
+> {note} В настоящее время `valet share` не поддерживает общий доступ к сайтам, которые были защищены командой `valet secure`.
 
 <a name="custom-valet-drivers"></a>
-## Custom Valet Drivers
+## Пользовательские драйверы Valet
 
-You can write your own Valet "driver" to serve PHP applications running on another framework or CMS that is not natively supported by Valet. When you install Valet, a `~/.valet/Drivers` directory is created which contains a `SampleValetDriver.php` file. This file contains a sample driver implementation to demonstrate how to write a custom driver. Writing a driver only requires you to implement three methods: `serves`, `isStaticFile`, and `frontControllerPath`.
+Вы можете написать свой собственный «драйвер» Valet для обслуживания PHP-приложений, работающих на другом фреймворке или CMS, изначально не поддерживаемых Valet. При установке Valet создаётся папка `~/.valet/Drivers`, содержащая файл `SampleValetDriver.php`. В этом файле находится пример реализации драйвера для демонстрации. Для написания драйвера необходимо реализовать всего три метода: `serves`, `isStaticFile` и `frontControllerPath`.
 
-All three methods receive the `$sitePath`, `$siteName`, and `$uri` values as their arguments. The `$sitePath` is the fully qualified path to the site being served on your machine, such as `/Users/Lisa/Sites/my-project`. The `$siteName` is the "host" / "site name" portion of the domain (`my-project`). The `$uri` is the incoming request URI (`/foo/bar`).
+Все три метода принимают в качестве аргументов `$sitePath`, `$siteName` и `$uri`. Параметр `$sitePath` — полный путь к сайту на вашей машине, например, `/Users/Lisa/Sites/my-project`. Параметр `$siteName` — часть домена "хост" / "имя сайта" (`my-project`). Параметр `$uri` — URI входящих запросов (`/foo/bar`).
 
-Once you have completed your custom Valet driver, place it in the `~/.valet/Drivers` directory using the `FrameworkValetDriver.php` naming convention. For example, if you are writing a custom valet driver for WordPress, your file name should be `WordPressValetDriver.php`.
+Когда вы завершили написание своего драйвера Valet, поместите его в директорию `~/.valet/Drivers`, используя принцип именования `FrameworkValetDriver.php`. Например, если вы написали драйвер для WordPress, то имя файла должно быть `WordPressValetDriver.php`.
 
-Let's take a look at a sample implementation of each method your custom Valet driver should implement.
+Давайте рассмотрим примеры реализации каждого из этих методов.
 
-#### The `serves` Method
+#### Метод `serves`
 
-The `serves` method should return `true` if your driver should handle the incoming request. Otherwise, the method should return `false`. So, within this method you should attempt to determine if the given `$sitePath` contains a project of the type you are trying to serve.
+Метод `serves` должен возвращать `true`, если ваш драйвер должен обрабатывать входящие запросы. Иначе метод должен возвращать `false`. В этом методе вы должны попытаться определить, содержит ли данный `$sitePath` проект того типа, который вы хотите обслуживать.
 
-For example, let's pretend we are writing a `WordPressValetDriver`. Our serve method might look something like this:
+Например, давайте предположим, что мы пишем `WordPressValetDriver`. Наш метод `serves` должен выглядеть примерно так:
 
     /**
-     * Determine if the driver serves the request.
+     * Определить, обслуживает ли драйвер запрос.
      *
      * @param  string  $sitePath
      * @param  string  $siteName
@@ -189,12 +193,12 @@ For example, let's pretend we are writing a `WordPressValetDriver`. Our serve me
         return is_dir($sitePath.'/wp-admin');
     }
 
-#### The `isStaticFile` Method
+#### Метод `isStaticFile`
 
-The `isStaticFile` should determine if the incoming request is for a file that is "static", such as an image or a stylesheet. If the file is static, the method should return the fully qualified path to the static file on disk. If the incoming request is not for a static file, the method should return `false`:
+Метод `isStaticFile` должен определять, является ли входящий запрос запросом к статическому файлу, такому как изображение или таблица стилей. Если файл статический, метод должен вернуть полный путь к этому файлу на диске. Если входящий запрос не к статическому файлу, метод должен вернуть `false`:
 
     /**
-     * Determine if the incoming request is for a static file.
+     * Определить, является ли входящий запрос запросом к статическому файлу.
      *
      * @param  string  $sitePath
      * @param  string  $siteName
@@ -210,14 +214,14 @@ The `isStaticFile` should determine if the incoming request is for a file that i
         return false;
     }
 
-> {note} The `isStaticFile` method will only be called if the `serves` method returns `true` for the incoming request and the request URI is not `/`.
+> {note} Метод `isStaticFile` будет вызван, только если метод `serves` возвращает `true` для входящего запроса, и значение URI запроса не равно `/`.
 
-#### The `frontControllerPath` Method
+#### Метод `frontControllerPath`
 
-The `frontControllerPath` method should return the fully qualified path to your application's "front controller", which is typically your "index.php" file or equivalent:
+Метод `frontControllerPath` должен вернуть полный путь к "первичному контроллеру" вашего приложения, которым обычно является ваш файл "index.php" или его эквивалент:
 
     /**
-     * Get the fully resolved path to the application's front controller.
+     * Получение полного пути к первичному контроллеру приложения.
      *
      * @param  string  $sitePath
      * @param  string  $siteName
@@ -230,14 +234,14 @@ The `frontControllerPath` method should return the fully qualified path to your 
     }
 
 <a name="local-drivers"></a>
-### Local Drivers
+### Локальные драйверы
 
-If you would like to define a custom Valet driver for a single application, create a `LocalValetDriver.php` in the application's root directory. Your custom driver may extend the base `ValetDriver` class or extend an existing application specific driver such as the `LaravelValetDriver`:
+Если вы хотите определить пользовательский драйвер Valet для одного приложения, создайте `LocalValetDriver.php` в корневой директории приложения. Ваш драйвер может расширить базовый класс `ValetDriver` или расширить существующий определенный драйвер приложения, такой как `LaravelValetDriver`:
 
     class LocalValetDriver extends LaravelValetDriver
     {
         /**
-         * Determine if the driver serves the request.
+         * Определить, обслуживает ли драйвер запрос.
          *
          * @param  string  $sitePath
          * @param  string  $siteName
@@ -264,13 +268,13 @@ If you would like to define a custom Valet driver for a single application, crea
     }
 
 <a name="other-valet-commands"></a>
-## Other Valet Commands
+## Другие команды Valet
 
-Command  | Description
+Команда  | Описание
 ------------- | -------------
-`valet forget` | Run this command from a "parked" directory to remove it from the parked directory list.
-`valet paths` | View all of your "parked" paths.
-`valet restart` | Restart the Valet daemon.
-`valet start` | Start the Valet daemon.
-`valet stop` | Stop the Valet daemon.
-`valet uninstall` | Uninstall the Valet daemon entirely.
+`valet forget` | Выполните эту команду в каталоге "парковки" для удаления его из списка каталогов парковки.
+`valet paths` | Просмотр всех путей "парковки".
+`valet restart` | Перезапуск демона Valet.
+`valet start` | Запуск демона Valet.
+`valet stop` | Остановка демона Valet.
+`valet uninstall` | Полное удаление демона Valet.
