@@ -1,60 +1,64 @@
-# Mail
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-    - [Driver Prerequisites](#driver-prerequisites)
-- [Generating Mailables](#generating-mailables)
-- [Writing Mailables](#writing-mailables)
-    - [Configuring The Sender](#configuring-the-sender)
-    - [Configuring The View](#configuring-the-view)
-    - [View Data](#view-data)
-    - [Attachments](#attachments)
-    - [Inline Attachments](#inline-attachments)
-    - [Customizing The SwiftMailer Message](#customizing-the-swiftmailer-message)
+---
+
+# Работа с e-mail 
+
+- [Введение](#introduction)
+    - [Требования для драйверов](#driver-prerequisites)
+- [Генерация Mailables](#generating-mailables)
+- [Написание Mailables](#writing-mailables)
+    - [Настройка отправителя](#configuring-the-sender)
+    - [Настройка шаблона](#configuring-the-view)
+    - [Данные шаблона](#view-data)
+    - [Вложения](#attachments)
+    - [Встроенные вложения](#inline-attachments)
+    - [Настройка сообщения SwiftMailer](#customizing-the-swiftmailer-message)
 - [Markdown Mailables](#markdown-mailables)
-    - [Generating Markdown Mailables](#generating-markdown-mailables)
-    - [Writing Markdown Messages](#writing-markdown-messages)
-    - [Customizing The Components](#customizing-the-components)
-- [Sending Mail](#sending-mail)
-    - [Queueing Mail](#queueing-mail)
-- [Mail & Local Development](#mail-and-local-development)
-- [Events](#events)
+    - [Генерация Markdown Mailables](#generating-markdown-mailables)
+    - [Написание Markdown-сообщений](#writing-markdown-messages)
+    - [Настройка компонентов](#customizing-the-components)
+- [Отправка почты](#sending-mail)
+    - [Очереди отправки](#queueing-mail)
+- [Почта и локальная разработка](#mail-and-local-development)
+- [События](#events)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel provides a clean, simple API over the popular [SwiftMailer](http://swiftmailer.org) library with drivers for SMTP, Mailgun, SparkPost, Amazon SES, PHP's `mail` function, and `sendmail`, allowing you to quickly get started sending mail through a local or cloud based service of your choice.
+Laravel предоставляет простой API к популярной библиотеке [SwiftMailer](http://swiftmailer.org) с драйверами для SMTP, Mailgun, SparkPost, Amazon SES, PHP-функций `mail` и `sendmail`, поэтому вы можете быстро приступить к рассылке почты с помощью локального или облачного сервиса на ваш выбор.
 
 <a name="driver-prerequisites"></a>
-### Driver Prerequisites
+### Требования для драйверов
 
-The API based drivers such as Mailgun and SparkPost are often simpler and faster than SMTP servers. If possible, you should use one of these drivers. All of the API drivers require the Guzzle HTTP library, which may be installed via the Composer package manager:
+Основанные на API драйвера, такие как Mailgun и SparkPost, часто гораздо проще и быстрее, чем SMTP-серверы. Вам следует использовать один из таких драйверов, если это возможно. Для работы таких драйверов необходимо, чтобы в вашем приложении была установлена HTTP-библиотека Guzzle, которую можно установить через менеджер пакетов Composer:
 
     composer require guzzlehttp/guzzle
 
-#### Mailgun Driver
+#### Драйвер Mailgun
 
-To use the Mailgun driver, first install Guzzle, then set the `driver` option in your `config/mail.php` configuration file to `mailgun`. Next, verify that your `config/services.php` configuration file contains the following options:
+Для использования драйвера Mailgun установите Guzzle и задайте для параметра `driver` в конфиге `config/mail.php` значение `mailgun`. Затем проверьте, что в конфиге `config/services.php` содержатся следующие параметры:
 
     'mailgun' => [
         'domain' => 'your-mailgun-domain',
         'secret' => 'your-mailgun-key',
     ],
 
-#### SparkPost Driver
+#### Драйвер SparkPost
 
-To use the SparkPost driver, first install Guzzle, then set the `driver` option in your `config/mail.php` configuration file to `sparkpost`. Next, verify that your `config/services.php` configuration file contains the following options:
+Для использования драйвера SparkPost установите Guzzle и задайте для параметра `driver` в конфиге`config/mail.php` значение `sparkpost`. Затем проверьте, что в файле `config/services.php` содержатся следующие параметры:
 
     'sparkpost' => [
         'secret' => 'your-sparkpost-key',
     ],
 
-#### SES Driver
+#### Драйвер SES
 
-To use the Amazon SES driver you must first install the Amazon AWS SDK for PHP. You may install this library by adding the following line to your `composer.json` file's `require` section and running the `composer update` command:
+Чтобы использовать драйвер Amazon SES, установите Amazon AWS SDK для PHP. Вы можете установить эту библиотеку, добавив следующую строку в раздел `require` файла `composer.json` и выполнив команду `composer update`:
 
     "aws/aws-sdk-php": "~3.0"
 
-Next, set the `driver` option in your `config/mail.php` configuration file to `ses` and verify that your `config/services.php` configuration file contains the following options:
+Затем задайте для параметра `driver` в конфиге `config/mail.php` значение `ses` и проверьте, что в файле `config/services.php` содержатся следующие параметры:
 
     'ses' => [
         'key' => 'your-ses-key',
@@ -63,26 +67,26 @@ Next, set the `driver` option in your `config/mail.php` configuration file to `s
     ],
 
 <a name="generating-mailables"></a>
-## Generating Mailables
+## Генерация Mailables
 
-In Laravel, each type of email sent by your application is represented as a "mailable" class. These classes are stored in the `app/Mail` directory. Don't worry if you don't see this directory in your application, since it will be generated for you when you create your first mailable class using the `make:mail` command:
+В Laravel каждый тип email-сообщений, отправляемых вашим приложением, представлен классом "mailable". Эти классы хранятся в директории `app/Mail`. Не волнуйтесь, если не видите этту директорию в своем приложении, так как она будет сгенерирована когда вы создадите первый подобный класс, используя команду`make:mail`:
 
     php artisan make:mail OrderShipped
 
 <a name="writing-mailables"></a>
-## Writing Mailables
+## Написание Mailables
 
-All of a mailable class' configuration is done in the `build` method. Within this method, you may call various methods such as `from`, `subject`, `view`, and `attach` to configure the email's presentation and delivery.
+Настройка класса mailable выполняется в методе `build`. В рамках этого метода можно вызвать различные методы, такие как `from`, `subject`, `view` и `attach` для настройки самого электронного письма и его доставки.
 
 <a name="configuring-the-sender"></a>
-### Configuring The Sender
+### Настройка отправителя
 
-#### Using The `from` Method
+#### Использование метода `from`
 
-First, let's explore configuring the sender of the email. Or, in other words, who the email is going to be "from". There are two ways to configure the sender. First, you may use the `from` method within your mailable class' `build` method:
+Сначала давайте рассмотрим настройку отправителя электронных писем. Или, другими словами, кто будет указан в поле отправителя - "from". Есть два способа настройки отправителя. Во-первых, можно использовать метод  `from` внутри вашего метода mailable-класса `build`:
 
     /**
-     * Build the message.
+     * Построение сообщения.
      *
      * @return $this
      */
@@ -92,19 +96,19 @@ First, let's explore configuring the sender of the email. Or, in other words, wh
                     ->view('emails.orders.shipped');
     }
 
-#### Using A Global `from` Address
+#### Использование глобального адреса `from`
 
-However, if your application uses the same "from" address for all of its emails, it can become cumbersome to call the `from` method in each mailable class you generate. Instead, you may specify a global "from" address in your `config/mail.php` configuration file. This address will be used if no other "from" address is specified within the mailable class:
+Однако, если ваше приложение использует один и тот же адрес "from" во всех своих письмах, будет довольно утомительно вызывать метод `from` в каждом генерируемом классе mailable. Вместо этого можно указать глобальный адрес "from" в конфиге `config/mail.php`. Этот адрес будет использоваться, если больше не указан ни один адрес "from" в классе mailable:
 
     'from' => ['address' => 'example@example.com', 'name' => 'App Name'],
 
 <a name="configuring-the-view"></a>
-### Configuring The View
+### Настройка шаблона
 
-Within a mailable class' `build` method, you may use the `view` method to specify which template should be used when rendering the email's contents. Since each email typically uses a [Blade template](/docs/{{version}}/blade) to render its contents, you have the full power and convenience of the Blade templating engine when building your email's HTML:
+В методе `build` mailable-класса можно использовать метод `view`, чтобы указать какой шаблон следует использовать при визуальном представлении содержимого этого email-сообщения. Как как каждый email обычно использует [шаблон Blade](/docs/{{version}}/blade) для представления своего содержимого, в вашем распоряжении будет вся мощь и удобство движка обработки шаблонов Blade при построении HTML вашего электронного сообщения:
 
     /**
-     * Build the message.
+     * Построение сообщения.
      *
      * @return $this
      */
@@ -113,11 +117,11 @@ Within a mailable class' `build` method, you may use the `view` method to specif
         return $this->view('emails.orders.shipped');
     }
 
-> {tip} You may wish to create a `resources/views/emails` directory to house all of your email templates; however, you are free to place them wherever you wish within your `resources/views` directory.
+> {tip} Возможно, вы захотите создать директорию `resources/views/emails`, чтобы разместить все свои email-шаблоны; тем не менее, вы можете размещать их где угодно внутри своей директории `resources/views`.
 
-#### Plain Text Emails
+#### Email-сообщения без форматирования
 
-If you would like to define a plain-text version of your email, you may use the `text` method. Like the `view` method, the `text` method accepts a template name which will be used to render the contents of the email. You are free to define both a HTML and plain-text version of your message:
+Если вы хотите определить версию своего email без форматирования, то можно использовать метод `text`. Как и метод `view`, метод `text` принимает имя шаблона, который будет использоваться для визуального представления содержимого письма. Вы свободно можете определить и HTML-версию и версию без форматирования своего сообщения:
 
     /**
      * Build the message.
@@ -131,11 +135,11 @@ If you would like to define a plain-text version of your email, you may use the 
     }
 
 <a name="view-data"></a>
-### View Data
+### Данные шаблона
 
-#### Via Public Properties
+#### Через общедоступные свойства
 
-Typically, you will want to pass some data to your view that you can utilize when rendering the email's HTML. There are two ways you may make data available to your view. First, any public property defined on your mailable class will automatically be made available to the view. So, for example, you may pass data into your mailable class' constructor and set that data to public properties defined on the class:
+Как правило, вы захотите передать некоторые данные своему шаблону, которые можно использовать при визуальном отображении электронного сообщения в виде HTML. Существует два способа, благодаря которым можно сделать данные доступными для вашего шаблона. Первый: любое общедоступное свойство, определенное в вашем классе mailable, можно автоматически сделать доступным для шаблона. Поэтому, к примеру, вы можете передать данные своему конструктору класса mailable и изменить данные на общедоступные свойства, определенные в классе:
 
     <?php
 
@@ -158,7 +162,7 @@ Typically, you will want to pass some data to your view that you can utilize whe
         public $order;
 
         /**
-         * Create a new message instance.
+         * Создать новый экземпляр сообщения.
          *
          * @return void
          */
@@ -168,7 +172,7 @@ Typically, you will want to pass some data to your view that you can utilize whe
         }
 
         /**
-         * Build the message.
+         * Построить сообщение.
          *
          * @return $this
          */
@@ -178,15 +182,15 @@ Typically, you will want to pass some data to your view that you can utilize whe
         }
     }
 
-Once the data has been set to a public property, it will automatically be available in your view, so you may access it like you would access any other data in your Blade templates:
+Как только данные были заменены на общедоступные свойства, они станут автоматически доступными для вашего шаблона - вы сможете получать к ним доступ так же, как и к любым другим данным в ваших шаблонах Blade:
 
     <div>
         Price: {{ $order->price }}
     </div>
 
-#### Via The `with` Method:
+#### Через метод `with`:
 
-If you would like to customize the format of your email's data before it is sent to the template, you may manually pass your data to the view via the `with` method. Typically, you will still pass data via the mailable class' constructor; however, you should set this data to `protected` or `private` properties so the data is not automatically made available to the template. Then, when calling the `with` method, pass an array of data that you wish to make available to the template:
+Если вы хотите изменить формат данных своего e-mail сообщения, прежде чем они будут отправлены шаблону, вы можете вручную передать данные шаблону через метод `with`. Как правило, вы все еще будете передавать данные через контруктор класса mailable; однако, вы должны задать свойства данных `protected` или `private`, чтобыд данные не были автоматически доступны шаблону. Тогда во время вызова метода `with` нужно передать массив данных, которые вы хотите сделать доступным для шаблона:
 
     <?php
 
@@ -209,7 +213,7 @@ If you would like to customize the format of your email's data before it is sent
         protected $order;
 
         /**
-         * Create a new message instance.
+         * Создать новый экземпляр сообщения.
          *
          * @return void
          */
@@ -233,16 +237,16 @@ If you would like to customize the format of your email's data before it is sent
         }
     }
 
-Once the data has been passed to the `with` method, it will automatically be available in your view, so you may access it like you would access any other data in your Blade templates:
+Как только данные были переданы методу `with`, они автоматически будут доступны в вашем шаблоне - вы сможете получить к ним доступ точно так же, как и к любым другим данным в своих шаблонах Blade:
 
     <div>
         Price: {{ $orderPrice }}
     </div>
 
 <a name="attachments"></a>
-### Attachments
+### Вложения
 
-To add attachments to an email, use the `attach` method within the mailable class' `build` method. The `attach` method accepts the full path to the file as its first argument:
+Чтобы добавить вложение к электронному сообщению, используйте метод `attach` в методе mailable-класса `build`. В качестве первого аргумента метод `attach` принимает полный путь к файлу:
 
         /**
          * Build the message.
@@ -255,7 +259,7 @@ To add attachments to an email, use the `attach` method within the mailable clas
                         ->attach('/path/to/file');
         }
 
-When attaching files to a message, you may also specify the display name and / or MIME type by passing an `array` as the second argument to the `attach` method:
+Во время присоединения файлов к сообщению, вы также можете указать отображаемое имя и / или MIME-тип, передав `array` в качестве второго аргумента методу `attach`:
 
         /**
          * Build the message.
@@ -271,9 +275,9 @@ When attaching files to a message, you may also specify the display name and / o
                         ]);
         }
 
-#### Raw Data Attachments
+#### Вложения с сырыми данными
 
-The `attachData` method may be used to attach a raw string of bytes as an attachment. For example, you might use this method if you have generated a PDF in memory and want to attach it to the email without writing it to disk. The `attachData` method accepts the raw data bytes as its first argument, the name of the file as its second argument, and an array of options as its third argument:
+Метод `attachData` можно использовать для присоединения сырой строки байтов в качестве вложения. Например, вы можете использовать этот метод, если сгенерировали PDF в памяти и хотите присоединить его к электронному письму без записи на диск. Метод `attachData` принимает байты сырых данных в качестве первого аргумента, имя файла - в качестве второго аргумента, а массив опций - в качестве третьего:
 
         /**
          * Build the message.
@@ -289,32 +293,32 @@ The `attachData` method may be used to attach a raw string of bytes as an attach
         }
 
 <a name="inline-attachments"></a>
-### Inline Attachments
+### Встроенные вложения
 
-Embedding inline images into your emails is typically cumbersome; however, Laravel provides a convenient way to attach images to your emails and retrieving the appropriate CID. To embed an inline image, use the `embed` method on the `$message` variable within your email template. Laravel automatically makes the `$message` variable available to all of your email templates, so you don't need to worry about passing it in manually:
+Обычно добавление встроенных вложений — утомительное занятие, однако Laravel делает его проще, позволяя вам добавлять изображения и получать соответствующие CID. Для вставки встроенного изображения используйте метод `embed` на переменной `$message` в вашем email-шаблоне. Laravel автоматически делает переменную `$message` доступной для всех ваших email-шаблонов, так что вам не нужно волноваться о том, чтобы передать ее вручную:
 
     <body>
-        Here is an image:
+        Вот изображение:
 
         <img src="{{ $message->embed($pathToFile) }}">
     </body>
 
-> {note} `$message` variable is not available in markdown messages.
+> {note} Переменная `$message` недоступна в markdown-сообщениях.
 
-#### Embedding Raw Data Attachments
+#### Встроенные вложения с сырыми данными
 
-If you already have a raw data string you wish to embed into an email template, you may use the `embedData` method on the `$message` variable:
+Если у вас уже есть строка с сырыми данными, которую вы хотите встроить в шаблон электронного сообщения, можно использовать метод `embedData` на переменной `$message`:
 
     <body>
-        Here is an image from raw data:
+        Вот изображение из сырых данных:
 
         <img src="{{ $message->embedData($data, $name) }}">
     </body>
 
 <a name="customizing-the-swiftmailer-message"></a>
-### Customizing The SwiftMailer Message
+### Настройка сообщения SwiftMailer
 
-The `withSwiftMessage` method of the `Mailable` base class allows you to register a callback which will be invoked with the raw SwiftMailer message instance before sending the message. This gives you an opportunity to customize the message before it is delivered:
+Метод `withSwiftMessage` базового класса `Mailable` позволяет вам зарегистрировать анонимную функцию, которая будет вызываться экземпляром сообщения SwiftMailer перед отправкой сообщения. Это дает вам возможность кастомизировать сообщение перед тем как оно будет доставлено:
 
         /**
          * Build the message.
@@ -334,16 +338,16 @@ The `withSwiftMessage` method of the `Mailable` base class allows you to registe
 <a name="markdown-mailables"></a>
 ## Markdown Mailables
 
-Markdown mailable messages allow you to take advantage of the pre-built templates and components of mail notifications in your mailables. Since the messages are written in Markdown, Laravel is able to render beautiful, responsive HTML templates for the messages while also automatically generating a plain-text counterpart.
+Mailable-сообщения в формате Markdown позволяют вам воспользоваться предварительно собранными шаблонами и компонентами почтовых уведомлений в ваших mailables. Так как сообщения написаны в формате Markdown, Laravel способен отображать красивые, отзывчивые HTML-шаблоны сообщений, в то же время генерируя идентичную копию без форматирования (только текст).
 
 <a name="generating-markdown-mailables"></a>
-### Generating Markdown Mailables
+### Генерация Markdown Mailables
 
-To generate a mailable with a corresponding Markdown template, you may use the `--markdown` option of the `make:mail` Artisan command:
+Чтобы сгенерировать mailable с соответствующим Markdown можно использовать опцию `--markdown` Artisan-команды `make:mail`:
 
     php artisan make:mail OrderShipped --markdown=emails.orders.shipped
 
-Then, when configuring the mailable within its `build` method, call the `markdown` method instead of the `view` method. The `markdown` methods accepts the name of the Markdown template and an optional array of data to make available to the template:
+Тогда при настройке mailable в своем методе `build`, вызовите метод `markdown` вместо метода `view`. Метод `markdown` принимает имя Markdown-шаблона в качестве необязательного массива данных, который затем делает доступным для шаблона:
 
     /**
      * Build the message.
@@ -357,44 +361,44 @@ Then, when configuring the mailable within its `build` method, call the `markdow
     }
 
 <a name="writing-markdown-messages"></a>
-### Writing Markdown Messages
+### Написание Markdown-сообщений
 
-Markdown mailables use a combination of Blade components and Markdown syntax which allow you to easily construct mail messages while leveraging Laravel's pre-crafted components:
+Markdown mailable-сообщения используют комбинацию Blade-компонентов и синтаксиса Markdown, что позволяет вам довольно просто конструировать почтовые сообщения, используя заранее созданные компоненты Laravel:
 
     @component('mail::message')
-    # Order Shipped
+    # Заказ отправлен
 
-    Your order has been shipped!
+    Ваш заказ был отправлен!
 
     @component('mail::button', ['url' => $url])
-    View Order
+    Просмотреть заказ
     @endcomponent
 
-    Thanks,<br>
+    Спасибо,<br>
     {{ config('app.name') }}
     @endcomponent
 
-> {tip} Do not use excess indentation when writing Markdown emails. Markdown parsers will render indented content as code blocks.
+> {tip}Не используйте чрезмерное количество отступов во время написания Markdown-сообщений. Markdown парсеры выполнят содержимое с отступом в виде блоков кода.
 
-#### Button Component
+#### Компонент Button (кнопка)
 
-The button component renders a centered button link. The component accepts two arguments, a `url` and an optional `color`. Supported colors are `blue`, `green`, and `red`. You may add as many button components to a message as you wish:
+Компонент кнопки отображает отцентрованную ссылку-кнопку. Этот компонент принимает два аргумента: `url` и необязательный `color`. Поддерживаются цвета: `blue` (синий), `green` (зеленый) и `red` (красный). Вы можете добавить сколько угодно компонентов-кнопок в свое сообщение:
 
     @component('mail::button', ['url' => $url, 'color' => 'green'])
-    View Order
+    Просмотреть заказ
     @endcomponent
 
-#### Panel Component
+#### Компонент Panel (область)
 
-The panel component renders the given block of text in a panel that has a slightly different background color than the rest of the message. This allows you to draw attention to a given block of text:
+Компонент panel отображает заданный блок текста в области с цветом фона, слегка отличающимся от заднего фона самого сообщения. Это позволяет привлечь внимание к данной области текста:
 
     @component('mail::panel')
     This is the panel content.
     @endcomponent
 
-#### Table Component
+#### Компонента Table (таблица)
 
-The table component allows you to transform a Markdown table into an HTML table. The component accepts the Markdown table as its content. Table column alignment is supported using the default Markdown table alignment syntax:
+Компонент table позволяет трансформировать Markdown-таблицу в HTML-таблицу. Этот компонент принимает  Markdown-таблицу в качестве содержимого. Поддерживается выравнивание столбцов с использованием синтаксиса выравнивания в Markdown таблицах по умолчанию:
 
     @component('mail::table')
     | Laravel       | Table         | Example  |
@@ -404,24 +408,24 @@ The table component allows you to transform a Markdown table into an HTML table.
     @endcomponent
 
 <a name="customizing-the-components"></a>
-### Customizing The Components
+### Настройка компонентов
 
-You may export all of the Markdown mail components to your own application for customization. To export the components, use the `vendor:publish` Artisan command to publish the `laravel-mail` asset tag:
+Вы можете экспортировать все Markdown-компоненты почты в собственное приложение, чтобы настроить их. Чтобы экспортировать: используйте Artisan-команду `vendor:publish`, чтобы опубликовать ассет-тэг `laravel-mail`:
 
     php artisan vendor:publish --tag=laravel-mail
 
-This command will publish the Markdown mail components to the `resources/views/vendor/mail` directory. The `mail` directory will contain a `html` and a `markdown` directory, each containing their respective representations of every available component. You are free to customize these components however you like.
+Эта команда опубликует Markdown-компоненты почты в директорию `resources/views/vendor/mail`. Директория `mail` будет содержать директорию `html` и `markdown`, каждая из которых содержит соответсвующие представления каждого доступного компонента. Вы можете свободно настраивать эти компоненты по собственному усмотрению.
 
-#### Customizing The CSS
+#### Настройка CSS
 
-After exporting the components, the `resources/views/vendor/mail/html/themes` directory will contain a `default.css` file. You may customize the CSS in this file and your styles will automatically be in-lined within the HTML representations of your Markdown mail messages.
+После экспорта компонентов в директории `resources/views/vendor/mail/html/themes` будет содержаться файл `default.css`. Вы можете настроить CSS в этом файле, и ваши стили будут автоматически приведены в соответствие с HTML-представлениями ваших Markdown-сообщений.
 
-> {tip} If you would like to build an entirely new theme for the Markdown components, simply write a new CSS file within the `html/themes` directory and change the `theme` option of your `mail` configuration file.
+> {tip} Если вы хотите собрать полностью новую тему для Markdown-кмпонентов, просто напишите новый CSS-файл в директории `html/themes` и измените параметр `theme` в конфиге `mail`.
 
 <a name="sending-mail"></a>
-## Sending Mail
+## Отправка почты
 
-To send a message, use the `to` method on the `Mail` [facade](/docs/{{version}}/facades). The `to` method accepts an email address, a user instance, or a collection of users. If you pass an object or collection of objects, the mailer will automatically use their `email` and `name` properties when setting the email recipients, so make sure these attributes are available on your objects. Once you have specified your recipients, you may pass an instance of your mailable class to the `send` method:
+Используйте метод `to` [фасада](/docs/{{version}}/facades) `Mail`, чтобы отправить сообщение. Метод `to` принимает адрес email, экземпляр пользователя или коллекцию пользователей. Если вы передаете объект или коллекцию объектов, почтовая программа будет автоматически использовать их свойства `email` и `name` при настройке получателей электронного сообщения, поэтому убедитесь, что у ваших объектов есть эти атрибуты. Как только вы указали получателей, вы можете передать экземпляр своего класса mailable методу `send`:
 
     <?php
 
@@ -436,7 +440,7 @@ To send a message, use the `to` method on the `Mail` [facade](/docs/{{version}}/
     class OrderController extends Controller
     {
         /**
-         * Ship the given order.
+         * Отправить заданный заказ.
          *
          * @param  Request  $request
          * @param  int  $orderId
@@ -446,13 +450,13 @@ To send a message, use the `to` method on the `Mail` [facade](/docs/{{version}}/
         {
             $order = Order::findOrFail($orderId);
 
-            // Ship order...
+            // Отправить заказ...
 
             Mail::to($request->user())->send(new OrderShipped($order));
         }
     }
 
-Of course, you are not limited to just specifying the "to" recipients when sending a message. You are free to set "to", "cc", and "bcc" recipients all within a single, chained method call:
+Конечно, вы не ограничены исключительно указанием получателей в поле "to" при отправке сообщения. Также можно указать и получателей "to", "cc" и "bcc" - всех в одном связанном вызове метода:
 
     Mail::to($request->user())
         ->cc($moreUsers)
@@ -460,22 +464,22 @@ Of course, you are not limited to just specifying the "to" recipients when sendi
         ->send(new OrderShipped($order));
 
 <a name="queueing-mail"></a>
-### Queueing Mail
+### Очереди отправки
 
-#### Queueing A Mail Message
+#### Помещение сообщения в очередь отправки
 
-Since sending email messages can drastically lengthen the response time of your application, many developers choose to queue email messages for background sending. Laravel makes this easy using its built-in [unified queue API](/docs/{{version}}/queues). To queue a mail message, use the `queue` method on the `Mail` facade after specifying the message's recipients:
+Из-за того, что отправка сообщений может сильно повлиять на время обработки запроса, многие разработчики помещают их в очередь на фоновую отправку. Laravel позволяет легко делать это, используя [единое API очередей](/docs/{{version}}/queues). Для помещения сообщения в очередь просто используйте метод `queue` фасада `Mail` после указания получателей сообщения:
 
     Mail::to($request->user())
         ->cc($moreUsers)
         ->bcc($evenMoreUsers)
         ->queue(new OrderShipped($order));
 
-This method will automatically take care of pushing a job onto the queue so the message is sent in the background. Of course, you will need to [configure your queues](/docs/{{version}}/queues) before using this feature.
+Этот метод автоматически позаботится о помещении в очередь задачи для фоновой отправки почтового сообщения. Конечно, вам нужно будет [настроить механизм очередей](/docs/{{version}}/queues) перед использованием данной возможности.
 
-#### Delayed Message Queueing
+#### Задержка отправки сообщения
 
-If you wish to delay the delivery of a queued email message, you may use the `later` method. As its first argument, the `later` method accepts a `DateTime` instance indicating when the message should be sent:
+Вы можете задержать отправку сообщения методом `later`. В качестве своего первого аргумента метод `later` принимает экземпляр `DateTime`, указывая когда следует отправить сообщение:
 
     $when = Carbon\Carbon::now()->addMinutes(10);
 
@@ -484,9 +488,9 @@ If you wish to delay the delivery of a queued email message, you may use the `la
         ->bcc($evenMoreUsers)
         ->later($when, new OrderShipped($order));
 
-#### Pushing To Specific Queues
+#### Помещение сообщения в определённую очередь
 
-Since all mailable classes generated using the `make:mail` command make use of the `Illuminate\Bus\Queueable` trait, you may call the `onQueue` and `onConnection` methods on any mailable class instance, allowing you to specify the connection and queue name for the message:
+Так как все mailable-классы генерируемые с использованием команды `make:mail` используют трейт `Illuminate\Bus\Queueable`, вы можете вызвать методы `onQueue` и `onConnection` в любом экземпляре класса mailable, что позволит указать имя очереди и подключение для сообщения:
 
     $message = (new OrderShipped($order))
                     ->onConnection('sqs')
@@ -497,9 +501,9 @@ Since all mailable classes generated using the `make:mail` command make use of t
         ->bcc($evenMoreUsers)
         ->queue($message);
 
-#### Queueing By Default
+#### Помещение в очередь по умолчанию
 
-If you have mailable classes that you want to always be queued, you may implement the `ShouldQueue` contract on the class. Now, even if you call the `send` method when mailing, the mailable will still be queued since it implements the contract:
+Если у вас есть mailable-классы, которые всегда должны быть в очереди, вы можете реализовать на классе контракт `ShouldQueue`. Теперь даже если вы вызовете метод `send` при отправке почты, mailable все еще будет находится в очереди, так как он реализует контракт:
 
     use Illuminate\Contracts\Queue\ShouldQueue;
 
@@ -509,17 +513,17 @@ If you have mailable classes that you want to always be queued, you may implemen
     }
 
 <a name="mail-and-local-development"></a>
-## Mail & Local Development
+## Почта и локальная разработка
 
-When developing an application that sends email, you probably don't want to actually send emails to live email addresses. Laravel provides several ways to "disable" the actual sending of emails during local development.
+При разработке приложения обычно предпочтительно отключить доставку отправляемых сообщений. В Laravel есть несколько способов "отключить" реальную отправку почтовых сообщений
 
-#### Log Driver
+#### Драйвер Log
 
-Instead of sending your emails, the `log` mail driver will write all email messages to your log files for inspection. For more information on configuring your application per environment, check out the [configuration documentation](/docs/{{version}}/configuration#environment-configuration).
+Вместо отправки ваших электронных сообщений, драйвер `log` будет записывать все email-сообщения в ваши логи для анализа. Это полезно в первую очередь для быстрой, локальной отладки и проверки данных. Подробнее о настройке различных окружений для приложения читайте в [документации по настройке](/docs/{{version}}/configuration#environment-configuration).
 
-#### Universal To
+#### Универсальный получатель
 
-Another solution provided by Laravel is to set a universal recipient of all emails sent by the framework. This way, all the emails generated by your application will be sent to a specific address, instead of the address actually specified when sending the message. This can be done via the `to` option in your `config/mail.php` configuration file:
+Другой вариант — задать универсального получателя для всех сообщений от фреймворка. при этом все сообщения, генерируемые вашим приложением, будут отсылаться на заданный адрес, вместо адреса, указанного при отправке сообщения. Это можно сделать с помощью параметра `to` в конфиге `config/mail.php`:
 
     'to' => [
         'address' => 'example@example.com',
@@ -528,15 +532,15 @@ Another solution provided by Laravel is to set a universal recipient of all emai
 
 #### Mailtrap
 
-Finally, you may use a service like [Mailtrap](https://mailtrap.io) and the `smtp` driver to send your email messages to a "dummy" mailbox where you may view them in a true email client. This approach has the benefit of allowing you to actually inspect the final emails in Mailtrap's message viewer.
+И, наконец, вы можете использовать сервис [Mailtrap](https://mailtrap.io) и драйвер `smtp` для отправки ваших почтовых сообщений на фиктивный почтовый ящик, где вы сможете посмотреть их при помощи настоящего почтового клиента. Преимущество этого вариант в том, что вы можете проверить то, как в итоге будут выглядеть ваши почтовые сообщения, при помощи средства для просмотра сообщений Mailtrap.
 
 <a name="events"></a>
-## Events
+## События
 
-Laravel fires an event just before sending mail messages. Remember, this event is fired when the mail is *sent*, not when it is queued. You may register an event listener for this event in your `EventServiceProvider`:
+Laravel генерирует событие непосредственно перед отправкой почтовых сообщений. Учтите, это событие возникает при *отправке*, сообщения, а не при помещении его в очередь. Вы можете зарегистрировать слушатель события в своём `EventServiceProvider`:
 
     /**
-     * The event listener mappings for the application.
+     * Отображения слушателя событий для приложения.
      *
      * @var array
      */
