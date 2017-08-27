@@ -1,7 +1,11 @@
-# Release Notes
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Versioning Scheme](#versioning-scheme)
-- [Support Policy](#support-policy)
+---
+
+# Описание изменений
+
+- [Схема контроля версий](#versioning-scheme)
+- [Политика поддержки](#support-policy)
 - [Laravel 5.4.22](#laravel-5.4.22)
 - [Laravel 5.4](#laravel-5.4)
 - [Laravel 5.3](#laravel-5.3)
@@ -14,83 +18,83 @@
 - [Laravel 4.1](#laravel-4.1)
 
 <a name="versioning-scheme"></a>
-## Versioning Scheme
+## Схема контроля версий
 
-Laravel's versioning scheme maintains the following convention: `paradigm.minor.patch`. Minor framework releases are released every six months (January and July), while patch releases may be released as often as every week. Patch releases should **never** contain breaking changes.
+Схема контроля версий Laravel поддерживает соглашение именования версий `paradigm.minor.patch`. Малые релизы фремворка выпускаются каждые шесть месяцев (в январе и в июле), в то время как патчи могут выпускаться гораздо чаще, вплоть до каждой недели. Релизы патчей **никогда** не должны содержать критических изменений.
 
-When referencing the Laravel framework or its components from your application or package, you should always use a version constraint such as `5.4.*`, since minor releases of Laravel do include breaking changes. However, we strive to always ensure you may update to a new minor release in one day or less.
+Когда вы ссылаетесь на структуру Laravel или ее компоненты из вашего приложения или пакета, вы всегда должны использовать ограничение версии, такое как `5.4.*`, так как второстепенные релизы Laravel не содержат критических изменений. Однако, мы стремимся всегда предоставить вам возможность обновиться до нового релиза в течение одного дня или быстрее.
 
-Paradigm shifting releases are separated by many years and represent fundamental shifts in the framework's architecture and conventions. Currently, there is no paradigm shifting release under development.
+Релизы меняющие парадигму - растягиваются на многие годы, и представляют собой фундаментальные изменения в архитектуре фреймворка и соглашениях. В настоящий момент в разработке нет релизов изменяющих парадигму.
 
-#### Why Doesn't Laravel Use Semantic Versioning?
+#### Почему в Laravel не используется семантический контроль версий?
 
-On one hand, all optional components of Laravel (Cashier, Dusk, Valet, Socialite, etc.) **do** use semantic versioning. However, the Laravel framework itself does not. The reason for this is because semantic versioning is a "reductionist" way of determining if two pieces of code are compatible. Even when using semantic versioning, you still must install the upgraded package and run your automated test suite to know if anything is *actually* incompatible with your code base.
+С одной стороны, все необязательные компоненты Laravel (Cashier, Dusk, Valet, Socialite, и т.д.) и **используют** семантический контроль версий. Однако, сам фреймворк Laravel - нет. Причина этого в том, что семантическое управление версиями является "редукционистским" способом определения совместимости двух фрагментов кода. Даже при использовании семантического контроля версий вам все еще нужно устанавливать обновленный пакет и запускать свой автоматический набор тестов, чтобы узнать о том, что что-либо *фактически* несовместимо с вашей базой кода.
 
-So, instead, the Laravel framework uses a versioning scheme that is more communicative of the actual scope of the release. Furthermore, since patch releases **never** contain intentional breaking changes, you should never receive a breaking change as long as your version constraints follow the `paradigm.minor.*` convention.
+Поэтому вместо этого фреймворк Laravel использует схему контроля версий, которая сообщает больше информации о фактическом охвате релиза. Помимо этого, так как релизы патчей **никогда** не содержат намеренные критические изменения; вы никогда не получите критическое изменение, если указываете требуемые версии в стиле конвенции `paradigm.minor.*`.
 
 <a name="support-policy"></a>
-## Support Policy
+## Политика поддержки
 
-For LTS releases, such as Laravel 5.1, bug fixes are provided for 2 years and security fixes are provided for 3 years. These releases provide the longest window of support and maintenance. For general releases, bug fixes are provided for 6 months and security fixes are provided for 1 year.
+Для LTS-версий, таких как Laravel 5.1, обеспечивается исправление ошибок в течение 2 лет и исправление ошибок безопасности в течение 3 лет. Такие версии имеют наибольший срок поддержки. Для обычных релизов обеспечивается исправление ошибок в течение 6 месяцев и исправление ошибок безопасности в течение 1 года.
 
 <a name="laravel-5.4.22"></a>
 ## Laravel 5.4.22
 
-Laravel 5.4.22 patches a security vulnerability in the Laravel 5.4 release series that allows phishing attempts on users of the application. Using the password reset system, malicious users can attempt to trick your users into entering their login credentials into a separate application that they control. Since the password reset notification uses the host of the incoming request to build the password reset URL, the host of the password reset URL may be spoofed. If users do not notice that they are not on their intended application's domain, they may accidentally enter their login credentials into a malicious application.
+Laravel 5.4.22 исправляет уязвимость безопасности в серии релизов Laravel 5.4, которые позволяли выполнять попытки фишинга относительно пользователей приложения. Используя систему сброса пароля, злоумышленники могут попытаться обмануть ваших пользователей, указав их учетные данные для входа в отдельное приложение, которое они контролируют. Поскольку уведомление о сбросе пароля использует хост входящего запроса для создания URL-адреса сброса пароля, хост URL-адреса сброса пароля может быть подделан. Если пользователи не замечают, что они не находятся в домене их предполагаемого приложения, они могут случайно ввести свои учетные данные во вредоносном приложении.
 
-In Laravel 5.1 applications, the password reset notification is maintained by the developer, so this vulnerability may or may not be present. You should verify that your application generates an absolute URL for password reset links:
+В приложениях Laravel 5.1 уведомление о сбросе пароля находится в ведении разработчика, поэтому данной уязвимости может и не быть. Вы должны убедиться, что ваше приложение генерирует абсолютный URL для ссылок сброса пароля:
 
     {{ url('http://example.com/password/reset/'.$token) }}
 
 <a name="laravel-5.4"></a>
 ## Laravel 5.4
 
-Laravel 5.4 continues the improvements made in Laravel 5.3 by adding support for [Markdown based emails and notifications](/docs/5.4/mail#markdown-mailables), the [Laravel Dusk](/docs/5.4/dusk) browser automation and testing framework, Laravel Mix, Blade "components" and "slots", route model binding on broadcast channels, higher order messages for Collections, object-based Eloquent events, job-level "retry" and "timeout" settings, "realtime" facades, improved support for Redis Cluster, custom pivot table models, middleware for request input trimming and cleaning, and more. In addition, the entire codebase of the framework was reviewed and refactored for general cleanliness.
+Laravel 5.4 продолжает улучшения, внесенные в Laravel 5.3, добавляя поддержку [e-mail сообщений и уведомлений на основе markdown](/docs/5.4/mail#markdown-mailables), фреймворка для автоматизации браузера и тестирования [Laravel Dusk](/docs/5.4/dusk), Laravel Mix, "компоненты" и "слоты" Blade, привязку роут-моделей на каналах вещания, сообщения высшего порядка для Коллекций, объектно-ориентированные события Eloquent, настройки "retry" и "timeout" на уровне задач, "realtime"-фасады, улучшенную поддержку Redis Cluster, пользовательские модели сводных таблиц, посредников для запроса обрезки и очистки ввода, и др. Кроме того, вся кодовая база фреймворка прошла процедуру рефакторинга для улучшения общей опрятности кода.
 
-> {tip} This documentation summarizes the most notable improvements to the framework; however, more thorough change logs are always available [on GitHub](https://github.com/laravel/framework/blob/5.4/CHANGELOG-5.4.md).
+> {tip} В этой документации приведены наиболее заметные улучшения фреймворка; более подробные списки изменений всегда доступны [на GitHub](https://github.com/laravel/framework/blob/5.4/CHANGELOG-5.4.md).
 
-### Markdown Mail & Notifications
+### Письма и уведомления в формате markdown
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/7) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/7) по этой теме.
 
-Markdown mailable messages allow you to take advantage of the pre-built templates and components of mail notifications in your mailables. Since the messages are written in Markdown, Laravel is able to render beautiful, responsive HTML templates for the messages while also automatically generating a plain-text counterpart. For example, a Markdown email might look something like the following:
+Письма в формате markdown позволяют воспользоваться предварительно созданными шаблонами и компонентами почтовых уведомлений в ваших почтовых рассылках. Поскольку сообщения написаны в Markdown, Laravel может отображать красивые, отзывчивые HTML шаблоны для сообщений, в то же время генерируя копию с текстом без форматирования. Например, Markdown-email может выглядеть примерно так:
 
     @component('mail::message')
     # Order Shipped
 
-    Your order has been shipped!
+    Ваш заказ был отправлен!
 
     @component('mail::button', ['url' => $url])
-    View Order
+    Просмотреть заказ
     @endcomponent
 
-    Next Steps:
+    Следующие шаги:
 
-    - Track Your Order On Our Website
-    - Pre-Sign For Delivery
+    - Отследить заказ на нашем сайте
+    - Заказать курьерскую доставку
 
-    Thanks,<br>
+    Спасибо,<br>
     {{ config('app.name') }}
     @endcomponent
 
-Using this simple Markdown template, Laravel is able to generate a responsive HTML email and plain-text counterpart:
+Используя этот простой формат Markdown, Laravel может отображать красивые, отзывчивые HTML шаблоны для сообщений, в то же время генерируя копию с текстом без форматирования.:
 
 <img src="https://laravel.com/assets/img/examples/markdown.png" width="551" height="596">
 
-To read more about Markdown mail and notifications, check out the full [mail](/docs/5.4/mail) and [notification](/docs/5.4/notifications) documentation.
+Чтобы прочитать больше о почтовых сообщениях и уведомлениях Markdown, советуем изучить документацию по [почтовым сообщениям](/docs/5.4/mail) и [уведомлениям](/docs/5.4/notifications).
 
-> {tip} You may export all of the Markdown mail components to your own application for customization. To export the components, use the `vendor:publish` Artisan command to publish the `laravel-mail` asset tag.
+> {tip} Вы можете экспортировать компоненты из почтовых сообщений в формате Markdown в собственное приложение, чтобы настроить их. Для экспорта компонентов используйте Artisan-камнду `vendor:publish`, чтобы опубликовать тег ассетов `laravel-mail`.
 
 ### Laravel Dusk
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/9) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/9) по этой теме.
 
-Laravel Dusk provides an expressive, easy-to-use browser automation and testing API. By default, Dusk does not require you to install JDK or Selenium on your machine. Instead, Dusk uses a standalone [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/home) installation. However, you are free to utilize any other Selenium compatible driver you wish.
+Laravel Dusk предоставляет выразительный и простой в использовании API для тестирования и автоматизации с помощью браузера. По умолчанию Dusk не требует от вас установки JDK или Selenium на своей машине. Вместо этого Dusk использует отдельную установку [ChromeDriver](https://sites.google.com/a/chromium.org/chromedriver/home). Тем не менее, вы можете использовать и любой другой совместимый с Selenium драйвер по своему желанию.
 
-Since Dusk operates using a real browser, you are able to easily test and interact with your applications that heavily use JavaScript:
+Так как Dusk работает с реальным браузером, можно запросто тестировать и взаимодействовать со своими приложениями, в которых используется много скриптов:
 
     /**
-     * A basic browser test example.
+     * Пример базового теста браузера.
      *
      * @return void
      */
@@ -113,22 +117,22 @@ Since Dusk operates using a real browser, you are able to easily test and intera
         });
     }
 
-For more information on Dusk, consult the full [Dusk documentation](/docs/5.4/dusk).
+Для получения дополнительной информации о Dusk смотрите [документацию Dusk](/docs/5.4/dusk).
 
 ### Laravel Mix
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/3) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/3) по этой теме.
 
-Laravel Mix is the spiritual successor of Laravel Elixir, and its entirely based on Webpack instead of Gulp. Laravel Mix provides a fluent API for defining Webpack build steps for your Laravel application using several common CSS and JavaScript pre-processors. Through simple method chaining, you can fluently define your asset pipeline. For example:
+Laravel Mix - духовный наследник Laravel Elixir, который полностью работает на Webpack вместо Gulp. Laravel Mix предоставляет API с текучим интерфейсом для определения шагов построения Webpack для вашего Laravel-приложения, используя несколько общих препроцессоров CSS и JavaScript. Вы можете задать свой конвейер ассетов простейшим методом связывания. Пример:
 
     mix.js('resources/assets/js/app.js', 'public/js')
        .sass('resources/assets/sass/app.scss', 'public/css');
 
-### Blade Components & Slots
+### Компоненты и слоты Blade
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/6) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/6) по этой теме.
 
-Blade components and slots provide similar benefits to sections and layouts; however, some may find the mental model of components and slots easier to understand. First, let's imagine a reusable "alert" component we would like to reuse throughout our application:
+Компоненты и слоты предоставляют схожие плюсы для секций и разметки; однако, ментальные модели компонентов и слотов могут показаться многим проще для понимания. Во-первых, давайте представим повторно используемые компонент "alert", который мы бы хотели многократно использовать в нашем приложении:
 
     <!-- /resources/views/alert.blade.php -->
 
@@ -136,13 +140,13 @@ Blade components and slots provide similar benefits to sections and layouts; how
         {{ $slot }}
     </div>
 
-The `{{ $slot }}` variable will contain the content we wish to inject into the component. Now, to construct this component, we can use the `@component` Blade directive:
+Переменная `{{ $slot }}` будет содержать контент, который мы бы хотели внедрить в компонент. Теперь мы можем использовать Blade-директиву `@component` для построения этого компонента:
 
     @component('alert')
-        <strong>Whoops!</strong> Something went wrong!
+        <strong>Ой!</strong> Что-по пошло не так!
     @endcomponent
 
-Named slots allow you to provide multiple slots into a single component:
+Именованные слоты позволяют вам предоставлять несколько слотов в едином компоненте:
 
     <!-- /resources/views/alert.blade.php -->
 
@@ -152,21 +156,21 @@ Named slots allow you to provide multiple slots into a single component:
         {{ $slot }}
     </div>
 
-Named slots may be injected using the `@slot` directive. Any content is not within a `@slot` directive will be passed to the component in the `$slot` variable:
+Именованные слоты можно внедрить, используя директиву `@slot`. Любой контент за рамками директивы `@slot` будет передан компоненту в переменной `$slot`:
 
     @component('alert')
         @slot('title')
             Forbidden
         @endslot
 
-        You are not allowed to access this resource!
+        Вам не разрешен доступ к этому ресурсу!
     @endcomponent
 
-To read more about components and slots, consult the full [Blade documentation](/docs/5.4/blade).
+Загляните в полную [документацию Blade](/docs/5.4/blade), чтобы прочесть больше о компонентах и слотах.
 
-### Broadcast Model Binding
+### Присоединение модели к бродкастам
 
-Just like HTTP routes, channel routes may now take advantage of implicit and explicit [route model binding](/docs/5.4/routing#route-model-binding). For example, instead of receiving the string or numeric order ID, you may request an actual `Order` model instance:
+Как и HTTP роуты, роуты каналов теперь пользуются преимуществами [присоединения моделей к роутам](/docs/5.4/routing#route-model-binding), явных и скрытых. К примеру, вместо получения строки или числового ID заказа, вы можете запросить фактический экземпляр модели `Order`:
 
     use App\Order;
 
@@ -174,31 +178,31 @@ Just like HTTP routes, channel routes may now take advantage of implicit and exp
         return $user->id === $order->user_id;
     });
 
-To read more about broadcast model binding, consult the full [event broadcasting](/docs/5.4/broadcasting) documentation.
+Чтобы прочитать больше о связывании моделей, см. полную документацию о [бродкасте событий](/docs/5.4/broadcasting).
 
-### Collection Higher Order Messages
+### Операции высшего порядка в коллекциях
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/2) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/2) по этой теме.
 
-Collections now provide support for "higher order messages", which are short-cuts for performing common actions on collections. The collection methods that provide higher order messages are: `contains`, `each`, `every`, `filter`, `first`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc`, and `sum`.
+Коллекции теперь поддерживают "операции высшего порядка", которые служат сокращенными методами для выполнения обычных действий с коллекциями. Методы коллекции, которые поддерживают операции высшего порядка: `contains`, `each`, `every`, `filter`, `first`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc` и `sum`.
 
-Each higher order message can be accessed as a dynamic property on a collection instance. For instance, let's use the `each` higher order message to call a method on each object within a collection:
+Доступ к каждой операции высшего порядка можно получить как к динамическому свойству экземпляра коллекции. Например, давайте используем сообщение высшего порядка `each`, чтобы вызвать метод для каждого объекта в коллекции:
 
     $users = User::where('votes', '>', 500)->get();
 
     $users->each->markAsVip();
 
-Likewise, we can use the `sum` higher order message to gather the total number of "votes" for a collection of users:
+Аналогично мы можем использовать операцию высшего порядка `sum`, чтобы собрать общее количество голосов ("votes") для коллекции пользователей:
 
     $users = User::where('group', 'Development')->get();
 
     return $users->sum->votes;
 
-### Object Based Eloquent Events
+### Объектно-ориентированные события Eloquent
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/10) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/10) по этой теме.
 
-Eloquent event handlers may now be mapped to event objects. This provides a more intuitive way of handling Eloquent events and makes it easier to test the events. To get started, define an `$events` property on your Eloquent model that maps various points of the Eloquent model's lifecycle to your own [event classes](/docs/5.4/events):
+Обработчики событий Eloquent теперь могут быть преобразованы в объекты событий. Это более интуитивный способ обработки событий Eloquent, который упрощает тестирование событий. Для начала задайте свойство `$events` в своей модели Eloquent, которая преобразовывает различные точки жизненного цикла Eloquent в ваши собственные [классы событий](/docs/5.4/events):
 
     <?php
 
@@ -214,7 +218,7 @@ Eloquent event handlers may now be mapped to event objects. This provides a more
         use Notifiable;
 
         /**
-         * The event map for the model.
+         * Карта событий для модели.
          *
          * @var array
          */
@@ -224,9 +228,9 @@ Eloquent event handlers may now be mapped to event objects. This provides a more
         ];
     }
 
-### Job Level Retry & Timeout
+### Настройки Retry и Timeout на уровне задач
 
-Previously, queue job "retry" and "timeout" settings could only be configured globally for all jobs on the command line. However, in Laravel 5.4, these settings may be configured on a per-job basis by defining them directly on the job class:
+Ранее настройки задач в очереди "retry" и "timeout" можно было настроить только глобально для всех задач в командной строке. Однако, в Laravel 5.4 данные настройки можно изменить отдельно для каждой задачи, задав их напрямую в классе задачи:
 
     <?php
 
@@ -235,32 +239,32 @@ Previously, queue job "retry" and "timeout" settings could only be configured gl
     class ProcessPodcast implements ShouldQueue
     {
         /**
-         * The number of times the job may be attempted.
+         * Количество раз, которое можно повторить задачу.
          *
          * @var int
          */
         public $tries = 5;
 
         /**
-         * The number of seconds the job can run before timing out.
+         * Количество секунд, которое задача может быть запущена до таймаута.
          *
          * @var int
          */
         public $timeout = 120;
     }
 
-For more information about these settings, consult the full [queue documentation](/docs/5.4/queues).
+Для получения дополнительной информации см. [документацию по очередям](/docs/5.4/queues).
 
-### Request Sanitization Middleware
+### Посредники для очистки запроса от опасных символов
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/1) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/1) по этой теме.
 
-Laravel 5.4 includes two new middleware in the default middleware stack: `TrimStrings` and `ConvertEmptyStringsToNull`:
+Laravel 5.4 включает два новых посредника в стеке посредников по умолчанию: `TrimStrings` и `ConvertEmptyStringsToNull`:
 
     /**
-     * The application's global HTTP middleware stack.
+     * Глобальный стек HTTP-посредников приложения.
      *
-     * These middleware are run during every request to your application.
+     * Эти посредники запущены во время каждого запроса к вашему приложению.
      *
      * @var array
      */
@@ -271,13 +275,13 @@ Laravel 5.4 includes two new middleware in the default middleware stack: `TrimSt
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
 
-These middleware will automatically trim request input values and convert any empty strings to `null`. This helps you normalize the input for every request entering into your application and not have to worry about continually calling the `trim` function in every route and controller.
+Эти посредники будут автоматически обрезать входные значения запроса и преобразовать любые пустые строки в `null`. Это поможет вам нормализовать ввод для каждого запроса, входящего в ваше приложение, и не беспокоиться о том, что постоянно нужно вызывать функцию `trim` на каждом роуте и контроллере.
 
-### "Realtime" Facades
+### Фасады в реальном времени
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/8) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-4/episodes/8) по этой теме.
 
-Previously, only Laravel's own built-in services exposed [facades](/docs/5.4/facades), which provide quick, terse access to their methods via the service container. However, in Laravel 5.4, you may easily convert any of your application's classes into a facade in realtime simply by prefixing the imported class name with `Facades`. For example, imagine your application contains a class like the following:
+Ранее только собственные сервисы Laravel предоставляли [фасады](/docs/5.4/facades), которые обеспечивали быстрый, лаконичный доступ к своим методам через сервис-контейнер. Однако, в Laravel 5.4 можно запросто конвертировать любой класс вашего приложения в фасад в режиме реального времени просто добавив к имени импортированного класса `Facades` в роли префикса. Например, представьте, что ваше приложение содержит следующий класс:
 
     <?php
 
@@ -288,7 +292,7 @@ Previously, only Laravel's own built-in services exposed [facades](/docs/5.4/fac
         protected $tax;
 
         /**
-         * Create a new payment gateway instance.
+         * Создание нового экземпляра шлюза платежа.
          *
          * @param  TaxCalculator  $tax
          * @return void
@@ -299,7 +303,7 @@ Previously, only Laravel's own built-in services exposed [facades](/docs/5.4/fac
         }
 
         /**
-         * Pay the given amount.
+         * Заплатить заданную сумму.
          *
          * @param  int  $amount
          * @return void
@@ -310,7 +314,7 @@ Previously, only Laravel's own built-in services exposed [facades](/docs/5.4/fac
         }
     }
 
-You may easily use this class as a facade like so:
+Вы можете запросто использовать этот класс в качестве фасада:
 
     use Facades\ {
         App\Services\PaymentGateway
@@ -320,13 +324,13 @@ You may easily use this class as a facade like so:
         PaymentGateway::pay($amount);
     });
 
-Of course, if you leverage a realtime facade in this way, you may easily write a test for the interaction using Laravel's [facade mocking capabilities](/docs/5.4/mocking):
+Конечно, если вы используете фасад реального времени таким образом, вы можете легко написать тест для взаимодействия, используя [мок-возможности фасадов](/docs/5.4/mocking) Laravel:
 
     PaymentGateway::shouldReceive('pay')->with('100');
 
-### Custom Pivot Table Models
+### Пользовательские модели сводных таблиц
 
-In Laravel 5.3, all "pivot" table models for `belongsToMany` relationships used the same built-in `Pivot` model instance. In Laravel 5.4, you may define custom models for your pivot tables. If you would like to define a custom model to represent the intermediate table of your relationship, use the `using` method when defining the relationship:
+В Laravel 5.3 все модели сводных ("pivot") таблиц для отношений `belongsToMany` используют один и тот же встроенный экземпляр модели `Pivot`. В Laravel 5.4 можно задать пользовательские модели для своих сводных таблиц. Если вы хотите определить пользовательскую модель для представления промежуточной таблицы ваших отношений, используйте метод `using` при определении отношения:
 
     <?php
 
@@ -337,7 +341,7 @@ In Laravel 5.3, all "pivot" table models for `belongsToMany` relationships used 
     class Role extends Model
     {
         /**
-         * The users that belong to the role.
+         * Пользователи, которые принадлежат роли.
          */
         public function users()
         {
@@ -345,16 +349,16 @@ In Laravel 5.3, all "pivot" table models for `belongsToMany` relationships used 
         }
     }
 
-### Improved Redis Cluster Support
+### Улучшенная поддержка кластеров Redis
 
-Previously, it was not possible to define Redis connections to single hosts and to clusters in the same application. In Laravel 5.4, you may now define Redis connections to multiple single hosts and multiple clusters within the same application. For more information on Redis in Laravel, please consult the full [Redis documentation](/docs/5.4/redis).
+Раньше было невозможно определить соединения Redis к отдельным хостам и к кластерам в одном и том же приложении. В Laravel 5.4 теперь можно определять соединения Redis к нескольким одиночным хостам и к нескольким кластерам в рамках одного и того же приложения. Чтобы узнать больше о Redis в Laravel загляните в полную [документацию Redis](/docs/5.4/redis).
 
 <a name="utf8mb4"></a>
-### Migration Default String Length
+### Миграция длины строки по умолчанию
 
-Laravel 5.4 uses the `utf8mb4` character set by default, which includes support for storing "emojis" in the database. If you are upgrading your application from Laravel 5.3, you are not required to switch to this character set.
+Laravel 5.4 использует кодировку `utf8mb4`, установленную по умолчанию, которая включает поддержку "эмоджи" в базе данных. Если вы обновляете свое приложение с Laravel 5.3, вам не нужно переключаться на этот набор символов.
 
-If you choose to switch to this character set manually and are running a version of MySQL older than the 5.7.7 release, you may need to manually configure the default string length generated by migrations. You may configure this by calling the `Schema::defaultStringLength` method within your `AppServiceProvider`:
+Если вы решите переключиться на этот набор символов вручную и работаете на версии MySQL старше релиза 5.7.7, то вам может потребоваться вручную настроить длину строки по умолчанию, используя миграции. Вы можете изменить данную настройку вызвав метод `Schema::defaultStringLength` в своем `AppServiceProvider`:
 
     use Illuminate\Support\Facades\Schema;
 
@@ -371,37 +375,37 @@ If you choose to switch to this character set manually and are running a version
 <a name="laravel-5.3"></a>
 ## Laravel 5.3
 
-Laravel 5.3 continues the improvements made in Laravel 5.2 by adding a driver based [notification system](/docs/5.3/notifications), robust realtime support via [Laravel Echo](/docs/5.3/broadcasting), painless OAuth2 servers via [Laravel Passport](/docs/5.3/passport), full-text model searching via [Laravel Scout](/docs/5.3/scout), Webpack support in Laravel Elixir, "mailable" objects, explicit separation of `web` and `api` routes, Closure based console commands, convenient helpers for storing uploaded files, support for POPO and single-action controllers, improved default frontend scaffolding, and more.
+В Laravel 5.3 продолжены улучшения, сделанные в Laravel 5.2, добавлена [система уведомлений](/docs/5.3/notifications) на основе драйверов, надёжная поддержка режима реального времени с помощью [Laravel Echo](/docs/5.3/broadcasting), простая настройка серверов OAuth2 с помощью [Laravel Passport](/docs/5.3/passport), полнотекстовый поиск моделей с помощью [Laravel Scout](/docs/5.3/scout), поддержка Webpack в Laravel Elixir, «отправляемые по почте» объекты, явное разделение роутов `web` и `api`, консольные команды на основе замыканий, удобные вспомогательные функции для хранения загружаемых файлов, поддержка POPO и контроллеров одностороннего действия, улучшенная заготовка фронтенда по умолчанию, и многое другое.
 
-### Notifications
+### Уведомления
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/9) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/9) по этой теме.
 
-Laravel Notifications provide a simple, expressive API for sending notifications across a variety of delivery channels such as email, Slack, SMS, and more. For example, you may define a notification that an invoice has been paid and deliver that notification via email and SMS. Then, you may send the notification using a single, simple method:
+Уведомления Laravel предоставляют простой, выразительный API для отправки уведомлений по различным каналам доставки, таким как email, Slack, SMS и другим. Например, вы можете определить уведомление об оплате счёта и доставлять его по email и SMS. Затем вы можете отправить уведомление с помощью одного простого метода:
 
     $user->notify(new InvoicePaid($invoice));
 
-There is already a wide variety of [community written drivers](http://laravel-notification-channels.com) for notifications, including support for iOS and Android notifications. To learn more about notifications, be sure to check out the [full notification documentation](/docs/5.3/notifications).
+Для уведомлений уже существует огромное множество [созданных сообществом драйверов](http://laravel-notification-channels.com), включая поддержку уведомлений для iOS и Android. Подробнее об уведомлениях читайте в [полной документации по уведомлениям](/docs/5.3/notifications).
 
-### WebSockets / Event Broadcasting
+### WebSockets / Бродкаст событий
 
-While event broadcasting existed in previous versions of Laravel, the Laravel 5.3 release greatly improves this feature of the framework by adding channel-level authentication for private and presence WebSocket channels:
+Вещание событий есть и в предыдущих версиях Laravel, но в Laravel 5.3 оно значительно улучшено добавлением аутентификации на уровне канала для частных каналов и каналов присутствия WebSocket:
 
     /*
-     * Authenticate the channel subscription...
+     * Аутентификация подписки на канал...
      */
     Broadcast::channel('orders.*', function ($user, $orderId) {
         return $user->placedOrder($orderId);
     });
 
-Laravel Echo, a new JavaScript package installable via NPM, has also been released to provide a simple, beautiful API for subscribing to channels and listening for your server-side events in your client-side JavaScript application. Echo includes support for [Pusher](https://pusher.com) and [Socket.io](http://socket.io):
+Laravel Echo — новый JavaScript-пакет, устанавливаемый через NPM. Он обеспечивает простой, прекрасный API для подписок на каналы и прослушивания ваших событий на стороне сервера в вашем JavaScript-приложении на стороне клиента. Echo включает поддержку [Pusher](https://pusher.com) и [Socket.io](http://socket.io):
 
     Echo.channel('orders.' + orderId)
         .listen('ShippingStatusUpdated', (e) => {
             console.log(e.description);
         });
 
-In addition to subscribing to traditional channels, Laravel Echo also makes it a breeze to subscribe to presence channels which provide information about who is listening on a given channel:
+В дополнение к подпискам на обычные каналы Laravel Echo упрощает подписку на каналы присутствия, которые предоставляют информацию о том, кто прослушивает данный канал:
 
     Echo.join('chat.' + roomId)
         .here((users) => {
@@ -414,42 +418,42 @@ In addition to subscribing to traditional channels, Laravel Echo also makes it a
             console.log(user.name);
         });
 
-To learn more about Echo and event broadcasting, check out the [full documentation](/docs/5.3/broadcasting).
+Подробнее об Echo и вещании событий читайте в [полной документации](/docs/5.3/broadcasting).
 
-### Laravel Passport (OAuth2 Server)
+### Laravel Passport (Сервер OAuth2)
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/13) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/13) по этой теме.
 
-Laravel 5.3 makes API authentication a breeze using [Laravel Passport](/docs/{{version}}/passport), which provides a full OAuth2 server implementation for your Laravel application in a matter of minutes. Passport is built on top of the [League OAuth2 server](https://github.com/thephpleague/oauth2-server) that is maintained by Alex Bilbie.
+В Laravel 5.3 реализована простая API аутентификация с помощью [Laravel Passport](/docs/{{version}}/passport), который предоставляет полную реализацию сервера OAuth2 для вашего приложения в считанные минуты. Passport создан на основе [сервера League OAuth2](https://github.com/thephpleague/oauth2-server), созданного Алексом Билби.
 
-Passport makes it painless to issue access tokens via OAuth2 authorization codes. You may also allow your users to create "personal access tokens" via your web UI. To get you started quickly, Passport includes [Vue components](https://vuejs.org) that can serve as a starting point for your OAuth2 dashboard, allowing users to create clients, revoke access tokens, and more:
+Passport упрощает создание токенов доступа с помощью кодов авторизации OAuth2. Также вы можете позволить своим пользователям создавать "персональные токены доступа" с помощью вашего веб-UI. Чтобы вы могли быстрее разобраться, Passport содержит [Vue-компоненты](https://vuejs.org), которые могут служить отправной точкой для вашей панели управления OAuth2, позволяя пользователям создавать клиентов, отзывать токены доступа и многое другое:
 
     <passport-clients></passport-clients>
     <passport-authorized-clients></passport-authorized-clients>
     <passport-personal-access-tokens></passport-personal-access-tokens>
 
-If you do not want to use the Vue components, you are welcome to provide your own frontend dashboard for managing clients and access tokens. Passport exposes a simple JSON API that you may use with any JavaScript framework you choose.
+Если вы не хотите использовать Vue-компоненты, вы можете предоставить свою собственную фронтенд-панель для управления клиентами и токенами доступа. Passport предоставляет простой JSON API, который вы можете использовать с любым JavaScript-фреймворком на ваш выбор.
 
-Of course, Passport also makes it simple to define access token scopes that may be requested by application's consuming your API:
+Разумеется, Passport также позволяет легко определить ограничения токенов доступа, которые могут быть запрошены приложением, использующим ваш API:
 
     Passport::tokensCan([
         'place-orders' => 'Place new orders',
         'check-status' => 'Check order status',
     ]);
 
-In addition, Passport includes helpful middleware for verifying that an access token authenticated request contains the necessary token scopes:
+Кроме того, в Passport есть вспомогательный посредник для проверки того, что аутентифицированный токеном доступа запрос содержит необходимые ограничения токена:
 
     Route::get('/orders/{order}/status', function (Order $order) {
-        // Access token has "check-status" scope...
+        // Токен доступа имеет ограничение "check-status"...
     })->middleware('scope:check-status');
 
-Lastly, Passport includes support for consuming your own API from your JavaScript application without worrying about passing access tokens. Passport achieves this through encrypted JWT cookies and synchronized CSRF tokens, allowing you to focus on what matters: your application. For more information on Passport, be sure to check out its [full documentation](/docs/5.3/passport).
+И наконец, Passport поддерживает использование вашего собственного API в вашем JavaScript-приложении, позволяя не беспокоиться о передаче токенов доступа. Это достигается при помощи шифрованных JWT-cookie и синхронизированных CSRF-токенов, позволяя вам сконцентрироваться на том, что важно, — вашем приложении. Подробнее о Passport читайте в [полной документации](/docs/5.3/passport).
 
-### Search (Laravel Scout)
+### Поиск (Laravel Scout)
 
-Laravel Scout provides a simple, driver based solution for adding full-text search to your [Eloquent models](/docs/5.3/eloquent). Using model observers, Scout will automatically keep your search indexes in sync with your Eloquent records. Currently, Scout ships with an [Algolia](https://www.algolia.com/) driver; however, writing custom drivers is simple and you are free to extend Scout with your own search implementations.
+Laravel Scout предоставляет простое решение на основе драйверов для добавления полнотекстового поиска в ваши [Eloquent-модели](/docs/5.3/eloquent). С помощью наблюдателей за моделями Scout будет автоматически синхронизировать ваши поисковые индексы с вашими записями Eloquent. Сейчас Scout поставляется с драйвером [Algolia](https://www.algolia.com/); однако, создавать свои драйверы просто, и вы можете дополнить Scout своей собственной реализацией поиска.
 
-Making models searchable is as simple as adding a `Searchable` trait to the model:
+Делать модели доступными для поиска так же просто, как добавить трейт `Searchable` в модель:
 
     <?php
 
@@ -463,7 +467,7 @@ Making models searchable is as simple as adding a `Searchable` trait to the mode
         use Searchable;
     }
 
-Once the trait has been added to your model, its information will be kept in sync with your search indexes by simply saving the model:
+Когда трейт добавлен в вашу модель, её информация будет синхронизироваться с вашими поисковыми индексами при сохранении модели:
 
     $order = new Order;
 
@@ -471,26 +475,26 @@ Once the trait has been added to your model, its information will be kept in syn
 
     $order->save();
 
-Once your models have been indexed, its a breeze to perform full-text searches across all of your models. You may even paginate your search results:
+Когда ваши модели проиндексированы, можно легко выполнять полнотекстовый поиск по всем вашим моделям. Вы можете даже сделать страничный вывод для результатов поиска:
 
     return Order::search('Star Trek')->get();
 
     return Order::search('Star Trek')->where('user_id', 1)->paginate();
 
-Of course, Scout has many more features which are covered in the [full documentation](/docs/5.3/scout).
+Разумеется, Scout имеет многие другие возможности, описанные в [полной документации](/docs/5.3/scout).
 
-### Mailable Objects
+### Почтовые объекты
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/6) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/6) по этой теме.
 
-Laravel 5.3 ships with support for mailable objects. These objects allow you to represent your email messages as a simple objects instead of customizing mail messages within Closures. For example, you may define a simple mailable object for a "welcome" email:
+Laravel 5.3 поддерживает почтовые объекты. Эти объекты позволяют вам представлять ваши email-сообщения в виде простых объектов вместо того, чтобы настраивать письма в замыканиях. Например, вы можете определить простой почтовый объект для письма "welcome":
 
     class WelcomeMessage extends Mailable
     {
         use Queueable, SerializesModels;
 
         /**
-         * Build the message.
+         * Создать сообщение.
          *
          * @return $this
          */
@@ -500,27 +504,27 @@ Laravel 5.3 ships with support for mailable objects. These objects allow you to 
         }
     }
 
-Once the mailable object has been defined, you can send it to a user using a simple, expressive API. Mailable objects are great for discovering the intent of your messages while scanning your code:
+После определения почтового объекта вы можете отправить его пользователю с помощью простого и выразительного API. Почтовые объекты позволяют легко определить цель сообщения при просмотре вашего кода:
 
     Mail::to($user)->send(new WelcomeMessage);
 
-Of course, you may also mark mailable objects as "queueable" so that they will be sent in the background by your queue workers:
+Само собой, вы можете пометить почтовый объект как объект "для очереди", тогда он будет отправлен в фоновом режиме вашими обработчиками очереди:
 
     class WelcomeMessage extends Mailable implements ShouldQueue
     {
         //
     }
 
-For more information on mailable objects, be sure to check out the [mail documentation](/docs/5.3/mail).
+Подробнее о почтовых объектах читайте в [документации по mail](/docs/5.3/mail).
 
-### Storing Uploaded Files
+### Хранение загруженных файлов
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/12) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/12) по этой теме.
 
-In web applications, one of the most common use-cases for storing files is storing user uploaded files such as profile pictures, photos, and documents. Laravel 5.3 makes it very easy to store uploaded files using the new `store` method on an uploaded file instance. Simply call the `store` method with the path at which you wish to store the uploaded file:
+Один из самых распространённых сценариев хранения файлов в веб-приложениях — хранение файлов, загружаемых пользователем, таких как изображение для профиля, фотографии и документы. Laravel 5.3 позволяет очень просто сохранять загружаемые файлы с помощью нового метода `store` на экземпляре загруженного файла. Просто вызовите метод `store` указав путь для сохранения загруженного файла:
 
     /**
-     * Update the avatar for the user.
+     * Изменить аватар пользователя.
      *
      * @param  Request  $request
      * @return Response
@@ -532,86 +536,85 @@ In web applications, one of the most common use-cases for storing files is stori
         return $path;
     }
 
-For more information on storing uploaded files, check out the [full documentation](/docs/{{version}}/filesystem#file-uploads).
+Подробнее о хранении загруженных файлов читайте в [полной документации](/docs/{{version}}/filesystem#file-uploads).
 
+### Webpack и Laravel Elixir
 
-### Webpack & Laravel Elixir
-
-Along with Laravel 5.3, Laravel Elixir 6.0 has been released with baked-in support for the Webpack and Rollup JavaScript module bundlers. By default, the Laravel 5.3 `gulpfile.js` file now uses Webpack to compile your JavaScript. The [full Laravel Elixir documentation](/docs/5.3/elixir) contains more information on both of these bundlers:
+Вместе с Laravel 5.3 вышла версия Laravel Elixir 6.0 с встроенной поддержкой для сборщиков модулей Webpack и Rollup JavaScript. Теперь файл `gulpfile.js` в Laravel 5.3 по умолчанию использует Webpack для компилирования вашего JavaScript. В [полной документации по Laravel Elixir](/docs/5.3/elixir) содержится подробная информация об обоих этих сборщиках:
 
     elixir(mix => {
         mix.sass('app.scss')
            .webpack('app.js');
     });
 
-### Frontend Structure
+### Структура фронтенда
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/4) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/4) по этой теме.
 
-Laravel 5.3 ships with a more modern frontend structure. This primarily affects the `make:auth` authentication scaffolding. Instead of loading frontend assets from a CDN, dependencies are specified in the default `package.json` file.
+В Laravel 5.3 более современная структура фронтенда. Это повлияло главным образом на заготовку аутентификации `make:auth` Вместо загрузки ресурсов фронтенда из CDN зависимости указаны в стандартном файле `package.json`.
 
-In addition, support for single file [Vue components](https://vuejs.org) is now included out of the box. A sample `Example.vue` component is included in the `resources/assets/js/components` directory. In addition, the new `resources/assets/js/app.js` file bootstraps and configures your JavaScript libraries and, if applicable, Vue components.
+Кроме того, теперь сразу поддерживаются однофайловые [Vue-компоненты](https://vuejs.org). Пример компонента `Example.vue` находится в директории `resources/assets/js/components`. Более того, новый файл `resources/assets/js/app.js` загружает и настраивает ваши JavaScript-библиотеки и при необходимости Vue-компоненты.
 
-This structure provides more guidance on how to begin developing modern, robust JavaScript applications, without requiring your application to use any given JavaScript or CSS framework. For more information on getting started with modern Laravel frontend development, check out the new [introductory frontend documentation](/docs/5.3/frontend).
+Эта структура обеспечивает лучшую основу для начала разработки современных, надёжных JavaScript-приложений, не требуя от вашего приложения использования какого-либо из этих JavaScript и CSS фреймворка. Подробнее о том, как начать разработку современного фронтенда на Laravel, читайте в новом [вводном разделе о фронтенде](/docs/5.3/frontend).
 
-### Routes Files
+### Файлы роутов
 
-By default, fresh Laravel 5.3 applications contain two HTTP route files in a new top-level `routes` directory. The `web` and `api` route files provide more explicit guidance in how to split the routes for your web interface and your API. The routes in the `api` route file are automatically assigned the `api` prefix by the `RouteServiceProvider`.
+По умолчанию свежее приложение Laravel 5.3 содержит два файла HTTP-роутов в новой директории верхнего уровня `routes`. Файлы роутов `web` и `api` обеспечивают более явное понимание того, как разделяются роуты для вашего веб-интерфейса и вашего API. `RouteServiceProvider` автоматически назначает префикс `api` роутам из файла `api`.
 
-### Closure Console Commands
+### Консольные команды замыкания
 
-In addition to being defined as command classes, Artisan commands may now be defined as simple Closures in the `commands` method of your `app/Console/Kernel.php` file. In fresh Laravel 5.3 applications, the `commands` method loads a `routes/console.php` file which allows you to define your Console commands as route-like, Closure based entry points into your application:
+В добавление к тому, что Artisan-команды определены как классы, теперь они могут быть определены как простые замыкания в методе `commands` вашего файла `app/Console/Kernel.php`. В свежих приложениях Laravel 5.3 метод `commands` загружает файл `routes/console.php`, который позволяет вам определять ваши консольные команды как "роутоподобные" точки входа в ваше приложение на основе замыканий:
 
     Artisan::command('build {project}', function ($project) {
         $this->info('Building project...');
     });
 
-For more information on Closure commands, check out the [full Artisan documentation](/docs/5.3/artisan#closure-commands).
+Подробнее о командах замыканиях читайте в [полной документации по Artisan](/docs/5.3/artisan#closure-commands).
 
-### The `$loop` Variable
+### Переменная `$loop`
 
-> {video} There is a free [video tutorial](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/7) for this feature available on Laracasts.
+> {video} На Laracasts есть бесплатный [видео-урок](https://laracasts.com/series/whats-new-in-laravel-5-3/episodes/7) по этой теме.
 
-When looping within a Blade template, a `$loop` variable will be available inside of your loop. This variable provides access to some useful bits of information such as the current loop index and whether this is the first or last iteration through the loop:
+В циклах внутри Blade-шаблонов будет доступна переменная `$loop`. Эта переменная предоставляет доступ к некоторым полезным данным, таким как текущий индекс цикла, и является ли данная итерация цикла первой или последней:
 
     @foreach ($users as $user)
         @if ($loop->first)
-            This is the first iteration.
+            Это первая итерация.
         @endif
 
         @if ($loop->last)
-            This is the last iteration.
+            Это последняя итерация.
         @endif
 
-        <p>This is user {{ $user->id }}</p>
+        <p>Это пользователь {{ $user->id }}</p>
     @endforeach
 
-For more information, consult the [full Blade documentation](/docs/5.3/blade#the-loop-variable).
+Подробнее читайте в [полной документации Blade](/docs/5.3/blade#the-loop-variable).
 
 <a name="laravel-5.2"></a>
 ## Laravel 5.2
 
-Laravel 5.2 continues the improvements made in Laravel 5.1 by adding multiple authentication driver support, implicit model binding, simplified Eloquent global scopes, opt-in authentication scaffolding, middleware groups, rate limiting middleware, array validation improvements, and more.
+В Laravel 5.2 вошли такие улучшения, как поддержка нескольких драйверов аутентификации, неявная привязка модели, упрощение глобальных заготовок Eloquent, оптимизация создания заготовок для аутентификации, группы посредников, посредник для ограничения скорости, улучшения проверки ввода массивов, и много другое.
 
-### Authentication Drivers / "Multi-Auth"
+### Драйверы аутентификации / "Multi-Auth"
 
-In previous versions of Laravel, only the default, session-based authentication driver was supported out of the box, and you could not have more than one authenticatable model instance per application.
+В предыдущих версиях Laravel изначально поддерживался только один драйвер аутентификации — драйвер на основе сессий. В вашем приложении мог быть только один экземпляр аутентифицируемой модели.
 
-However, in Laravel 5.2, you may define additional authentication drivers as well define multiple authenticatable models or user tables, and control their authentication process separately from each other. For example, if your application has one database table for "admin" users and one database table for "student" users, you may now use the `Auth` methods to authenticate against each of these tables separately.
+В Laravel 5.2 вы можете определить дополнительные драйверы аутентификации, а также определить несколько аутентифицируемых моделей или таблиц пользователей, и контролировать процесс их аутентификации отдельно друг от друга. Например, если у вас есть одна таблица для администраторов и другая таблица для обучаемых, вы можете использовать методы `Auth` для каждой их них отдельно.
 
-### Authentication Scaffolding
+### Создание модулей аутентификации
 
-Laravel already makes it easy to handle authentication on the back-end; however, Laravel 5.2 provides a convenient, lightning-fast way to scaffold the authentication views for your front-end. Simply execute the `make:auth` command on your terminal:
+Аутентификация в Laravel и без того довольно проста в настройке, но в Laravel 5.2 появился удобный и быстрый способ создания заготовок для шаблонов аутентификации для вашего «бэкенда». Просто выполните команду `make:auth` в терминале:
 
     php artisan make:auth
 
-This command will generate plain, Bootstrap compatible views for user login, registration, and password reset. The command will also update your routes file with the appropriate routes.
+Эта команда сгенерирует совместимые с начальной загрузкой пустые шаблоны для входа пользователя, регистрации и сброса пароля. Также эта команда дополнит ваш файл роутов соответствующими роутами.
 
-> {note} This feature is only meant to be used on new applications, not during application upgrades.
+> {note} Эта возможность предназначена только для новых приложений, и не подходит для обновления приложений.
 
-### Implicit Model Binding
+### Неявная привязка модели
 
-Implicit model binding makes it painless to inject relevant models directly into your routes and controllers. For example, assume you have a route defined like the following:
+Явная привязка модели затрудняет внедрение соответствующих моделей непосредственно в ваши роуты и контроллеры. Например, предположим у вас есть роут, определённый следующим образом:
 
     use App\User;
 
@@ -619,18 +622,18 @@ Implicit model binding makes it painless to inject relevant models directly into
         return $user;
     });
 
-In Laravel 5.1, you would typically need to use the `Route::model` method to instruct Laravel to inject the `App\User` instance that matches the `{user}` parameter in your route definition. However, in Laravel 5.2, the framework will **automatically** inject this model based on the URI segment, allowing you to quickly gain access to the model instances you need.
+В Laravel 5.1 вам бы пришлось использовать метод `Route::model`, чтобы указать Laravel, что надо внедрить экземпляр `App\User`, соответствующий параметру `{user}` в определении вашего роута. А в Laravel 5.2 фреймворк **автоматически** внедрит эту модель на основе сегмента URI, позволяя вам быстро получить доступ к нужным экземплярам модели.
 
-Laravel will automatically inject the model when the route parameter segment (`{user}`) matches the route Closure or controller method's corresponding variable name (`$user`) and the variable is type-hinting an Eloquent model class.
+Laravel автоматически внедрит модель, если сегмент параметра роута (`{user}`) совпадает с замыканием роута или именем соответствующей переменной метода контроллера (`$user`), и переменная указывает тип класса модели Eloquent.
 
-### Middleware Groups
+### Группы посредников
 
-Middleware groups allow you to group several route middleware under a single, convenient key, allowing you to assign several middleware to a route at once. For example, this can be useful when building a web UI and an API within the same application. You may group the session and CSRF routes into a `web` group, and perhaps the rate limiter in the `api` group.
+Группы посредников позволяют вам объединять несколько посредников роутов одним удобным ключом и назначать на роут сразу несколько посредников. Например, это может пригодится при создании веб-интерфейса и API в одном приложении. Вы можете сгруппировать роуты сессии и CSRF в группу `web`, , а ограничитель скорости в группу `api`.
 
-In fact, the default Laravel 5.2 application structure takes exactly this approach. For example, in the default `App\Http\Kernel.php` file you will find the following:
+На самом деле по умолчанию структура приложения в Laravel 5.2 использует именно такой подход. Например, в стандартном файле`App\Http\Kernel.php` вы найдёте вот что:
 
     /**
-     * The application's route middleware groups.
+     * Группы посредников роутов приложения.
      *
      * @var array
      */
@@ -648,96 +651,96 @@ In fact, the default Laravel 5.2 application structure takes exactly this approa
         ],
     ];
 
-Then, the `web` group may be assigned to routes like so:
+Теперь группа `web` может быть назначена на роут следующим образом:
 
     Route::group(['middleware' => ['web']], function () {
         //
     });
 
-However, keep in mind the `web` middleware group is *already* applied to your routes by default since the `RouteServiceProvider` includes it in the default middleware group.
+Но не забывайте, что группа посредников `web` *уже* применяется к вашим роутам по умолчанию, так как `RouteServiceProvider` включает её в группу посредников по умолчанию.
 
-### Rate Limiting
+### Ограничение скорости
 
-A new rate limiter middleware is now included with the framework, allowing you to easily limit the number of requests that a given IP address can make to a route over a specified number of minutes. For example, to limit a route to 60 requests every minute from a single IP address, you may do the following:
+Теперь во фреймворк включён новый посредник ограничения скорости, позволяющий вам легко ограничить количество запросов, которое может выполнить указанный IP за определённое число минут. Например, для ограничения количества запросов от одного IP-адреса до 60 в минуту сделайте так:
 
     Route::get('/api/users', ['middleware' => 'throttle:60,1', function () {
         //
     }]);
 
-### Array Validation
+### Проверка ввода массивов
 
-Validating array form input fields is much easier in Laravel 5.2. For example, to validate that each e-mail in a given array input field is unique, you may do the following:
+В Laravel 5.2 стало намного проще проверять ввод массивов через поля форм. Например, для проверки того, что каждый e-mail в данном поле ввода массива уникален, сделайте так:
 
     $validator = Validator::make($request->all(), [
         'person.*.email' => 'email|unique:users'
     ]);
 
-Likewise, you may use the `*` character when specifying your validation messages in your language files, making it a breeze to use a single validation message for array based fields:
+Более того, вы можете использовать символ `*` при написании сообщений для проверки ввода в ваших языковых файлах, что позволяет использовать одно сообщение для полей ввода массивов:
 
     'custom' => [
         'person.*.email' => [
-            'unique' => 'Each person must have a unique e-mail address',
+            'unique' => 'Каждый человек должен иметь уникальный e-mail',
         ]
     ],
 
-### Bail Validation Rule
+### Правило проверки ввода Bail
 
-A new `bail` validation rule has been added, which instructs the validator to stop validating after the first validation failure for a given rule. For example, you may now prevent the validator from running a `unique` check if an attribute fails an `integer` check:
+Добавлено новое правило проверки ввода `bail` , оно останавливает валидатор после первой неудачной проверки по данному правилу. Например, вы можете отменить проверку значения на уникальность `unique`, если оно не прошло проверку на `integer`:
 
     $this->validate($request, [
         'user_id' => 'bail|integer|unique:users'
     ]);
 
-### Eloquent Global Scope Improvements
+### Улучшения глобальных заготовок Eloquent
 
-In previous versions of Laravel, global Eloquent scopes were complicated and error-prone to implement; however, in Laravel 5.2, global query scopes only require you to implement a single, simple method: `apply`.
+В предыдущих версиях Laravel глобальные заготовки Eloquent были сложными и приводили к появлению ошибок. Но в Laravel 5.2 глобальные заготовки запросов требуют от вас реализации только одного простого метода `apply`.
 
-For more information on writing global scopes, check out the full [Eloquent documentation](/docs/{{version}}/eloquent#global-scopes).
+Подробнее о написании глобальных заготовок читайте в полной [документации по Eloquent](/docs/{{version}}/eloquent#global-scopes).
 
 <a name="laravel-5.1.11"></a>
 ## Laravel 5.1.11
 
-Laravel 5.1.11 introduces [authorization](/docs/{{version}}/authorization) support out of the box! Conveniently organize your application's authorization logic using simple callbacks or policy classes, and authorize actions using simple, expressive methods.
+В Laravel 5.1.11 добавлена поддержка [авторизации](/docs/{{version}}/authorization) в исходном состоянии. Удобно организуйте логику авторизации ваше приложения при помощи простых обратных вызовов или классов политик, и авторизуйте действия при помощи простых и выразительных методов.
 
-For more information, please refer to the [authorization documentation](/docs/{{version}}/authorization).
+Подробнее читайте в [документации по авторизации](/docs/{{version}}/authorization).
 
 <a name="laravel-5.1.4"></a>
 ## Laravel 5.1.4
 
-Laravel 5.1.4 introduces simple login throttling to the framework. Consult the [authentication documentation](/docs/{{version}}/authentication#authentication-throttling) for more information.
+В Laravel 5.1.4 добавлена простая блокировка входа в приложение. Подробнее читайте в [документации по аутентификации](/docs/{{version}}/authentication#authentication-throttling) for more information.
 
 <a name="laravel-5.1"></a>
 ## Laravel 5.1
 
-Laravel 5.1 continues the improvements made in Laravel 5.0 by adopting PSR-2 and adding event broadcasting, middleware parameters, Artisan improvements, and more.
+В Laravel 5.1 продолжены сделанные в Laravel 5.0 улучшения по применению стандарта PSR-2, и добавлено вещание событий, параметры посредников, улучшения Artisan, и многое другое.
 
 ### PHP 5.5.9+
 
-Since PHP 5.4 will enter "end of life" in September and will no longer receive security updates from the PHP development team, Laravel 5.1 requires PHP 5.5.9 or greater. PHP 5.5.9 allows compatibility with the latest versions of popular PHP libraries such as Guzzle and the AWS SDK.
+Поскольку PHP 5.4 вступит в "завершающий этап жизненного цикла" в сентябре, и для него больше не будет обновлений безопасности от команды разработки PHP, Laravel 5.1 требует PHP 5.5.9 или выше. PHP 5.5.9 обеспечивает совместимость с последними версиями популярных PHP-библиотек, таких как Guzzle и AWS SDK.
 
 ### LTS
 
- Laravel 5.1 is the first release of Laravel to receive **long term support**. Laravel 5.1 will receive bug fixes for 2 years and security fixes for 3 years. This support window is the largest ever provided for Laravel and provides stability and peace of mind for larger, enterprise clients and customers.
+Laravel 5.1 — первый выпуск Laravel с **долгосрочной поддержкой**. Для Laravel 5.1 будет обеспечено исправление ошибок в течение 2 лет и исправление ошибок безопасности в течение 3 лет. Это наибольший срок поддержки для вышедших версий Laravel, он обеспечивает стабильность и уверенность для больших, корпоративных клиентов и заказчиков.
 
 ### PSR-2
 
-The [PSR-2 coding style guide](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) has been adopted as the default style guide for the Laravel framework. Additionally, all generators have been updated to generate PSR-2 compatible syntax.
+[Руководство по стилю программирования PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) принято стандартом для стиля разработки фреймворка Laravel. Вдобавок, все генераторы обновлены для генерирования PSR-2-совместимого синтаксиса.
 
-### Documentation
+### Документация
 
-Every page of the Laravel documentation has been meticulously reviewed and dramatically improved. All code examples have also been reviewed and expanded to provide more relevance and context.
+Каждая страница документации Laravel тщательно отредактирована и значительно исправлена. Все примеры кода также пересмотрены и расширены для обеспечения большей релевантности и понимания контекста.
 
-### Event Broadcasting
+### Вещание событий
 
-In many modern web applications, web sockets are used to implement realtime, live-updating user interfaces. When some data is updated on the server, a message is typically sent over a websocket connection to be handled by the client.
+Во многих современных веб-приложениях используются веб-сокеты для реализации живых интерфейсов пользователя, работающих в реальном времени. Когда на сервере обновляются какие-либо данные, по веб-сокет соединению отправляется сообщение для обработки клиентом.
 
-To assist you in building these types of applications, Laravel makes it easy to "broadcast" your events over a websocket connection. Broadcasting your Laravel events allows you to share the same event names between your server-side code and your client-side JavaScript framework.
+Чтобы помочь вам в создании приложений такого типа, Laravel позволяет легко "транслировать" ваши события по веб-сокет соединению. Вещание ваших событий Laravel позволяет вам использовать одинаковые названия событий в вашем коде на стороне сервера и вашем JavaScript-фреймворке на стороне клиента.
 
-To learn more about event broadcasting, check out the [event documentation](/docs/{{version}}/events#broadcasting-events).
+Подробнее о вещании событий читайте в [документации по событиям](/docs/{{version}}/events#broadcasting-events).
 
-### Middleware Parameters
+### Параметры посредников
 
-Middleware can now receive additional custom parameters. For example, if your application needs to verify that the authenticated user has a given "role" before performing a given action, you could create a `RoleMiddleware` that receives a role name as an additional argument:
+Теперь посредники могут принимать дополнительные параметры. Например, если в вашем приложении необходима проверка наличия у пользователя необходимой "роли" для выполнения данного действия, вы можете создать посредника `RoleMiddleware`, который принимает название роли в качестве дополнительного аргумента:
 
     <?php
 
@@ -748,7 +751,7 @@ Middleware can now receive additional custom parameters. For example, if your ap
     class RoleMiddleware
     {
         /**
-         * Run the request filter.
+         * Запуск фильтра запроса.
          *
          * @param  \Illuminate\Http\Request  $request
          * @param  \Closure  $next
@@ -758,7 +761,7 @@ Middleware can now receive additional custom parameters. For example, if your ap
         public function handle($request, Closure $next, $role)
         {
             if (! $request->user()->hasRole($role)) {
-                // Redirect...
+                // Переадресация...
             }
 
             return $next($request);
@@ -766,17 +769,17 @@ Middleware can now receive additional custom parameters. For example, if your ap
 
     }
 
-Middleware parameters may be specified when defining the route by separating the middleware name and parameters with a `:`. Multiple parameters should be delimited by commas:
+Параметры посредника можно указать при определении роута, разделив название посредника и его параметры двоеточием `:`. Несколько параметров разделяются между собой запятыми:
 
     Route::put('post/{id}', ['middleware' => 'role:editor', function ($id) {
         //
     }]);
 
-For more information on middleware, check out the [middleware documentation](/docs/{{version}}/middleware).
+Подробнее о посредниках читайте в [документации посредников](/docs/{{version}}/middleware).
 
-### Testing Overhaul
+### Пересмотр тестирования
 
-The built-in testing capabilities of Laravel have been dramatically improved. A variety of new methods provide a fluent, expressive interface for interacting with your application and examining its responses. For example, check out the following test:
+Встроенные в Laravel возможности для тестирования были значительно улучшены. Набор новых методов обеспечивает гибкий и выразительный интерфейс для взаимодействия с вашим приложением и проверки его откликов. Например, взгляните на следующий тест:
 
     public function testNewUserRegistration()
     {
@@ -787,11 +790,11 @@ The built-in testing capabilities of Laravel have been dramatically improved. A 
              ->seePageIs('/dashboard');
     }
 
-For more information on testing, check out the [testing documentation](/docs/{{version}}/testing).
+Подробнее о тестировании читайте в [документации по тестированию](/docs/{{version}}/testing).
 
-### Model Factories
+### Фабрики моделей
 
-Laravel now ships with an easy way to create stub Eloquent models using [model factories](/docs/{{version}}/database-testing#writing-factories). Model factories allow you to easily define a set of "default" attributes for your Eloquent model, and then generate test model instances for your tests or database seeds. Model factories also take advantage of the powerful [Faker](https://github.com/fzaninotto/Faker) PHP library for generating random attribute data:
+Теперь Laravel содержит простой способ для создания заглушек Eloquent-моделей при помощи [фабрик моделей](/docs/{{version}}/database-testing#writing-factories). Фабрики моделей позволяют вам легко задать набор «стандартных» атрибутов для вашей Eloquent-модели, и затем сгенерировать экземпляры тестовой модели для ваших тестов и тестовые данные для БД. Также фабрики моделей содержат полезные возможности мощной PHP-библиотеки [Faker](https://github.com/fzaninotto/Faker) для генерирования случайных данных:
 
     $factory->define(App\User::class, function ($faker) {
         return [
@@ -802,76 +805,76 @@ Laravel now ships with an easy way to create stub Eloquent models using [model f
         ];
     });
 
-For more information on model factories, check out [the documentation](/docs/{{version}}/database-testing#writing-factories).
+Подробнее о фабриках моделей читайте в [документации](/docs/{{version}}/database-testing#writing-factories).
 
-### Artisan Improvements
+### Улучшения Artisan
 
-Artisan commands may now be defined using a simple, route-like "signature", which provides an extremely simple interface for defining command line arguments and options. For example, you may define a simple command and its options like so:
+Теперь Artisan-команды можно определить с помощью простой, роуто-подобной "сигнатуры", которая обеспечивает чрезвычайно простой интерфейс для определения аргументов и параметров командной строки. Например, вы можете определить простую команду и её параметры таким образом:
 
     /**
-     * The name and signature of the console command.
+     * Имя и сигнатура терминальной команды.
      *
      * @var string
      */
     protected $signature = 'email:send {user} {--force}';
 
-For more information on defining Artisan commands, consult the [Artisan documentation](/docs/{{version}}/artisan).
+Подробнее об определении Artisan-команд читайте в [документации Artisan](/docs/{{version}}/artisan).
 
-### Folder Structure
+### Структура папок
 
-To better express intent, the `app/Commands` directory has been renamed to `app/Jobs`. Additionally, the `app/Handlers` directory has been consolidated into a single `app/Listeners` directory which simply contains event listeners. However, this is not a breaking change and you are not required to update to the new folder structure to use Laravel 5.1.
+Для большего соответствия своему назначению папка `app/Commands` переименована в `app/Jobs`. Также директория `app/Handlers`  собрана в единую директорию `app/Listeners`, которая содержит слушатели событий. Однако, эти изменения не обязательны, и вам не требуется обновлять структуру папок для использования Laravel 5.1.
 
-### Encryption
+### Шифрование
 
-In previous versions of Laravel, encryption was handled by the `mcrypt` PHP extension. However, beginning in Laravel 5.1, encryption is handled by the `openssl` extension, which is more actively maintained.
+В предыдущих версиях Laravel за шифрование отвечало PHP-расширение `mcrypt`. А теперь, начиная с Laravel 5.1, за шифрование отвечает расширение `openssl`, которое развивается намного активнее.
 
 <a name="laravel-5.0"></a>
 ## Laravel 5.0
 
-Laravel 5.0 introduces a fresh application structure to the default Laravel project. This new structure serves as a better foundation for building a robust application in Laravel, as well as embraces new auto-loading standards (PSR-4) throughout the application. First, let's examine some of the major changes:
+В Laravel 5.0 введена новая структура приложения для проекта Laravel по умолчанию. Эта новая структура служит лучшей основой для построения надёжных приложений на Laravel, а также обеспечивает поддержку стандартов автозагрузки (PSR-4) для всего приложения. Для начала давайте рассмотрим некоторые основные новшества:
 
-### New Folder Structure
+### Новая структура папок
 
-The old `app/models` directory has been entirely removed. Instead, all of your code lives directly within the `app` folder, and, by default, is organized to the `App` namespace. This default namespace can be quickly changed using the new `app:name` Artisan command.
+Старая директория `app/models` была полностью удалена. Вместо этого весь ваш код теперь располагается прямо в папке `app` и по умолчанию попадает в пространство имён `App`. Это пространство имён по умолчанию можно быстро изменить с помощью новой Artisan-команды `app:name`.
 
-Controllers, middleware, and requests (a new type of class in Laravel 5.0) are now grouped under the `app/Http` directory, as they are all classes related to the HTTP transport layer of your application. Instead of a single, flat file of route filters, all middleware are now broken into their own class files.
+Контроллеры, посредники и запросы (новый тип классов в Laravel 5.0) теперь сгруппированы в папке `app/Http`, так как все они связаны с транспортным уровнем HTTP вашего приложения. Вместо единого, длинного файла фильтров роутов теперь все посредники разбиты по своим отдельным файлам классов.
 
-A new `app/Providers` directory replaces the `app/start` files from previous versions of Laravel 4.x. These service providers provide various bootstrapping functions to your application, such as error handling, logging, route loading, and more. Of course, you are free to create additional service providers for your application.
+Новая директория `app/Providers` заменяет файлы `app/start` из предыдущей версии Laravel 4.x. Эти сервис-провайдеры предоставляют различные функции начальной загрузки для вашего приложения, такие как обработка ошибок, ведение журналов, загрузка роутов и т.д. Само собой, вы можете создавать дополнительные сервис-провайдеры для своего приложения.
 
-Application language files and views have been moved to the `resources` directory.
+Языковые файлы приложения и шаблоны переместились в директорию `resources`.
 
-### Contracts
+### Контракты
 
-All major Laravel components implement interfaces which are located in the `illuminate/contracts` repository. This repository has no external dependencies. Having a convenient, centrally located set of interfaces you may use for decoupling and dependency injection will serve as an easy alternative option to Laravel Facades.
+Все основные компоненты Laravel реализуют интерфейсы, расположенные в репозитории `illuminate/contracts`. У репозитория нет внешних зависимостей. Наличие удобного, централизованного набора интерфейсов, который вы можете использовать для отвязки и внедрения зависимостей, может служить простой альтернативой для фасадов Laravel.
 
-For more information on contracts, consult the [full documentation](/docs/{{version}}/contracts).
+Подробнее о контрактах читайте в [полной документации](/docs/{{version}}/contracts).
 
-### Route Cache
+### Кэширование роутов
 
-If your application is made up entirely of controller routes, you may utilize the new `route:cache` Artisan command to drastically speed up the registration of your routes. This is primarily useful on applications with 100+ routes and will **drastically** speed up this portion of your application.
+Если ваше приложение полностью состоит из роутов контроллеров, вы можете использовать новую Artisan-команду `route:cache` для радикального ускорения регистрации ваших роутов. Это особенно полезно для приложений с числом роутов 100+. Эта часть вашего приложения получит **радикальное** ускорение.
 
-### Route Middleware
+### Посредники роутов
 
-In addition to Laravel 4 style route "filters", Laravel 5 now supports HTTP middleware, and the included authentication and CSRF "filters" have been converted to middleware. Middleware provides a single, consistent interface to replace all types of filters, allowing you to easily inspect, and even reject, requests before they enter your application.
+Вдобавок к "фильтрам" роутов из Laravel 4 теперь в версии 5 поддерживаются HTTP-посредники, а встроенная авторизация и CSRF-"фильтры" преобразованы в посредников. Посредники предоставляют единый, цельный интерфейс для замены всех типов фильтров, позволяя вам легко проверять, и даже отклонять запросы до того, как они попадут в ваше приложение.
 
-For more information on middleware, check out [the documentation](/docs/{{version}}/middleware).
+Подробнее о посредниках читайте в [документации](/docs/{{version}}/middleware).
 
-### Controller Method Injection
+### Внедрение методов контроллера
 
-In addition to the existing constructor injection, you may now type-hint dependencies on controller methods. The [service container](/docs/{{version}}/container) will automatically inject the dependencies, even if the route contains other parameters:
+Вдобавок к существующему внедрению конструктора теперь вы можете указывать типы зависимостей в методах контроллера. [Сервс-контейнер](/docs/{{version}}/container) автоматически внедрит зависимости, даже если роут содержит другие параметры:
 
     public function createPost(Request $request, PostRepository $posts)
     {
         //
     }
 
-### Authentication Scaffolding
+### Преднастроенная авторизация
 
-User registration, authentication, and password reset controllers are now included out of the box, as well as simple corresponding views, which are located at `resources/views/auth`. In addition, a "users" table migration has been included with the framework. Including these simple resources allows rapid development of application ideas without bogging down on authentication boilerplate. The authentication views may be accessed on the `auth/login` and `auth/register` routes. The `App\Services\Auth\Registrar` service is responsible for user validation and creation.
+Контроллеры регистрации, авторизации и сброса паролей пользователей теперь встроены сразу из коробки, а также соответствующие им простые шаблоны, расположенные в `resources/views/auth`. Вдобавок миграция таблицы "users" была включена во фреймворк. Наличие этих простых ресурсов позволяет ускорить разработку идей для приложения, не увязая в создании шаблонной авторизации. Шаблоны авторизации доступны по роутам `auth/login` и `auth/register`. Сервис `App\Services\Auth\Registrar` отвечает за проверку данных и создание пользователей.
 
-### Event Objects
+### Объекты событий
 
-You may now define events as objects instead of simply using strings. For example, check out the following event:
+Теперь вы можете определять события как объекты вместо простого использования строк. Например, взгляните на такое событие:
 
     <?php
 
@@ -885,11 +888,11 @@ You may now define events as objects instead of simply using strings. For exampl
         }
     }
 
-The event may be dispatched like normal:
+Событие может быть отправлено как обычно:
 
     Event::fire(new PodcastWasPurchased($podcast));
 
-Of course, your event handler will receive the event object instead of a list of data:
+Само собой, ваш обработчик событий получит объект события вместо списка данных:
 
     <?php
 
@@ -901,11 +904,11 @@ Of course, your event handler will receive the event object instead of a list of
         }
     }
 
-For more information on working with events, check out the [full documentation](/docs/{{version}}/events).
+Подробнее о работе с событиями читайте в [полной документации](/docs/{{version}}/events).
 
-### Commands / Queueing
+### Команды / Очереди
 
-In addition to the queue job format supported in Laravel 4, Laravel 5 allows you to represent your queued jobs as simple command objects. These commands live in the `app/Commands` directory. Here's a sample command:
+Вдобавок к поддерживаемому в Laravel 4 формату очередей команд в Laravel 5 можно представлять ваши задачи для очереди как простые объекты команд. Эти команды живут в директории `app/Commands`. Вот пример команды:
 
     <?php
 
@@ -916,7 +919,7 @@ In addition to the queue job format supported in Laravel 4, Laravel 5 allows you
         protected $user, $podcast;
 
         /**
-         * Create a new command instance.
+         * Создание нового экземпляра команды.
          *
          * @return void
          */
@@ -927,57 +930,57 @@ In addition to the queue job format supported in Laravel 4, Laravel 5 allows you
         }
 
         /**
-         * Execute the command.
+         * Выполнение команды.
          *
          * @return void
          */
         public function handle()
         {
-            // Handle the logic to purchase the podcast...
+            // Обработка логики покупки подкаста...
 
             event(new PodcastWasPurchased($this->user, $this->podcast));
         }
     }
 
-The base Laravel controller utilizes the new `DispatchesCommands` trait, allowing you to easily dispatch your commands for execution:
+Базовый контроллер Laravel использует новый трейт `DispatchesCommands`, позволяя вам легко отправлять ваши команды на выполнение:
 
     $this->dispatch(new PurchasePodcastCommand($user, $podcast));
 
-Of course, you may also use commands for tasks that are executed synchronously (are not queued). In fact, using commands is a great way to encapsulate complex tasks your application needs to perform. For more information, check out the [command bus](/docs/5.0/bus) documentation.
+Конечно, вы можете использовать команды также и для команд, выполняющихся синхронно (не в очереди). На самом деле, использование команд — отличный способ инкапсулировать сложные задачи, которые необходимо выполнять вашему приложению. Более подробно об этом написано в документации по [командной шине](/docs/5.0/bus).
 
-### Database Queue
+### Очередь БД
 
-A `database` queue driver is now included in Laravel, providing a simple, local queue driver that requires no extra package installation beyond your database software.
+Драйвер очереди `database` теперь включён в Laravel — это простой, локальный драйвер очереди, не требующий установки дополнительных пакетов кроме ПО вашей БД.
 
-### Laravel Scheduler
+### Планировщик Laravel
 
-In the past, developers have generated a Cron entry for each console command they wished to schedule. However, this is a headache. Your console schedule is no longer in source control, and you must SSH into your server to add the Cron entries. Let's make our lives easier. The Laravel command scheduler allows you to fluently and expressively define your command schedule within Laravel itself, and only a single Cron entry is needed on your server.
+Раньше разработчикам приходилось создавать Cron-задачи для каждой консольной команды, которую они хотели запланировать. Это утомительно. Для планирования консольных команд теперь не ведётся контроль версий, и для добавления Cron-задач вам необходимо подключаться к серверу по SSH. Давайте упростим нам жизнь. Планировщик команд Laravel позволяет вам гибко и выразительно задавать план команд в самом Laravel, а на сервере нужна только одна Cron-задача.
 
-It looks like this:
+Это выглядит так:
 
     $schedule->command('artisan:command')->dailyAt('15:00');
 
-Of course, check out the [full documentation](/docs/{{version}}/scheduling) to learn all about the scheduler!
+Чтобы узнать всё о планировщике, загляните в [полную документацию](/docs/{{version}}/scheduling).
 
 ### Tinker / Psysh
 
-The `php artisan tinker` command now utilizes [Psysh](https://github.com/bobthecow/psysh) by Justin Hileman, a more robust REPL for PHP. If you liked Boris in Laravel 4, you're going to love Psysh. Even better, it works on Windows! To get started, just try:
+Теперь команда `php artisan tinker` использует  [Psysh](https://github.com/bobthecow/psysh) от Джастина Хильмана, более надёжный REPL для PHP. Если вам нравился Boris в Laravel 4, то вы полюбите Psysh. И более того — он работает в Windows! Для начала просто попробуйте:
 
     php artisan tinker
 
 ### DotEnv
 
-Instead of a variety of confusing, nested environment configuration directories, Laravel 5 now utilizes [DotEnv](https://github.com/vlucas/phpdotenv) by Vance Lucas. This library provides a super simple way to manage your environment configuration, and makes environment detection in Laravel 5 a breeze. For more details, check out the full [configuration documentation](/docs/{{version}}/installation#environment-configuration).
+Вместо множества сбивающих с толку, вложенных папок с настройками среды, Laravel 5 теперь использует[DotEnv](https://github.com/vlucas/phpdotenv) от Ванса Лукаса. Эта библиотека предоставляет простой способ управления вашими настройками сред, и делает простым определение среды в Laravel 5.Подробнее читайте в [документации по настройке](/docs/{{version}}/installation#environment-configuration).
 
 ### Laravel Elixir
 
-Laravel Elixir, by Jeffrey Way, provides a fluent, expressive interface to compiling and concatenating your assets. If you've ever been intimidated by learning Grunt or Gulp, fear no more. Elixir makes it a cinch to get started using Gulp to compile your Less, Sass, and CoffeeScript. It can even run your tests for you!
+Laravel Elixir от Джеффри Вэя предоставляет гибкий, выразительный интерфейс для компилирования и соединения ваших ресурсов. Если вы имели печальный опыт изучения Grunt или Gulp, то эти страшные времена позади. Elixir помогает начать пользоваться Gulp для компилирования ваших Less, Sass и CoffeeScript. Он может даже запустить ваши тесты для вас!
 
-For more information on Elixir, check out the [full documentation](/docs/5.3/elixir).
+Подробнее об Elixir читайте в [полной документации](/docs/5.3/elixir).
 
 ### Laravel Socialite
 
-Laravel Socialite is an optional, Laravel 5.0+ compatible package that provides totally painless authentication with OAuth providers. Currently, Socialite supports Facebook, Twitter, Google, and GitHub. Here's what it looks like:
+Laravel Socialite — необязательный, совместимый с Laravel 5.0+ пакет, обеспечивающий безболезненную авторизацию с помощью провайдеров OAuth. На данный момент Socialite поддерживает работу с Facebook, Twitter, Google и GitHub. Вот как это выглядит:
 
     public function redirectForAuth()
     {
@@ -989,19 +992,19 @@ Laravel Socialite is an optional, Laravel 5.0+ compatible package that provides 
         $user = Socialize::with('twitter')->user();
     }
 
-No more spending hours writing OAuth authentication flows. Get started in minutes! The [full documentation](/docs/{{version}}/authentication#social-authentication) has all the details.
+Больше не надо тратить часы на написание потоков авторизации OAuth. Начните за несколько минут! В [полной документации](/docs/{{version}}/authentication#social-authentication) вы найдете все подробновсти.
 
-### Flysystem Integration
+### Интеграция Flysystem
 
-Laravel now includes the powerful [Flysystem](https://github.com/thephpleague/flysystem) filesystem abstraction library, providing pain free integration with local, Amazon S3, and Rackspace cloud storage - all with one, unified and elegant API! Storing a file in Amazon S3 is now as simple as:
+Теперь Laravel содержит мощную библиотеку для абстракции файловой системы [Flysystem](https://github.com/thephpleague/flysystem), обеспечивающую безболезненную интеграцию с локальным хранилищем, облачными хранилищами Amazon S3 и Rackspace — всё в одном, едином и элегантном API! Хранить файлы в Amazon S3 теперь вот так просто:
 
     Storage::put('file.txt', 'contents');
 
-For more information on the Laravel Flysystem integration, consult the [full documentation](/docs/{{version}}/filesystem).
+Более подробно об интеграции Laravel Flysystem читайте в [полной документации](/docs/{{version}}/filesystem).
 
-### Form Requests
+### Запросы форм
 
-Laravel 5.0 introduces **form requests**, which extend the `Illuminate\Foundation\Http\FormRequest` class. These request objects can be combined with controller method injection to provide a boiler-plate free method of validating user input. Let's dig in and look at a sample `FormRequest`:
+В Laravel 5.0 введены **запросы форм**, которые наследуют класс `Illuminate\Foundation\Http\FormRequest`. Эти объекты запросов могут быть совмещены с внедрением методов контроллера для обеспечения метода проверки ввода пользователей, без необходимости написания шаблонного кода. Давайте разберёмся подробнее и взглянем на пример `FormRequest`:
 
     <?php
 
@@ -1023,18 +1026,18 @@ Laravel 5.0 introduces **form requests**, which extend the `Illuminate\Foundatio
         }
     }
 
-Once the class has been defined, we can type-hint it on our controller action:
+Когда класс определён, мы можем указать его тип в нашем действии контроллера:
 
     public function register(RegisterRequest $request)
     {
         var_dump($request->input());
     }
 
-When the Laravel service container identifies that the class it is injecting is a `FormRequest` instance, the request will **automatically be validated**. This means that if your controller action is called, you can safely assume the HTTP request input has been validated according to the rules you specified in your form request class. Even more, if the request is invalid, an HTTP redirect, which you may customize, will automatically be issued, and the error messages will be either flashed to the session or converted to JSON. **Form validation has never been more simple.** For more information on `FormRequest` validation, check out the [documentation](/docs/{{version}}/validation#form-request-validation).
+Когда сервис-контейнер Laravel определяет, что внедряемый им класс — это экземпляр `FormRequest`, запрос **автоматически пройдёт проверку**. Это значит, что если вызвано действие вашего контроллера, то вы можете быть уверены, что ввод HTTP-запроса прошёл проверку по тем правилам, которые вы указали в классе запроса формы. Более того, если запрос некорректен, будет автоматически вызвана HTTP-переадресация, которую вы можете настроить, а сообщение об ошибке будет либо передано в сессию, либо преобразовано в JSON. **Проверка форм никогда не была настолько простой.** Подробнее о проверке `FormRequest` читайте в [документации](/docs/{{version}}/validation#form-request-validation).
 
-### Simple Controller Request Validation
+### Простая проверка запроса контроллера
 
-The Laravel 5 base controller now includes a `ValidatesRequests` trait. This trait provides a simple `validate` method to validate incoming requests. If `FormRequests` are a little too much for your application, check this out:
+Базовый контроллер Laravel 5 теперь содержит трейт `ValidatesRequests`. Этот трейт предоставляет простой метод `validate` для проверки входящих запросов. Если `FormRequests` для вашего приложения избыточен, попробуйте это:
 
     public function createPost(Request $request)
     {
@@ -1044,134 +1047,135 @@ The Laravel 5 base controller now includes a `ValidatesRequests` trait. This tra
         ]);
     }
 
-If the validation fails, an exception will be thrown and the proper HTTP response will automatically be sent back to the browser. The validation errors will even be flashed to the session! If the request was an AJAX request, Laravel even takes care of sending a JSON representation of the validation errors back to you.
+Если проверка неудачна, будет выброшено исключение, и нужный HTTP-отклик будет автоматически возвращён в браузер. Ошибки при проверки будут переданы даже в сессию! Если запрос был AJAX-запросом, то Laravel даже позаботиться об отправке JSON-шаблона ошибок проверки обратно к вам.
 
-For more information on this new method, check out [the documentation](/docs/{{version}}/validation#validation-quickstart).
+Подробнее об этом новом методе читайте в [документации](/docs/{{version}}/validation#validation-quickstart).
 
-### New Generators
+### Новые генераторы
 
-To complement the new default application structure, new Artisan generator commands have been added to the framework. See `php artisan list` for more details.
+В дополнение к новой структуре приложения по умолчанию в фреймворк были добавлены новые Artisan-команды генераторы. Для подробностей посмотрите `php artisan list`.
 
-### Configuration Cache
+### Кэш настроек
 
-You may now cache all of your configuration in a single file using the `config:cache` command.
+Теперь вы можете кэшировать все свои настройки в едином файле с помощью команды `config:cache`.
 
 ### Symfony VarDumper
 
-The popular `dd` helper function, which dumps variable debug information, has been upgraded to use the amazing Symfony VarDumper. This provides color-coded output and even collapsing of arrays. Just try the following in your project:
+Популярная вспомогательная функция `dd`, которая сохраняет переменную отладочную информацию, была переведена на использование восхитительного Symfony VarDumper. Это обеспечивает цветовое выделение вывода и даже сворачивание массивов. Просто попробуйте сделать так в своём проекте:
 
     dd([1, 2, 3]);
 
 <a name="laravel-4.2"></a>
 ## Laravel 4.2
 
-The full change list for this release by running the `php artisan changes` command from a 4.2 installation, or by [viewing the change file on GitHub](https://github.com/laravel/framework/blob/4.2/src/Illuminate/Foundation/changes.json). These notes only cover the major enhancements and changes for the release.
+Полный список изменений этой версии можно увидеть, выполнив команду `php artisan changes` в установленной версии 4.2 или [посмотрев файл изменений на GitHub](https://github.com/laravel/framework/blob/4.2/src/Illuminate/Foundation/changes.json). В это описание вошли только значительные улучшения и изменения данной версии.
 
-> {note} During the 4.2 release cycle, many small bug fixes and enhancements were incorporated into the various Laravel 4.1 point releases. So, be sure to check the change list for Laravel 4.1 as well!
+> {note} Во время разработки версии 4.2 многие небольшие исправления и улучшения были включены в различные подверсии Laravel 4.1. Поэтому не забудьте также ознакомиться со списком изменений Laravel 4.1!
 
-### PHP 5.4 Requirement
+### Требование PHP 5.4
 
-Laravel 4.2 requires PHP 5.4 or greater. This upgraded PHP requirement allows us to use new PHP features such as traits to provide more expressive interfaces for tools like [Laravel Cashier](/docs/billing). PHP 5.4 also brings significant speed and performance improvements over PHP 5.3.
+Laravel 4.2 требует PHP 5.4 или выше. Это обновлённое требование PHP позволяет нам использовать новые возможности PHP, такие как трейты, чтобы обеспечивать более выразительные интерфейсы для таких инструментов как [Laravel Cashier](/docs/billing). Также PHP 5.4 даёт преимущество в скорости и производительности по сравнению с PHP 5.3.
 
 ### Laravel Forge
 
-Laravel Forge, a new web based application, provides a simple way to create and manage PHP servers on the cloud of your choice, including Linode, DigitalOcean, Rackspace, and Amazon EC2. Supporting automated Nginx configuration, SSH key access, Cron job automation, server monitoring via NewRelic & Papertrail, "Push To Deploy", Laravel queue worker configuration, and more, Forge provides the simplest and most affordable way to launch all of your Laravel applications.
+Laravel Forge— новое веб-приложение для простого создания и управления
+PHP-серверами в облаке по вашему выбору, включая Linode, DigitalOcean, Rackspace и Amazon EC2. Поддерживая автоматическую настройку Nginx, доступ по ключам SSH, автоматизацию работы Cron, мониторинг серверов через NewRelic & Papertrail, "Push To Deploy" ("нажми, чтобы развернуть"), настройку обработчика очереди Laravel, и многое другое, Forge предоставляет наиболее простой и доступный способ для запуска всех ваших приложений Laravel..
 
-The default Laravel 4.2 installation's `app/config/database.php` configuration file is now configured for Forge usage by default, allowing for more convenient deployment of fresh applications onto the platform.
+Сейчас установочный файл конфигурации Laravel 4.2 `app/config/database.php` по умолчанию настроен на использование Forge, что обеспечивает более удобное развёртывание свежих приложений на платформе.
 
-More information about Laravel Forge can be found on the [official Forge website](https://forge.laravel.com).
+Больше информации о Laravel Forge можно найти на [официальном сайте Forge](https://forge.laravel.com).
 
 ### Laravel Homestead
 
-Laravel Homestead is an official Vagrant environment for developing robust Laravel and PHP applications. The vast majority of the boxes' provisioning needs are handled before the box is packaged for distribution, allowing the box to boot extremely quickly. Homestead includes Nginx 1.6, PHP 5.6, MySQL, Postgres, Redis, Memcached, Beanstalk, Node, Gulp, Grunt, & Bower. Homestead includes a simple `Homestead.yaml` configuration file for managing multiple Laravel applications on a single box.
+Laravel Homestead — официальное окружение Vagrant для разработки надёжных приложений на Laravel и PHP. Подавляющее большинство необходимых для коробок операций обрабатывается перед тем, как коробка подготавливается к распространению, что позволяет ей загружаться чрезвычайно быстро. Homestead включает в себя Nginx 1.6, PHP 5.5.12, MySQL, Postgres, Redis, Memcached, Beanstalk, Node, Gulp, Grunt и Bower. Homestead содержит простой конфиг`Homestead.yaml` для управления несколькими приложениями Laravel в одной коробке.
 
-The default Laravel 4.2 installation now includes an `app/config/local/database.php` configuration file that is configured to use the Homestead database out of the box, making Laravel initial installation and configuration more convenient.
+Сейчас по умолчанию установленный Laravel 4.2 содержит конфиг-файл `app/config/local/database.php`, который настроен на использование базы данных Homestead, что делает начальную установку и настройку Laravel удобнее.
 
-The official documentation has also been updated to include [Homestead documentation](/docs/homestead).
+В официальную документацию также была включена [документация Homestead](/docs/homestead).
 
 ### Laravel Cashier
 
-Laravel Cashier is a simple, expressive library for managing subscription billing with Stripe. With the introduction of Laravel 4.2, we are including Cashier documentation along with the main Laravel documentation, though installation of the component itself is still optional. This release of Cashier brings numerous bug fixes, multi-currency support, and compatibility with the latest Stripe API.
+Laravel Cashier — простая, удобная библиотека для управления подписками биллинга с помощью Stripe. Начиная с версии Laravel 4.2, мы добавили документацию по Cashier к основной документации Laravel, хотя установка самого компонента по-прежнему не обязательна. Эта версия Cashier содержит много исправлений, поддерживает множество валют и совместима с последним Stripe API.
 
-### Daemon Queue Workers
+### Обработчики очереди — демоны
 
-The Artisan `queue:work` command now supports a `--daemon` option to start a worker in "daemon mode", meaning the worker will continue to process jobs without ever re-booting the framework. This results in a significant reduction in CPU usage at the cost of a slightly more complex application deployment process.
+Команда Artisan `queue:work` теперь поддерживает параметр `--daemon` для запуска обработчика в "режиме демона", это значит, что обработчик будет продолжать выполнять работу без перезагрузки фреймворка. Это приводит к значительному снижению загрузки процессора за счёт несколько более сложного процесса развёртывания приложения.
 
-More information about daemon queue workers can be found in the [queue documentation](/docs/queues#daemon-queue-worker).
+Больше информации о демонах — обработчиках очереди можно найти в [документации по очередям](/docs/queues#daemon-queue-worker).
 
-### Mail API Drivers
+### Драйверы Mail API
 
-Laravel 4.2 introduces new Mailgun and Mandrill API drivers for the `Mail` functions. For many applications, this provides a faster and more reliable method of sending e-mails than the SMTP options. The new drivers utilize the Guzzle 4 HTTP library.
+В Laravel 4.2 вошли новые драйверы Mailgun и Mandrill API для функций `Mail`. Для многих приложений это обеспечивает более быстрый и надёжный способ отправки электронной почты, чем варианты SMTP. Новые драйверы используют HTTP библиотеку Guzzle 4.
 
-### Soft Deleting Traits
+### Мягко удаляемые трейты
 
-A much cleaner architecture for "soft deletes" and other "global scopes" has been introduced via PHP 5.4 traits. This new architecture allows for the easier construction of similar global traits, and a cleaner separation of concerns within the framework itself.
+Более чистая архитектура для "мягких удалений" и других "глобальных областей" была добавлена в PHP 5.4 с помощью трейтов. Эта новая архитектура позволяет проще создавать подобные глобальные трейты и чище разделять задачи внутри самого фреймворка.
 
-More information on the new `SoftDeletingTrait` may be found in the [Eloquent documentation](/docs/eloquent#soft-deleting).
+Больше информации о новых `SoftDeletingTrait` можно найти в [документации Eloquent](/docs/eloquent#soft-deleting).
 
-### Convenient Auth & Remindable Traits
+### Удобная аутентификация и запоминаемые трейты
 
-The default Laravel 4.2 installation now uses simple traits for including the needed properties for the authentication and password reminder user interfaces. This provides a much cleaner default `User` model file out of the box.
+Теперь Laravel 4.2 по-умолчанию использует простые трейты, содержащие необходимые свойства для пользовательских интерфейсов аутентификации и напоминания паролей. Это обеспечивает более чистый файл модели `User` по умолчанию.
 
 ### "Simple Paginate"
 
-A new `simplePaginate` method was added to the query and Eloquent builder which allows for more efficient queries when using simple "Next" and "Previous" links in your pagination view.
+В построитель запросов и Eloquent был добавлен новый метод `simplePaginate` (простое разбиение на страницы), который обеспечивает более эффективные запросы при использовании простых ссылок "Далее" и "Назад" в вашем постраничном представлении.
 
-### Migration Confirmation
+### Подтверждение миграций
 
-In production, destructive migration operations will now ask for confirmation. Commands may be forced to run without any prompts using the `--force` command.
+Теперь в работающих приложениях деструктивные операции миграций будут запрашивать подтверждение. Команды можно выполнять без дополнительных подтверждений, используя параметр `--force`.
 
 <a name="laravel-4.1"></a>
 ## Laravel 4.1
 
-### Full Change List
+### Полный список изменений
 
-The full change list for this release by running the `php artisan changes` command from a 4.1 installation, or by [viewing the change file on GitHub](https://github.com/laravel/framework/blob/4.1/src/Illuminate/Foundation/changes.json). These notes only cover the major enhancements and changes for the release.
+Полный список изменений для этой версии можно увидеть, выполнив команду `php artisan changes` в установленной версии 4.1 или [посмотрев файл изменений на GitHub](https://github.com/laravel/framework/blob/4.1/src/Illuminate/Foundation/changes.json). Это описание содержит только основные улучшения и изменения в релизе.
 
-### New SSH Component
+### Новый компонент SSH
 
-An entirely new `SSH` component has been introduced with this release. This feature allows you to easily SSH into remote servers and run commands. To learn more, consult the [SSH component documentation](/docs/4.1/ssh).
+В этот релиз вошёл полностью новый компонент `SSH`. Данная функция позволяет вам легко подключаться через SSH к удалённым серверам и выполнять команды. Чтобы узнать больше, загляните в [документацию компонента SSH](/docs/4.1/ssh).
 
 The new `php artisan tail` command utilizes the new SSH component. For more information, consult the `tail` [command documentation](http://laravel.com/docs/ssh#tailing-remote-logs).
 
-### Boris In Tinker
+### Boris в Tinker
 
-The `php artisan tinker` command now utilizes the [Boris REPL](https://github.com/d11wtq/boris) if your system supports it. The `readline` and `pcntl` PHP extensions must be installed to use this feature. If you do not have these extensions, the shell from 4.0 will be used.
+Теперь команда `php artisan tinker` использует [Boris REPL](https://github.com/d11wtq/boris), если ваша система поддерживает его. Для использования этой возможности должны быть установлены PHP расширения `readline` и `pcntl`. Если у вас нет этих расширений, будет использована оболочка из 4.0.
 
-### Eloquent Improvements
+### Улучшения Eloquent
 
-A new `hasManyThrough` relationship has been added to Eloquent. To learn how to use it, consult the [Eloquent documentation](/docs/eloquent#has-many-through).
+В Eloquent добавлено новое отношение `hasManyThrough`. Посмотрите, как им пользоваться в [документации Eloquent](/docs/eloquent#has-many-through).
 
 A new `whereHas` method has also been introduced to allow [retrieving models based on relationship constraints](/docs/eloquent#querying-relations).
 
-### Database Read / Write Connections
+### Подключения чтения/записи к БД
 
-Automatic handling of separate read / write connections is now available throughout the database layer, including the query builder and Eloquent. For more information, consult [the documentation](/docs/database#read-write-connections).
+Теперь автоматическая обработка отдельных подключений чтения/записи доступна во всём слое БД, в том числе в построителе запросов и Eloquent. Чтобы узнать больше, загляните в [эту документацию](/docs/database#read-write-connections).
 
-### Queue Priority
+### Приоритет очереди
 
-Queue priorities are now supported by passing a comma-delimited list to the `queue:listen` command.
+Теперь поддерживаются приоритеты очереди с помощью передачи в команду `queue:listen` списка, разделённого запятыми.
 
-### Failed Queue Job Handling
+### Обработка неудавшихся заданий очереди
 
-The queue facilities now include automatic handling of failed jobs when using the new `--tries` switch on `queue:listen`. More information on handling failed jobs can be found in the [queue documentation](/docs/queues#failed-jobs).
+Теперь в очередях есть возможность автоматической обработки неудавшихся заданий при использовании нового переключателя `--tries` в `queue:listen`. Больше информации об обработке неудавшихся заданий можно найти в [документации об очередях](/docs/queues#failed-jobs).
 
-### Cache Tags
+### Тэги кэша
 
-Cache "sections" have been superseded by "tags". Cache tags allow you to assign multiple "tags" to a cache item, and flush all items assigned to a single tag. More information on using cache tags may be found in the [cache documentation](/docs/cache#cache-tags).
+"Секции" кэша были заменены "тэгами". Тэги кэша позволяют назначать несколько «тэгов» элементу кэша и получать элементы по тэгу. Больше информации об использовании тэгов кэша можно найти в [документации кэша](/docs/cache#cache-tags).
 
-### Flexible Password Reminders
+### Гибкие напоминатели паролей
 
-The password reminder engine has been changed to provide greater developer flexibility when validating passwords, flashing status messages to the session, etc. For more information on using the enhanced password reminder engine, [consult the documentation](/docs/4.1/security#password-reminders-and-reset).
+Движок напоминателя паролей был изменён для обеспечения большей гибкости разработки при проверке паролей, выводе сообщений о состоянии в сессии, и т.д. Чтобы узнать больше об использовании расширенного движка напоминателя паролей, [взгляните на документацию](/docs/4.1/security#password-reminders-and-reset).
 
-### Improved Routing Engine
+### Улучшенный движок роутов
 
-Laravel 4.1 features a totally re-written routing layer. The API is the same; however, registering routes is a full 100% faster compared to 4.0. The entire engine has been greatly simplified, and the dependency on Symfony Routing has been minimized to the compiling of route expressions.
+В Laravel 4.1 вошёл полностью переписанный слой роутов. API прежний, но регистрация роутов на все 100% быстрее по сравнению с 4.0. Весь движок был значительно упрощён, и зависимость от Symfony Routing была минимизирована до составления выражений для роутов.
 
-### Improved Session Engine
+### Улучшенный движок сессий
 
-With this release, we're also introducing an entirely new session engine. Similar to the routing improvements, the new session layer is leaner and faster. We are no longer using Symfony's (and therefore PHP's) session handling facilities, and are using a custom solution that is simpler and easier to maintain.
+Также в версию вошёл полностью новый движок сессий. Также как и улучшения роутов, новый слой сессий проще и быстрее. Мы больше не используем средства обработки сессий Symfony(а значит и PHP), а используем своё решение, которое проще и легче в обслуживании.
 
 ### Doctrine DBAL
 
-If you are using the `renameColumn` function in your migrations, you will need to add the `doctrine/dbal` dependency to your `composer.json` file. This package is no longer included in Laravel by default.
+Если вы используете функцию `renameColumn` в ваших миграциях, то вам надо будет добавить зависимость `doctrine/dbal` в ваш файл `composer.json`. Этот пакет больше не входит в Laravel по умолчанию.
