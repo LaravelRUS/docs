@@ -1,40 +1,44 @@
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+
+---
+
 # Laravel Homestead
 
-- [Introduction](#introduction)
-- [Installation & Setup](#installation-and-setup)
-    - [First Steps](#first-steps)
-    - [Configuring Homestead](#configuring-homestead)
-    - [Launching The Vagrant Box](#launching-the-vagrant-box)
-    - [Per Project Installation](#per-project-installation)
-    - [Installing MariaDB](#installing-mariadb)
-- [Daily Usage](#daily-usage)
-    - [Accessing Homestead Globally](#accessing-homestead-globally)
-    - [Connecting Via SSH](#connecting-via-ssh)
-    - [Connecting To Databases](#connecting-to-databases)
-    - [Adding Additional Sites](#adding-additional-sites)
-    - [Configuring Cron Schedules](#configuring-cron-schedules)
-    - [Ports](#ports)
-    - [Sharing Your Environment](#sharing-your-environment)
-    - [Multiple PHP Versions](#multiple-php-versions)
-- [Network Interfaces](#network-interfaces)
-- [Updating Homestead](#updating-homestead)
-- [Old Versions](#old-versions)
-- [Provider Specific Settings](#provider-specific-settings)
+- [Введение](#introduction)
+- [Установка и настройка](#installation-and-setup)
+    - [Первые шаги](#first-steps)
+    - [Настройка Homestead](#configuring-homestead)
+    - [Запуск Vagrant Box](#launching-the-vagrant-box)
+    - [Установка для проекта](#per-project-installation)
+    - [Установка MariaDB](#installing-mariadb)
+- [Повседневное использование](#daily-usage)
+    - [Глобальный доступ к Homestead](#accessing-homestead-globally)
+    - [Подключение через SSH](#connecting-via-ssh)
+    - [Подключение к базам данных](#connecting-to-databases)
+    - [Добавление дополнительных сайтов](#adding-additional-sites)
+    - [Настройка расписания Cron](#configuring-cron-schedules)
+    - [Порты](#ports)
+    - [Совместное использование вашей среды](#sharing-your-environment)
+    - [Несколько версий PHP](#multiple-php-versions)
+- [Сетевые интерфейсы](#network-interfaces)
+- [Обновление Homestead](#updating-homestead)
+- [Старые версии](#old-versions)
+- [Специальные настройки провайдера](#provider-specific-settings)
     - [VirtualBox](#provider-specific-virtualbox)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel strives to make the entire PHP development experience delightful, including your local development environment. [Vagrant](https://www.vagrantup.com) provides a simple, elegant way to manage and provision Virtual Machines.
+Laravel стремится преобразить процесс разработки на PHP, это относится и к локальной среде разработки. [Vagrant](https://www.vagrantup.com) обеспечивает простой, элегантный способ настройки и управления виртуальными машинами.
 
-Laravel Homestead is an official, pre-packaged Vagrant box that provides you a wonderful development environment without requiring you to install PHP, a web server, and any other server software on your local machine. No more worrying about messing up your operating system! Vagrant boxes are completely disposable. If something goes wrong, you can destroy and re-create the box in minutes!
+Laravel Homestead — официальный предустановленный Vagrant-бокс, который предоставляет вам замечательную среду разработки без необходимости установки PHP, веб-сервера и любого другого серверного программного обеспечения на ваш компьютер. Можно больше не беспокоиться о том, что ваша операционная система засоряется! Vagrant-боксы очень удобны. Если что-то пошло не так, вы можете уничтожить и пересоздать бокс в считанные минуты!
 
-Homestead runs on any Windows, Mac, or Linux system, and includes the Nginx web server, PHP 7.1, MySQL, Postgres, Redis, Memcached, Node, and all of the other goodies you need to develop amazing Laravel applications.
+Homestead запускается на ОС Windows, Mac и Linux, и включает в себя веб-сервер Nginx, PHP 7.1, MySQL, Postgres, Redis, Memcached, Node и все другие полезные штуки, которые вам понадобятся для разработки удивительных Laravel-приложений.
 
-> {note} If you are using Windows, you may need to enable hardware virtualization (VT-x). It can usually be enabled via your BIOS. If you are using Hyper-V on a UEFI system you may additionally need to disable Hyper-V in order to access VT-x.
+> {note} Если вы используете Windows, возможно, вам необходимо включить аппаратную виртуализацию (VT-x). Она обычно включается через BIOS. Если вы используете Hyper-V на UEFI-системе, вам может понадобиться отключить Hyper-V, для доступа к VT-x.
 
 <a name="included-software"></a>
-### Included Software
+### Включённое ПО
 
 - Ubuntu 16.04
 - Git
@@ -45,7 +49,7 @@ Homestead runs on any Windows, Mac, or Linux system, and includes the Nginx web 
 - Sqlite3
 - Postgres
 - Composer
-- Node (With Yarn, Bower, Grunt, and Gulp)
+- Node (с Yarn, Bower, Grunt, and Gulp)
 - Redis
 - Memcached
 - Beanstalkd
@@ -53,41 +57,41 @@ Homestead runs on any Windows, Mac, or Linux system, and includes the Nginx web 
 - ngrok
 
 <a name="installation-and-setup"></a>
-## Installation & Setup
+## Установка и настройка
 
 <a name="first-steps"></a>
-### First Steps
+### Первые шаги
 
-Before launching your Homestead environment, you must install [VirtualBox 5.1](https://www.virtualbox.org/wiki/Downloads), [VMWare](https://www.vmware.com), or [Parallels](http://www.parallels.com/products/desktop/) as well as [Vagrant](https://www.vagrantup.com/downloads.html). All of these software packages provide easy-to-use visual installers for all popular operating systems.
+Прежде чем запустить среду Homestead, вы должны установить [VirtualBox 5.1](https://www.virtualbox.org/wiki/Downloads), [VMWare](https://www.vmware.com) или [Parallels](http://www.parallels.com/products/desktop/), а также [Vagrant](https://www.vagrantup.com/downloads.html). Эти программные пакеты предоставляют простые в использовании визуальные инсталляторы для всех популярных операционных систем.
 
-To use the VMware provider, you will need to purchase both VMware Fusion / Workstation and the [VMware Vagrant plug-in](https://www.vagrantup.com/vmware). Though it is not free, VMware can provide faster shared folder performance out of the box.
+Для использования VMWare вам необходимо приобрести и VMware Fusion/Workstation, и [плагин VMware Vagrant](https://www.vagrantup.com/vmware). Хотя он и платный, зато VMware изначально обеспечивает большую скорость работы общих папок.
 
-To use the Parallels provider, you will need to install [Parallels Vagrant plug-in](https://github.com/Parallels/vagrant-parallels). It is free of charge.
+Для использования провайдера Parallels вам необходимо установить [плагин Parallels Vagrant](https://github.com/Parallels/vagrant-parallels). Он бесплатный.
 
-#### Installing The Homestead Vagrant Box
+#### Установка Homestead Vagrant Box
 
-Once VirtualBox / VMware and Vagrant have been installed, you should add the `laravel/homestead` box to your Vagrant installation using the following command in your terminal. It will take a few minutes to download the box, depending on your Internet connection speed:
+После установки VirtualBox / VMware и Vagrant вы должны добавить бокс `laravel/homestead` в ваш Vagrant, используя следующую команду в вашем терминале. Скачивание образа может занять несколько минут в зависимости от скорости вашего Интернет-подключения:
 
     vagrant box add laravel/homestead
 
-If this command fails, make sure your Vagrant installation is up to date.
+Если выполнение команды завершится неудачно, проверьте, что у вас установлена свежая версия Vagrant.
 
-#### Installing Homestead
+#### Установка Homestead
 
-You may install Homestead by simply cloning the repository. Consider cloning the repository into a `Homestead` folder within your "home" directory, as the Homestead box will serve as the host to all of your Laravel projects:
+Вы можете установить Homestead просто клонировав репозиторий. Клонируйте репозиторий в папку `Homestead` в директорию "home", потому что коробка Homestead станет хостом всех ваших Laravel-проектов:
 
     cd ~
 
     git clone https://github.com/laravel/homestead.git Homestead
 
-You should check out a tagged version of Homestead since the `master` branch may not always be stable. You can find the latest stable version on the [GitHub Release Page](https://github.com/laravel/homestead/releases):
+Вы должны проверить меченную версию Homestead, так как ветска `master` не всегда может быть стабильна. Самую свежую стабильную сервисю можно найти на [странице релиза в GitHub](https://github.com/laravel/homestead/releases):
 
     cd Homestead
 
-    // Clone the desired release...
+    // Клонировать желаемый релиз...
     git checkout v5.4.0
 
-Once you have cloned the Homestead repository, run the `bash init.sh` command from the Homestead directory to create the `Homestead.yaml` configuration file. The `Homestead.yaml` file will be placed in the Homestead directory:
+После клонирования репозитория Homestead выполните в этой директории команду `bash init.sh`, чтобы создать конфиг `Homestead.yaml`. Файл `Homestead.yaml` будет помещен в директорию Homestead:
 
     // Mac / Linux...
     bash init.sh
@@ -96,32 +100,32 @@ Once you have cloned the Homestead repository, run the `bash init.sh` command fr
     init.bat
 
 <a name="configuring-homestead"></a>
-### Configuring Homestead
+### Настройка Homestead
 
-#### Setting Your Provider
+#### Настройка провайдера
 
-The `provider` key in your `Homestead.yaml` file indicates which Vagrant provider should be used: `virtualbox`, `vmware_fusion`, `vmware_workstation`, or `parallels`. You may set this to the provider you prefer:
+Параметр `provider` в вашем файле `Homestead.yaml` указывает на то, какой Vagrant-провайдер следует использовать: `virtualbox`, `vmware_fusion`, `vmware_workstation` или `parallels`. Вы можете задать тот, который предпочитаете:
 
     provider: virtualbox
 
-#### Configuring Shared Folders
+#### Настройка общих папок
 
-The `folders` property of the `Homestead.yaml` file lists all of the folders you wish to share with your Homestead environment. As files within these folders are changed, they will be kept in sync between your local machine and the Homestead environment. You may configure as many shared folders as necessary:
+В свойстве `folders` файла `Homestead.yaml` перечислены все папки, которые вы хотите расшарить для вашей среды Homestead. Поскольку файлы в этих папках будут меняться, они будут синхронизироваться с вашей локальной машиной и средой Homestead. Вы можете настроить столько папок, сколько вам необходимо:
 
     folders:
         - map: ~/Code
           to: /home/vagrant/Code
 
-To enable [NFS](https://www.vagrantup.com/docs/synced-folders/nfs.html), you only need to add a simple flag to your synced folder configuration:
+Для включения [NFS](https://www.vagrantup.com/docs/synced-folders/nfs.html) просто добавьте простой ключ к вашей синхронизируемой папке:
 
     folders:
         - map: ~/Code
           to: /home/vagrant/Code
           type: "nfs"
 
-> {note} When using NFS, you should consider installing the [vagrant-bindfs](https://github.com/gael-ian/vagrant-bindfs) plug-in. This plug-in will maintain the correct user / group permissions for files and directories within the Homestead box.
+> {note} При использовании NFS вам следует рассмотреть возможность установки плагина [vagrant-bindfs](https://github.com/gael-ian/vagrant-bindfs). Этот плагин будет поддерживать верные права пользователя / группы относительно файлов / директорий для файлов и директорий в боксе Homestead.
 
-You may also pass any options supported by Vagrant's [Synced Folders](https://www.vagrantup.com/docs/synced-folders/basic_usage.html) by listing them under the `options` key:
+Также вы можете передавать параметры, поддерживаемые [синхронизируемыми папками](https://www.vagrantup.com/docs/synced-folders/basic_usage.html) Vagrant, указывая их под ключом `options`:
 
     folders:
         - map: ~/Code
@@ -132,43 +136,43 @@ You may also pass any options supported by Vagrant's [Synced Folders](https://ww
               rsync__exclude: ["node_modules"]
 
 
-#### Configuring Nginx Sites
+#### Настройка сайтов Nginx 
 
-Not familiar with Nginx? No problem. The `sites` property allows you to easily map a "domain" to a folder on your Homestead environment. A sample site configuration is included in the `Homestead.yaml` file. Again, you may add as many sites to your Homestead environment as necessary. Homestead can serve as a convenient, virtualized environment for every Laravel project you are working on:
+Не знакомы с Nginx? Не проблема. Параметр `sites` позволяет легко связать "домен" с папкой в среде Homestead. Типовая конфигурация сайта включена в файл `Homestead.yaml`. И снова, вы можете добавить столько сайтов к своей среде Homestead, сколько необходимо. Homestead может служить удобной виртуальной средой для каждого проекта Laravel, над которым вы работаете:
 
     sites:
         - map: homestead.app
           to: /home/vagrant/Code/Laravel/public
 
-If you change the `sites` property after provisioning the Homestead box, you should re-run `vagrant reload --provision`  to update the Nginx configuration on the virtual machine.
+Если вы измените параметр `sites` после подключения Homestead-бокса, необходимо перезапустить `vagrant reload --provision`, чтобы обновить конфигурацию Nginx на виртуальной машине.
 
-#### The Hosts File
+#### Файл Hosts
 
-You must add the "domains" for your Nginx sites to the `hosts` file on your machine. The `hosts` file will redirect requests for your Homestead sites into your Homestead machine. On Mac and Linux, this file is located at `/etc/hosts`. On Windows, it is located at `C:\Windows\System32\drivers\etc\hosts`. The lines you add to this file will look like the following:
+Вы должны добавить "домены" для своих Nginx-сайтов в файл `hosts` на вашей машине. Файл `hosts` перенаправит запросы к вашим сайтам в вашу машину Homestead. На Mac и Linux этот файл расположен в `/etc/hosts`. На Windows он расположен в `C:\Windows\System32\drivers\etc\hosts`. Строки, которые вы добавляете в этот файл, будут выглядеть примерно так:
 
     192.168.10.10  homestead.app
 
-Make sure the IP address listed is the one set in your `Homestead.yaml` file. Once you have added the domain to your `hosts` file and launched the Vagrant box you will be able to access the site via your web browser:
+Удостоверьтесь, что IP-адрес тот же, что вы установили в своём файле `Homestead.yaml`. Когда вы добавите домен в свой файл `hosts` и запустите Vagrant-бокс, вы можете получить доступ к сайту через свой веб-браузер:
 
     http://homestead.app
 
 <a name="launching-the-vagrant-box"></a>
-### Launching The Vagrant Box
+### Запуск Vagrant Box
 
-Once you have edited the `Homestead.yaml` to your liking, run the `vagrant up` command from your Homestead directory. Vagrant will boot the virtual machine and automatically configure your shared folders and Nginx sites.
+Когда вы отредактировали `Homestead.yaml` по собственному усмотрению, выполните команду `vagrant up` в папке Homestead. Vagrant загрузит виртуальную машину и настроит ваши общие папки и сайты Nginx автоматически.
 
-To destroy the machine, you may use the `vagrant destroy --force` command.
+Чтобы уничтожить машину, вы можете использовать команду `vagrant destroy --force`.
 
 <a name="per-project-installation"></a>
-### Per Project Installation
+### Установка для проекта
 
-Instead of installing Homestead globally and sharing the same Homestead box across all of your projects, you may instead configure a Homestead instance for each project you manage. Installing Homestead per project may be beneficial if you wish to ship a `Vagrantfile` with your project, allowing others working on the project to simply `vagrant up`.
+Вместо глобальной установки Homestead и использования одного Homestead-бокса для всех ваших проектов, вы можете настроить отдельный экземпляр Homestead для каждого проекта. Установка Homestead для проекта может быть выгоднее, когда вы хотите поставлять файл `Vagrantfile` вместе с вашим проектом, позволяя тем, кто работает над проектом, просто выполнять `vagrant up`.
 
-To install Homestead directly into your project, require it using Composer:
+Чтобы установить Homestead непосредственно в ваш проект, затребуйте его с помощью Composer:
 
     composer require laravel/homestead --dev
 
-Once Homestead has been installed, use the `make` command to generate the `Vagrantfile` and `Homestead.yaml` file in your project root. The `make` command will automatically configure the `sites` and `folders` directives in the `Homestead.yaml` file.
+Когда Homestead установлен, используйте команду `make` для создания `Vagrantfile` и файла `Homestead.yaml` в корне вашего проекта. Команда `make` автоматически настроит директивы `sites` м `folders` в файле `Homestead.yaml`.
 
 Mac / Linux:
 
@@ -178,12 +182,12 @@ Windows:
 
     vendor\\bin\\homestead make
 
-Next, run the `vagrant up` command in your terminal and access your project at `http://homestead.app` in your browser. Remember, you will still need to add an `/etc/hosts` file entry for `homestead.app` or the domain of your choice.
+Затем выполните команду `vagrant up`  терминале и зайдите в свой проект по адресу `http://homestead.app` через браузер. Не забывайте, что вам по-прежнему необходимо добавить строку для `homestead.app` или любого другого выбранного вами домена в `/etc/hosts`.
 
 <a name="installing-mariadb"></a>
-### Installing MariaDB
+### Установка MariaDB
 
-If you prefer to use MariaDB instead of MySQL, you may add the `mariadb` option to your `Homestead.yaml` file. This option will remove MySQL and install MariaDB. MariaDB serves as a drop-in replacement for MySQL so you should still use the `mysql` database driver in your application's database configuration:
+Если вы решили использовать MariaDB вместо MySQL, вы можете добавить параметр `mariadb` в свой файл `Homestead.yaml`. Этот параметр удалит MySQL и установит MariaDB. MariaDB является полноценной заменой для MySQL, поэтому вы должны использовать тот же драйвер БД `mysql` в настройках базы данных приложения:
 
     box: laravel/homestead
     ip: "192.168.20.20"
@@ -193,12 +197,12 @@ If you prefer to use MariaDB instead of MySQL, you may add the `mariadb` option 
     mariadb: true
 
 <a name="daily-usage"></a>
-## Daily Usage
+## Повседневное использование
 
 <a name="accessing-homestead-globally"></a>
-### Accessing Homestead Globally
+### Глобальный доступ к Homestead
 
-Sometimes you may want to `vagrant up` your Homestead machine from anywhere on your filesystem. You can do this on Mac / Linux systems by adding a Bash function to your Bash profile. On Windows, you may accomplish this by adding a "batch" file to your `PATH`. These scripts will allow you to run any Vagrant command from anywhere on your system and will automatically point that command to your Homestead installation:
+Иногда вам может понадобиться выполнить `vagrant up` yвашей Homestead-машины из любого места вашей файловой системы. На системах Mac / Linux это можно сделать добавив Bash-функцию в ваш Bash-профиль. На Windows можно добавить "пакетный" файл к своему `PATH`. Эти скрипты позволят вам выполнять любые команды Vagrant из любого места вашей системы, и автоматически укажет команде на ваш установленный Homestead:
 
 #### Mac / Linux
 
@@ -206,11 +210,11 @@ Sometimes you may want to `vagrant up` your Homestead machine from anywhere on y
         ( cd ~/Homestead && vagrant $* )
     }
 
-Make sure to tweak the `~/Homestead` path in the function to the location of your actual Homestead installation. Once the function is installed, you may run commands like `homestead up` or `homestead ssh` from anywhere on your system.
+Не забудьте исправить путь `~/Homestead` в функции на реальное расположение вашего установленного Homestead. Когда функция установлена, вы можете выполнять такие команды, как `homestead up` или `homestead ssh` из любого места вашей системы.
 
 #### Windows
 
-Create a `homestead.bat` batch file anywhere on your machine with the following contents:
+Создайте `homestead.bat` пакетный файл из любого места на вашей машине, использовав следующее содержимое:
 
     @echo off
 
@@ -223,28 +227,28 @@ Create a `homestead.bat` batch file anywhere on your machine with the following 
     set cwd=
     set homesteadVagrant=
 
-Make sure to tweak the example `C:\Homestead` path in the script to the actual location of your Homestead installation. After creating the file, add the file location to your `PATH`. You may then run commands like `homestead up` or `homestead ssh` from anywhere on your system.
+Не забудьте исправить путь `C:\Homestead` в скрипте на реальное расположение вашего установленного Homestead.. После того как вы создали файл, добавьте местоположение своего файла в свой `PATH`. Вы можете выполнять такие команды, как `homestead up` или `homestead ssh` из любого места своей системы.
 
 <a name="connecting-via-ssh"></a>
-### Connecting Via SSH
+### Подключение через SSH
 
-You can SSH into your virtual machine by issuing the `vagrant ssh` terminal command from your Homestead directory.
+Для подключения к своей виртуальной машине по SSH вы можете использовать команду `vagrant ssh` из своей Homestead-директории.
 
-But, since you will probably need to SSH into your Homestead machine frequently, consider adding the "function" described above to your host machine to quickly SSH into the Homestead box.
+Но поскольку вам, скорее всего, потребуется часто подключаться к вашей Homestead-машине по SSH, будет удобно создать "функцию" на вашей хост-машине для быстрого подключения, как описано выше.
 
 <a name="connecting-to-databases"></a>
-### Connecting To Databases
+### Подключение к базам данных
 
-A `homestead` database is configured for both MySQL and Postgres out of the box. For even more convenience, Laravel's `.env` file configures the framework to use this database out of the box.
+База `homestead` изначально настроена на использование и MySQL, и Postgres. Для ещё большего удобства файл Laravel `.env` настраивает фреймворк на использование этой БД по умолчанию.
 
-To connect to your MySQL or Postgres database from your host machine's database client, you should connect to `127.0.0.1` and port `33060` (MySQL) or `54320` (Postgres). The username and password for both databases is `homestead` / `secret`.
+Чтобы подключиться к вашей базе данных MySQL или Postgres через клиент БД с вашей хост-машины, вы должны подключиться к `127.0.0.1` через порт `33060` (MySQL) или `54320` (Postgres). Имя пользователя и пароль для обеих баз данных `homestead` / `secret`.
 
-> {note} You should only use these non-standard ports when connecting to the databases from your host machine. You will use the default 3306 and 5432 ports in your Laravel database configuration file since Laravel is running _within_ the virtual machine.
+> {note} Вы должны использовать эти нестандартные порты только подключаясь к базам данных с вашей главной машины. Вы будете использовать порты 3306 и 5432 в вашем конфигурационном файле базы данных Laravel, так как Laravel запущен _на_ виртуальной машине.
 
 <a name="adding-additional-sites"></a>
-### Adding Additional Sites
+### Добавление дополнительных сайтов
 
-Once your Homestead environment is provisioned and running, you may want to add additional Nginx sites for your Laravel applications. You can run as many Laravel installations as you wish on a single Homestead environment. To add an additional site, simply add the site to your `Homestead.yaml` file:
+После настройки и запуска вашей среды Homestead вы можете захотеть добавить дополнительные Nginx-сайты для своих Laravel-приложений. Вы можете запустить в одной среде Homestead столько установок Laravel, сколько захотите. Вы можете просто добавить сайты в свой файл `Homestead.yaml`:
 
     sites:
         - map: homestead.app
@@ -252,29 +256,29 @@ Once your Homestead environment is provisioned and running, you may want to add 
         - map: another.app
           to: /home/vagrant/Code/another/public
 
-If Vagrant is not automatically managing your "hosts" file, you may need to add the new site to that file as well:
+Если Vagrant не управляет вашим файлом "hosts" автоматически, вам может потребоваться также добавить к тому файлу новый сайт:
 
     192.168.10.10  homestead.app
     192.168.10.10  another.app
 
-Once the site has been added, run the `vagrant reload --provision` command from your Homestead directory.
+После добавления сайта выполните команду `vagrant reload --provision` из своей директории Homestead.
 
 <a name="site-types"></a>
-#### Site Types
+#### Типы сайтов
 
-Homestead supports several types of sites which allow you to easily run projects that are not based on Laravel. For example, we may easily add a Symfony application to Homestead using the `symfony2` site type:
+Homestead поддерживает несколько типов файлов, что позволяет вам запросто работать с проектами, которые не работаю на Laravel. Например, мы можем запросто добавить Symfony-приложение в Homestead, используя тип сайта `symfony2`:
 
     sites:
         - map: symfony2.app
           to: /home/vagrant/Code/Symfony/public
           type: symfony2
 
-The available site types are: `apache`, `laravel` (the default), `proxy`, `silverstripe`, `statamic`, `symfony2`, and `symfony4`.
+Доступные типы сайтов: `apache`, `laravel` (по умолчанию), `proxy`, `silverstripe`, `statamic`, `symfony2` и `symfony4`.
 
 <a name="site-parameters"></a>
-#### Site Parameters
+#### Параметры сайтов
 
-You may add additional Nginx `fastcgi_param` values to your site via the `params` site directive. For example, we'll add a `FOO` parameter with a value of `BAR`:
+Вы можете добавить дополнительные Nginx-значения `fastcgi_param` вашему сайте через директиву `params`. Например, мы добавим параметр `FOO` со значением `BAR`:
 
     sites:
         - map: homestead.app
@@ -284,34 +288,34 @@ You may add additional Nginx `fastcgi_param` values to your site via the `params
                 value: BAR
 
 <a name="configuring-cron-schedules"></a>
-### Configuring Cron Schedules
+### Настройка расписания Cron
 
-Laravel provides a convenient way to [schedule Cron jobs](/docs/{{version}}/scheduling) by scheduling a single `schedule:run` Artisan command to be run every minute. The `schedule:run` command will examine the job schedule defined in your `App\Console\Kernel` class to determine which jobs should be run.
+Laravel предоставляет удобный способ для [планирования Cron-задач](/docs/{{version}}/scheduling) путём планирования единственной Artisan-команды `schedule:run` на ежеминутное выполнение. Команда `schedule:run` проверит запланированные задачи, определённые в классе `App\Console\Kernel`, и определит, какие задачи необходимо выполнить.
 
-If you would like the `schedule:run` command to be run for a Homestead site, you may set the `schedule` option to `true` when defining the site:
+Если вы хотите выполнить команду `schedule:run` для сайта Homestead, вы можете задать значение `true` для параметра `schedule` при определении сайта:
 
     sites:
         - map: homestead.app
           to: /home/vagrant/Code/Laravel/public
           schedule: true
 
-The Cron job for the site will be defined in the `/etc/cron.d` folder of the virtual machine.
+Cron-задача для сайта будет определена в папке `/etc/cron.d` на виртуальной машине.
 
 <a name="ports"></a>
-### Ports
+### Порты
 
-By default, the following ports are forwarded to your Homestead environment:
+По умолчанию следующие порты переадресованы в вашу среду Homestead:
 
-- **SSH:** 2222 &rarr; Forwards To 22
-- **HTTP:** 8000 &rarr; Forwards To 80
-- **HTTPS:** 44300 &rarr; Forwards To 443
-- **MySQL:** 33060 &rarr; Forwards To 3306
-- **Postgres:** 54320 &rarr; Forwards To 5432
-- **Mailhog:** 8025 &rarr; Forwards To 8025
+- **SSH:** 2222 &rarr; переадресован в 22
+- **HTTP:** 8000 &rarr; переадресован в 80
+- **HTTPS:** 44300 &rarr; переадресован в 443
+- **MySQL:** 33060 &rarr; переадресован в 3306
+- **Postgres:** 54320 &rarr; переадресован в 5432
+- **Mailhog:** 8025 &rarr; переадресован в 8025
 
-#### Forwarding Additional Ports
+#### Перенаправление дополнительных портов
 
-If you wish, you may forward additional ports to the Vagrant box, as well as specify their protocol:
+По желанию можно переадресовать дополнительные порты в Vagrant-бокс, а также указать их протокол:
 
     ports:
         - send: 50000
@@ -321,83 +325,82 @@ If you wish, you may forward additional ports to the Vagrant box, as well as spe
           protocol: udp
 
 <a name="sharing-your-environment"></a>
-### Sharing Your Environment
+### Совместное использование вашей среды
 
-Sometimes you may wish to share what you're currently working on with coworkers or a  client. Vagrant has a built-in way to support this via `vagrant share`; however, this will not work if you have multiple sites configured in your `Homestead.yaml` file.
+Иногда вам может потребоваться поделиться тем, над чем вы работаете в данный момент, с другими разработчиками или клиентом. В Vagrant есть встроенный способ поддержки данного функционала через `vagrant share`; однако, это не будет работать, если в вашем файле `Homestead.yaml` настроено несколько сайтов.
 
-To solve this problem, Homestead includes its own `share` command. To get started, SSH into your Homestead machine via `vagrant ssh` and run `share homestead.app`. This will share the `homestead.app` site from your `Homestead.yaml` configuration file. Of course, you may substitute any of your other configured sites for `homestead.app`:
+Чтобы решить это проблему у Homestead есть собственная команда `share`. Для начала подключитесь к своей Homested-машине через `vagrant ssh` и выполните `share homestead.app`. Это позволит поделиться сайтом `homestead.app` из вашего конфига `Homestead.yaml`. Конечно же, вы можете заменить любой из других своих настроенных сайтов на `homestead.app`:
 
     share homestead.app
 
-After running the command, you will see an Ngrok screen appear which contains the activity log and the publicly accessible URLs for the shared site. If you would like to specify a custom region, subdomain, or other Ngrok runtime option, you may add them to your `share` command:
+После запуска команды вы увидите, как появится экран Ngrok, на котором содержится журнал активности и  общедоступные URL для сайта, которым вы поделились. Если вы хотите указать пользовательскую область, поддомен или другую настройку Ngrok, можно добавить их к своей команде `share`:
 
     share homestead.app -region=eu -subdomain=laravel
 
-> {note} Remember, Vagrant is inherently insecure and you are exposing your virtual machine to the Internet when running the `share` command.
+> {note} Помните, что Vagrant от природы небезопасен и вы выставляете свою виртуальную машину всему Интернет-пространству во время запуска команды `share`.
 
 <a name="multiple-php-versions"></a>
-### Multiple PHP Versions
+### Несколько версий PHP
 
-> {note} This feature is only compatible with Nginx.
+> {note} Совместимо только с Nginx.
 
-Homestead 6 introduced support for multiple versions of PHP on the same virtual machine. You may specify which version of PHP to use for a given site within your `Homestead.yaml` file. The available PHP versions are: "5.6", "7.0", and "7.1":
+Homestead 6 представил поддержку нескольких версий PHP на одной и той же виртуальной машине. Вы можете указать какие версии PHP использовать для заданного сайта в своем файле `Homestead.yaml`. Доступные версии PHP: "5.6", "7.0" и "7.1":
 
     sites:
         - map: homestead.app
           to: /home/vagrant/Code/Laravel/public
           php: "5.6"
 
-In addition, you may use any of the supported PHP versions via the CLI:
+Дополнительно вы можете пользоваться любой из поддерживаемых версий PHP через CLI:
 
     php5.6 artisan list
     php7.0 artisan list
     php7.1 artisan list
 
 <a name="network-interfaces"></a>
-## Network Interfaces
-
-The `networks` property of the `Homestead.yaml` configures network interfaces for your Homestead environment. You may configure as many interfaces as necessary:
+## Сетевые интерфейсы
+Свойство `networks` файла `Homestead.yaml` настраивает сетевые интерфейсы вашей среды Homestead. Вы можете настроить столько интерфейсов, сколько потребуется:
 
     networks:
         - type: "private_network"
           ip: "192.168.10.20"
 
-To enable a [bridged](https://www.vagrantup.com/docs/networking/public_network.html) interface, configure a `bridge` setting and change the network type to `public_network`:
+Чтобы включить интерфейс с [мостовым соединением](https://www.vagrantup.com/docs/networking/public_network.html), измените настройку `bridge` и измените тип сети на `public_network`:
 
     networks:
         - type: "public_network"
           ip: "192.168.10.20"
           bridge: "en1: Wi-Fi (AirPort)"
 
-To enable [DHCP](https://www.vagrantup.com/docs/networking/public_network.html), just remove the `ip` option from your configuration:
+Чтобы включить [DHCP](https://www.vagrantup.com/docs/networking/public_network.html), просто уберите опцию `ip` из своей настройки:
 
     networks:
         - type: "public_network"
           bridge: "en1: Wi-Fi (AirPort)"
 
 <a name="updating-homestead"></a>
-## Updating Homestead
+## Обновление Homestead
 
-You can update Homestead in two simple steps. First, you should update the Vagrant box using the `vagrant box update` command:
+Для обновления Homestead надо выполнить два простых шага. Во-первых, вам надо обновить Vagrant-бокс с помощью команды `vagrant box update`:
 
     vagrant box update
 
-Next, you need to update the Homestead source code. If you cloned the repository you can simply `git pull origin master` at the location you originally cloned the repository.
+Затем вам надо обновить исходный код Homestead. Если вы клонировали репозиторий, то можете просто выполнить `git pull origin master` в то место, куда вы клонировали репозиторий изначально.
 
-If you have installed Homestead via your project's `composer.json` file, you should ensure your `composer.json` file contains `"laravel/homestead": "^4"` and update your dependencies:
+Если вы установили Homestead через файл `composer.json`, то должны убедиться, что файл `composer.json` содержит строку `"laravel/homestead": "^4"` и обновить ваши зависимости:
 
     composer update
 
 <a name="old-versions"></a>
-## Old Versions
+## Старые версии
 
-> {tip} If you need an older version of PHP check the documentation on <a href="#multiple-php-versions">multiple PHP versions</a> before attempting to use an old version of Homestead. 
+> {tip} Если вам нужна более старая версия PHP, посмотрите документацию по <a href="#multiple-php-versions">нескольким PHP-версиям</a> прежде чем начнете использовать старую версию Homestead. 
 
-You can easily override the version of the box that Homestead uses by adding the following line to your `Homestead.yaml` file:
+Вы можете легко изменить используемую в Homestead версию бокса, добавив следующую строку в ваш файл `Homestead.yaml`:
 
     version: 0.6.0
 
-An example:
+Пример:
 
     box: laravel/homestead
     version: 0.6.0
@@ -406,20 +409,20 @@ An example:
     cpus: 4
     provider: virtualbox
 
-When you use an older version of the Homestead box you need to match that with a compatible version of the Homestead source code. Below is a chart which shows the supported box versions, which version of Homestead source code to use, and the version of PHP provided:
+При использовании старых версий бокса Homestead вам надо проверить версию на совместимость с исходным кодом Homestead. Ниже приведена таблица поддерживаемых версий бокса с указанием того, какую версию исходного кода необходимо использовать, и какая в коробке версия PHP:
 
-|   | Homestead Version | Box Version |
+|   | Версия Homestead | Версия бокса |
 |---|---|---|
 | PHP 7.0 | 3.1.0 | 0.6.0 |
 | PHP 7.1 | 4.0.0 | 1.0.0 |
 
 <a name="provider-specific-settings"></a>
-## Provider Specific Settings
+## Специальные настройки провайдера
 
 <a name="provider-specific-virtualbox"></a>
 ### VirtualBox
 
-By default, Homestead configures the `natdnshostresolver` setting to `on`. This allows Homestead to use your host operating system's DNS settings. If you would like to override this behavior, add the following lines to your `Homestead.yaml` file:
+По умолчанию Homestead настраивает `natdnshostresolver` как `on`. Это позволяет Homestead использовать настройки DNS вашей операционной системы хоста. Если вы хотите переопределить такое поведение, добавьте следующие строки к своему файлу `Homestead.yaml`:
 
     provider: virtualbox
     natdnshostresolver: off
