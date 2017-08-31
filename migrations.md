@@ -1,53 +1,57 @@
-# Database: Migrations
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Generating Migrations](#generating-migrations)
-- [Migration Structure](#migration-structure)
-- [Running Migrations](#running-migrations)
-    - [Rolling Back Migrations](#rolling-back-migrations)
-- [Tables](#tables)
-    - [Creating Tables](#creating-tables)
-    - [Renaming / Dropping Tables](#renaming-and-dropping-tables)
-- [Columns](#columns)
-    - [Creating Columns](#creating-columns)
-    - [Column Modifiers](#column-modifiers)
-    - [Modifying Columns](#modifying-columns)
-    - [Dropping Columns](#dropping-columns)
-- [Indexes](#indexes)
-    - [Creating Indexes](#creating-indexes)
-    - [Dropping Indexes](#dropping-indexes)
-    - [Foreign Key Constraints](#foreign-key-constraints)
+---
+
+# База данных: Миграции
+
+- [Введение](#introduction)
+- [Создание миграций](#generating-migrations)
+- [Структура миграций](#migration-structure)
+- [Выполнение миграций](#running-migrations)
+    - [Откат миграций](#rolling-back-migrations)
+- [Таблицы](#tables)
+    - [Создание таблиц](#creating-tables)
+    - [Переименование / удаление таблиц](#renaming-and-dropping-tables)
+- [Столбцы](#columns)
+    - [Создание столбцов](#creating-columns)
+    - [Модификаторы столбцов](#column-modifiers)
+    - [Изменение столбцов](#modifying-columns)
+    - [Удаление столбцов](#dropping-columns)
+- [Индексы](#indexes)
+    - [Создание индексов](#creating-indexes)
+    - [Удаление индексов](#dropping-indexes)
+    - [Ограничения внешнего ключа](#foreign-key-constraints)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Migrations are like version control for your database, allowing your team to easily modify and share the application's database schema. Migrations are typically paired with Laravel's schema builder to easily build your application's database schema. If you have ever had to tell a teammate to manually add a column to their local database schema, you've faced the problem that database migrations solve.
+Миграции — что-то вроде системы контроля версий для вашей базы данных. Они позволяют вашей команде изменять структуру БД, в то же время оставаясь в курсе изменений других участников. Миграции обычно идут рука об руку с построителем структур для более простого обращения с архитектурой вашей базы данных. Если вы когда-нибудь просили коллегу вручную добавить столбец в его локальную БД, значит вы сталкивались с проблемой, которую решают миграции БД.
 
-The Laravel `Schema` [facade](/docs/{{version}}/facades) provides database agnostic support for creating and manipulating tables across all of Laravel's supported database systems.
+[Фасад](/docs/{{version}}/facades) Laravel `Schema` обеспечивает поддержку создания и изменения таблиц в независимости от используемой СУБД из числа тех, что поддерживаются в Laravel.
 
 <a name="generating-migrations"></a>
-## Generating Migrations
+## Создание миграций
 
-To create a migration, use the `make:migration` [Artisan command](/docs/{{version}}/artisan):
+Для создания новой миграции используйте [Artisan-команду](/docs/{{version}}/artisan) `make:migration` :
 
     php artisan make:migration create_users_table
 
-The new migration will be placed in your `database/migrations` directory. Each migration file name contains a timestamp which allows Laravel to determine the order of the migrations.
+Миграция будет помещена в директорию `database/migrations`. Название файла каждой миграции будет содержать метку времени, которая позволяет фреймворку определять порядок применения миграций.
 
-The `--table` and `--create` options may also be used to indicate the name of the table and whether the migration will be creating a new table. These options simply pre-fill the generated migration stub file with the specified table:
+Можно также использовать параметры `--table` и `--create` для указания имени таблицы и того факта, что миграция будет создавать новую таблицу. Эти параметры просто заранее создают указанную таблицу в создаваемом файле-заглушке миграции:
 
     php artisan make:migration create_users_table --create=users
 
     php artisan make:migration add_votes_to_users_table --table=users
 
-If you would like to specify a custom output path for the generated migration, you may use the `--path` option when executing the `make:migration` command. The given path should be relative to your application's base path.
+Если вы хотите указать свой путь для сохранения создаваемых миграций, используйте параметр `--path` при запуске команды `make:migration`. Этот путь должен быть указан относительно базового пути вашего приложения.
 
 <a name="migration-structure"></a>
-## Migration Structure
+## Структура миграций
 
-A migration class contains two methods: `up` and `down`. The `up` method is used to add new tables, columns, or indexes to your database, while the `down` method should simply reverse the operations performed by the `up` method.
+Класс миграций содержит два метода: `up` и `down`. Метод `up` используется для добавления новых таблиц, столбцов или индексов в вашу БД, а метод `down` просто отменяет операции, выполненные методом `up`.
 
-Within both of these methods you may use the Laravel schema builder to expressively create and modify tables. To learn about all of the methods available on the `Schema` builder, [check out its documentation](#creating-tables). For example, this migration example creates a `flights` table:
+В обоих методах вы можете использовать построитель структур Laravel для удобного создания и изменения таблиц. О всех доступных методах построителя структур `Schema` [читайте в его доументации](#creating-tables). Например, эта миграция создаёт таблицу `flights`:
 
     <?php
 
@@ -58,7 +62,7 @@ Within both of these methods you may use the Laravel schema builder to expressiv
     class CreateFlightsTable extends Migration
     {
         /**
-         * Run the migrations.
+         * Выполнение миграций.
          *
          * @return void
          */
@@ -73,7 +77,7 @@ Within both of these methods you may use the Laravel schema builder to expressiv
         }
 
         /**
-         * Reverse the migrations.
+         * Отмена миграций.
          *
          * @return void
          */
@@ -85,65 +89,65 @@ Within both of these methods you may use the Laravel schema builder to expressiv
 
 
 <a name="running-migrations"></a>
-## Running Migrations
+## Выполнение миграций
 
-To run all of your outstanding migrations, execute the `migrate` Artisan command:
+Для запуска всех необходимых вам миграций используйте Artisan-команду `migrate`:
 
     php artisan migrate
 
-> {note} If you are using the [Homestead virtual machine](/docs/{{version}}/homestead), you should run this command from within your virtual machine.
+> {note} Если вы используете [виртуальную машину Homestead](/docs/{{version}}/homestead), вам надо выполнить эту команду на своей ВМ.
 
-#### Forcing Migrations To Run In Production
+#### Принудительные миграции в продакшне
 
-Some migration operations are destructive, which means they may cause you to lose data. In order to protect you from running these commands against your production database, you will be prompted for confirmation before the commands are executed. To force the commands to run without a prompt, use the `--force` flag:
+Некоторые операции миграций разрушительны, значит они могут привести к потере ваших данных. Для предотвращения случайного запуска этих команд на вашей боевой БД перед их выполнением запрашивается подтверждение. Для принудительного запуска команд без подтверждения используйте ключ `--force`:
 
     php artisan migrate --force
 
 <a name="rolling-back-migrations"></a>
-### Rolling Back Migrations
+### Откат миграций
 
-To rollback the latest migration operation, you may use the `rollback` command. This command rolls back the last "batch" of migrations, which may include multiple migration files:
+Для отмены изменений, сделанных последней миграцией, используйте команду `rollback`. Эта команда отменит результат последней "партии" миграций, которая может включать несколько файлов миграций:
 
     php artisan migrate:rollback
 
-You may rollback a limited number of migrations by providing the `step` option to the `rollback` command. For example, the following command will rollback the last five migrations:
+Вы можете сделать откат определённого числа миграций, указав параметр `step` для команды `rollback`. Например, эта команда откатит последние пять миграций:
 
     php artisan migrate:rollback --step=5
 
-The `migrate:reset` command will roll back all of your application's migrations:
+Команда `migrate:reset` откатит изменения всех миграций вашего приложения:
 
     php artisan migrate:reset
 
-#### Rollback & Migrate In Single Command
+#### Откат всех миграций и их повторное применение одной командой
 
-The `migrate:refresh` command will roll back all of your migrations and then execute the `migrate` command. This command effectively re-creates your entire database:
+Команда `migrate:refresh` отменит изменения всех ваших миграций, а затем выполнит команду `migrate`. Эта команда эффективно создаёт заново всю вашу БД:
 
     php artisan migrate:refresh
 
-    // Refresh the database and run all database seeds...
+    // Обновить БД и запустить заполнение БД начальными данными...
     php artisan migrate:refresh --seed
 
-You may rollback & re-migrate a limited number of migrations by providing the `step` option to the `refresh` command. For example, the following command will rollback & re-migrate the last five migrations:
+Вы можете откатить и повторно применить определённое число миграций, указав параметр `step` для команды `refresh`. Например, эта команда откатит и повторно применит последние пять миграций:
 
     php artisan migrate:refresh --step=5
 
 <a name="tables"></a>
-## Tables
+## Таблицы
 
 <a name="creating-tables"></a>
-### Creating Tables
+### Создание таблиц
 
-To create a new database table, use the `create` method on the `Schema` facade. The `create` method accepts two arguments. The first is the name of the table, while the second is a `Closure` which receives a `Blueprint` object that may be used to define the new table:
+Для создания новой таблицы БД используйте метод `create` фасада `Schema`. Метод `create` принимает два аргумента. Первый — имя таблицы, второй — функция `Closure`, которую получает объект `Blueprint`, который можно использовать для определения новой таблицы:
 
     Schema::create('users', function (Blueprint $table) {
         $table->increments('id');
     });
 
-Of course, when creating the table, you may use any of the schema builder's [column methods](#creating-columns) to define the table's columns.
+Само собой, при создании таблицы вы можете использовать любые [методы для работы со столбцами](#creating-columns) построителя структур.
 
-#### Checking For Table / Column Existence
+#### Проверка существования таблицы / столбца
 
-You may easily check for the existence of a table or column using the `hasTable` and `hasColumn` methods:
+Вы можете легко проверить существование таблицы или столбца при помощи методов `hasTable` и `hasColumn`:
 
     if (Schema::hasTable('users')) {
         //
@@ -153,15 +157,15 @@ You may easily check for the existence of a table or column using the `hasTable`
         //
     }
 
-#### Connection & Storage Engine
+#### Подключение и подсистема хранения данных
 
-If you want to perform a schema operation on a database connection that is not your default connection, use the `connection` method:
+Если вы хотите выполнить операции над структурой через подключение к БД, которое не является вашим основным подключением, используйте метод `connection`:
 
     Schema::connection('foo')->create('users', function (Blueprint $table) {
         $table->increments('id');
     });
 
-You may use the `engine` property on the schema builder to define the table's storage engine:
+Используйте свойство `engine` построителя структур, чтобы задать подсистему хранения данных для таблицы:
 
     Schema::create('users', function (Blueprint $table) {
         $table->engine = 'InnoDB';
@@ -170,203 +174,203 @@ You may use the `engine` property on the schema builder to define the table's st
     });
 
 <a name="renaming-and-dropping-tables"></a>
-### Renaming / Dropping Tables
+### Переименование / удаление таблиц
 
-To rename an existing database table, use the `rename` method:
+Для переименования существующей таблицы используйте метод `rename`:
 
     Schema::rename($from, $to);
 
-To drop an existing table, you may use the `drop` or `dropIfExists` methods:
+Для удаления существующей таблицы используйте методы `drop` или `dropIfExists`:
 
     Schema::drop('users');
 
     Schema::dropIfExists('users');
 
-#### Renaming Tables With Foreign Keys
+#### Переименование таблиц с внешними ключами
 
-Before renaming a table, you should verify that any foreign key constraints on the table have an explicit name in your migration files instead of letting Laravel assign a convention based name. Otherwise, the foreign key constraint name will refer to the old table name.
+Перед переименованием таблицы вы должны проверить, что для всех ограничений внешних ключей таблицы есть явные имена в файлах вашей миграции, чтобы избежать автоматического назначения имён на основе принятого соглашения. Иначе имя ограничения внешнего ключа будет ссылаться на имя старой таблицы.
 
 <a name="columns"></a>
-## Columns
+## Столбцы
 
 <a name="creating-columns"></a>
-### Creating Columns
+### Создание столбцов
 
-The `table` method on the `Schema` facade may be used to update existing tables. Like the `create` method, the `table` method accepts two arguments: the name of the table and a `Closure` that receives a `Blueprint` instance you may use to add columns to the table:
+Для изменения существующей таблицы мы будем использовать метод `table` фасада `Schema`. Как и метод `create`, метод `table` принимает два аргумента: имя таблицы и замыкание, которое получает экземпляр `Blueprint`, который можно использовать для добавления столбцов в таблицу:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('email');
     });
 
-#### Available Column Types
+#### Доступные типы столбцов
 
-Of course, the schema builder contains a variety of column types that you may specify when building your tables:
+Разумеется, построитель структур содержит различные типы столбцов, которые вы можете указывать при построении ваших таблиц:
 
-Command  | Description
+Команда  | Описание
 ------------- | -------------
-`$table->bigIncrements('id');`  |  Incrementing ID (primary key) using a "UNSIGNED BIG INTEGER" equivalent.
-`$table->bigInteger('votes');`  |  BIGINT equivalent for the database.
-`$table->binary('data');`  |  BLOB equivalent for the database.
-`$table->boolean('confirmed');`  |  BOOLEAN equivalent for the database.
-`$table->char('name', 4);`  |  CHAR equivalent with a length.
-`$table->date('created_at');`  |  DATE equivalent for the database.
-`$table->dateTime('created_at');`  |  DATETIME equivalent for the database.
-`$table->dateTimeTz('created_at');`  |  DATETIME (with timezone) equivalent for the database.
-`$table->decimal('amount', 5, 2);`  |  DECIMAL equivalent with a precision and scale.
-`$table->double('column', 15, 8);`  |  DOUBLE equivalent with precision, 15 digits in total and 8 after the decimal point.
-`$table->enum('choices', ['foo', 'bar']);` | ENUM equivalent for the database.
-`$table->float('amount', 8, 2);`  |  FLOAT equivalent for the database, 8 digits in total and 2 after the decimal point.
-`$table->increments('id');`  |  Incrementing ID (primary key) using a "UNSIGNED INTEGER" equivalent.
-`$table->integer('votes');`  |  INTEGER equivalent for the database.
-`$table->ipAddress('visitor');`  |  IP address equivalent for the database.
-`$table->json('options');`  |  JSON equivalent for the database.
-`$table->jsonb('options');`  |  JSONB equivalent for the database.
-`$table->longText('description');`  |  LONGTEXT equivalent for the database.
-`$table->macAddress('device');`  |  MAC address equivalent for the database.
-`$table->mediumIncrements('id');`  |  Incrementing ID (primary key) using a "UNSIGNED MEDIUM INTEGER" equivalent.
-`$table->mediumInteger('numbers');`  |  MEDIUMINT equivalent for the database.
-`$table->mediumText('description');`  |  MEDIUMTEXT equivalent for the database.
-`$table->morphs('taggable');`  |  Adds unsigned INTEGER `taggable_id` and STRING `taggable_type`.
-`$table->nullableMorphs('taggable');`  |  Nullable versions of the `morphs()` columns.
-`$table->nullableTimestamps();`  |  Nullable versions of the `timestamps()` columns.
-`$table->rememberToken();`  |  Adds `remember_token` as VARCHAR(100) NULL.
-`$table->smallIncrements('id');`  |  Incrementing ID (primary key) using a "UNSIGNED SMALL INTEGER" equivalent.
-`$table->smallInteger('votes');`  |  SMALLINT equivalent for the database.
-`$table->softDeletes();`  |  Adds nullable `deleted_at` column for soft deletes.
-`$table->string('email');`  |  VARCHAR equivalent column.
-`$table->string('name', 100);`  |  VARCHAR equivalent with a length.
-`$table->text('description');`  |  TEXT equivalent for the database.
-`$table->time('sunrise');`  |  TIME equivalent for the database.
-`$table->timeTz('sunrise');`  |  TIME (with timezone) equivalent for the database.
-`$table->tinyInteger('numbers');`  |  TINYINT equivalent for the database.
-`$table->timestamp('added_on');`  |  TIMESTAMP equivalent for the database.
-`$table->timestampTz('added_on');`  |  TIMESTAMP (with timezone) equivalent for the database.
-`$table->timestamps();`  |  Adds nullable `created_at` and `updated_at` columns.
-`$table->timestampsTz();`  |  Adds nullable `created_at` and `updated_at` (with timezone) columns.
-`$table->unsignedBigInteger('votes');`  |  Unsigned BIGINT equivalent for the database.
-`$table->unsignedInteger('votes');`  |  Unsigned INT equivalent for the database.
-`$table->unsignedMediumInteger('votes');`  |  Unsigned MEDIUMINT equivalent for the database.
-`$table->unsignedSmallInteger('votes');`  |  Unsigned SMALLINT equivalent for the database.
-`$table->unsignedTinyInteger('votes');`  |  Unsigned TINYINT equivalent for the database.
-`$table->uuid('id');`  |  UUID equivalent for the database.
+`$table->bigIncrements('id');`  |  Инкрементный ID (первичный ключ), использующий эквивалент "UNSIGNED BIG INTEGER".
+`$table->bigInteger('votes');`  |  Эквивалент BIGINT для базы данных.
+`$table->binary('data');`  |  Эквивалент BLOB для базы данных.
+`$table->boolean('confirmed');`  |  Эквивалент BOOLEAN для базы данных.
+`$table->char('name', 4);`  |  Эквивалент CHAR для базы данных.
+`$table->date('created_at');`  |  Эквивалент DATE для базы данных.
+`$table->dateTime('created_at');`  |  Эквивалент DATETIME для базы данных.
+`$table->dateTimeTz('created_at');`  |  Эквивалент DATETIME (с часовым поясом) для базы данных.
+`$table->decimal('amount', 5, 2);`  |  Эквивалент DECIMAL с точностью и масштабом.
+`$table->double('column', 15, 8);`  |  Эквивалент DOUBLE с точностью, всего 15 цифр, после запятой 8 цифр.
+`$table->enum('choices', ['foo', 'bar']);` | Эквивалент ENUM для базы данных.
+`$table->float('amount', 8, 2);`  |  Эквивалент FLOAT для базы данных, всего 8 знаков, из них 2 после запятой.
+`$table->increments('id');`  |  Инкрементный ID (первичный ключ), использующий эквивалент "UNSIGNED INTEGER".
+`$table->integer('votes');`  |  Эквивалент INTEGER для базы данных.
+`$table->ipAddress('visitor');`  |  Эквивалент IP-адреса для базы данных.
+`$table->json('options');`  |  Эквивалент JSON для базы данных.
+`$table->jsonb('options');`  |  Эквивалент JSONB для базы данных.
+`$table->longText('description');`  |  Эквивалент LONGTEXT для базы данных.
+`$table->macAddress('device');`  |  Эквивалент MAC-адреса для базы данных.
+`$table->mediumIncrements('id');`  |  Инкрементный ID (первичный ключ), использующий эквивалент "UNSIGNED MEDIUM INTEGER".
+`$table->mediumInteger('numbers');`  |  Эквивалент MEDIUMINT для базы данных.
+`$table->mediumText('description');`  |  Эквивалент MEDIUMTEXT для базы данных.
+`$table->morphs('taggable');`  |  Добавление столбца `taggable_id` INTEGER и `taggable_type` STRING.
+`$table->nullableMorphs('taggable');`  |  Аналогично `morphs()`, но разрешено значение NULL.
+`$table->nullableTimestamps();`  |  Аналогично `timestamps()`, но разрешено значение NULL.
+`$table->rememberToken();`  |  Добавление столбца `remember_token` как VARCHAR(100) NULL.
+`$table->smallIncrements('id');`  |  Инкрементный ID (первичный ключ), использующий эквивалент "UNSIGNED SMALL INTEGER".
+`$table->smallInteger('votes');`  |  Эквивалент SMALLINT для базы данных.
+`$table->softDeletes();`  |     Добавление столбца `deleted_at` для мягкого удаления с разрешенным значением NULL.
+`$table->string('email');`  |  Эквивалент VARCHAR.
+`$table->string('name', 100);`  |  Эквивалент VARCHAR с длиной.
+`$table->text('description');`  |  Эквивалент TEXT для базы данных.
+`$table->time('sunrise');`  |  Эквивалент TIME для базы данных.
+`$table->timeTz('sunrise');`  |  Эквивалент TIME (с часовым поясом) для базы данных.
+`$table->tinyInteger('numbers');`  |  Эквивалент TINYINT для базы данных.
+`$table->timestamp('added_on');`  |  Эквивалент TIMESTAMP для базы данных.
+`$table->timestampTz('added_on');`  |  Эквивалент TIMESTAMP (с часовым поясом) для базы данных.
+`$table->timestamps();`  |  Добавление столбцов `created_at` и `updated_at` с разрешенным значением NULL.
+`$table->timestampsTz();`  |  Добавление столбцов `created_at` и `updated_at` (с часовым поясом), для которых разрешено значение NULL.
+`$table->unsignedBigInteger('votes');`  |  Эквивалент Unsigned BIGINT для базы данных.
+`$table->unsignedInteger('votes');`  |  Эквивалент Unsigned INT для базы данных.
+`$table->unsignedMediumInteger('votes');`  |  Эквивалент Unsigned MEDIUMINT для базы данных.
+`$table->unsignedSmallInteger('votes');`  |  Эквивалент Unsigned SMALLINT для базы данных.
+`$table->unsignedTinyInteger('votes');`  |  Эквивалент Unsigned TINYINT для базы данных.
+`$table->uuid('id');`  |  Эквивалент UUID для базы данных.
 
 <a name="column-modifiers"></a>
-### Column Modifiers
+### Модификаторы столбцов
 
-In addition to the column types listed above, there are several column "modifiers" you may use while adding a column to a database table. For example, to make the column "nullable", you may use the `nullable` method:
+Вдобавок к перечисленным типам столбцов существует несколько "модификаторов" столбцов, которые вы можете использовать при добавлении столбцов в таблицу. Например, чтобы сделать столбец "обнуляемым", используйте метод `nullable`:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('email')->nullable();
     });
 
-Below is a list of all the available column modifiers. This list does not include the [index modifiers](#creating-indexes):
+Ниже перечислены все доступные модификаторы столбцов. В этом списке отсутствуют [модицикаторы индексов](#creating-indexes):
 
-Modifier  | Description
+Модификатор  | Описание
 ------------- | -------------
-`->after('column')`  |  Place the column "after" another column (MySQL Only)
-`->comment('my comment')`  |  Add a comment to a column
-`->default($value)`  |  Specify a "default" value for the column
-`->first()`  |  Place the column "first" in the table (MySQL Only)
-`->nullable()`  |  Allow NULL values to be inserted into the column
-`->storedAs($expression)`  |  Create a stored generated column (MySQL Only)
-`->unsigned()`  |  Set `integer` columns to `UNSIGNED`
-`->virtualAs($expression)`  |  Create a virtual generated column (MySQL Only)
+`->after('column')`  |  Помещает столбец "после" указанного столбца (только MySQL)
+`->comment('my comment')`  |  Добавляет комментарий в столбец
+`->default($value)`  |  Указывает значение "по умолчанию" для столбца
+`->first()`  |  Помещает столбец "первым" в таблице (только MySQL)
+`->nullable()`  |  Разрешает вставлять значения NULL в столбец
+`->storedAs($expression)`  |  Создать генерируемый столбец типа stored (только MySQL)
+`->unsigned()`  |  Делает столбцы `integer` беззнаковыми `UNSIGNED`
+`->virtualAs($expression)`  |  Создать генерируемый столбец типа virtual (только MySQL)
 
 <a name="changing-columns"></a>
 <a name="modifying-columns"></a>
-### Modifying Columns
+### Изменение столбцов
 
-#### Prerequisites
+#### Требования
 
-Before modifying a column, be sure to add the `doctrine/dbal` dependency to your `composer.json` file. The Doctrine DBAL library is used to determine the current state of the column and create the SQL queries needed to make the specified adjustments to the column:
+Перед изменением столбцов добавьте зависимость `doctrine/dbal` в свой файл `composer.json`. Библиотека Doctrine DBAL используется для определения текущего состояния столбца и создания SQL-запросов, необходимых для выполнения указанных преобразований столбца:
 
     composer require doctrine/dbal
 
-#### Updating Column Attributes
+#### Изменение атрибутов столбца
 
-The `change` method allows you to modify some existing column types to a new type or modify the column's attributes. For example, you may wish to increase the size of a string column. To see the `change` method in action, let's increase the size of the `name` column from 25 to 50:
+Метод `change` позволяет изменить тип существующего столбца или изменить его атрибуты. Например, если вы захотите увеличить размер строкового столбца `name` с 25 до 50:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('name', 50)->change();
     });
 
-We could also modify a column to be nullable:
+Также мы можем изменить столбец, чтобы он могу иметь значения NULL:
 
     Schema::table('users', function (Blueprint $table) {
         $table->string('name', 50)->nullable()->change();
     });
 
-> {note} The following column types can not be "changed": char, double, enum, mediumInteger, timestamp, tinyInteger, ipAddress, json, jsonb, macAddress, mediumIncrements, morphs, nullableMorphs, nullableTimestamps, softDeletes, timeTz, timestampTz, timestamps, timestampsTz, unsignedMediumInteger, unsignedTinyInteger, uuid.
+> {note} Столбы следующих типов нельзя "изменить": char, double, enum, mediumInteger, timestamp, tinyInteger, ipAddress, json, jsonb, macAddress, mediumIncrements, morphs, nullableMorphs, nullableTimestamps, softDeletes, timeTz, timestampTz, timestamps, timestampsTz, unsignedMediumInteger, unsignedTinyInteger, uuid.
 
 <a name="renaming-columns"></a>
-#### Renaming Columns
+#### Переименование столбцов
 
-To rename a column, you may use the `renameColumn` method on the Schema builder. Before renaming a column, be sure to add the `doctrine/dbal` dependency to your `composer.json` file:
+Для переименования столбца используйте метод `renameColumn` на построителе структур. Перед переименованием столбца добавьте зависимость `doctrine/dbal` в свой файл `composer.json`:
 
     Schema::table('users', function (Blueprint $table) {
         $table->renameColumn('from', 'to');
     });
 
-> {note} Renaming any column in a table that also has a column of type `enum` is not currently supported.
+> {note} Пока не поддерживается переименование любых столбцов в таблице, содержащей столбцы типов `enum`.
 
 <a name="dropping-columns"></a>
-### Dropping Columns
+### Удаление столбцов
 
-To drop a column, use the `dropColumn` method on the Schema builder. Before dropping columns from a SQLite database, you will need to add the `doctrine/dbal` dependency to your `composer.json` file and run the `composer update` command in your terminal to install the library:
+Для удаления столбца используйте метод `dropColumn` на построителе структур. Перед удалением столбцов из базы данных SQLite вам необходимо добавить зависимость `doctrine/dbal` в ваш файл `composer.json` и выполнить команду `composer update` для установки библиотеки:
 
     Schema::table('users', function (Blueprint $table) {
         $table->dropColumn('votes');
     });
 
-You may drop multiple columns from a table by passing an array of column names to the `dropColumn` method:
+Вы можете удалить несколько столбцов таблицы, передав массив их имён в метод `dropColumn`:
 
     Schema::table('users', function (Blueprint $table) {
         $table->dropColumn(['votes', 'avatar', 'location']);
     });
 
-> {note} Dropping or modifying multiple columns within a single migration while using a SQLite database is not supported.
+> {note} Удаление и изменение нескольких столбцов одной миграцией не поддерживается для базы данных SQLite.
 
 <a name="indexes"></a>
-## Indexes
+## Индексы
 
 <a name="creating-indexes"></a>
-### Creating Indexes
+### Создание индексов
 
-The schema builder supports several types of indexes. First, let's look at an example that specifies a column's values should be unique. To create the index, we can simply chain the `unique` method onto the column definition:
+Построитель структур поддерживает несколько типов индексов. Сначала давайте посмотрим на пример, в котором задаётся, что значения столбца должны быть уникальными. Для создания индекса мы можем просто сцепить метод `unique` с определением столбца:
 
     $table->string('email')->unique();
 
-Alternatively, you may create the index after defining the column. For example:
+Другой вариант — создать индекс после определения столбца. Например:
 
     $table->unique('email');
 
-You may even pass an array of columns to an index method to create a compound index:
+Вы можете даже передать массив столбцов в метод индексирования для создания сложного индекса:
 
     $table->index(['account_id', 'created_at']);
 
-Laravel will automatically generate a reasonable index name, but you may pass a second argument to the method to specify the name yourself:
+Laravel автоматически генерирует подходящее имя индекса, но вы можете передать своё значение вторым аргументом метода:
 
     $table->index('email', 'my_index_name');
 
-#### Available Index Types
+#### Доступные типы индексов
 
-Command  | Description
+Команда  | Описание
 ------------- | -------------
-`$table->primary('id');`  |  Add a primary key.
-`$table->primary(['first', 'last']);`  |  Add composite keys.
-`$table->unique('email');`  |  Add a unique index.
-`$table->unique('state', 'my_index_name');`  |  Add a custom index name.
-`$table->unique(['first', 'last']);`  |  Add a composite unique index.
-`$table->index('state');`  |  Add a basic index.
+`$table->primary('id');`  |  Добавление первичного ключа.
+`$table->primary(['first', 'last']);`  |  Добавление составных ключей.
+`$table->unique('email');`  |  Добавление уникального индекса.
+`$table->unique('state', 'my_index_name');`  |  Добавление пользовательского имени индекса.
+`$table->unique(['first', 'last']);`  |  Добавление составного уникального индекса.
+`$table->index('state');`  |  Добавление базового индекса.
 
-#### Index Lengths & MySQL / MariaDB
+#### Длина индексов и MySQL / MariaDB
 
-Laravel uses the `utf8mb4` character set by default, which includes support for storing "emojis" in the database. If you are running a version of MySQL older than the 5.7.7 release or MariaDB older than the 10.2.2 release, you may need to manually configure the default string length generated by migrations in order for MySQL to create indexes for them. You may configure this by calling the `Schema::defaultStringLength` method within your `AppServiceProvider`:
+По умолчанию Laravel использует набор символов `utf8mb4`, который включает поддаржку хранения "эмоджи" в базе данных. Если вы работаете на версии MySQL старее, чем релиз 5.7.7 или версии MariaDB старее, чем релиз 10.2.2, вам может потребоваться вручную настроить длину строки по умолчанию, которая генерируется миграциями. Таким образом, MySQL сможет генерировать для них индексы. Это можно настроить вызвав метод `Schema::defaultStringLength` в вашем `AppServiceProvider`:
 
     use Illuminate\Support\Facades\Schema;
 
     /**
-     * Bootstrap any application services.
+     * Начальная загрузка любых сервисов приложения.
      *
      * @return void
      */
@@ -375,29 +379,29 @@ Laravel uses the `utf8mb4` character set by default, which includes support for 
         Schema::defaultStringLength(191);
     }
 
-Alternatively, you may enable the `innodb_large_prefix` option for your database. Refer to your database's documentation for instructions on how to properly enable this option.
+Или же, вы можете включить опцию `innodb_large_prefix` для своей базы данных. См. документацию своей базы данных для получения инструкций о том, как правильно включить данную опцию.
 
 <a name="dropping-indexes"></a>
-### Dropping Indexes
+### Удаление индексов
 
-To drop an index, you must specify the index's name. By default, Laravel automatically assigns a reasonable name to the indexes. Simply concatenate the table name, the name of the indexed column, and the index type. Here are some examples:
+Для удаления индекса необходимо указать его имя. По умолчанию Laravel автоматически назначает имена индексам. Просто соедините имя таблицы, имя столбца-индекса и тип индекса. Ниже приведено несколько примеров:
 
-Command  | Description
+Команда  | Описание
 ------------- | -------------
-`$table->dropPrimary('users_id_primary');`  |  Drop a primary key from the "users" table.
-`$table->dropUnique('users_email_unique');`  |  Drop a unique index from the "users" table.
-`$table->dropIndex('geo_state_index');`  |  Drop a basic index from the "geo" table.
+`$table->dropPrimary('users_id_primary');`  |  Удаление первичного ключа из таблицы "users".
+`$table->dropUnique('users_email_unique');`  |  Удаление уникального индекса из таблицы "users".
+`$table->dropIndex('geo_state_index');`  |  Удаление базового индекса из таблицы "geo".
 
-If you pass an array of columns into a method that drops indexes, the conventional index name will be generated based on the table name, columns and key type:
+Если вы передадите массив столбцов в метод для удаления индексов, будет сгенерировано стандартное имя индекса на основе имени таблицы, столбца и типа ключа:
 
     Schema::table('geo', function (Blueprint $table) {
         $table->dropIndex(['state']); // Drops index 'geo_state_index'
     });
 
 <a name="foreign-key-constraints"></a>
-### Foreign Key Constraints
+### Ограничения внешнего ключа
 
-Laravel also provides support for creating foreign key constraints, which are used to force referential integrity at the database level. For example, let's define a `user_id` column on the `posts` table that references the `id` column on a `users` table:
+Laravel также поддерживает создание ограничений для внешнего ключа, которые используются для обеспечения ссылочной целостности на уровне базы данных. Например, давайте определим столбец `user_id` в таблице `posts`, который ссылается на столбец `id` в таблице `users`:
 
     Schema::table('posts', function (Blueprint $table) {
         $table->integer('user_id')->unsigned();
@@ -405,21 +409,21 @@ Laravel also provides support for creating foreign key constraints, which are us
         $table->foreign('user_id')->references('id')->on('users');
     });
 
-You may also specify the desired action for the "on delete" and "on update" properties of the constraint:
+Вы также можете указать требуемое действие для свойств ограничений "on delete" и "on update":
 
     $table->foreign('user_id')
           ->references('id')->on('users')
           ->onDelete('cascade');
 
-To drop a foreign key, you may use the `dropForeign` method. Foreign key constraints use the same naming convention as indexes. So, we will concatenate the table name and the columns in the constraint then suffix the name with "_foreign":
+Для удаления внешнего ключа используйте метод `dropForeign`. Ограничения внешнего ключа используют те же принципы именования, что и индексы. Итак, мы соединим имя таблицы и столбцов из ограничения, а затем добавим суффикс "_foreign":
 
     $table->dropForeign('posts_user_id_foreign');
 
-Or, you may pass an array value which will automatically use the conventional constraint name when dropping:
+Либо вы можете передать значение массива, при этом для удаления будет автоматически использовано стандартное имя ограничения:
 
     $table->dropForeign(['user_id']);
 
-You may enable or disable foreign key constraints within your migrations by using the following methods:
+Вы можете включить или выключить ограничения внешнего ключа в своих миграциях с помощью следующих методов:
 
     Schema::enableForeignKeyConstraints();
 
