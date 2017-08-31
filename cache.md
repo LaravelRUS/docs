@@ -1,35 +1,39 @@
-# Cache
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Configuration](#configuration)
-    - [Driver Prerequisites](#driver-prerequisites)
-- [Cache Usage](#cache-usage)
-    - [Obtaining A Cache Instance](#obtaining-a-cache-instance)
-    - [Retrieving Items From The Cache](#retrieving-items-from-the-cache)
-    - [Storing Items In The Cache](#storing-items-in-the-cache)
-    - [Removing Items From The Cache](#removing-items-from-the-cache)
-    - [The Cache Helper](#the-cache-helper)
-- [Cache Tags](#cache-tags)
-    - [Storing Tagged Cache Items](#storing-tagged-cache-items)
-    - [Accessing Tagged Cache Items](#accessing-tagged-cache-items)
-    - [Removing Tagged Cache Items](#removing-tagged-cache-items)
-- [Adding Custom Cache Drivers](#adding-custom-cache-drivers)
-    - [Writing The Driver](#writing-the-driver)
-    - [Registering The Driver](#registering-the-driver)
-- [Events](#events)
+---
+
+# Кэш
+
+- [Настройка](#configuration)
+    - [Требования драйвера](#driver-prerequisites)
+- [Использование кэша](#cache-usage)
+    - [Получение экземпляра кэша](#obtaining-a-cache-instance)
+    - [Получение элементов из кэша](#retrieving-items-from-the-cache)
+    - [Сохранение элементов в кэш](#storing-items-in-the-cache)
+    - [Удаление элементов из кэша](#removing-items-from-the-cache)
+    - [Хелпер Cache](#the-cache-helper)
+- [Теги кэша](#cache-tags)
+    - [Сохранение элементов кэша с тегами](#storing-tagged-cache-items)
+    - [Обращение к элементам кэша с тегами](#accessing-tagged-cache-items)
+    - [Удаление элементов кэша с тегами](#removing-tagged-cache-items)
+- [Добавление своих драйверов кэша](#adding-custom-cache-drivers)
+    - [Написание драйвера](#writing-the-driver)
+    - [Регистрация драйвера](#registering-the-driver)
+- [События](#events)
 
 <a name="configuration"></a>
-## Configuration
+## Настройка
 
-Laravel provides an expressive, unified API for various caching backends. The cache configuration is located at `config/cache.php`. In this file you may specify which cache driver you would like used by default throughout your application. Laravel supports popular caching backends like [Memcached](https://memcached.org) and [Redis](http://redis.io) out of the box.
+Laravel предоставляет выразительный, универсальный API для различных систем кэширования. Настройки кэша находятся в файле `config/cache.php`. Здесь вы можете указать драйвер, используемый по умолчанию в вашем приложении. Laravel изначально поддерживает многие популярные системы, такие как [Memcached](https://memcached.org) и [Redis](http://redis.io).
 
-The cache configuration file also contains various other options, which are documented within the file, so make sure to read over these options. By default, Laravel is configured to use the `file` cache driver, which stores the serialized, cached objects in the filesystem. For larger applications, it is recommended that you use a more robust driver such as Memcached or Redis. You may even configure multiple cache configurations for the same driver.
+Этот файл также содержит множество других настроек, которые в нём же документированы, поэтому обязательно ознакомьтесь с ними. По умолчанию, Laravel настроен для использования драйвера `file`, который хранит сериализованные объекты кэша в файловой системе. Для больших приложений рекомендуется использование более надёжных драйверов, таких как Memcached или Redis. Вы можете настроить даже несколько конфигураций кэширования для одного драйвера.
 
 <a name="driver-prerequisites"></a>
-### Driver Prerequisites
+### Требования драйвера
 
 #### Database
 
-When using the `database` cache driver, you will need to setup a table to contain the cache items. You'll find an example `Schema` declaration for the table below:
+Перед использованием драйвера кэша `database` вам нужно создать таблицу для хранения элементов кэша. Ниже приведён пример объявления структуры `Schema`:
 
     Schema::create('cache', function ($table) {
         $table->string('key')->unique();
@@ -37,11 +41,11 @@ When using the `database` cache driver, you will need to setup a table to contai
         $table->integer('expiration');
     });
 
-> {tip} You may also use the `php artisan cache:table` Artisan command to generate a migration with the proper schema.
+> {tip} Также вы можете использовать Artisan-команду `php artisan cache:table` для генерации миграции с правильной схемой.
 
 #### Memcached
 
-Using the Memcached driver requires the [Memcached PECL package](https://pecl.php.net/package/memcached) to be installed. You may list all of your Memcached servers in the `config/cache.php` configuration file:
+Для использования системы кэширования Memcached необходим установленный [пакет Memcached PECL](https://pecl.php.net/package/memcached). Вы можете перечислить все свои сервера Memcached в конфиге `config/cache.php`:
 
     'memcached' => [
         [
@@ -51,7 +55,7 @@ Using the Memcached driver requires the [Memcached PECL package](https://pecl.ph
         ],
     ],
 
-You may also set the `host` option to a UNIX socket path. If you do this, the `port` option should be set to `0`:
+Вы также можете задать параметр `host` для пути UNIX-сокета. В этом случае в параметр `port` следует записать значение `0`:
 
     'memcached' => [
         [
@@ -63,19 +67,19 @@ You may also set the `host` option to a UNIX socket path. If you do this, the `p
 
 #### Redis
 
-Before using a Redis cache with Laravel, you will need to either install the `predis/predis` package (~1.0) via Composer or install the PhpRedis PHP extension via PECL.
+Перед тем, как использовать систему Redis необходимо установить пакет `predis/predis` (~1.0) с помощью Composer или установить расширение PhpRedis PHP через PECL.
 
-For more information on configuring Redis, consult its [Laravel documentation page](/docs/{{version}}/redis#configuration).
+Для получения дополнительной информации по настройке Redis, загляните на [соответствующую страницу в документации Laravel](/docs/{{version}}/redis#configuration).
 
 <a name="cache-usage"></a>
-## Cache Usage
+## Использование кэша
 
 <a name="obtaining-a-cache-instance"></a>
-### Obtaining A Cache Instance
+### Получение экземпляра кэша
 
-The `Illuminate\Contracts\Cache\Factory` and `Illuminate\Contracts\Cache\Repository` [contracts](/docs/{{version}}/contracts) provide access to Laravel's cache services. The `Factory` contract provides access to all cache drivers defined for your application. The `Repository` contract is typically an implementation of the default cache driver for your application as specified by your `cache` configuration file.
+[Контракты](/docs/{{version}}/contracts) `Illuminate\Contracts\Cache\Factory` и `Illuminate\Contracts\Cache\Repository` предоставляют доступ к службам кэша Laravel. Контракт `Factory` предоставляет доступ ко всем драйверам кэша, определённым для вашего приложения. А контракт `Repository` обычно является реализацией драйвера кэша по умолчанию для вашего приложения, который задан в файле настроек `cache`.
 
-However, you may also use the `Cache` facade, which is what we will use throughout this documentation. The `Cache` facade provides convenient, terse access to the underlying implementations of the Laravel cache contracts:
+А также вы можете использовать фасад `Cache`, который мы будем использовать в данной статье. Фасад `Cache` обеспечивает удобный и лаконичный способ доступа к лежащим в его основе реализациям контрактов кэша Laravel:
 
     <?php
 
@@ -86,7 +90,7 @@ However, you may also use the `Cache` facade, which is what we will use througho
     class UserController extends Controller
     {
         /**
-         * Show a list of all users of the application.
+         * Вывод списка всех пользователей приложения.
          *
          * @return Response
          */
@@ -98,158 +102,158 @@ However, you may also use the `Cache` facade, which is what we will use througho
         }
     }
 
-#### Accessing Multiple Cache Stores
+#### Доступ к нескольким хранилищам кэша
 
-Using the `Cache` facade, you may access various cache stores via the `store` method. The key passed to the `store` method should correspond to one of the stores listed in the `stores` configuration array in your `cache` configuration file:
+Используя фасад `Cache` можно обращаться к разным хранилищам кэша с помощью метода `store`. Передаваемый в метод ключ должен соответствовать одному из хранилищ, перечисленных в массиве `stores` в вашем файле настроек `cache`:
 
     $value = Cache::store('file')->get('foo');
 
     Cache::store('redis')->put('bar', 'baz', 10);
 
 <a name="retrieving-items-from-the-cache"></a>
-### Retrieving Items From The Cache
+### Получение элементов из кэша
 
-The `get` method on the `Cache` facade is used to retrieve items from the cache. If the item does not exist in the cache, `null` will be returned. If you wish, you may pass a second argument to the `get` method specifying the default value you wish to be returned if the item doesn't exist:
+Для получения элементов из кэша используется метод `get` фасада `Cache`. Если элемента в кэше не существует, будет возвращён `null`. При желании вы можете указать другое возвращаемое значение, передав его вторым аргументом метода `get`:
 
     $value = Cache::get('key');
 
     $value = Cache::get('key', 'default');
 
-You may even pass a `Closure` as the default value. The result of the `Closure` will be returned if the specified item does not exist in the cache. Passing a Closure allows you to defer the retrieval of default values from a database or other external service:
+А также вы можете передать замыкание в качестве значения по умолчанию. Тогда, если элемента не существует, будет возвращён результат замыкания. С помощью замыкания вы можете настроить получение значений по умолчанию из базы данных или внешнего сервиса:
 
     $value = Cache::get('key', function () {
         return DB::table(...)->get();
     });
 
-#### Checking For Item Existence
+#### Проверка существования элемента
 
-The `has` method may be used to determine if an item exists in the cache. This method will return `false` if the value is `null` or `false`:
+Для определения существования элемента в кэше используется метод `has`. Он вернёт `false`, если значение равно `null` или `false`:
 
     if (Cache::has('key')) {
         //
     }
 
-#### Incrementing / Decrementing Values
+#### Увеличение / уменьшение значений
 
-The `increment` and `decrement` methods may be used to adjust the value of integer items in the cache. Both of these methods accept an optional second argument indicating the amount by which to increment or decrement the item's value:
+Для изменения числовых элементов кэша используются методы `increment` и `decrement`. Оба они могут принимать второй необязательный аргумент, определяющий значение, на которое нужно изменить значение элемента:
 
     Cache::increment('key');
     Cache::increment('key', $amount);
     Cache::decrement('key');
     Cache::decrement('key', $amount);
 
-#### Retrieve & Store
+#### Получение и хранение
 
-Sometimes you may wish to retrieve an item from the cache, but also store a default value if the requested item doesn't exist. For example, you may wish to retrieve all users from the cache or, if they don't exist, retrieve them from the database and add them to the cache. You may do this using the `Cache::remember` method:
+Иногда необходимо получить элемент из кэша и при этом сохранить значение по умолчанию, если запрашиваемый элемент не существует. Например, когда необходимо получить всех пользователей из кэша, а если они не существуют, получить их из базы данных и добавить в кэш. Это можно сделать с помощью метода `Cache::remember`:
 
     $value = Cache::remember('users', $minutes, function () {
         return DB::table('users')->get();
     });
 
-If the item does not exist in the cache, the `Closure` passed to the `remember` method will be executed and its result will be placed in the cache.
+Если элемента нет в кэше, будет выполнено переданное в метод `remember` замыкание, а его результат будет помещён в кэш.
 
-#### Retrieve & Delete
+#### Получение и удаление
 
-If you need to retrieve an item from the cache and then delete the item, you may use the `pull` method. Like the `get` method, `null` will be returned if the item does not exist in the cache:
+При необходимости получить элемент и удалить его из кэша используется метод `pull`. Как и метод `get`, данный метод вернёт `null`, если элемента не существует:
 
     $value = Cache::pull('key');
 
 <a name="storing-items-in-the-cache"></a>
-### Storing Items In The Cache
+### Сохранение элементов в кэш
 
-You may use the `put` method on the `Cache` facade to store items in the cache. When you place an item in the cache, you need to specify the number of minutes for which the value should be cached:
+Для помещения элементов в кэш используется метод `put` фасада `Cache`. При помещении элемента в кэш необходимо указать, сколько минут его необходимо хранить:
 
     Cache::put('key', 'value', $minutes);
 
-Instead of passing the number of minutes as an integer, you may also pass a `DateTime` instance representing the expiration time of the cached item:
+Вместо указания количества минут можно передать экземпляр PHP-типа `DateTime` для указания времени истечения срока хранения:
 
     $expiresAt = Carbon::now()->addMinutes(10);
 
     Cache::put('key', 'value', $expiresAt);
 
-#### Store If Not Present
+#### Сохранить, если такого нет
 
-The `add` method will only add the item to the cache if it does not already exist in the cache store. The method will return `true` if the item is actually added to the cache. Otherwise, the method will return `false`:
+Метод `add` просто добавит элемент в кэш, если его там ещё нет. Метод вернёт `true`, если элемент действительно будет добавлен в кэш. Иначе — вернет `false`:
 
     Cache::add('key', 'value', $minutes);
 
-#### Storing Items Forever
+#### Сохранить элементы навсегда
 
-The `forever` method may be used to store an item in the cache permanently. Since these items will not expire, they must be manually removed from the cache using the `forget` method:
+Для бесконечного хранения элемента кэша используется метод `forever`. Поскольку срок хранения таких элементов не истечёт никогда, они должны удаляться из кэша вручную с помощью метода `forget`:
 
     Cache::forever('key', 'value');
 
-> {tip} If you are using the Memcached driver, items that are stored "forever" may be removed when the cache reaches its size limit.
+> {tip} При использовании драйвера Memcached элементы, сохранённые "навсегда", могут быть удалены, когда размер кэша достигнет своего лимита.
 
 <a name="removing-items-from-the-cache"></a>
-### Removing Items From The Cache
+### Удаление элементов из кэша
 
-You may remove items from the cache using the `forget` method:
+Можно удалить элементы из кэша с помощью метода `forget`:
 
     Cache::forget('key');
 
-You may clear the entire cache using the `flush` method:
+Вы можете очистить весь кэш методом `flush`:
 
     Cache::flush();
 
-> {note} Flushing the cache does not respect the cache prefix and will remove all entries from the cache. Consider this carefully when clearing a cache which is shared by other applications.
+> {note} Очистка не поддерживает префикс кэша и удаляет из него все элементы. Учитывайте это при очистке кэша, которым пользуются другие приложения.
 
 <a name="the-cache-helper"></a>
-### The Cache Helper
+### Хелпер Cache
 
-In addition to using the `Cache` facade or [cache contract](/docs/{{version}}/contracts), you may also use the global `cache` function to retrieve and store data via the cache. When the `cache` function is called with a single, string argument, it will return the value of the given key:
+Помимо использования фасада `Cache` или [контракта кэша](/docs/{{version}}/contracts), вы также можете использовать глобальную функция `cache` для получения данных из кэша и помещения данных в него. При вызове функции `cache` с одним строковым аргументом она вернёт значение данного ключа:
 
     $value = cache('key');
 
-If you provide an array of key / value pairs and an expiration time to the function, it will store values in the cache for the specified duration:
+Если вы передадите в функцию массив пар ключ/значение и время хранения, она сохранит значения в кэше на указанное время:
 
     cache(['key' => 'value'], $minutes);
 
     cache(['key' => 'value'], Carbon::now()->addSeconds(10));
 
-> {tip} When testing call to the global `cache` function, you may use the `Cache::shouldReceive` method just as if you were [testing a facade](/docs/{{version}}/mocking#mocking-facades).
+> {tip} При тестировании вызова глобальной функции `cache` вы можете использовать метод `Cache::shouldReceive`, как и при [тестировании фасада](/docs/{{version}}/mocking#mocking-facades).
 
 <a name="cache-tags"></a>
-## Cache Tags
+## Теги кэша
 
-> {note} Cache tags are not supported when using the `file` or `database` cache drivers. Furthermore, when using multiple tags with caches that are stored "forever", performance will be best with a driver such as `memcached`, which automatically purges stale records.
+> {note} Теги кэша не поддерживаются драйверами `file` или `database`. Кроме того, при использовании нескольких тегов для кэшей, хранящихся "навсегда", лучшая производительность будет достигнута при использовании такого драйвера как `memcached`, который автоматически зачищает устаревшие записи.
 
 <a name="storing-tagged-cache-items"></a>
-### Storing Tagged Cache Items
+### Сохранение элементов кэша с тегами
 
-Cache tags allow you to tag related items in the cache and then flush all cached values that have been assigned a given tag. You may access a tagged cache by passing in an ordered array of tag names. For example, let's access a tagged cache and `put` value in the cache:
+Теги кэша позволяют отмечать связанные элементы в кэше, и затем сбрасывать все элементы, которые были отмеченны одним тегом. Вы можете обращаться к кэшу с тегами, передавая упорядоченный массив имён тегов. Например, давайте обратимся к кэшу с тегами и поместим в него значение методом `put`:
 
     Cache::tags(['people', 'artists'])->put('John', $john, $minutes);
 
     Cache::tags(['people', 'authors'])->put('Anne', $anne, $minutes);
 
 <a name="accessing-tagged-cache-items"></a>
-### Accessing Tagged Cache Items
+### Обращение к элементам кэша с тегами
 
-To retrieve a tagged cache item, pass the same ordered list of tags to the `tags` method and then call the `get` method with the key you wish to retrieve:
+Для получения элемента с тегом передайте тот же упорядоченный список тегов в метод `tags`, а затем вызовите метод `get` с тем ключом, который необходимо получить:
 
     $john = Cache::tags(['people', 'artists'])->get('John');
 
     $anne = Cache::tags(['people', 'authors'])->get('Anne');
 
 <a name="removing-tagged-cache-items"></a>
-### Removing Tagged Cache Items
+### Удаление элементов кэша с тегами
 
-You may flush all items that are assigned a tag or list of tags. For example, this statement would remove all caches tagged with either `people`, `authors`, or both. So, both `Anne` and `John` would be removed from the cache:
+Вы можете очистить все элементы с заданным тегом или списком тегов. Например, следующий код удалит все элементы, отмеченные либо тегом `people`, либо `authors`, либо и тем и другим. Поэтому и `Anne`, и `John` будут удалены из кэша:
 
     Cache::tags(['people', 'authors'])->flush();
 
-In contrast, this statement would remove only caches tagged with `authors`, so `Anne` would be removed, but not `John`:
+В отличие от предыдущего, следующий код удалит только те элементы, которые отмечены тегом `authors`, поэтому `Anne` будет удалён, а `John` - нет:
 
     Cache::tags('authors')->flush();
 
 <a name="adding-custom-cache-drivers"></a>
-## Adding Custom Cache Drivers
+## Добавление своих драйверов кэша
 
 <a name="writing-the-driver"></a>
-### Writing The Driver
+### Написание драйвера
 
-To create our custom cache driver, we first need to implement the `Illuminate\Contracts\Cache\Store` [contract](/docs/{{version}}/contracts) contract. So, a MongoDB cache implementation would look something like this:
+Чтобы создать свой драйвер кэша, нам надо сначала реализовать [контракт](/docs/{{version}}/contracts) `Illuminate\Contracts\Cache\Store`. Итак, наша реализация кэша MongoDB будет выглядеть примерно так:
 
     <?php
 
@@ -271,18 +275,18 @@ To create our custom cache driver, we first need to implement the `Illuminate\Co
         public function getPrefix() {}
     }
 
-We just need to implement each of these methods using a MongoDB connection. For an example of how to implement each of these methods, take a look at the `Illuminate\Cache\MemcachedStore` in the framework source code. Once our implementation is complete, we can finish our custom driver registration.
+Нам просто надо реализовать каждый из этих методов, используя соединение MongoDB. Примеры реализации каждого из этих методов можно найти в `Illuminate\Cache\MemcachedStore` в исходном коде фреймворка. Когда наша реализация готова, мы можем завершить регистрацию нашего драйвера.
 
     Cache::extend('mongo', function ($app) {
         return Cache::repository(new MongoStore);
     });
 
-> {tip} If you're wondering where to put your custom cache driver code, you could create an `Extensions` namespace within your `app` directory. However, keep in mind that Laravel does not have a rigid application structure and you are free to organize your application according to your preferences.
+> {tip} Если вы задумались о том, где разместить код вашего драйвера, то можете создать пространство имён `Extensions` в директории `app`. Однако, не забывайте, что в Laravel нет жёсткой структуры приложения, и вы можете организовать его как пожелаете.
 
 <a name="registering-the-driver"></a>
-### Registering The Driver
+### Регистрация драйвера
 
-To register the custom cache driver with Laravel, we will use the `extend` method on the `Cache` facade. The call to `Cache::extend` could be done in the `boot` method of the default `App\Providers\AppServiceProvider` that ships with fresh Laravel applications, or you may create your own service provider to house the extension - just don't forget to register the provider in the `config/app.php` provider array:
+Чтобы зарегистрировать свой драйвер кэша в Laravel, мы будем использовать метод `extend` фасада `Cache`. Вызов `Cache::extend` можно делать из метода `boot` сервис-провайдера по умолчанию `App\Providers\AppServiceProvider`, который есть в каждом Laravel-приложении. Или вы можете создать свой сервис-провайдер для размещения расширения — только не забудьте зарегистрировать его в массиве провайдеров `config/app.php`:
 
     <?php
 
@@ -317,14 +321,14 @@ To register the custom cache driver with Laravel, we will use the `extend` metho
         }
     }
 
-The first argument passed to the `extend` method is the name of the driver. This will correspond to your `driver` option in the `config/cache.php` configuration file. The second argument is a Closure that should return an `Illuminate\Cache\Repository` instance. The Closure will be passed an `$app` instance, which is an instance of the [service container](/docs/{{version}}/container).
+Первый аргумент метода `extend` — имя драйвера. Оно будет соответствовать параметру `driver` в вашем конфиге `config/cache.php`. Второй аргумент — замыкание, которое должно возвращать экземпляр `Illuminate\Cache\Repository`. В замыкание будет передан экземпляр `$app`, который является экземпляром [сервис-контейнера](/docs/{{version}}/container).
 
-Once your extension is registered, simply update your `config/cache.php` configuration file's `driver` option to the name of your extension.
+Когда ваше расширение зарегистрировано, просто укажите его имя в качестве значения параметра `driver` в конфиге `config/cache.php`.
 
 <a name="events"></a>
-## Events
+## События
 
-To execute code on every cache operation, you may listen for the [events](/docs/{{version}}/events) fired by the cache. Typically, you should place these event listeners within your `EventServiceProvider`:
+Для выполнения какого-либо кода при каждой операции с кэшем вы можете прослушивать [события](/docs/{{version}}/events), инициируемые кэшем. Обычно вам необходимо поместить эти слушатели событий в ваш `EventServiceProvider`:
 
     /**
      * The event listener mappings for the application.
