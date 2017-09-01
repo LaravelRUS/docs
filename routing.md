@@ -1,40 +1,44 @@
-# Routing
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Basic Routing](#basic-routing)
-- [Route Parameters](#route-parameters)
-    - [Required Parameters](#required-parameters)
-    - [Optional Parameters](#parameters-optional-parameters)
-    - [Regular Expression Constraints](#parameters-regular-expression-constraints)
-- [Named Routes](#named-routes)
-- [Route Groups](#route-groups)
-    - [Middleware](#route-group-middleware)
-    - [Namespaces](#route-group-namespaces)
-    - [Sub-Domain Routing](#route-group-sub-domain-routing)
-    - [Route Prefixes](#route-group-prefixes)
-- [Route Model Binding](#route-model-binding)
-    - [Implicit Binding](#implicit-binding)
-    - [Explicit Binding](#explicit-binding)
-- [Form Method Spoofing](#form-method-spoofing)
-- [Accessing The Current Route](#accessing-the-current-route)
+---
+
+# Роутинг
+
+- [Простейший роутинг](#basic-routing)
+- [Параметры роутов](#route-parameters)
+    - [Обязательные параметры](#required-parameters)
+    - [Необязательные параметры](#parameters-optional-parameters)
+    - [Ограничения регулярными выражениями](#parameters-regular-expression-constraints)
+- [Именованные роуты](#named-routes)
+- [Группы роутов](#route-groups)
+    - [Посредники](#route-group-middleware)
+    - [Пространства имён](#route-group-namespaces)
+    - [Доменный роутинг](#route-group-sub-domain-routing)
+    - [Префиксы роута](#route-group-prefixes)
+- [Привязка модели роута](#route-model-binding)
+    - [Неявная привязка](#implicit-binding)
+    - [Явная привязка](#explicit-binding)
+- [Подмена методов](#form-method-spoofing)
+- [Получение текущего роута](#accessing-the-current-route)
 
 <a name="basic-routing"></a>
-## Basic Routing
+## Простейший роутинг
 
-The most basic Laravel routes simply accept a URI and a `Closure`, providing a very simple and expressive method of defining routes:
+В Laravel простейшие роуты принимают URI (путь) и функцию-замыкание, предоставляя очень простой и выразительный метод определения роутов:
 
     Route::get('foo', function () {
         return 'Hello World';
     });
 
-#### The Default Route Files
+#### Файлы роутов по умолчанию
 
-All Laravel routes are defined in your route files, which are located in the `routes` directory. These files are automatically loaded by the framework. The `routes/web.php` file defines routes that are for your web interface. These routes are assigned the `web` middleware group, which provides features like session state and CSRF protection. The routes in `routes/api.php` are stateless and are assigned the `api` middleware group.
+Все роуты Laravel определены в файлах роутов, которые расположены в директории `routes`. Эти файлы автоматически загружаются фреймворком. В файле `routes/web.php` определены роуты для вашего web-интерфейса. Эти роуты входят в группу посредников `web`, которые обеспечивают такие возможности, как состояние сессии и CSRF-защита. Роуты из файла `routes/api.php` не сохраняют состояние приложения и входят в группу посредников `api`.
 
-For most applications, you will begin by defining routes in your `routes/web.php` file.
+Для большинства приложений сначала определяются роуты в файле `routes/web.php`.
 
-#### Available Router Methods
+#### Доступные методы роутера
 
-The router allows you to register routes that respond to any HTTP verb:
+Роутер (маршрутизатор) позволяет регистрировать роуты для любого HTTP-запроса:
 
     Route::get($uri, $callback);
     Route::post($uri, $callback);
@@ -43,7 +47,7 @@ The router allows you to register routes that respond to any HTTP verb:
     Route::delete($uri, $callback);
     Route::options($uri, $callback);
 
-Sometimes you may need to register a route that responds to multiple HTTP verbs. You may do so using the `match` method. Or, you may even register a route that responds to all HTTP verbs using the `any` method:
+Иногда необходимо зарегистрировать роут, который отвечает на HTTP-запросы нескольких типов. Это можно сделать методом `match`. Или вы можете зарегистрировать роут, отвечающий на HTTP-запросы всех типов, с помощью метода `any`:
 
     Route::match(['get', 'post'], '/', function () {
         //
@@ -53,9 +57,9 @@ Sometimes you may need to register a route that responds to multiple HTTP verbs.
         //
     });
 
-#### CSRF Protection
+#### CSRF-защита
 
-Any HTML forms pointing to `POST`, `PUT`, or `DELETE` routes that are defined in the `web` routes file should include a CSRF token field. Otherwise, the request will be rejected. You can read more about CSRF protection in the [CSRF documentation](/docs/{{version}}/csrf):
+Все HTML-формы, ведущие к роутам `POST`, `PUT` или `DELETE`, которые определены в файле роутов `web` , должны иметь поле CSRF-токена. Иначе запрос будет отклонён. Подробнее о CSRF-защите читайте в [документации CSRF](/docs/{{version}}/csrf):
 
     <form method="POST" action="/profile">
         {{ csrf_field() }}
@@ -63,29 +67,29 @@ Any HTML forms pointing to `POST`, `PUT`, or `DELETE` routes that are defined in
     </form>
 
 <a name="route-parameters"></a>
-## Route Parameters
+## Параметры роутов
 
 <a name="required-parameters"></a>
-### Required Parameters
+### Обязательные параметры
 
-Of course, sometimes you will need to capture segments of the URI within your route. For example, you may need to capture a user's ID from the URL. You may do so by defining route parameters:
+Разумеется, иногда вам может понадобиться захватить сегменты URI в вашем роуте. Например, если вам необходимо захватить ID пользователя из URL. Это можно сделать, определив параметры роута:
 
     Route::get('user/{id}', function ($id) {
         return 'User '.$id;
     });
 
-You may define as many route parameters as required by your route:
+Вы можете определить сколько угодно параметров:
 
     Route::get('posts/{post}/comments/{comment}', function ($postId, $commentId) {
         //
     });
 
-Route parameters are always encased within `{}` braces and should consist of alphabetic characters, and may not contain a `-` character. Instead of using the `-` character, use an underscore (`_`) instead. Route parameters are injected into route callbacks / controllers based on their order - the names of the callback / controller arguments do not matter.
+Параметры роута всегда заключаются в фигурные скобки `{}` и должны состоять из буквенных символов. Параметры роута не могут содержать символ `-`. Используйте вместо него подчёркивание (`_`). Параметры роута внедряются в анонимные функции / контроллеры роута, основываясь на их порядке - названия аргументов анонимных функций / контроллеров не имеют значения.
 
 <a name="parameters-optional-parameters"></a>
-### Optional Parameters
+### Необязательные параметры
 
-Occasionally you may need to specify a route parameter, but make the presence of that route parameter optional. You may do so by placing a `?` mark after the parameter name. Make sure to give the route's corresponding variable a default value:
+Иногда необходимо указать параметр роута, но при этом сделать его наличие необязательным. Это можно сделать, поместив знак вопроса `?` после названия параметра. Не забудьте задать значение по умолчанию для соответствующей переменной роута:
 
     Route::get('user/{name?}', function ($name = null) {
         return $name;
@@ -96,9 +100,9 @@ Occasionally you may need to specify a route parameter, but make the presence of
     });
 
 <a name="parameters-regular-expression-constraints"></a>
-### Regular Expression Constraints
+### Ограничения регулярными выражениями
 
-You may constrain the format of your route parameters using the `where` method on a route instance. The `where` method accepts the name of the parameter and a regular expression defining how the parameter should be constrained:
+Вы можете ограничить формат параметров вашего роута с помощью метода `where` на экземпляре роута. Метод `where` принимает название параметра и регулярное выражение, определяющее ограничения для параметра:
 
     Route::get('user/{name}', function ($name) {
         //
@@ -113,9 +117,9 @@ You may constrain the format of your route parameters using the `where` method o
     })->where(['id' => '[0-9]+', 'name' => '[a-z]+']);
 
 <a name="parameters-global-constraints"></a>
-#### Global Constraints
+#### Глобальные ограничения
 
-If you would like a route parameter to always be constrained by a given regular expression, you may use the `pattern` method. You should define these patterns in the `boot` method of your `RouteServiceProvider`:
+Если вы хотите, чтобы параметр был всегда ограничен заданным регулярным выражением, то можете использовать метод `pattern`. Вам следует определить эти шаблоны в методе `boot` вашего `RouteServiceProvider`:
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -129,28 +133,28 @@ If you would like a route parameter to always be constrained by a given regular 
         parent::boot();
     }
 
-Once the pattern has been defined, it is automatically applied to all routes using that parameter name:
+Когда шаблон был определён, он автоматически применится ко всем роутам, использующим этот параметр:
 
     Route::get('user/{id}', function ($id) {
         // Only executed if {id} is numeric...
     });
 
 <a name="named-routes"></a>
-## Named Routes
+## Именованные роуты
 
-Named routes allow the convenient generation of URLs or redirects for specific routes. You may specify a name for a route by chaining the `name` method onto the route definition:
+Именованные роуты позволяют удобно генерировать URL-адреса и делать переадресацию на конкретный роут. Вы можете задать имя роута, прицепив метод `name` к определению роута:
 
     Route::get('user/profile', function () {
         //
     })->name('profile');
 
-You may also specify route names for controller actions:
+Также можно указать имена роутов для действий контроллера:
 
     Route::get('user/profile', 'UserController@showProfile')->name('profile');
 
-#### Generating URLs To Named Routes
+#### Генерирование URL адресов для именованных роутов
 
-Once you have assigned a name to a given route, you may use the route's name when generating URLs or redirects via the global `route` function:
+Когда вы назначили имя роуту, вы можете использовать это имя для генерирования URL адресов и переадресаций глобальным методом `route`:
 
     // Generating URLs...
     $url = route('profile');
@@ -158,7 +162,7 @@ Once you have assigned a name to a given route, you may use the route's name whe
     // Generating Redirects...
     return redirect()->route('profile');
 
-If the named route defines parameters, you may pass the parameters as the second argument to the `route` function. The given parameters will automatically be inserted into the URL in their correct positions:
+Если у именованного роута есть параметры, вы можете передать их вторым аргументом метода `route`. Эти параметры будут автоматически вставлены в соответствующие места URL:
 
     Route::get('user/{id}/profile', function ($id) {
         //
@@ -167,14 +171,14 @@ If the named route defines parameters, you may pass the parameters as the second
     $url = route('profile', ['id' => 1]);
 
 <a name="route-groups"></a>
-## Route Groups
+## Группы роутов
 
-Route groups allow you to share route attributes, such as middleware or namespaces, across a large number of routes without needing to define those attributes on each individual route. Shared attributes are specified in an array format as the first parameter to the `Route::group` method.
+Группы роутов позволяют использовать общие атрибуты роутов, такие как посредники и пространства имён, для большого числа роутов без необходимости определять эти атрибуты для каждого отдельного роута. Общие атрибуты указываются в виде массива первым аргументом метода `Route::group`.
 
 <a name="route-group-middleware"></a>
-### Middleware
+### Посредники
 
-To assign middleware to all routes within a group, you may use the `middleware` method before defining the group. Middleware are executed in the order they are listed in the array:
+Посредники применяются ко всем роутам в группе путём указания списка этих посредников с параметром `middleware` в массиве групповых атрибутов. Посредники выполняются в порядке перечисления в этом массиве:
 
     Route::middleware(['first', 'second'])->group(function () {
         Route::get('/', function () {
@@ -187,20 +191,20 @@ To assign middleware to all routes within a group, you may use the `middleware` 
     });
 
 <a name="route-group-namespaces"></a>
-### Namespaces
+### Пространства имён
 
-Another common use-case for route groups is assigning the same PHP namespace to a group of controllers using the `namespace` method:
+Другой типичный пример использования групп роутов — назначение одного пространства имён PHP для группы контроллеров, используя параметр `namespace` в массиве группы:
 
     Route::namespace('Admin')->group(function () {
         // Controllers Within The "App\Http\Controllers\Admin" Namespace
     });
 
-Remember, by default, the `RouteServiceProvider` includes your route files within a namespace group, allowing you to register controller routes without specifying the full `App\Http\Controllers` namespace prefix. So, you only need to specify the portion of the namespace that comes after the base `App\Http\Controllers` namespace.
+Помните, по умолчанию `RouteServiceProvider` включает ваши файлы роутов в группу пространства имён, позволяя вам регистрировать роуты контроллера без указания полного префикса пространства имён `App\Http\Controllers`. Поэтому нам надо указать лишь ту часть пространства имён, которая следует за базовым пространством имён `App\Http\Controllers`.
 
 <a name="route-group-sub-domain-routing"></a>
-### Sub-Domain Routing
+### Доменный роутинг
 
-Route groups may also be used to handle sub-domain routing. Sub-domains may be assigned route parameters just like route URIs, allowing you to capture a portion of the sub-domain for usage in your route or controller. The sub-domain may be specified by calling the the `domain` method before defining the group:
+Группы роутов можно использовать для обработки маршрутизации поддоменов. Поддоменам можно назначать параметры роутов также как URI роутов, поэтому вы можете захватить часть поддомена и использовать в своём роуте или контроллере. Поддомен можно указать с помощью ключа `domain` в массиве атрибутов группы:
 
     Route::domain('{account}.myapp.com')->group(function () {
         Route::get('user/{id}', function ($account, $id) {
@@ -209,9 +213,9 @@ Route groups may also be used to handle sub-domain routing. Sub-domains may be a
     });
 
 <a name="route-group-prefixes"></a>
-### Route Prefixes
+### Префиксы роута
 
-The `prefix` method may be used to prefix each route in the group with a given URI. For example, you may want to prefix all route URIs within the group with `admin`:
+Метод `prefix` можно использовать для указания URI-префикса каждого роута в группе. Например, если вы хотите добавить `admin` ко всем URI роутов в группе:
 
     Route::prefix('admin')->group(function () {
         Route::get('users', function () {
@@ -220,24 +224,24 @@ The `prefix` method may be used to prefix each route in the group with a given U
     });
 
 <a name="route-model-binding"></a>
-## Route Model Binding
+## Привязка модели роута
 
-When injecting a model ID to a route or controller action, you will often query to retrieve the model that corresponds to that ID. Laravel route model binding provides a convenient way to automatically inject the model instances directly into your routes. For example, instead of injecting a user's ID, you can inject the entire `User` model instance that matches the given ID.
+При внедрении ID модели в действие роута или контроллера бывает часто необходимо получить модель, соответствующую этому ID. Привязка моделей — удобный способ автоматического внедрения экземпляров модели напрямую в ваши роуты. Например, вместо внедрения ID пользователя вы можете внедрить весь экземпляр модели `User`, который соответствует данному ID.
 
 <a name="implicit-binding"></a>
-### Implicit Binding
+### Неявная привязка
 
-Laravel automatically resolves Eloquent models defined in routes or controller actions whose type-hinted variable names match a route segment name. For example:
+Laravel автоматически включает модели Eloquent, определённые в действиях роута или контроллера, чьи переменные имеют имена, совпадающие с сегментом роута. Например:
 
     Route::get('api/users/{user}', function (App\User $user) {
         return $user->email;
     });
 
-Since the `$user` variable is type-hinted as the `App\User` Eloquent model and the variable name matches the `{user}` URI segment, Laravel will automatically inject the model instance that has an ID matching the corresponding value from the request URI. If a matching model instance is not found in the database, a 404 HTTP response will automatically be generated.
+Так как переменная `$user` указывается в качестве аргумента Eloquent модели `App\User` и название переменной совпадает с URI-сегментом `{user}`, автоматически внедрит экземпляр модели, который имеет ID, совпадающий с соответствующим значением из URI запроса. Если совпадающий экземпляр модели не найден в базе данных, будет автоматически сгенерирован HTTP-отклик 404.
 
-#### Customizing The Key Name
+#### Изменение имени ключа
 
-If you would like model binding to use a database column other than `id` when retrieving a given model class, you may override the `getRouteKeyName` method on the Eloquent model:
+Если вы хотите, чтобы для получения класса данной модели вместо столбца `id` использовался другой столбец базы данных, вы можете переопределить метод `getRouteKeyName` в своей модели Eloquent:
 
     /**
      * Get the route key for the model.
@@ -250,9 +254,9 @@ If you would like model binding to use a database column other than `id` when re
     }
 
 <a name="explicit-binding"></a>
-### Explicit Binding
+### Явная привязка
 
-To register an explicit binding, use the router's `model` method to specify the class for a given parameter. You should define your explicit model bindings in the `boot` method of the `RouteServiceProvider` class:
+Для регистрации явной привязки используйте метод роута `model` для указания класса для данного параметра. Вам надо определить явные привязки вашей модели в методе `boot` класса `RouteServiceProvider`:
 
     public function boot()
     {
@@ -261,19 +265,19 @@ To register an explicit binding, use the router's `model` method to specify the 
         Route::model('user', App\User::class);
     }
 
-Next, define a route that contains a `{user}` parameter:
+Затем определите роут, содержащий параметр `{user}`:
 
     Route::get('profile/{user}', function (App\User $user) {
         //
     });
 
-Since we have bound all `{user}` parameters to the `App\User` model, a `User` instance will be injected into the route. So, for example, a request to `profile/1` will inject the `User` instance from the database which has an ID of `1`.
+Из-за того, что мы ранее привязали все параметры `{user}` к модели `App\User`, её экземпляр будет внедрён в роут. Таким образом, к примеру, запрос `profile/1` внедрит объект `User` , полученный из БД, который соответствует ID `1`.
 
-If a matching model instance is not found in the database, a 404 HTTP response will be automatically generated.
+Если совпадающий экземпляр модели не найден в базе данных, будет автоматически сгенерирован HTTP-отклик 404.
 
-#### Customizing The Resolution Logic
+#### Изменение логики принятия решения
 
-If you wish to use your own resolution logic, you may use the `Route::bind` method. The `Closure` you pass to the `bind` method will receive the value of the URI segment and should return the instance of the class that should be injected into the route:
+Если захотите использовать собственную логику принятия решения, используйте метод `Route::bind` . Переданное в метод `bind` замыкание получит значение сегмента URI, и должно вернуть экземпляр класса, который вы хотите внедрить в роут:
 
     public function boot()
     {
@@ -285,23 +289,23 @@ If you wish to use your own resolution logic, you may use the `Route::bind` meth
     }
 
 <a name="form-method-spoofing"></a>
-## Form Method Spoofing
+## Подмена методов
 
-HTML forms do not support `PUT`, `PATCH` or `DELETE` actions. So, when defining `PUT`, `PATCH` or `DELETE` routes that are called from an HTML form, you will need to add a hidden `_method` field to the form. The value sent with the `_method` field will be used as the HTTP request method:
+HTML-формы не поддерживают действия `PUT`, `PATCH` или `DELETE`. Поэтому при определении роутов `PUT`, `PATCH` или `DELETE`, вызываемых из HTML-формы, вам надо добавить в неё скрытое поле `_method`. Переданное в этом поле значение будет использовано как метод HTTP-запроса:
 
     <form action="/foo/bar" method="POST">
         <input type="hidden" name="_method" value="PUT">
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
     </form>
 
-You may use the `method_field` helper to generate the `_method` input:
+Используйте хелпер `method_field`, чтобы сгенерировать ввод `_method`:
 
     {{ method_field('PUT') }}
 
 <a name="accessing-the-current-route"></a>
-## Accessing The Current Route
+## Получение текущего роута
 
-You may use the `current`, `currentRouteName`, and `currentRouteAction` methods on the `Route` facade to access information about the route handling the incoming request:
+Используйте методы `current`, `currentRouteName` и `currentRouteAction` фасада `Route` для получения информации о роуте, обрабатывающем входящий запрос:
 
     $route = Route::current();
 
@@ -309,4 +313,4 @@ You may use the `current`, `currentRouteName`, and `currentRouteAction` methods 
 
     $action = Route::currentRouteAction();
 
-Refer to the API documentation for both the [underlying class of the Route facade](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html) and [Route instance](https://laravel.com/api/{{version}}/Illuminate/Routing/Route.html) to review all accessible methods.
+Чтобы изучить все доступные методы, обратитесь к документации по API [класса, лежащего в основе фасада Route](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html) и [экземпляра Route](https://laravel.com/api/{{version}}/Illuminate/Routing/Route.html).
