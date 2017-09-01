@@ -1,59 +1,63 @@
-# Upgrade Guide
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Upgrading To 5.4.0 From 5.3](#upgrade-5.4.0)
+---
+
+# Руководство по обновлению
+
+- [Обновление с 5.3 до 5.4.0](#upgrade-5.4.0)
 
 <a name="upgrade-5.4.0"></a>
-## Upgrading To 5.4.0 From 5.3
+## Обновление с 5.3 до 5.4.0
 
-#### Estimated Upgrade Time: 1-2 Hours
+#### Примерное время обновления: 1-2 часа 
 
-> {note} We attempt to document every possible breaking change. Since some of these breaking changes are in obscure parts of the framework only a portion of these changes may actually affect your application.
+> {note} Мы стараемся задокументировать все изменения, которые могут вызывать проблемы. Однако так как некоторые изменения фреймворка находятся в малоизвестных областях, только некоторые из них могут действительно повлиять на работу вашего приложения.
 
-### Updating Dependencies
+### Обновление зависимостей
 
-Update your `laravel/framework` dependency to `5.4.*` in your `composer.json` file. In addition, you should update your `phpunit/phpunit` dependency to `~5.7`.
+В вашем файле `composer.json` обновите зависимость `laravel/framework` до `5.4.*`. Кроме того, необходимо обновить зависимость `phpunit/phpunit` до `~5.7`.
 
-#### Removing Compiled Services File
+#### Удаление файла скомпилированных сервисов
 
-If it exists, you may delete the `bootstrap/cache/compiled.php` file. It is no longer used by the framework.
+Вы можете удалить файл `bootstrap/cache/compiled.php`, если он существует. Он больше не используется фреймворком.
 
-#### Flushing The Cache
+#### Очистка кэша
 
-After upgrading all packages, you should run `php artisan view:clear` to avoid Blade errors related to the removal of `Illuminate\View\Factory::getFirstLoop()`. In addition, you may need to run `php artisan route:clear` to flush the route cache.
+После обновления всех пакетов вам следует выполнить команду `php artisan view:clear`, чтобы избежать ошибок Blade, связанных с удалением `Illuminate\View\Factory::getFirstLoop()`. Также вам может потребоваться выполнить `php artisan route:clear` для очистки кэша роутов.
 
 #### Laravel Cashier
 
-Laravel Cashier is already compatible with Laravel 5.4.
+Laravel Cashier уже совместим с Laravel 5.4..
 
 #### Laravel Passport
 
-Laravel Passport `2.0.0` has been released to provide compatibility with Laravel 5.4 and the [Axios](https://github.com/mzabriskie/axios) JavaScript library. If you are upgrading from Laravel 5.3 and using the pre-built Passport Vue components, you should make sure the Axios library is globally available to your application as `axios`.
+Вышел Laravel Passport `2.0.0`, предоставляющий совместимость с Laravel 5.4 и JavaScript-библиотекой [Axios](https://github.com/mzabriskie/axios). Если вы обновляете с Laravel 5.3 и используете предварительно созданные компоненты Vue Passport, стоит убедиться в том, что библиотека Axios глобально доступна вашему приложению через кючевое слово `axios`.
 
 #### Laravel Scout
 
-Laravel Scout `3.0.0` has been released to provide compatibility with Laravel 5.4.
+Вышел Laravel Scout `3.0.0`, предоставляющий совместимость с Laravel 5.4.
 
 #### Laravel Socialite
 
-Laravel Socialite `3.0.0` has been released to provide compatibility with Laravel 5.4.
+Вышел Laravel Socialite `3.0.0`, предоставляющий совместимость с Laravel 5.4.
 
 #### Laravel Tinker
 
-In order to continue using the `tinker` Artisan command, you should also install the `laravel/tinker` package:
+Чтобы продолжить использовать Artisan команду `tinker`, вам следует установить пакет `laravel/tinker`:
 
     composer require laravel/tinker
 
-Once the package has been installed, you should add `Laravel\Tinker\TinkerServiceProvider::class` to the `providers` array in your `config/app.php` configuration file.
+Как только пакет будет установлен, необходимо добавить `Laravel\Tinker\TinkerServiceProvider::class` в массив `providers` в конфиге `config/app.php`.
 
 #### Guzzle
 
-Laravel 5.4 requires Guzzle 6.0 or greater.
+Laravel 5.4 требует Guzzle 6.0 или выше.
 
-### Authorization
+### Авторизация
 
-#### The `getPolicyFor` Method
+#### Метод `getPolicyFor`
 
-Previous, when calling the `Gate::getPolicyFor($class)` method, an exception was thrown if no policy could be found. Now, the method will return `null` if no policy is found for the given class. If you call this method directly, make sure you refactor your code to check for `null`:
+Раньше, вызывая метод `Gate::getPolicyFor($class)`, возникало исключение в случае, если политика не была найдена. Теперь метод возвращает `null`, если политика для данного класса не будет найдена. Если вы вызываете этот метод напрямую, убедитесь в том, что в вашем коде происходит проверка на возвращаемое значение `null`:
 
 ```php
 $policy = Gate::getPolicyFor($class);
@@ -67,13 +71,13 @@ if ($policy) {
 
 ### Blade
 
-#### `@section` Escaping
+#### Экранирование `@section`
 
-In Laravel 5.4, inline content passed to a section is automatically escaped:
+В Laravel 5.4, контент, переданный в секцию, автоматически экранируется:
 
     @section('title', $content)
 
-If you would like to render unescaped content in a section, you must declare the section using the traditional "long form" style:
+Если вы хотите передать в секцию неэкранированный контент, вам необходимо определять секцию с помощью традиционного стиля "длинной формы":
 
     @section('title')
         {!! $content !!}
@@ -81,45 +85,45 @@ If you would like to render unescaped content in a section, you must declare the
 
 ### Bootstrappers
 
-If you are manually overriding the `$bootstrappers` array on your HTTP or Console kernel, you should rename the `DetectEnvironment` entry to `LoadEnvironmentVariables` and remove `ConfigureLogging`.
+Если вы вручную переопределяете массив `$bootstrappers` в HTTP-ядре или ядре консоли, то вам следует переименовать `DetectEnvironment` на `LoadEnvironmentVariables` и убрать `ConfigureLogging`.
 
-### Broadcasting
+### Бродкастинг
 
-#### Channel Model Binding
+#### Связывание моделей каналов
 
-When defining channel name placeholders in Laravel 5.3, the `*` character is used. In Laravel 5.4, you should define these placeholders using `{foo}` style placeholders, like routes:
+При определении заполнителя названия канала в Laravel 5.3 используется символ '*'. В Laravel 5.4 вам следует определять их с помощью синтаксиса `{foo}`, как роуты:
 
     Broadcast::channel('App.User.{userId}', function ($user, $userId) {
         return (int) $user->id === (int) $userId;
     });
 
-### Collections
+### Коллекции
 
-#### The `every` Method
+#### Метод `every`
 
-The behavior of the `every` method has been moved to the `nth` method to match the method name defined by Lodash.
+Функционал метода `every` был перемещён в метод `nth` для соответсвия названию метода, определенному в Lodash.
 
-#### The `random` Method
+#### Метод `random`
 
-Calling `$collection->random(1)` will now return a new collection instance with one item. Previously, this would return a single object. This method will only return a single object if no arguments are supplied.
+Вызов `$collection->random(1)` теперь будет возвращать новый экземпляр коллекции с одним элементом. Ранее, это возращало единственный объект. Этот метод будет возвращать единственный объект только в случае, если аргументы не переданы.
 
-### Container
+### Контейнер
 
-#### Aliasing Via `bind` / `instance`
+#### Псевдонимы через `bind` / `instance`
 
-In previous Laravel releases, you could pass an array as the first parameter to the `bind` or `instance` methods to register an alias:
+В предыдущих версиях Laravel вы могли передать массив в качестве первого аргумента методов `bind` или `instance` для регистрации псевдонима:
 
     $container->bind(['foo' => FooContract::class], function () {
         return 'foo';
     });
 
-However, this behavior has been removed in Laravel 5.4. To register an alias, you should now use the `alias` method:
+Однако, это поведение было удалено в Laravel 5.4. Для регистрации псевдонима теперь необходимо использовать метод `alias`:
 
     $container->alias(FooContract::class, 'foo');
 
-#### Binding Classes With Leading Slashes
+#### Связывание классов через косую черту
 
-Binding classes into the container with leading slashes is no longer supported. This feature required a significant amount of string formatting calls to be made within the container. Instead, simply register your bindings without a leading slash:
+Связывание классов в контейнер через косую черту больше не поддерживаются. Этот функционал требовал значительного количества вызовов форматирования строки внутри контейнера. Вместо этого просто зарегистрируйте свои классы без косой черты:
 
     $container->bind('Class\Name', function () {
         //
@@ -129,13 +133,13 @@ Binding classes into the container with leading slashes is no longer supported. 
         //
     });
 
-#### `make` Method Parameters
+#### Параметры метода `make`
 
-The container's `make` method no longer accepts a second array of parameters. This feature typically indicates a code smell. Typically, you can always construct the object in another way that is more intuitive.
+Метод контейнера `make` больше не принимает вторым аргументом массив параметров. Этот функционал был признаком некачественного кода. Вы всегда можете построить объект другим путём, что является более интуитивным вариантом.
 
-#### Resolving Callbacks
+#### Резолвинг анонимных функций
 
-The container's `resolving` and `afterResolving` method now must be provided a class name or binding key as the first argument to the method:
+Методам контейнера `resolving` и `afterResolving` необходимо передавать название класса или ключ в качестве первого аргумента:
 
     $container->resolving('Class\Name', function ($instance) {
         //
@@ -145,25 +149,25 @@ The container's `resolving` and `afterResolving` method now must be provided a c
         //
     });
 
-#### `share` Method Removed
+#### Удален метод `share`
 
-The `share` method has been removed from the container. This was a legacy method that has not been documented in several years. If you are using this method, you should begin using the `singleton` method instead:
+Метод `share` был удален из контейнера. Он считался устаревшим и не упоминался в документации уже несколько лет. Если вы используете его, то в качестве альтернативы вам следует использовать метод `singleton`:
 
     $container->singleton('foo', function () {
         return 'foo';
     });
 
-### Console
+### Консоль
 
-#### The `Illuminate\Console\AppNamespaceDetectorTrait` Trait
+#### Трейт `Illuminate\Console\AppNamespaceDetectorTrait`
 
-If you are directly referencing the `Illuminate\Console\AppNamespaceDetectorTrait` trait, update your code to reference `Illuminate\Console\DetectsApplicationNamespace` instead.
+Если вы напрямую ссылаетесь на трейт `Illuminate\Console\AppNamespaceDetectorTrait`, то внесите изменения в свой код, где вместо этого будете ссылаться на трейт `Illuminate\Console\DetectsApplicationNamespace`.
 
-### Database
+### База данных
 
-#### Custom Connections
+#### Кастомные соединения
 
-If you were previously binding a service container binding for a `db.connection.{driver-name}` key in order to resolve a custom database connection instance, you should now use the `Illuminate\Database\Connection::resolverFor` method in the `register` method of your `AppServiceProvider`:
+Если ранее вы указывали в контейнере свой ключ для соединения с базой данных как `db.connection.{driver-name}`, теперь необходимо использовать `Illuminate\Database\Connection::resolverFor` в методе `register` вашего `AppServiceProvider`:
 
     use Illuminate\Database\Connection;
 
@@ -171,9 +175,9 @@ If you were previously binding a service container binding for a `db.connection.
         //
     });
 
-#### Fetch Mode
+#### Режим выбора
 
-Laravel no longer includes the ability to customize the PDO "fetch mode" from your configuration files. Instead, `PDO::FETCH_OBJ` is always used. If you would still like to customize the fetch mode for your application you may listen for the new `Illuminate\Database\Events\StatementPrepared` event:
+Laravel больше не включает возможность настройки PDO в "режиме выбора" в зависимости от ваших конфигурационных файлов. Взамен этого всегда используется  `PDO::FETCH_OBJ`. Если все еще есть необходимость настроить режим для вашего приложения, можно прослушивать событие `Illuminate\Database\Events\StatementPrepared`:
 
     Event::listen(StatementPrepared::class, function ($event) {
         $event->statement->setFetchMode(...);
@@ -181,47 +185,47 @@ Laravel no longer includes the ability to customize the PDO "fetch mode" from yo
 
 ### Eloquent
 
-#### Date Casts
+#### Событие Date
 
-The `date` cast now converts the column to a `Carbon` object and calls the `startOfDay` method on the object. If you would like to preserve the time portion of the date, you should use the `datetime` cast.
+Выброс события `date`,  теперь преобразует столбец в объект  `Carbon` и вызывает метод `startOfDay`. Если вы хотите сохранить время, вы должны использовать `datetime`.
 
-#### Foreign Key Conventions
+#### Соглашения для внешнего ключа
 
-If the foreign key is not explicitly specified when defining a relationship, Eloquent will now use the table name and primary key name for the related model to build the foreign key. For the vast majority of applications, this is not a change of behavior. For example:
+Если внешний ключ не  задан в явном виде при определении отношений, Eloquent, будет использовать имя таблицы и первичного ключа модели для  создания внешний ключа. Для подавляющего большинства приложений это поведение не изменяется. Например:
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-Just like previous Laravel releases, this relationship will typically use `user_id` as the foreign key. However, the behavior could be different from previous releases if you are overriding the `getKeyName` method of the `User` model. For example:
+Точно так же, как и в предыдущих версиях Laravel эти отношения будут  использовать `user_id` в качестве внешнего ключа. Однако поведение могло отличаться от предыдущих выпусков, если вы переопределяли метод`getKeyName` модели `User`. Например:
 
     public function getKeyName()
     {
         return 'key';
     }
 
-When this is the case, Laravel will now respect your customization and determine the foreign key column name is `user_key` instead of `user_id`.
+Когда дело обстоит так, Laravel будет уважать вашу настройку и решит, что имя столбца внешнего ключа - `user_key` вместо `user_id`.
 
 #### BelongsToMany `setJoin`
 
-The `setJoin` method has been renamed to `performJoin`.
+Метод `setJoin` был переименован в `performJoin`.
 
 #### Has One / Many `createMany`
 
-The `createMany` method of a `hasOne` or `hasMany` relationship now returns a collection object instead of an array.
+Метод `createMany` имеющий `hasOne` или  `hasMany`  теперь возвращает объект с коллекцией, а не массив.
 
-#### Related Model Connections
+#### Соединения моделей с отношениями
 
-Related models will now use the same connection as the parent model. For example, if you execute a query like:
+Отношение моделей теперь будут использовать те же соединения, что и родительская модель, к примеру если выполнить запрос:
 
     User::on('example')->with('posts');
 
-Eloquent will query the posts table on the `example` connection instead of the default database connection. If you want to read the `posts` relationship from the default connection, you should to explicitly set the model's connection to your application's default connection.
+Eloquent будет запрашивать таблицу posts через соединение `example` вместо соединения базы данных по умолчанию. Если вы хотите прочитать `posts` через соединение по умолчанию, необходимо явно установить соединение модели на подключение вашего приложения.
 
-#### The `chunk` Method
+#### Метод `chunk`
 
-The query builder `chunk` method now requires an `orderBy` clause, which provides consistency with the `each` method. An exception will be thrown if an `orderBy` clause is not supplied. For example:
+Метод построителя запросов `chunk` теперь требует условие `orderBy`, которое предоставляет консистентность с методом `each`. Если условие `orderBy` не предоставлено - будет выброшено исключение. Например:
 
     DB::table('users')->orderBy('id')->chunk(100, function ($users) {
         foreach ($users as $user) {
@@ -229,11 +233,11 @@ The query builder `chunk` method now requires an `orderBy` clause, which provide
         }
     });
 
-The Eloquent query builder `chunk` method will automatically apply an `orderBy` clause on the model's primary key if one is not supplied.
+Метод построителя запросов Eloquent `chunk` будет автоматически применять условие `orderBy` на первичный ключ модели, если он не предоставлен.
 
-#### The `create` & `forceCreate` Methods
+#### Методы `create` & `forceCreate`
 
-The `Model::create` & `Model::forceCreate` methods have been moved to the `Illuminate\Database\Eloquent\Builder` class in order to provide better support for creating models on multiple connections. However, if you are extending these methods in your own models, you will need to modify your implementation to call the `create` method on the builder. For example:
+Методы `Model::create` & `Model:: forceCreate` были перемещены в класс `Illuminate\Database\Eloquent\Builder` для обеспечения лучшей поддержки создания моделей для нескольких соединений. Однако, если наследовать эти методы в свои собственных моделях, потребуется изменить реализацию, чтобы вызвать метод `create` из строителя. Например:
 
     public static function create(array $attributes = [])
     {
@@ -244,73 +248,74 @@ The `Model::create` & `Model::forceCreate` methods have been moved to the `Illum
         return $model;
     }
 
-#### The `hydrate` Method
+#### Метод `hydrate`
 
-If you are currently passing a custom connection name to this method, you should now use the `on` method:
+Если вы передаете имя соединения, необходимо использовать метод `on`:
 
     User::on('connection')->hydrate($records);
 
-#### `hydrateRaw` Method
+#### `Метод `hydrateRaw`
 
-The `Model::hydrateRaw` method has been renamed to `fromQuery`. If you are passing a custom connection name to this method, you should now use the `on` method:
+Метод `Model::hydrateRaw` был переименован в `fromQuery`. Eсли вы передаете имя настраиваемого подключения  к этому методу, нужно использовать метод `on`:
 
     User::on('connection')->fromQuery('...');
 
-#### The `whereKey` Method
+#### Метод `whereKey`
 
-The `whereKey($id)` method will now add a "where" clause for the given primary key value. Previously, this would fall into the dynamic "where" clause builder and add a "where" clause for the "key" column. If you used the `whereKey` method to dynamically add a condition for the `key` column you should now use `where('key', ...)` instead.
+Метод `whereKey($id)` сейчас добавляет условие "where" для получения первичного ключа. Ранее, это передавалось в условие "where" и внутри него еще добавлялось "where" для столбца "key". Если вы используете метод `whereKey`, чтобы динамически добавлять условие для столбцов `key`, вместо этого необходимо использовать `where('key', ...)`.
 
-#### The `factory` Helper
+#### Хелпер `factory`
 
-Calling `factory(User::class, 1)->make()` or `factory(User::class, 1)->create()` will now return a collection with one item. Previously, this would return a single model. This method will only return a single model if the amount is not supplied.
+Вызов `factory(User::class, 1)->make()` или `factory(User::class, 1)->create()`, возвращает коллекцию с одним элементом. Метод будет возвращает одну модель, если число не передается в параметры.
 
-### Events
+### События
 
-#### Contract Changes
+#### Изменения в Contract
 
-If you are manually implementing the `Illuminate\Contracts\Events\Dispatcher` interface in your application or package, you should rename the `fire` method to `dispatch`.
+Если вы самостоятельно  реализуете контракт `Illuminate\Contracts\Events\Dispatcher` в своем  приложение или пакете, нужно переименовать метод `fire` в метод `dispatch`.
 
-#### Event Priority
+#### Приоритет событий
 
-Support for event handler "priorities" has been removed. This undocumented feature typically indicates an abuse of the event feature. Instead, consider using a series of synchronous method calls. Alternatively, you may dispatch a new event from within the handler of another event in order to ensure that a given event's handler fires after an unrelated handler.
+Поддержка  события  "priorities"  была удалена. Это возможность, не описывалась в документации и обычно указывает на злоупотребление функцией события. Взамен рассмотрите использование серий синхронных вызовов. Кроме того, вы можете отправить новое событие из обработчика другого события, чтобы гарантировать, что данное событие будет обработано после несвязанного обработчика.
 
-#### Wildcard Event Handler Signatures
+#### Сигнатуры обработчиков событий
 
-Wildcard event handlers now receive the event name as their first argument and the array of event data as their second argument. The `Event::firing` method has been removed:
+Обработчики событий теперь получают в качестве первого аргумента имя события  и массив с  данными  в качестве второго аргумента.Метод `Event::firing` был удален:
 
     Event::listen('*', function ($eventName, array $data) {
         //
     });
 
-#### The `kernel.handled` Event
+#### Событие `kernel.handled`
 
-The `kernel.handled` event is now an object based event using the `Illuminate\Foundation\Http\Events\RequestHandled` class.
+Событие `kernel.handled` сейчас объект на основе событий, используя класс `Illuminate\Foundation\Http\Events\RequestHandled`.
 
-#### The `locale.changed` Event
+#### Событие `locale.changed`
 
-The `locale.changed` event is now an object based event using the `Illuminate\Foundation\Events\LocaleUpdated` class.
+Событие `locale.changed` сейчас объект на основе, используя класс `Illuminate\Foundation\Events\LocaleUpdated`.
 
-#### The `illuminate.log` Event
+#### Событие `illuminate.log`
 
-The `illuminate.log` event is now an object based event using the `Illuminate\Log\Events\MessageLogged` class.
+Событие `illuminate.log` сейчас объект на основе используя класс `Illuminate\Log\Events\MessageLogged`.
 
-### Exceptions
+### Исключения
 
-The `Illuminate\Http\Exception\HttpResponseException` has been renamed to `Illuminate\Http\Exceptions\HttpResponseException`. Note that `Exceptions` is now plural. Likewise, the `Illuminate\Http\Exception\PostTooLargeException` has been renamed to `Illuminate\Http\Exceptions\PostTooLargeException`.
+`Illuminate\Http\Exception\HttpResponseException` был переименован 
+`Illuminate\Http\Exceptions\HttpResponseException`. Отметим, что `Exceptions` теперь во множественном числе. кроме того, `Illuminate\Http\Exception\PostTooLargeException` был переименован в `Illuminate\Http\Exceptions\PostTooLargeException`.
 
-### Mail
+### Почта
 
-#### `Class@method` Syntax
+#### Синтаксис `Class@method`
 
-Sending mail using `Class@method` syntax is no longer supported. For example:
+Отправка почты с помощью `Class@method` уже долгое время не поддерживается. Например:
 
     Mail::send('view.name', $data, 'Class@send');
 
-If you are sending mail in this way you should convert these calls to [mailables](/docs/{{version}}/mail).
+Если вы отправляете почту таким образом, нужно конвертировать эти вызовы в [mailable](/docs/{{version}}/mail).
 
-#### New Configuration Options
+#### Новые опции настройки
 
-In order to provide support for Laravel 5.4's new Markdown mail components, you should add the following block of configuration to the bottom of your `mail` configuration file:
+Для того, чтобы обеспечить поддержку новых компонентов с разметкой Markdown в Laravel 5.4 необходимо добавить следующий блок в нижней части файла конфигурации `mail`:
 
     'markdown' => [
         'theme' => 'default',
@@ -320,23 +325,23 @@ In order to provide support for Laravel 5.4's new Markdown mail components, you 
         ],
     ],
 
-#### Queueing Mail With Closures
+#### Помещение почты в очередь при помощи функций Closure
 
-In order to queue mail, you now must use a [mailable](/docs/{{version}}/mail). Queuing mail using the `Mail::queue` and `Mail::later` methods no longer supports using Closures to configure the mail message. This feature required the use of special libraries to serialize Closures since PHP does not natively support this feature.
+Для организации почтовой очереди используйте [mailable](/docs/{{version}}/mail). Методы `Mail::queue` и`Mail::later`  больше не поддерживают использование анонимных функций для настройки почтового сообщения. Эта функция требует использования специальных библиотек для закрытия, поскольку PHP не поддерживает эту функцию.
 
-### Queue
+### Очередь
 
-#### Failed Jobs Table
+#### Таблица проваленных задач
 
-If your application contains a `failed_jobs` table, you should add an `exception` column to the table:
+Если ваше приложение содержит таблицу `failed_jobs`, вам нужно добавить столбец `exception` в эту таблицу:
 
     $table->longText('exception')->after('payload');
 
 ### Redis
 
-#### Improved Clustering Support
+#### Улучшена поддержка кластеризации
 
-Laravel 5.4 introduces improved Redis cluster support. If you are using Redis clusters, you should place your cluster connections inside of a `clusters` configuration option in the Redis portion of your `config/database.php` configuration file:
+В Laravel 5.4  улучшена поддержка кластера Redis. Если вы используете кластеры для Redis, нужно разместить свои соединения в блоке `clusters` внутри конфига `config/database.php`:
 
     'redis' => [
 
@@ -359,55 +364,55 @@ Laravel 5.4 introduces improved Redis cluster support. If you are using Redis cl
 
     ],
 
-### Routing
+### Роутинг
 
 #### Post Size Middleware
 
-The class `Illuminate\Foundation\Http\Middleware\VerifyPostSize` has been renamed to `Illuminate\Foundation\Http\Middleware\ValidatePostSize`.
+Класс `Illuminate\Foundation\Http\Middleware\VerifyPostSize` был переименован в  `Illuminate\Foundation\Http\Middleware\ValidatePostSize`.
 
-#### The `middleware` Method
+#### Метод `middleware`
 
-The `middleware` method of the `Illuminate\Routing\Router` class has been renamed to `aliasMiddleware()`. It is likely that most applications never call this method manually, as it is typically only called by the HTTP kernel to register route-level middleware defined in the `$routeMiddleware` array.
+Метод `middleware` в классе `Illuminate\Routing\Router` был переименован в `aliasMiddleware()`. Вероятно большинство приложений не вызывает этот метод вручную, как правило, это происходит  через  HTTP kernel в массиве `$routeMiddleware`.
 
-#### `Route` Methods
+#### Методы `Route` 
 
-The `getUri` method of the `Illuminate\Routing\Route` class has been removed. You should use the `uri` method instead.
+Метод `getUri` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `uri`.
 
-The `getMethods` method of the `Illuminate\Routing\Route` class has been removed. You should use the `methods` method instead.
+Метод `getMethods` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `methods`.
 
-The `getParameter` method of the `Illuminate\Routing\Route` class has been removed. You should use the `parameter` method instead.
+Метод`getParameter` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `parameter`.
 
-The `getPath` method of the `Illuminate\Routing\Route` class has been removed. You should use the `uri` method instead.
+Метод `getPath` из класса`Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `uri`.
 
-### Sessions
+### Сессии
 
-#### Symfony Compatibility
+#### Совместимость с Symfony
 
-Laravel's session handlers no longer implements Symfony's `SessionInterface`. Implementing this interface required us to implement extraneous features that were not needed by the framework. Instead, a new `Illuminate\Contracts\Session\Session` interface has been defined and may be used instead. The following code changes should also be applied:
+Обработчики сессий Laravel больше не реализуют Symfony интерфейс `SessionInterface`. Реализация этого интерфейса требует посторонних опций, которые не были необходимы во фреймворке. Взамен этого, был определен новый интерфейс `Illuminate\Contracts\Session\Session`. Следующие изменения кода должны быть также быть применены:
 
-All calls to the `->set()` method should be changed to `->put()`. Typically, Laravel applications would never call the `set` method since it has never been documented within the Laravel documentation. However, it is included here out of caution.
+Все вызовы метода `->set()` должны быть изменены на `->put()`. Обычно, в приложениях Laravel  метод `set` не используются, поскольку это не было описано в документации Laravel. Тем не менее, это указано из за осторожности.
 
-All calls to the `->getToken()` method should be changed to `->token()`.
+Все вызовы `->getToken()` следует заменить на `->token()`.
 
-All calls to the `$request->setSession()` method should be changed to `setLaravelSession()`.
+Все вызовы `$request->setSession()` следует заменить на `setLaravelSession()`.
 
-### Testing
+### Тестирование
 
-Laravel 5.4's testing layer has been re-written to be simpler and lighter out of the box. If you would like to continue using the testing layer present in Laravel 5.3, you may install the `laravel/browser-kit-testing` [package](https://github.com/laravel/browser-kit-testing) into your application. This package provides full compatibility with the Laravel 5.3 testing layer. In fact, you can run the Laravel 5.4 testing layer side-by-side with the Laravel 5.3 testing layer.
+Если вы хотите продолжать использовать функционал тестирования, который остался в версии Laravel 5.3 можно установить [пакет](https://github.com/laravel/browser-kit-testing) `laravel/browser-kit-testing` в ваше приложение. Он обеспечивает полную совместимость с версией Laravel 5.3. В действительности, вы можете запустить тестирование Laravel 5.4 бок-о-бок со средой тестирования из версии Laravel 5.3.
 
-In order to allow Laravel to autoload any new tests you generate using the Laravel 5.4 test generators, you should add the `Tests` namespace to your `composer.json` file's `autoload-dev` block:
+Чтобы позволить Laravel автоматически загружать любые новые тесты, которые вы генерируете с использованием генератороа тестов Laravel 5.4, вам нужно добавить пространство имён `Tests` к вашему блоку `autoload-dev` файла `composer.json`:
 
     "psr-4": {
         "Tests\\": "tests/"
     }
 
-#### Running Laravel 5.3 & 5.4 Tests In A Single Application
+#### Запуск тестов в  Laravel 5.3 и 5.4  в одном приложении
 
-First install the `laravel/browser-kit-testing` package:
+Установите пакет `laravel/browser-kit-testing`:
 
     composer require laravel/browser-kit-testing="1.*" --dev
 
-Once the package has been installed, create a copy of your `tests/TestCase.php` file and save it to your `tests` directory as `BrowserKitTestCase.php`. Then, modify the file to extend the `Laravel\BrowserKitTesting\TestCase` class. Once you have done this, you should have two base test classes in your `tests` directory: `TestCase.php` and `BrowserKitTestCase.php`. In order for your `BrowserKitTestCase` class to be properly loaded, you may need to add it to your `composer.json` file:
+После того, как пакет был установлен, создайте копию файла `tests/TestCase.php` и сохраните ее в директорию `tests` как файл `BrowserKitTestCase.php`. Затем, внесите изменения в него, наследуя `Laravel\BrowserKitTesting\TestCase`. Как только это сделано, в вашей директории `tests` будет находиться два базовых класса для тестирования: `TestCase.php` и `BrowserKitTestCase.php`. Для правильной загрузки класса `BrowserKitTestCase`, возможно понадобится его добавить в `composer.json`:
 
     "autoload-dev": {
         "classmap": [
@@ -416,7 +421,7 @@ Once the package has been installed, create a copy of your `tests/TestCase.php` 
         ]
     },
 
-Tests written on Laravel 5.3 will extend the `BrowserKitTestCase` class while any new tests that use the Laravel 5.4 testing layer will extend the `TestCase` class. Your `BrowserKitTestCase` class should look like the following:
+Тесты, написанные на версии Laravel 5.3 будут наследовать класс `BrowserKitTestCase`, в то время как любые новые тесты, которые используют Laravel 5.4 будут наследовать класс `TestCase`. Класс `BrowserKitTestCase` выглядит следующим образом:
 
     <?php
 
@@ -447,17 +452,17 @@ Tests written on Laravel 5.3 will extend the `BrowserKitTestCase` class while an
         }
     }
 
-Once you have created this class, make sure to update all of your tests to extend your new `BrowserKitTestCase` class. This will allow all of your tests written on Laravel 5.3 to continue running on Laravel 5.4. If you choose, you can slowly begin to port them over to the new [Laravel 5.4 test syntax](/docs/5.4/http-tests) or [Laravel Dusk](/docs/5.4/dusk).
+После того, как класс создан, не забудьте обновить все тесты, наследуя их новым классом `BrowserKitTestCase`. Это позволит всем тестам, написанным на Laravel 5.3, успешно продолжить работу на Laravel 5.4. После можно заняться рефакторингом с использованием [нового синтаксиса Laravel 5.4](/docs/5.4/http-tests) или [Laravel Dusk](/docs/5.4/dusk).
 
-> {note} If you are writing new tests and want them to use the Laravel 5.4 testing layer, make sure to extend the `TestCase` class.
+> {note} Если вы пишете новые тесты и используете тестирование из Laravel 5.4, убедитесь в том, что наследует класс `TestCase`.
 
-#### Installing Dusk In An Upgraded Application
+#### Установка Dusk в обновленное приложение
 
-If you would like to install Laravel Dusk into an application that has been upgraded from Laravel 5.3, first install it via Composer:
+Если вы хотите установить Laravel Dusk в приложении, который обновлен до версии Laravel 5.3, сначала установите его через Composer:
 
     composer require laravel/dusk
 
-Next, you will need to create a `CreatesApplication` trait in your `tests` directory. This trait is responsible for creating fresh application instances for test cases. The trait should look like the following:
+Далее, нужно создать трейт `CreatesApplication` в директории `tests`. Этот трейт отвечает за создание новых экземпляров для тестов. Он должен выглядеть следующим образом:
 
     <?php
 
@@ -480,37 +485,37 @@ Next, you will need to create a `CreatesApplication` trait in your `tests` direc
         }
     }
 
-> {note} If you have namespaced your tests and are using the PSR-4 autoloading standard to load your `tests` directory, you should place the `CreatesApplication` trait under the appropriate namespace.
+> {note} Если вы используете пространство имён по стандарту PSR-4 для загрузки каталога "тесты", необходимо поместить трейт `CreatesApplication` в соответствующее пространство имён.
 
-Once you have completed these preparatory steps, you can follow the normal [Dusk installation instructions](/docs/{{version}}/dusk#installation).
+После завершения этого подготовительного этапа, можно изучить обычную [инструкцию по установке Dusk](/docs/{{version}}/dusk#installation).
 
-#### Environment
+#### Окружение
 
-The Laravel 5.4 test class no longer manually forces `putenv('APP_ENV=testing')` for each test. Instead, the framework utilizes the `APP_ENV` variable from the loaded `.env` file.
+Тестовый класс Laravel 5.4 уже не вручную  использует `putenv('APP_ENV=testing')` для каждого теста. Вместо этого, фреймворк использует переменную `APP_ENV` в  файле `.env`.
 
 #### Event Fake
 
-The `Event` fake's `assertFired` method should be updated to `assertDispatched`, and the `assertNotFired` method should be updated to `assertNotDispatched`. The method's signatures have not been changed.
+Фейковый `Event` метод `assertFired` следует обновить до `assertDispatched`, а метод `assertNotFired` нужно обновить до `assertNotDispatched`. Сиггнатуры метода не были изменены.
 
 #### Mail Fake
 
-The `Mail` fake has been greatly simplified for the Laravel 5.4 release. Instead of using the `assertSentTo` method, you should now simply use the `assertSent` method and utilize the `hasTo`, `hasCc`, etc. helper methods within your callback:
+Фейковый `Mail` был значительно упрощен для релиза Laravel 5.4. Вместо использования метода `assertSentTo`, вам следует теперь просто использовать метод `assertSent` и пользоваться методами хелперами `hasTo`, `hasCc` и т.д. в рамках своей анонимной функции:
 
     Mail::assertSent(MailableName::class, function ($mailable) {
         return $mailable->hasTo('email@example.com');
     });
 
-### Translation
+### Перевод
 
-#### `{Inf}` Placeholder
+#### Шаблон `{Inf}`
 
-If you are using the `{Inf}` placeholder for pluralizing your translation strings, you should update your translation strings to use the `*` character instead:
+Если вы используете шаблон `{Inf}` для заполнения строк с переводом, нужно обновить эти строки, используя вместо этого знак `*`:
 
     {0} First Message|{1,*} Second Message
     
-#### The `trans` Helpers
+#### Хелперы `trans`
 
-The `trans` helper signature has been updated to remove the unnecessary `$domain` argument. The new signature is as follows:
+Сигнатура хелпера `trans` была обновлена, чтобы убрать ненужный аргумент `$domain`. Новая сигнатура выглядит так:
 
     /**
      * Translate the given message.
@@ -522,7 +527,7 @@ The `trans` helper signature has been updated to remove the unnecessary `$domain
      */
     function trans($id = null, $replace = [], $locale = null);
 
-In addition, the `trans_choice` helper has been updated:
+Также был обновлен хелпер `trans_choice`:
 
     /**
      * Translates the given message based on a count.
@@ -535,22 +540,22 @@ In addition, the `trans_choice` helper has been updated:
      */
     function trans_choice($id, $number, array $replace = [], $locale = null);
 
-### URL Generation
+### Генерация URL
 
-#### The `forceSchema` Method
+#### Метод `forceSchema`
 
-The `forceSchema` method of the `Illuminate\Routing\UrlGenerator` class has been renamed to `forceScheme`.
+Метод `forceSchema` класса`Illuminate\Routing\UrlGenerator` был переименован в `forceScheme`.
 
-### Validation
+### Валидация
 
-#### Date Format Validation
+#### Валидация формата даты
 
-Date format validation is now more strict and supports the placeholders present within the documentation for the PHP [date function](http://php.net/manual/en/function.date.php). In previous releases of Laravel, the timezone placeholder `P` would accept all timezone formats; however, in Laravel 5.4 each timezone format has a unique placeholder as per the PHP documentation.
+Проверка формата даты стала строже, так же поддерживает заполнители из документации по РНР [функции даты](http://php.net/manual/en/function.date.php). К сведению, в  предыдущих версиях Laravel часовой пояс с заполнителем `P` принимал все форматы, однако, в  Laravel 5.4 каждый пояс имеет уникальный заполнитель согласно документации PHP.
 
-#### Method Names
+#### Названия методов
 
-The `addError` method has been renamed to `addFailure`. In addition, the `doReplacements` method has been renamed to `makeReplacements`. Typically, these changes will only be relevant if you are extending the `Validator` class.
+Метод `addError` был переименован в `addFailure`. Дополнительно, метод `doReplacements` был переименован в `makeReplacements`. Как правило, эти изменения будут релевантны только если вы наследуете класс `Validator`.
 
-### Miscellaneous
+### Разное
 
-We also encourage you to view the changes in the `laravel/laravel` [GitHub repository](https://github.com/laravel/laravel). While many of these changes are not required, you may wish to keep these files in sync with your application. Some of these changes will be covered in this upgrade guide, but others, such as changes to configuration files or comments, will not be. You can easily view the changes with the [GitHub comparison tool](https://github.com/laravel/laravel/compare/5.3...master) and choose which updates are important to you.
+Мы также рекомендуем вам просмотреть изменение в [GitHub репозитории](https://github.com/laravel/laravel) `laravel/laravel`. Хотя сейчас многие из этих изменений не являются обязательными, можно синхронизировать эти файлы со своим приложением. Некоторые из этих изменений будут рассмотрены в данном руководстве по обновлению, но другие, такие как изменения в конфиги или комментарии - нет. Вы можете запросто просмотреть изменения, пользуясь [инструментом сравнения GitHub](https://github.com/laravel/laravel/compare/5.3...master) и выбрать какие обновления для вас наиболее важны.
