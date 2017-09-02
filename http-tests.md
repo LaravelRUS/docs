@@ -1,15 +1,19 @@
-# HTTP Tests
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Session / Authentication](#session-and-authentication)
-- [Testing JSON APIs](#testing-json-apis)
-- [Testing File Uploads](#testing-file-uploads)
-- [Available Assertions](#available-assertions)
+---
+
+# HTTP тесты
+
+- [Введение](#introduction)
+- [Сессия / Аутентификация](#session-and-authentication)
+- [Тестирование JSON API](#testing-json-apis)
+- [Тестирование загрузки файлов](#testing-file-uploads)
+- [Доступные утверждения](#available-assertions)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel provides a very fluent API for making HTTP requests to your application and examining the output. For example, take a look at the test defined below:
+Laravel предоставляет довольно функциональный API для составления HTTP-запросов к вашему приложению и анализа выходных данных. Например, давайте рассмотрим тест ниже:
 
     <?php
 
@@ -35,12 +39,12 @@ Laravel provides a very fluent API for making HTTP requests to your application 
         }
     }
 
-The `get` method makes a `GET` request into the application, while the `assertStatus` method asserts that the returned response should have the given HTTP status code. In addition to this simple assertion, Laravel also contains a variety of assertions for inspecting the response headers, content, JSON structure, and more.
+Метод `get` делает запрос `GET` в приложение, в то время как метод `assertStatus` утверждает, что возвращенный ответ должен иметь заданный HTTP код статуса. В дополнение к этому простому утверждению в Laravel также содержится множество утверждений для инспектирования заголовков ответов, их содержимого, структуры JSON и др.
 
 <a name="session-and-authentication"></a>
-## Session / Authentication
+## Сессия / Аутентификация
 
-Laravel provides several helpers for working with the session during HTTP testing. First, you may set the session data to a given array using the `withSession` method. This is useful for loading the session with data before issuing a request to your application:
+В Laravel есть несколько хелперов для работы с сессией во время HTTP-тестирования. Во-первых, можно задать данные сессии заданному массиву используя метод `withSession`. Это полезно для загрузки сессии с данными до отправки запроса вашему приложению:
 
     <?php
 
@@ -53,7 +57,7 @@ Laravel provides several helpers for working with the session during HTTP testin
         }
     }
 
-Of course, one common use of the session is for maintaining state for the authenticated user. The `actingAs` helper method provides a simple way to authenticate a given user as the current user. For example, we may use a [model factory](/docs/{{version}}/database-testing#writing-factories) to generate and authenticate a user:
+Конечно, одно из общепринятых использований сессии - поддержание состояния аутентифицированного пользователя. Хелпер `actingAs` предоставляет простой способ аутентифицировать заданного пользователя как текущего пользователя. Например, можно использовать [фабрику моделей](/docs/{{version}}/database-testing#writing-factories), чтобы сгенерировать и аутентифицировать пользователя:
 
     <?php
 
@@ -71,14 +75,14 @@ Of course, one common use of the session is for maintaining state for the authen
         }
     }
 
-You may also specify which guard should be used to authenticate the given user by passing the guard name as the second argument to the `actingAs` method:
+Также можно указать какого гварда следует использовать для аутентификации заданного пользователя, передавая имя гварда в качестве второго аргумента методу `actingAs`:
 
     $this->actingAs($user, 'api')
 
 <a name="testing-json-apis"></a>
-## Testing JSON APIs
+## Тестирование JSON API
 
-Laravel also provides several helpers for testing JSON APIs and their responses. For example, the `json`, `get`, `post`, `put`, `patch`, and `delete` methods may be used to issue requests with various HTTP verbs. You may also easily pass data and headers to these methods. To get started, let's write a test to make a `POST` request to `/user` and assert that the expected data was returned:
+В Laravel есть несколько хелперов для тестирования JSON API и его ответов. Например, методы `json`, `get`, `post`, `put`, `patch` и `delete` можно использовать, чтобы послать запросы с разными HTTP глаголами. Вы также можете легко передать этим методам данные и заголовки. Для начала напишем тест, чтобы послать запрос `POST` пользователю `/user` и затем выдать утверждение, что были возвращены ожидаемые данные:
 
     <?php
 
@@ -101,12 +105,12 @@ Laravel also provides several helpers for testing JSON APIs and their responses.
         }
     }
 
-> {tip} The `assertJson` method converts the response to an array and utilizes `PHPUnit::assertArraySubset` to verify that the given array exists within the JSON response returned by the application. So, if there are other properties in the JSON response, this test will still pass as long as the given fragment is present.
+> {tip} Метод `assertJson` конвертирует ответ в массив и использует `PHPUnit::assertArraySubset` для проверки, что заданный массив существует в JSON-ответе, возвращенном приложением. Итак, если у JSON-ответа есть другие свойства, этот тест все еще будет пройден, так как присутствует заданный фрагмент.
 
 <a name="verifying-exact-match"></a>
-### Verifying Exact Match
+### Проверка точного соответствия
 
-If you would like to verify that the given array is an **exact** match for the JSON returned by the application, you should use the `assertExactJson` method:
+Если нам нужно проверить, что заданный массив - **точное** соответствие JSON, возвращенного приложением, следует использовать метод `assertExactJson`:
 
     <?php
 
@@ -130,9 +134,9 @@ If you would like to verify that the given array is an **exact** match for the J
     }
 
 <a name="testing-file-uploads"></a>
-## Testing File Uploads
+## Тестирование загрузки файлов
 
-The `Illuminate\Http\UploadedFile` class provides a `fake` method which may be used to generate dummy files or images for testing. This, combined with the `Storage` facade's `fake` method greatly simplifies the testing of file uploads. For example, you may combine these two features to easily test an avatar upload form:
+Класс `Illuminate\Http\UploadedFile` предоставляет метод `fake`, который можно использовать для генерирования фиктивных файлов или изображений для тестирования. Вместе с методом `fake` васада `Storage` это значительно упрощает тестирование загрузки файлов. Например, можно скомбинировать эти две функции, чтобы быстро протестировать форму загрузки аватара:
 
     <?php
 
@@ -163,35 +167,35 @@ The `Illuminate\Http\UploadedFile` class provides a `fake` method which may be u
         }
     }
 
-#### Fake File Customization
+#### Настройка фиктивных файлов
 
-When creating files using the `fake` method, you may specify the width, height, and size of the image in order to better test your validation rules:
+При создании файлов методом `fake` можно указать ширину, высоту и размер изображения, чтобы лучше проверить свои правила валидации:
 
     UploadedFile::fake()->image('avatar.jpg', $width, $height)->size(100);
 
-In addition to creating images, you may create files of any other type using the `create` method:
+В дополнение к созданию изображений можно создавать файлы любого другого типа используя метод `create`:
 
     UploadedFile::fake()->create('document.pdf', $sizeInKilobytes);
 
 <a name="available-assertions"></a>
-## Available Assertions
+## Доступные утверждения
 
-Laravel provides a variety of custom assertion methods for your [PHPUnit](https://phpunit.de/) tests. These assertions may be accessed on the response that is returned from the `json`, `get`, `post`, `put`, and `delete` test methods:
+Laravel предоставляет множество методов утверждений для ваших [PHPUnit](https://phpunit.de/)-тестов. Доступ к этим утверждениям можно получить в ответе, который был возвращен тестовыми методами `json`, `get`, `post`, `put` и `delete`:
 
-Method  | Description
+Метод  | Описание
 ------------- | -------------
-`$response->assertStatus($code);`  |  Assert that the response has a given code.
-`$response->assertRedirect($uri);`  |  Assert that the response is a redirect to a given URI.
-`$response->assertHeader($headerName, $value = null);`  |  Assert that the given header is present on the response.
-`$response->assertCookie($cookieName, $value = null);`  |  Assert that the response contains the given cookie.
-`$response->assertPlainCookie($cookieName, $value = null);`  |  Assert that the response contains the given cookie (unencrypted).
-`$response->assertSessionHas($key, $value = null);`  |  Assert that the session contains the given piece of data.
-`$response->assertSessionHasErrors(array $keys);`  |  Assert that the session contains an error for the given field.
-`$response->assertSessionMissing($key);`  |  Assert that the session does not contain the given key.
-`$response->assertJson(array $data);`  |  Assert that the response contains the given JSON data.
-`$response->assertJsonFragment(array $data);`  |  Assert that the response contains the given JSON fragment.
-`$response->assertJsonMissing(array $data);`  |  Assert that the response does not contain the given JSON fragment.
-`$response->assertExactJson(array $data);`  |  Assert that the response contains an exact match of the given JSON data.
-`$response->assertJsonStructure(array $structure);`  |  Assert that the response has a given JSON structure.
-`$response->assertViewIs($value);`  |  Assert that the given view was returned by the route.
-`$response->assertViewHas($key, $value = null);`  |  Assert that the response view was given a piece of data.
+`$response->assertStatus($code);`  |  Ответ содержит заданный код.
+`$response->assertRedirect($uri);`  |  Ответ - это редирект на заданный URI.
+`$response->assertHeader($headerName, $value = null);`  |  В ответе присутствует заданные заголовок.
+`$response->assertCookie($cookieName, $value = null);`  |  В ответе содержится заданный cookie.
+`$response->assertPlainCookie($cookieName, $value = null);`  |  В ответе содержится заданный cookie (незашифрованный).
+`$response->assertSessionHas($key, $value = null);`  |  В сессии содержится заданный фрагмент данных.
+`$response->assertSessionHasErrors(array $keys);`  |  В сессии содержится ошибка для заданного поля.
+`$response->assertSessionMissing($key);`  |  В сессии не содержится заданный ключ.
+`$response->assertJson(array $data);`  |  В ответе содержатся заданные данные JSON.
+`$response->assertJsonFragment(array $data);`  |  В ответе содержится заданный фрагмент JSON.
+`$response->assertJsonMissing(array $data);`  |  В ответе не содержится заданный фрагмент JSON.
+`$response->assertExactJson(array $data);`  |  В ответе содержится точное совпадение заданных JSON-данных.
+`$response->assertJsonStructure(array $structure);`  |  У ответа есть заданная JSON-структура.
+`$response->assertViewIs($value);`  |  Роутом был возвращен заданный шаблон.
+`$response->assertViewHas($key, $value = null);`  |  Фрагмент данных был передан шалону ответа.
