@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git 9c7aa069905c90c415dbcf26a0c7dcf5a59929f1
 
 ---
 
@@ -53,7 +53,7 @@ Laravel использует [Composer](https://getcomposer.org) для упра
 
 В качестве альтернативы вы можете использовать Composer для установки Laravel с помощью команды `create-project`:
 
-    composer create-project --prefer-dist laravel/laravel blog
+    composer create-project --prefer-dist laravel/laravel blog "5.4.*"
 
 #### Локальный сервер разработки
 
