@@ -1,25 +1,29 @@
-# Mocking
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Bus Fake](#bus-fake)
-- [Event Fake](#event-fake)
-- [Mail Fake](#mail-fake)
-- [Notification Fake](#notification-fake)
-- [Queue Fake](#queue-fake)
-- [Storage Fake](#storage-fake)
-- [Facades](#mocking-facades)
+---
+
+# Мокинг (имитация)
+
+- [Введение](#introduction)
+- [Имитирование Bus](#bus-fake)
+- [Имитирование Event](#event-fake)
+- [Имитирование Mail](#mail-fake)
+- [Имитирование Notification](#notification-fake)
+- [Имитирование Queue](#queue-fake)
+- [Имитирование Storage](#storage-fake)
+- [Фасады](#mocking-facades)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-When testing Laravel applications, you may wish to "mock" certain aspects of your application so they are not actually executed during a given test. For example, when testing a controller that dispatches an event, you may wish to mock the event listeners so they are not actually executed during the test. This allows you to only test the controller's HTTP response without worrying about the execution of the event listeners, since the event listeners can be tested in their own test case.
+При тестировании приложений Laravel вам может потребоваться "сымитировать" определенные аспекты ваших приложений, так чтобы они по факту не выполнялись во время теста. Например, при тестировании контроллера, который распределяет событие, вы можете захотеть использовать моки (имитацию) слушателей событий, чтобы они не выполнялись во время этого теста. Это позволит проверить только HTTP-ответ контроллера, не волнуясь о выполнении слушателей событий, так как слушателей событий можно проверить в их собственных тест-кейсах.
 
-Laravel provides helpers for mocking events, jobs, and facades out of the box. These helpers primarily provide a convenience layer over Mockery so you do not have to manually make complicated Mockery method calls. Of course, you are free to use [Mockery](http://docs.mockery.io/en/latest/) or PHPUnit to create your own mocks or spies.
+Laravel изначально предоставляет хелперов для имитации событий, задач и фасадов. Эти хелперы в основном служат удобным слоем поверх Mockery, чтобы вам не пришлось вручную вызывать сложные методы Mockery. Конечно, для этой же цели все еще можно использовать [Mockery](http://docs.mockery.io/en/latest/) или PHPUnit.
 
 <a name="bus-fake"></a>
-## Bus Fake
+## Имитирование Bus
 
-As an alternative to mocking, you may use the `Bus` facade's `fake` method to prevent jobs from being dispatched. When using fakes, assertions are made after the code under test is executed:
+В качестве альтернативы мокингу (имитации), можно использовать метод `fake` фасада `Bus`, чтобы предотвратить выполнение задач. При использовании имитаций, после выполнения кода теста делаются утверждения:
 
     <?php
 
@@ -50,9 +54,9 @@ As an alternative to mocking, you may use the `Bus` facade's `fake` method to pr
     }
 
 <a name="event-fake"></a>
-## Event Fake
+## Имитирование Event
 
-As an alternative to mocking, you may use the `Event` facade's `fake` method to prevent all event listeners from executing. You may then assert that events were dispatched and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+В качестве альтернативы мокингу (имитации), можно использовать метод `fake` фасада `Event`, чтобы предотвратить выполнение слушателей. Затем можно утверждать, что события были отправлены и даже проверить данные, которые они получили. При использовании имитаций, после выполнения кода теста делаются утверждения:
 
     <?php
 
@@ -86,9 +90,9 @@ As an alternative to mocking, you may use the `Event` facade's `fake` method to 
     }
 
 <a name="mail-fake"></a>
-## Mail Fake
+## Имитирование Mail
 
-You may use the `Mail` facade's `fake` method to prevent mail from being sent. You may then assert that [mailables](/docs/{{version}}/mail) were sent to users and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+Можно использовать метод `fake` фасада `Mail` для предоствращения отправки почты. Затем можно утверждать, что [mailables](/docs/{{version}}/mail) были отправлены пользователям и даже проверить данные, которые они получили. При использовании имитаций, после выполнения кода теста делаются утверждения:
 
     <?php
 
@@ -126,9 +130,9 @@ You may use the `Mail` facade's `fake` method to prevent mail from being sent. Y
     }
 
 <a name="notification-fake"></a>
-## Notification Fake
+## Имитирование Notification
 
-You may use the `Notification` facade's `fake` method to prevent notifications from being sent. You may then assert that [notifications](/docs/{{version}}/notifications) were sent to users and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+Можно использовать метод `fake` фасада `Notification` для предоствращения отправки уведомлений. Вы можете утверждать, что [уведомления](/docs/{{version}}/notifications) были отправлены и даже инспектировать данные, которые они получили. При использовании имитаций, после выполнения кода теста делаются утверждения:
 
     <?php
 
@@ -170,9 +174,9 @@ You may use the `Notification` facade's `fake` method to prevent notifications f
     }
 
 <a name="queue-fake"></a>
-## Queue Fake
+## Имитирование Queue
 
-As an alternative to mocking, you may use the `Queue` facade's `fake` method to prevent jobs from being queued. You may then assert that jobs were pushed to the queue and even inspect the data they received. When using fakes, assertions are made after the code under test is executed:
+В качестве альтернативы мокингу (имитации), можно использовать метод `fake` фасада `Queue` для предоствращения помещения задач в очередь. Вы можете утверждать, что задачи были помещены в очередь и даже инспектировать полученные ими данные. При использовании имитаций, после выполнения кода теста делаются утверждения:
 
     <?php
 
@@ -206,9 +210,9 @@ As an alternative to mocking, you may use the `Queue` facade's `fake` method to 
     }
 
 <a name="storage-fake"></a>
-## Storage Fake
+## Имитирование Storage
 
-The `Storage` facade's `fake` method allows you to easily generate a fake disk that, combined with the file generation utilities of the `UploadedFile` class, greatly simplifies the testing of file uploads. For example:
+Метод `fake` фасада `Storage` позволяет запросто генерировать фейковый диск, который, в комбинации с утилитами генерации файлов класса `UploadedFile`, значительно упрощает тестирование загрузок файлов. Например:
 
     <?php
 
@@ -239,12 +243,12 @@ The `Storage` facade's `fake` method allows you to easily generate a fake disk t
         }
     }
 
-> {tip} By default, the `fake` method will delete all files in its temporary directory. If you would like to keep these files, you may use the "persistentFake" method instead.
+> {tip} По умолчанию метод `fake` удалит все файлы в своей временной директории. Если вам нужно сохранить эти файлы, вместо этого можно использовать метод "persistentFake".
 
 <a name="mocking-facades"></a>
-## Facades
+## Фасады
 
-Unlike traditional static method calls, [facades](/docs/{{version}}/facades) may be mocked. This provides a great advantage over traditional static methods and grants you the same testability you would have if you were using dependency injection. When testing, you may often want to mock a call to a Laravel facade in one of your controllers. For example, consider the following controller action:
+В отличие от традиционных вызовов статических методов, [фасады](/docs/{{version}}/facades) можно сымитировать. Это предоставляет большое преимущество над традиционными статическими методами и предоставляет ту же тестируемость, какая была бы у вас при использовании внедрений зависимостей. Во время тестирования вам часто может понадобиться имитировать вызов к фасаду Laravel в одном из своих контроллеров. Например, рассмотрите следующее действие контроллера:
 
     <?php
 
@@ -267,7 +271,7 @@ Unlike traditional static method calls, [facades](/docs/{{version}}/facades) may
         }
     }
 
-We can mock the call to the `Cache` facade by using the `shouldReceive` method, which will return an instance of a [Mockery](https://github.com/padraic/mockery) mock. Since facades are actually resolved and managed by the Laravel [service container](/docs/{{version}}/container), they have much more testability than a typical static class. For example, let's mock our call to the `Cache` facade's `get` method:
+Мы можем сымитировать вызов к фасаду `Cache`, используя метод `shouldReceive`, который вернет экземпляр мока [Mockery](https://github.com/padraic/mockery). Так как фасады фактически разрешаются и управляются [сервис контейнером](/docs/{{version}}/container) Laravel, у них куда больше тестируемости, чем у типичного статического класса. Например, давайте сымитируем наш вызов к методу `get` фасада `Cache`:
 
     <?php
 
@@ -294,4 +298,4 @@ We can mock the call to the `Cache` facade by using the `shouldReceive` method, 
         }
     }
 
-> {note} You should not mock the `Request` facade. Instead, pass the input you desire into the HTTP helper methods such as `get` and `post` when running your test. Likewise, instead of mocking the `Config` facade, simply call the `Config::set` method in your tests.
+> {note} Не следует имитировать фасад `Request`. Вместо этого передайте желаемый ввод HTTP методам-хелперам, таким как `get` и `post` во время выполнения своего теста. Схожим образом, вместо имитирования фасада `Config` просто вызовите метод `Config::set` в своих тестах.
