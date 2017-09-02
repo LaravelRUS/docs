@@ -1,39 +1,43 @@
-# Database: Query Builder
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Retrieving Results](#retrieving-results)
-    - [Chunking Results](#chunking-results)
-    - [Aggregates](#aggregates)
-- [Selects](#selects)
-- [Raw Expressions](#raw-expressions)
-- [Joins](#joins)
-- [Unions](#unions)
-- [Where Clauses](#where-clauses)
-    - [Parameter Grouping](#parameter-grouping)
-    - [Where Exists Clauses](#where-exists-clauses)
-    - [JSON Where Clauses](#json-where-clauses)
-- [Ordering, Grouping, Limit, & Offset](#ordering-grouping-limit-and-offset)
-- [Conditional Clauses](#conditional-clauses)
-- [Inserts](#inserts)
-- [Updates](#updates)
-    - [Updating JSON Columns](#updating-json-columns)
-    - [Increment & Decrement](#increment-and-decrement)
-- [Deletes](#deletes)
-- [Pessimistic Locking](#pessimistic-locking)
+---
+
+# База данных: Конструктор запросов 
+
+- [Введение](#introduction)
+- [Получение результатов](#retrieving-results)
+    - [Разделение результатов на куски](#chunking-results)
+    - [Агрегатные функции](#aggregates)
+- [Выборка (select)](#selects)
+- [Сырые выражения](#raw-expressions)
+- [Объединения (join)](#joins)
+- [Слияния (union)](#unions)
+- [Условия Where](#where-clauses)
+    - [Группировка параметров](#parameter-grouping)
+    - [Условия Where Exists](#where-exists-clauses)
+    - [JSON условия Where](#json-where-clauses)
+- [Упорядочивание, группировка, предел и смещение](#ordering-grouping-limit-and-offset)
+- [Условные выражения](#conditional-clauses)
+- [Вставка (insert)](#inserts)
+- [Обновления (update)](#updates)
+    - [Обновление JSON-столбцов](#updating-json-columns)
+    - [Increment и Decrement](#increment-and-decrement)
+- [Удаления (delete)](#deletes)
+- [Пессимистическое блокирование](#pessimistic-locking)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel's database query builder provides a convenient, fluent interface to creating and running database queries. It can be used to perform most database operations in your application and works on all supported database systems.
+Конструктор запросов Laravel предоставляет удобный, выразительный интерфейс для создания и выполнения запросов к базе данных. Он может использоваться для выполнения большинства типов операций и работает со всеми поддерживаемыми СУБД
 
-The Laravel query builder uses PDO parameter binding to protect your application against SQL injection attacks. There is no need to clean strings being passed as bindings.
+Конструктор запросов Laravel использует привязку параметров к запросам средствами PDO для защиты вашего приложения от SQL-инъекций. Нет необходимости экранировать строки перед их передачей в запрос
 
 <a name="retrieving-results"></a>
-## Retrieving Results
+## Получение результатов
 
-#### Retrieving All Rows From A Table
+#### Получение всех записей таблицы
 
-You may use the `table` method on the `DB` facade to begin a query. The `table` method returns a fluent query builder instance for the given table, allowing you to chain more constraints onto the query and then finally get the results using the `get` method:
+Используйте метод `table` фасада `DB` для создания запроса. Метод `table` возвращает экземпляр конструктора запросов для данной таблицы, позволяя вам "прицепить" к запросу дополнительные условия и в итоге получить результат методом `get`:
 
     <?php
 
@@ -57,27 +61,27 @@ You may use the `table` method on the `DB` facade to begin a query. The `table` 
         }
     }
 
-The `get` method returns an `Illuminate\Support\Collection` containing the results where each result is an instance of the PHP `StdClass` object. You may access each column's value by accessing the column as a property of the object:
+Метод `get` возвращает объект `Illuminate\Support\Collection` c результатами, в котором каждый результат — это экземпляр PHP-объекта `StdClass`. Вы можете получить значение каждого столбца, обращаясь к столбцу как к свойству объекта:
 
     foreach ($users as $user) {
         echo $user->name;
     }
 
-#### Retrieving A Single Row / Column From A Table
+#### Получение одной строки / столбца из таблицы
 
-If you just need to retrieve a single row from the database table, you may use the `first` method. This method will return a single `StdClass` object:
+Если вам необходимо получить только одну строку из таблицы БД, используйте метод `first`. Этот метод вернёт один объект `StdClass`:
 
     $user = DB::table('users')->where('name', 'John')->first();
 
     echo $user->name;
 
-If you don't even need an entire row, you may extract a single value from a record using the `value` method. This method will return the value of the column directly:
+Если вам не нужна вся строка, вы можете извлечь одно значение из записи методом `value`. Этот метод напрямую вернёт значение конкретного столбца:
 
     $email = DB::table('users')->where('name', 'John')->value('email');
 
-#### Retrieving A List Of Column Values
+#### Получение списка всех значений одного столбца
 
-If you would like to retrieve a Collection containing the values of a single column, you may use the `pluck` method. In this example, we'll retrieve a Collection of role titles:
+Если вы хотите получить массив значений одного столбца, используйте метод `pluck`. В этом примере мы получим коллекцию названий ролей:
 
     $titles = DB::table('roles')->pluck('title');
 
@@ -85,7 +89,7 @@ If you would like to retrieve a Collection containing the values of a single col
         echo $title;
     }
 
- You may also specify a custom key column for the returned Collection:
+Вы можете указать произвольный ключ для возвращаемой коллекции:
 
     $roles = DB::table('roles')->pluck('title', 'name');
 
@@ -94,9 +98,9 @@ If you would like to retrieve a Collection containing the values of a single col
     }
 
 <a name="chunking-results"></a>
-### Chunking Results
+### Разделение результатов на куски
 
-If you need to work with thousands of database records, consider using the `chunk` method. This method retrieves a small chunk of the results at a time and feeds each chunk into a `Closure` for processing. This method is very useful for writing [Artisan commands](/docs/{{version}}/artisan) that process thousands of records. For example, let's work with the entire `users` table in chunks of 100 records at a time:
+Если вам необходимо обработать тысячи записей БД, попробуйте использовать метод `chunk`. Этот метод получает небольшой "кусок" результатов за раз и отправляет его в замыкание для обработки. Этот метод очень полезен для написания [Artisan команд](/docs/{{version}}/artisan) , которые обрабатывают тысячи записей. Например, давайте обработаем всю таблицу `users` "кусками" по 100 записей:
 
     DB::table('users')->orderBy('id')->chunk(100, function ($users) {
         foreach ($users as $user) {
@@ -104,7 +108,7 @@ If you need to work with thousands of database records, consider using the `chun
         }
     });
 
-You may stop further chunks from being processed by returning `false` from the `Closure`:
+Вы можете остановить обработку последующих "кусков" вернув `false` из `Closure`:
 
     DB::table('users')->orderBy('id')->chunk(100, function ($users) {
         // Process the records...
@@ -113,43 +117,43 @@ You may stop further chunks from being processed by returning `false` from the `
     });
 
 <a name="aggregates"></a>
-### Aggregates
+### Агрегатные функции
 
-The query builder also provides a variety of aggregate methods such as `count`, `max`, `min`, `avg`, and `sum`. You may call any of these methods after constructing your query:
+Конструктор запросов содержит множество агрегатных методов, таких как `count`, `max`, `min`, `avg` и `sum`. Вы можете вызывать их после создания своего запроса:
 
     $users = DB::table('users')->count();
 
     $price = DB::table('orders')->max('price');
 
-Of course, you may combine these methods with other clauses:
+Разумеется, вы можете комбинировать эти методы с другими условиями:
 
     $price = DB::table('orders')
                     ->where('finalized', 1)
                     ->avg('price');
 
 <a name="selects"></a>
-## Selects
+## Выборка (select)
 
-#### Specifying A Select Clause
+#### Указание столбцов для выборки
 
-Of course, you may not always want to select all columns from a database table. Using the `select` method, you can specify a custom `select` clause for the query:
+Само собой, не всегда вам необходимо выбрать все столбцы из таблицы БД. Используя метод `select` вы можете указать необходимые столбцы для запроса:
 
     $users = DB::table('users')->select('name', 'email as user_email')->get();
 
-The `distinct` method allows you to force the query to return distinct results:
+Метод `distinct` позволяет вернуть только отличающиеся результаты:
 
     $users = DB::table('users')->distinct()->get();
 
-If you already have a query builder instance and you wish to add a column to its existing select clause, you may use the `addSelect` method:
+Если у вас уже есть экземпляр конструктора запросов и вы хотите добавить столбец к существующему набору для выборки, используйте метод `addSelect`:
 
     $query = DB::table('users')->select('name');
 
     $users = $query->addSelect('age')->get();
 
 <a name="raw-expressions"></a>
-## Raw Expressions
+## Сырые выражения
 
-Sometimes you may need to use a raw expression in a query. These expressions will be injected into the query as strings, so be careful not to create any SQL injection points! To create a raw expression, you may use the `DB::raw` method:
+Иногда вам может понадобиться использовать уже готовое SQL-выражение в вашем запросе. Такие выражения вставляются в запрос напрямую в виде строк, поэтому будьте внимательны и не допускайте возможностей для SQL-инъекций! Для создания сырого выражения используйте метод `DB::raw`:
 
     $users = DB::table('users')
                          ->select(DB::raw('count(*) as user_count, status'))
@@ -158,11 +162,11 @@ Sometimes you may need to use a raw expression in a query. These expressions wil
                          ->get();
 
 <a name="joins"></a>
-## Joins
+## Объединения (join)
 
-#### Inner Join Clause
+#### Inner Join
 
-The query builder may also be used to write join statements. To perform a basic "inner join", you may use the `join` method on a query builder instance. The first argument passed to the `join` method is the name of the table you need to join to, while the remaining arguments specify the column constraints for the join. Of course, as you can see, you can join to multiple tables in a single query:
+Конструктор запросов может быть использован для объединения данных из нескольких таблиц через объединение. Для выполнения обычного объединения "inner join", используйте метод `join` на экземпляре конструктора запросов. Первый аргумент метода `join` — имя таблицы, к которой необходимо присоединить другие, а остальные аргументы указывают условия для присоединения столбцов. Как видите, вы можете объединять несколько таблиц одним запросом:
 
     $users = DB::table('users')
                 ->join('contacts', 'users.id', '=', 'contacts.user_id')
@@ -170,25 +174,25 @@ The query builder may also be used to write join statements. To perform a basic 
                 ->select('users.*', 'contacts.phone', 'orders.price')
                 ->get();
 
-#### Left Join Clause
+#### Left Join
 
-If you would like to perform a "left join" instead of an "inner join", use the `leftJoin` method. The `leftJoin` method has the same signature as the `join` method:
+Для выполнения объединения "left join" вместо "inner join", используйте метод `leftJoin`. Этот метод имеет ту же сигнатуру, что и метод `join`:
 
     $users = DB::table('users')
                 ->leftJoin('posts', 'users.id', '=', 'posts.user_id')
                 ->get();
 
-#### Cross Join Clause
+#### Cross Join
 
-To perform a "cross join" use the `crossJoin` method with the name of the table you wish to cross join to. Cross joins generate a cartesian product between the first table and the joined table:
+Для выполнения объединения "cross join", используйте метод `crossJoin` с именем таблицы, с которой нужно произвести объединение. Этот метод формирует таблицу перекрестным соединением (декартовым произведением) двух таблиц:
 
     $users = DB::table('sizes')
                 ->crossJoin('colours')
                 ->get();
 
-#### Advanced Join Clauses
+#### Сложные условия объединения
 
-You may also specify more advanced join clauses. To get started, pass a `Closure` as the second argument into the `join` method. The `Closure` will receive a `JoinClause` object which allows you to specify constraints on the `join` clause:
+Вы можете указать более сложные условия для объединения. Для начала передайте замыкание вторым аргументом метода `join`. `Closure` будет получать объект `JoinClause`, позволяя вам указать условия для объединения:
 
     DB::table('users')
             ->join('contacts', function ($join) {
@@ -196,7 +200,7 @@ You may also specify more advanced join clauses. To get started, pass a `Closure
             })
             ->get();
 
-If you would like to use a "where" style clause on your joins, you may use the `where` and `orWhere` methods on a join. Instead of comparing two columns, these methods will compare the column against a value:
+Если вы хотите использовать стиль "where" для ваших объединений, то можете использовать для этого методы `where` и `orWhere`. Вместо сравнения двух столбцов эти методы будут сравнивать столбец и значение:
 
     DB::table('users')
             ->join('contacts', function ($join) {
@@ -206,9 +210,9 @@ If you would like to use a "where" style clause on your joins, you may use the `
             ->get();
 
 <a name="unions"></a>
-## Unions
+## Слияния (union)
 
-The query builder also provides a quick way to "union" two queries together. For example, you may create an initial query and use the `union` method to union it with a second query:
+Конструктор запросов позволяет создавать слияния двух запросов вместе. Например, вы можете создать начальный запрос и с помощью метода `union` слить его со вторым запросом:
 
     $first = DB::table('users')
                 ->whereNull('first_name');
@@ -218,24 +222,24 @@ The query builder also provides a quick way to "union" two queries together. For
                 ->union($first)
                 ->get();
 
-> {tip} The `unionAll` method is also available and has the same method signature as `union`.
+> {tip} Также существует метод `unionAll` с аналогичными параметрами.
 
 <a name="where-clauses"></a>
-## Where Clauses
+## Условия Where
 
-#### Simple Where Clauses
+#### Простые условия Where
 
-You may use the `where` method on a query builder instance to add `where` clauses to the query. The most basic call to `where` requires three arguments. The first argument is the name of the column. The second argument is an operator, which can be any of the database's supported operators. Finally, the third argument is the value to evaluate against the column.
+Для добавления в запрос условий `where` используйте метод `where` cна экземпляре конструктора запросов. Самый простой вызов `where` требует три аргумента. Первый — имя столбца. Второй — оператор (любой из поддерживаемых базой данных). Третий — значение для сравнения со столбцом.
 
-For example, here is a query that verifies the value of the "votes" column is equal to 100:
+Например, вот запрос, проверяющий равенство значения столбца "votes" и 100:
 
     $users = DB::table('users')->where('votes', '=', 100)->get();
 
-For convenience, if you simply want to verify that a column is equal to a given value, you may pass the value directly as the second argument to the `where` method:
+Для удобства, если вам необходимо просто проверить равенство значения столбца и данного значения, вы можете передать значение сразу вторым аргументом метода `where`:
 
     $users = DB::table('users')->where('votes', 100)->get();
 
-Of course, you may use a variety of other operators when writing a `where` clause:
+Разумеется, вы можете использовать различные другие операторы при написании условия `where`:
 
     $users = DB::table('users')
                     ->where('votes', '>=', 100)
@@ -249,34 +253,34 @@ Of course, you may use a variety of other operators when writing a `where` claus
                     ->where('name', 'like', 'T%')
                     ->get();
 
-You may also pass an array of conditions to the `where` function:
+В функцию `where` также можно передать массив условий:
 
     $users = DB::table('users')->where([
         ['status', '=', '1'],
         ['subscribed', '<>', '1'],
     ])->get();
 
-#### Or Statements
+#### Условия Or
 
-You may chain where constraints together as well as add `or` clauses to the query. The `orWhere` method accepts the same arguments as the `where` method:
+Вы можете сцепить вместе условия where, а также добавить условия `or` к запросу. Метод `orWhere` принимает те же аргументы, что и метод `where`:
 
     $users = DB::table('users')
                         ->where('votes', '>', 100)
                         ->orWhere('name', 'John')
                         ->get();
 
-#### Additional Where Clauses
+#### Дополнительные условия Where
 
 **whereBetween**
 
-The `whereBetween` method verifies that a column's value is between two values:
+Метод `whereBetween` проверяет, что значение столбца находится в указанном интервале:
 
     $users = DB::table('users')
                         ->whereBetween('votes', [1, 100])->get();
 
 **whereNotBetween**
 
-The `whereNotBetween` method verifies that a column's value lies outside of two values:
+Метод `whereNotBetween` проверяет, что значение столбца находится вне указанного интервала:
 
     $users = DB::table('users')
                         ->whereNotBetween('votes', [1, 100])
@@ -284,13 +288,13 @@ The `whereNotBetween` method verifies that a column's value lies outside of two 
 
 **whereIn / whereNotIn**
 
-The `whereIn` method verifies that a given column's value is contained within the given array:
+Метод `whereIn` проверяет, что значение столбца содержится в данном массиве:
 
     $users = DB::table('users')
                         ->whereIn('id', [1, 2, 3])
                         ->get();
 
-The `whereNotIn` method verifies that the given column's value is **not** contained in the given array:
+Метод `whereNotIn` проверяет, что значение столбца **не** содержится в данном массиве:
 
     $users = DB::table('users')
                         ->whereNotIn('id', [1, 2, 3])
@@ -298,13 +302,13 @@ The `whereNotIn` method verifies that the given column's value is **not** contai
 
 **whereNull / whereNotNull**
 
-The `whereNull` method verifies that the value of the given column is `NULL`:
+Метод `whereNull` проверяет, что значение столбца равно `NULL`:
 
     $users = DB::table('users')
                         ->whereNull('updated_at')
                         ->get();
 
-The `whereNotNull` method verifies that the column's value is not `NULL`:
+Метод `whereNotNull` проверяет, что значение столбца не равно `NULL`:
 
     $users = DB::table('users')
                         ->whereNotNull('updated_at')
@@ -312,25 +316,25 @@ The `whereNotNull` method verifies that the column's value is not `NULL`:
 
 **whereDate / whereMonth / whereDay / whereYear**
 
-The `whereDate` method may be used to compare a column's value against a date:
+Метод `whereDate` служит для сравнения значения столбца с датой:
 
     $users = DB::table('users')
                     ->whereDate('created_at', '2016-12-31')
                     ->get();
 
-The `whereMonth` method may be used to compare a column's value against a specific month of a year:
+Метод `whereMonth` служит для сравнения значения столбца с месяцем в году:
 
     $users = DB::table('users')
                     ->whereMonth('created_at', '12')
                     ->get();
 
-The `whereDay` method may be used to compare a column's value against a specific day of a month:
+Метод `whereDay` служит для сравнения значения столбца с днём месяца:
 
     $users = DB::table('users')
                     ->whereDay('created_at', '31')
                     ->get();
 
-The `whereYear` method may be used to compare a column's value against a specific year:
+Метод `whereYear` служит для сравнения значения столбца с указанным годом:
 
     $users = DB::table('users')
                     ->whereYear('created_at', '2016')
@@ -338,19 +342,19 @@ The `whereYear` method may be used to compare a column's value against a specifi
 
 **whereColumn**
 
-The `whereColumn` method may be used to verify that two columns are equal:
+Для проверки на совпадение двух столбцов можно использовать метод `whereColumn`:
 
     $users = DB::table('users')
                     ->whereColumn('first_name', 'last_name')
                     ->get();
 
-You may also pass a comparison operator to the method:
+В метод также можно передать оператор сравнения:
 
     $users = DB::table('users')
                     ->whereColumn('updated_at', '>', 'created_at')
                     ->get();
 
-The `whereColumn` method can also be passed an array of multiple conditions. These conditions will be joined using the `and` operator:
+В метод `whereColumn` также можно передать массив с несколькими условиями. Эти условия будут объединены оператором `and`:
 
     $users = DB::table('users')
                     ->whereColumn([
@@ -359,9 +363,9 @@ The `whereColumn` method can also be passed an array of multiple conditions. The
                     ])->get();
 
 <a name="parameter-grouping"></a>
-### Parameter Grouping
+### Группировка параметров
 
-Sometimes you may need to create more advanced where clauses such as "where exists" clauses or nested parameter groupings. The Laravel query builder can handle these as well. To get started, let's look at an example of grouping constraints within parenthesis:
+Иногда вам нужно сделать выборку по более сложным параметрам, таким как "where exists" или вложенная группировка условий. Конструктор запросов Laravel справится и с такими запросами. Для начала посмотрим на пример группировки условий в скобках:
 
     DB::table('users')
                 ->where('name', '=', 'John')
@@ -371,14 +375,14 @@ Sometimes you may need to create more advanced where clauses such as "where exis
                 })
                 ->get();
 
-As you can see, passing a `Closure` into the `orWhere` method instructs the query builder to begin a constraint group. The `Closure` will receive a query builder instance which you can use to set the constraints that should be contained within the parenthesis group. The example above will produce the following SQL:
+Как видите, передав `Closure` в метод `orWhere`, мы дали конструктору запросов команду, начать группировку условий. Замыкание получит экземпляр конструктора запросов, который вы можете использовать для задания условий, поместив их в скобки. Приведённый пример выполнит такой SQL-запрос:
 
     select * from users where name = 'John' or (votes > 100 and title <> 'Admin')
 
 <a name="where-exists-clauses"></a>
-### Where Exists Clauses
+### Условия Where Exists
 
-The `whereExists` method allows you to write `where exists` SQL clauses. The `whereExists` method accepts a `Closure` argument, which will receive a query builder instance allowing you to define the query that should be placed inside of the "exists" clause:
+Метод `whereExists` позволяет написать SQL-условия `where exists`. Метод `whereExists` принимает в качестве аргумента замыкание, которое получит экземпляр конструктора запросов, позволяя вам определить запрос для помещения в условие "exists":
 
     DB::table('users')
                 ->whereExists(function ($query) {
@@ -388,7 +392,7 @@ The `whereExists` method allows you to write `where exists` SQL clauses. The `wh
                 })
                 ->get();
 
-The query above will produce the following SQL:
+Этот пример выполнит такой SQL-запрос:
 
     select * from users
     where exists (
@@ -396,9 +400,9 @@ The query above will produce the following SQL:
     )
 
 <a name="json-where-clauses"></a>
-### JSON Where Clauses
+### JSON условия Where
 
-Laravel also supports querying JSON column types on databases that provide support for JSON column types. Currently, this includes MySQL 5.7 and Postgres. To query a JSON column, use the `->` operator:
+Laravel также поддерживает запросы для столбцов типа JSON в тех БД, которые поддерживают тип столбцов JSON. На данный момент это MySQL 5.7 и Postgres. Для запроса JSON столбца используйте оператор `->`:
 
     $users = DB::table('users')
                     ->where('options->language', 'en')
@@ -409,11 +413,11 @@ Laravel also supports querying JSON column types on databases that provide suppo
                     ->get();
 
 <a name="ordering-grouping-limit-and-offset"></a>
-## Ordering, Grouping, Limit, & Offset
+## Упорядочивание, группировка, предел и смещение
 
 #### orderBy
 
-The `orderBy` method allows you to sort the result of the query by a given column. The first argument to the `orderBy` method should be the column you wish to sort by, while the second argument controls the direction of the sort and may be either `asc` or `desc`:
+Метод `orderBy` позволяет вам отсортировать результат запроса по заданному столбцу. Первый аргумент метода `orderBy` — столбец для сортировки по нему, а второй — задаёт направление сортировки и может быть либо `asc`, либо `desc`:
 
     $users = DB::table('users')
                     ->orderBy('name', 'desc')
@@ -421,7 +425,7 @@ The `orderBy` method allows you to sort the result of the query by a given colum
 
 #### latest / oldest
 
-The `latest` and `oldest` methods allow you to easily order results by date. By default, result will be ordered by the `created_at` column. Or, you may pass the column name that you wish to sort by:
+Методы `latest` и `oldest` позволяют легко отсортировать результаты по дате. По умолчанию выполняется сортировка по столбцу `created_at`. Или вы можете передать имя столбца для сортировки по нему:
 
     $user = DB::table('users')
                     ->latest()
@@ -429,7 +433,7 @@ The `latest` and `oldest` methods allow you to easily order results by date. By 
 
 #### inRandomOrder
 
-The `inRandomOrder` method may be used to sort the query results randomly. For example, you may use this method to fetch a random user:
+Для сортировки результатов запроса в случайном порядке можно использовать метод `inRandomOrder`. Например, вы можете использовать этот метод для выбора случайного пользователя:
 
     $randomUser = DB::table('users')
                     ->inRandomOrder()
@@ -437,14 +441,14 @@ The `inRandomOrder` method may be used to sort the query results randomly. For e
 
 #### groupBy / having / havingRaw
 
-The `groupBy` and `having` methods may be used to group the query results. The `having` method's signature is similar to that of the `where` method:
+Методы `groupBy` и `having` используются для группировки результатов запроса. Сигнатура метода `having` аналогична методу `where`:
 
     $users = DB::table('users')
                     ->groupBy('account_id')
                     ->having('account_id', '>', 100)
                     ->get();
 
-The `havingRaw` method may be used to set a raw string as the value of the `having` clause. For example, we can find all of the departments with sales greater than $2,500:
+Метод `havingRaw` используется для передачи сырой строки в условие `having`. Например, мы можем найти все филиалы с объёмом продаж выше $2,500:
 
     $users = DB::table('orders')
                     ->select('department', DB::raw('SUM(price) as total_sales'))
@@ -454,11 +458,11 @@ The `havingRaw` method may be used to set a raw string as the value of the `havi
 
 #### skip / take
 
-To limit the number of results returned from the query, or to skip a given number of results in the query, you may use the `skip` and `take` methods:
+Для ограничения числа возвращаемых результатов из запроса или для пропуска заданного числа результатов в запросе используются методы `skip` и `take`:
 
     $users = DB::table('users')->skip(10)->take(5)->get();
 
-Alternatively, you may use the `limit` and `offset` methods:
+Или вы можете использовать методы `limit` и `offset`:
 
     $users = DB::table('users')
                     ->offset(10)
@@ -466,9 +470,9 @@ Alternatively, you may use the `limit` and `offset` methods:
                     ->get();
 
 <a name="conditional-clauses"></a>
-## Conditional Clauses
+## Условные выражения
 
-Sometimes you may want clauses to apply to a query only when something else is true. For instance you may only want to apply a `where` statement if a given input value is present on the incoming request. You may accomplish this using the `when` method:
+Иногда необходимо применять условие к запросу, только если выполняется какое-то другое условие. Например, выполнять оператор `where`, только если нужное значение есть во входящем запросе. Это можно сделать с помощью метода `when`:
 
     $role = $request->input('role');
 
@@ -479,9 +483,9 @@ Sometimes you may want clauses to apply to a query only when something else is t
                     ->get();
 
 
-The `when` method only executes the given Closure when the first parameter is `true`. If the first parameter is `false`, the Closure will not be executed.
+Метод `when` выполняет данное замыкание, только когда первый параметр равен `true`. Если первый параметр равен `false`, то замыкание не будет выполнено.
 
-You may pass another Closure as the third parameter to the `when` method. This Closure will execute if the first parameter evaluates as `false`. To illustrate how this feature may be used, we will use it to configure the default sorting of a query:
+Вы можете передать ещё одно замыкание третьим параметром метода `when`. Это замыкание будет выполнено, если первый параметр будет иметь значение `false`. Для демонстрации работы этой функции мы используем её для настройки сортировки по умолчанию для запроса:
 
     $sortBy = null;
 
@@ -495,55 +499,55 @@ You may pass another Closure as the third parameter to the `when` method. This C
 
 
 <a name="inserts"></a>
-## Inserts
+## Вставка (insert)
 
-The query builder also provides an `insert` method for inserting records into the database table. The `insert` method accepts an array of column names and values:
+Конструктор запросов предоставляет метод `insert` для вставки записей в таблицу БД. Метод `insert` принимает массив имён столбцов и значений:
 
     DB::table('users')->insert(
         ['email' => 'john@example.com', 'votes' => 0]
     );
 
-You may even insert several records into the table with a single call to `insert` by passing an array of arrays. Each array represents a row to be inserted into the table:
+Вы можете вставить в таблицу сразу несколько записей одним вызовом `insert`, передав ему массив массивов, каждый из которых — строка для вставки в таблицу:
 
     DB::table('users')->insert([
         ['email' => 'taylor@example.com', 'votes' => 0],
         ['email' => 'dayle@example.com', 'votes' => 0]
     ]);
 
-#### Auto-Incrementing IDs
+#### Автоинкрементные ID
 
-If the table has an auto-incrementing id, use the `insertGetId` method to insert a record and then retrieve the ID:
+Если в таблице есть автоинкрементный ID, используйте метод `insertGetId` для вставки записи и получения её ID:
 
     $id = DB::table('users')->insertGetId(
         ['email' => 'john@example.com', 'votes' => 0]
     );
 
-> {note} When using PostgreSQL the insertGetId method expects the auto-incrementing column to be named `id`. If you would like to retrieve the ID from a different "sequence", you may pass the sequence name as the second parameter to the `insertGetId` method.
+> {note} При использовании метода insertGetId для PostgreSQL автоинкрементное поле должно иметь имя `id`. Если вы хотите получить ID из другого поля таблицы, вы можете передать его имя вторым аргументом.
 
 <a name="updates"></a>
-## Updates
+## Обновления (update)
 
-Of course, in addition to inserting records into the database, the query builder can also update existing records using the `update` method. The `update` method, like the `insert` method, accepts an array of column and value pairs containing the columns to be updated. You may constrain the `update` query using `where` clauses:
+Разумеется, кроме вставки записей в БД конструктор запросов может и изменять существующие строки с помощью метода `update`. Метод `update`, как и метод `insert` , принимает массив столбцов и пар значений, содержащих столбцы для обновления. Вы можете ограничить запрос `update` условиями `where` :
 
     DB::table('users')
                 ->where('id', 1)
                 ->update(['votes' => 1]);
 
 <a name="updating-json-columns"></a>
-### Updating JSON Columns
+### Обновление JSON-столбцов
 
-When updating a JSON column, you should use `->` syntax to access the appropriate key in the JSON object. This operation is only supported on databases that support JSON columns:
+При обновлении JSON-столбцов используйте синтаксис `->` для обращения к нужному ключу в JSON-объекте. Эта операция поддерживается только в БД, поддерживающих JSON-столбцы:
 
     DB::table('users')
                 ->where('id', 1)
                 ->update(['options->enabled' => true]);
 
 <a name="increment-and-decrement"></a>
-### Increment & Decrement
+### Increment и Decrement
 
-The query builder also provides convenient methods for incrementing or decrementing the value of a given column. This is simply a shortcut, providing a more expressive and terse interface compared to manually writing the `update` statement.
+Конструктор запросов предоставляет удобные методы для увеличения и уменьшения значений заданных столбцов. Это просто более выразительный и краткий способ по сравнению с написанием оператора `update` вручную.
 
-Both of these methods accept at least one argument: the column to modify. A second argument may optionally be passed to control the amount by which the column should be incremented or decremented:
+Оба метода принимают один обязательный аргумент — столбец для изменения. Второй аргумент может быть передан для указания, на какую величину необходимо изменить значение столбца:
 
     DB::table('users')->increment('votes');
 
@@ -553,30 +557,30 @@ Both of these methods accept at least one argument: the column to modify. A seco
 
     DB::table('users')->decrement('votes', 5);
 
-You may also specify additional columns to update during the operation:
+Вы также можете указать дополнительные поля для изменения:
 
     DB::table('users')->increment('votes', 1, ['name' => 'John']);
 
 <a name="deletes"></a>
-## Deletes
+## Удаления (delete)
 
-The query builder may also be used to delete records from the table via the `delete` method. You may constrain `delete` statements by adding `where` clauses before calling the `delete` method:
+Конструктор запросов предоставляет метод `delete` для удаления записей из таблиц. Вы можете ограничить оператор `delete`, добавив условия `where` перед его вызовом
 
     DB::table('users')->delete();
 
     DB::table('users')->where('votes', '>', 100)->delete();
 
-If you wish to truncate the entire table, which will remove all rows and reset the auto-incrementing ID to zero, you may use the `truncate` method:
+Если вы хотите очистить таблицу (усечение), удалив все строки и обнулив счётчик ID, используйте метод `truncate`:
 
     DB::table('users')->truncate();
 
 <a name="pessimistic-locking"></a>
-## Pessimistic Locking
+## Пессимистическое блокирование
 
-The query builder also includes a few functions to help you do "pessimistic locking" on your `select` statements. To run the statement with a "shared lock", you may use the `sharedLock` method on a query. A shared lock prevents the selected rows from being modified until your transaction commits:
+В конструкторе запросов есть несколько функций, которые помогают делать "пессимистическое блокирование" для ваших операторов SELECT. Для запуска оператора SELECT с "разделяемой блокировкой" вы можете использовать в запросе метод `sharedLock`. Разделяемая блокировка предотвращает изменение выбранных строк до конца транзакции:
 
     DB::table('users')->where('votes', '>', 100)->sharedLock()->get();
 
-Alternatively, you may use the `lockForUpdate` method. A "for update" lock prevents the rows from being modified or from being selected with another shared lock:
+Или вы можете использовать метод `lockForUpdate`. Блокировка "для изменения" предотвращает изменение строк и их выбор другими разделяемыми блокировками:
 
     DB::table('users')->where('votes', '>', 100)->lockForUpdate()->get();
