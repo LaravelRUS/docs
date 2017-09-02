@@ -1,63 +1,67 @@
-# Errors & Logging
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-    - [Error Detail](#error-detail)
-    - [Log Storage](#log-storage)
-    - [Log Severity Levels](#log-severity-levels)
-    - [Custom Monolog Configuration](#custom-monolog-configuration)
-- [The Exception Handler](#the-exception-handler)
-    - [Report Method](#report-method)
-    - [Render Method](#render-method)
-- [HTTP Exceptions](#http-exceptions)
-    - [Custom HTTP Error Pages](#custom-http-error-pages)
-- [Logging](#logging)
+---
+
+# Ошибки и логирование
+
+- [Введение](#introduction)
+- [Настройка](#configuration)
+    - [Детализация ошибок](#error-detail)
+    - [Хранилище логов](#log-storage)
+    - [Коды серьёзности логов](#log-severity-levels)
+    - [Пользовательская настройка Monolog](#custom-monolog-configuration)
+- [Обработчик исключений](#the-exception-handler)
+    - [Метод Report](#report-method)
+    - [Метод Render](#render-method)
+- [HTTP-исключения](#http-exceptions)
+    - [Пользовательские страницы HTTP-ошибок](#custom-http-error-pages)
+- [Логгирование](#logging)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-When you start a new Laravel project, error and exception handling is already configured for you. The `App\Exceptions\Handler` class is where all exceptions triggered by your application are logged and then rendered back to the user. We'll dive deeper into this class throughout this documentation.
+Когда вы начинаете новый Laravel проект, обработка ошибок и исключений уже настроена для вас. Все происходящие в вашем приложении исключения записываются в журнал и отображаются пользователю в классе `App\Exceptions\Handler`. В этой документации мы подробно рассмотрим этот класс.
 
-For logging, Laravel utilizes the [Monolog](https://github.com/Seldaek/monolog) library, which provides support for a variety of powerful log handlers. Laravel configures several of these handlers for you, allowing you to choose between a single log file, rotating log files, or writing error information to the system log.
+Для логгирования Laravel использует библиотеку [Monolog](https://github.com/Seldaek/monolog), которая обеспечивает поддержку различных мощных обработчиков логов. В Laravel настроены несколько из них, благодаря чему вы можете выбрать между единым файлом журнала, ротируемыми файлами журналов и записью информации в системный журнал.
 
 <a name="configuration"></a>
-## Configuration
+## Настройка
 
 <a name="error-detail"></a>
-### Error Detail
+### Детализация ошибок
 
-The `debug` option in your `config/app.php` configuration file determines how much information about an error is actually displayed to the user. By default, this option is set to respect the value of the `APP_DEBUG` environment variable, which is stored in your `.env` file.
+Параметр `debug` в файле настроек `config/app.php` определяет, сколько информации об ошибке показывать пользователю. По умолчанию этот параметр установлен в соответствии со значением переменной среды `APP_DEBUG`, которая хранится в файле `.env`.
 
-For local development, you should set the `APP_DEBUG` environment variable to `true`. In your production environment, this value should always be `false`. If the value is set to `true` in production, you risk exposing sensitive configuration values to your application's end users.
+Для локальной разработки вам следует установить переменную среды `APP_DEBUG` в значение `true`. В продакшн-среде эта переменная всегда должна иметь значение `false`. Если значение равно `true`, на продакшн-сервере, вы рискуете раскрыть важные значения настроек вашим конечным пользователям.
 
 <a name="log-storage"></a>
-### Log Storage
+### Хранилище логов
 
-Out of the box, Laravel supports writing log information to `single` files, `daily` files, the `syslog`, and the `errorlog`. To configure which storage mechanism Laravel uses, you should modify the `log` option in your `config/app.php` configuration file. For example, if you wish to use daily log files instead of a single file, you should set the `log` value in your `app` configuration file to `daily`:
+Изначально Laravel поддерживает запись журналов в единые файлы `single`, в отдельные файлы для каждого дня `daily`, в `syslog` и `errorlog`. Для использования определённого механизма хранения вам надо изменить параметр `log` в файле `config/app.php`. Например, если вы хотите использовать ежедневные файлы логов вместо единого файла, вам надо установить значение `log` равное `daily` в файле настроек `app`:
 
     'log' => 'daily'
 
-#### Maximum Daily Log Files
+#### Максимальное число ежедневных файлов логов
 
-When using the `daily` log mode, Laravel will only retain five days of log files by default. If you want to adjust the number of retained files, you may add a `log_max_files` configuration value to your `app` configuration file:
+При использовании режима `daily` Laravel по умолчанию хранит логи только за последние пять дней. Если вы хотите изменить число хранимых файлов, добавьте в файл `app` значение для параметра `log_max_files`:
 
     'log_max_files' => 30
 
 <a name="log-severity-levels"></a>
-### Log Severity Levels
+### Коды серьёзности логов
 
-When using Monolog, log messages may have different levels of severity. By default, Laravel writes all log levels to storage. However, in your production environment, you may wish to configure the minimum severity that should be logged by adding the `log_level` option to your `app.php` configuration file.
+При использовании Monolog сообщения в журнале могут иметь разные уровни серьёзности. По умолчанию Laravel сохраняет в журнал события всех уровней. Но на продакшн-сервере вы можете задать минимальный уровень серьёзности, который необходимо заносить в журнал, добавив параметр `log_level` в конфиг `app.php`.
 
-Once this option has been configured, Laravel will log all levels greater than or equal to the specified severity. For example, a default `log_level` of `error` will log **error**, **critical**, **alert**, and **emergency** messages:
+После задания этого параметра Laravel будет записывать события всех уровней начиная с указанного и выше. Например, при `log_level` равном `error` будут записываться события **error**, **critical**, **alert** и **emergency**:
 
     'log_level' => env('APP_LOG_LEVEL', 'error'),
 
-> {tip} Monolog recognizes the following severity levels - from least severe to most severe: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`.
+> {tip} В Monolog используются следующие уровни серьёзности — от меньшего к большему: `debug`, `info`, `notice`, `warning`, `error`, `critical`, `alert`, `emergency`.
 
 <a name="custom-monolog-configuration"></a>
-### Custom Monolog Configuration
+### Пользовательская настройка Monolog
 
-If you would like to have complete control over how Monolog is configured for your application, you may use the application's `configureMonologUsing` method. You should place a call to this method in your `bootstrap/app.php` file right before the `$app` variable is returned by the file:
+Если вы хотите иметь полный контроль над конфигурацией Monolog для вашего приложения, вы можете использовать метод приложения `configureMonologUsing`. Вызов этого метода необходимо поместить в файл `bootstrap/app.php` прямо перед тем, как в нём возвращается переменная `$app`:
 
     $app->configureMonologUsing(function ($monolog) {
         $monolog->pushHandler(...);
@@ -66,17 +70,17 @@ If you would like to have complete control over how Monolog is configured for yo
     return $app;
 
 <a name="the-exception-handler"></a>
-## The Exception Handler
+## Обработчик исключений
 
 <a name="report-method"></a>
-### The Report Method
+### Метод Report
 
-All exceptions are handled by the `App\Exceptions\Handler` class. This class contains two methods: `report` and `render`. We'll examine each of these methods in detail. The `report` method is used to log exceptions or send them to an external service like [Bugsnag](https://bugsnag.com) or [Sentry](https://github.com/getsentry/sentry-laravel). By default, the `report` method simply passes the exception to the base class where the exception is logged. However, you are free to log exceptions however you wish.
+Все исключения обрабатываются классом `App\Exceptions\Handler`. Этот класс содержит два метода: `report` и `render`. Рассмотрим каждый из них подробнее. Метод `report` используется для занесения исключений в журнал или для отправки их во внешний сервис, такой как [Bugsnag](https://bugsnag.com) или [Sentry](https://github.com/getsentry/sentry-laravel). По умолчанию метод `report` просто передаёт исключение в базовую реализацию родительского класса, где это исключение зафиксировано. Но вы можете регистрировать исключения как пожелаете.
 
-For example, if you need to report different types of exceptions in different ways, you may use the PHP `instanceof` comparison operator:
+Например, если вам необходимо сообщать о различных типах исключений разными способами, вы можете использовать оператор сравнения PHP `instanceof`:
 
     /**
-     * Report or log an exception.
+     * Сообщить или зарегистрировать исключение.
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
@@ -92,12 +96,12 @@ For example, if you need to report different types of exceptions in different wa
         return parent::report($exception);
     }
 
-#### Ignoring Exceptions By Type
+#### Игнорирование исключений заданного типа
 
-The `$dontReport` property of the exception handler contains an array of exception types that will not be logged. For example, exceptions resulting from 404 errors, as well as several other types of errors, are not written to your log files. You may add other exception types to this array as needed:
+Свойство обработчика исключений `$dontReport` содержит массив с типами исключений, которые не будут заноситься в журнал. Например, исключения, возникающие при ошибке 404, а также при некоторых других типах ошибок, не записываются в журналы. При необходимости вы можете включить другие типы исключений в этот массив:
 
     /**
-     * A list of the exception types that should not be reported.
+     * Список типов исключений, о которых не надо сообщать.
      *
      * @var array
      */
@@ -110,12 +114,12 @@ The `$dontReport` property of the exception handler contains an array of excepti
     ];
 
 <a name="render-method"></a>
-### The Render Method
+### Метод Render
 
-The `render` method is responsible for converting a given exception into an HTTP response that should be sent back to the browser. By default, the exception is passed to the base class which generates a response for you. However, you are free to check the exception type or return your own custom response:
+Метод `render`отвечает за конвертацию исключения в HTTP-отклик, который должен быть возвращён браузеру. По умолчанию исключение передаётся в базовый класс, который генерирует для вас отклик. Но вы можете проверить тип исключения или вернуть ваш собственный отклик:
 
     /**
-     * Render an exception into an HTTP response.
+     * Отображение HTTP-оклика для исключения.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
@@ -131,27 +135,27 @@ The `render` method is responsible for converting a given exception into an HTTP
     }
 
 <a name="http-exceptions"></a>
-## HTTP Exceptions
+## HTTP-исключения
 
-Some exceptions describe HTTP error codes from the server. For example, this may be a "page not found" error (404), an "unauthorized error" (401) or even a developer generated 500 error. In order to generate such a response from anywhere in your application, you may use the `abort` helper:
+Некоторые исключения описывают коды HTTP-ошибок от сервера. Например, это может быть ошибка "страница не найдена" (404), "ошибка авторизации" (401) или даже сгенерированная разработчиком ошибка 500. Для возврата такого отклика из любого места в приложении можете использовать хелпер `abort`:
 
     abort(404);
 
-The `abort` helper will immediately raise an exception which will be rendered by the exception handler. Optionally, you may provide the response text:
+Хелпер `abort` немедленно создаёт исключение, которое будет отрисовано обработчиком исключений. Или вы можете предоставить такой отклик:
 
     abort(403, 'Unauthorized action.');
 
 <a name="custom-http-error-pages"></a>
-### Custom HTTP Error Pages
+### Пользовательские страницы HTTP-ошибок
 
-Laravel makes it easy to display custom error pages for various HTTP status codes. For example, if you wish to customize the error page for 404 HTTP status codes, create a `resources/views/errors/404.blade.php`. This file will be served on all 404 errors generated by your application. The views within this directory should be named to match the HTTP status code they correspond to. The `HttpException` instance raised by the `abort` function will be passed to the view as an `$exception` variable:
+В Laravel можно легко возвращать свои собственные страницы для различных кодов HTTP-ошибок. Например, для выдачи собственной страницы для ошибки 404 создайте файл `resources/views/errors/404.blade.php`. Этот файл будет использован для всех ошибок 404, генерируемых вашим приложением. Представления в этой папке должны иметь имена, соответствующие кодам ошибок. Экземпляр `HttpException`, созданный функцией `abort`, будет передан в представление как переменная `$exception`:
 
     <h2>{{ $exception->getMessage() }}</h2>
 
 <a name="logging"></a>
-## Logging
+## Логгирование
 
-Laravel provides a simple abstraction layer on top of the powerful [Monolog](https://github.com/seldaek/monolog) library. By default, Laravel is configured to create a log file for your application in the `storage/logs` directory. You may write information to the logs using the `Log` [facade](/docs/{{version}}/facades):
+Laravel обеспечивает простой простой уровень абстракции над мощной библиотекой [Monolog](https://github.com/seldaek/monolog). По умолчанию Laravel настроен на создание файла журнала в директории `storage/logs`. Вы можете записывать информацию в журнал при помощи [фасада](/docs/{{version}}/facades) `Log`:
 
     <?php
 
@@ -164,7 +168,7 @@ Laravel provides a simple abstraction layer on top of the powerful [Monolog](htt
     class UserController extends Controller
     {
         /**
-         * Show the profile for the given user.
+         * Показать профиль данного пользователя.
          *
          * @param  int  $id
          * @return Response
@@ -177,7 +181,7 @@ Laravel provides a simple abstraction layer on top of the powerful [Monolog](htt
         }
     }
 
-The logger provides the eight logging levels defined in [RFC 5424](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info** and **debug**.
+Регистратор событий предоставляет восемь уровней логгирования, как описано в [RFC 5424](https://tools.ietf.org/html/rfc5424): **emergency**, **alert**, **critical**, **error**, **warning**, **notice**, **info** и **debug**.
 
     Log::emergency($message);
     Log::alert($message);
@@ -188,14 +192,14 @@ The logger provides the eight logging levels defined in [RFC 5424](https://tools
     Log::info($message);
     Log::debug($message);
 
-#### Contextual Information
+#### Контекстная информация
 
-An array of contextual data may also be passed to the log methods. This contextual data will be formatted and displayed with the log message:
+Также в методы логгирования можно передать массив контекстных данных:
 
     Log::info('User failed to login.', ['id' => $user->id]);
 
-#### Accessing The Underlying Monolog Instance
+#### Обращение к расположенному ниже экземпляру Monolog
 
-Monolog has a variety of additional handlers you may use for logging. If needed, you may access the underlying Monolog instance being used by Laravel:
+В Monolog доступно множество дополнительных обработчиков для журналов. При необходимости вы можете получить доступ к расположенному ниже экземпляру Monolog, используемому в Laravel:
 
     $monolog = Log::getMonolog();
