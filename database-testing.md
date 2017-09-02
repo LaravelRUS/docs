@@ -1,21 +1,25 @@
-# Database Testing
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Introduction](#introduction)
-- [Resetting The Database After Each Test](#resetting-the-database-after-each-test)
-    - [Using Migrations](#using-migrations)
-    - [Using Transactions](#using-transactions)
-- [Writing Factories](#writing-factories)
-    - [Factory States](#factory-states)
-- [Using Factories](#using-factories)
-    - [Creating Models](#creating-models)
-    - [Persisting Models](#persisting-models)
-    - [Relationships](#relationships)
-- [Available Assertions](#available-assertions)
+---
+
+# Тестирование БД
+
+- [Введение](#introduction)
+- [Сброс БД после каждого теста](#resetting-the-database-after-each-test)
+    - [Использование миграций](#using-migrations)
+    - [Использование транзакций](#using-transactions)
+- [Написание фабрик](#writing-factories)
+    - [Состояния фабрик](#factory-states)
+- [Использование фабрик](#using-factories)
+    - [Создание моделей](#creating-models)
+    - [Сохранение моделей](#persisting-models)
+    - [Отношения](#relationships)
+- [Доступные утверждения](#available-assertions)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel provides a variety of helpful tools to make it easier to test your database driven applications. First, you may use the `assertDatabaseHas` helper to assert that data exists in the database matching a given set of criteria. For example, if you would like to verify that there is a record in the `users` table with the `email` value of `sally@example.com`, you can do the following:
+Laravel предоставляет множество полезных инструментов, чтобы упростить тестирование приложений, основанных на базах данных. Во-первых, можно использовать хелпер `assertDatabaseHas`, чтобы утверждать, что данные существуют в БД, соответствующей заданному набору критериев. Например, если вам нужно проверить, что в таблице `users` есть `email` со значением `sally@example.com`, то можно сделать следующее:
 
     public function testDatabase()
     {
@@ -26,19 +30,19 @@ Laravel provides a variety of helpful tools to make it easier to test your datab
         ]);
     }
 
-You can also used the `assertDatabaseMissing` helper to assert that data does not exist in the database.
+Также можно использовать хелпер `assertDatabaseMissing`, чтобы утверждать, что данные не существуют в базе данных.
 
-Of course, the `assertDatabaseHas` method and other helpers like it are for convenience. You are free to use any of PHPUnit's built-in assertion methods to supplement your tests.
+Конечно, метод `assertDatabaseHas` и другие хелперы, похожие на него, используются для удобства. Вы можете любой встроенный метод утверждений PHPUnit для своих тестов.
 
 <a name="resetting-the-database-after-each-test"></a>
-## Resetting The Database After Each Test
+## Сброс БД после каждого теста
 
-It is often useful to reset your database after each test so that data from a previous test does not interfere with subsequent tests.
+Часто полезно сбрасывать свою БД после каждого теста, так чтобы данные из предыдущего теста не мешали последующим тестам.
 
 <a name="using-migrations"></a>
-### Using Migrations
+### Использование миграций
 
-One approach to resetting the database state is to rollback the database after each test and migrate it before the next test. Laravel provides a simple `DatabaseMigrations` trait that will automatically handle this for you. Simply use the trait on your test class and everything will be handled for you:
+Один из способов сброса состояния базы данных - откат базы данных после каждого теста и ей миграция перед следующим тестом. В Laravel есть простой трейт `DatabaseMigrations`, который автоматически обработает это за вас. Просто используйте трейт на классе своего теста и все будет обработано за вас:
 
     <?php
 
@@ -67,9 +71,9 @@ One approach to resetting the database state is to rollback the database after e
     }
 
 <a name="using-transactions"></a>
-### Using Transactions
+### Использование транзакций
 
-Another approach to resetting the database state is to wrap each test case in a database transaction. Again, Laravel provides a convenient `DatabaseTransactions` trait that will automatically handle this for you:
+Другой подход к сбросу состояния БД - обернуть каждый тест-кейс в транзакцию базы данных. Опять же, в Laravel есть удобный трейт `DatabaseTransactions`, который автоматически сделает всю работу за вас:
 
     <?php
 
@@ -97,12 +101,12 @@ Another approach to resetting the database state is to wrap each test case in a 
         }
     }
 
-> {note} By default, this trait will only wrap the default database connection in a transaction. If your application is using multiple database connections, you should define a `$connectionsToTransact` property on your test class. This property should be an array of connection names to execute the transactions on.
+> {note} По умолчанию этот трейт будет оборачивать в транзакцию только подключение БД по умолчанию. Если ваше приложение использует несколько БД-подключений, нужно задать свойство `$connectionsToTransact` в вашем тестовом классе. Это свойство должно быть массивом имен подключений, в которых следует производить транзакции.
 
 <a name="writing-factories"></a>
-## Writing Factories
+## Написание фабрик
 
-When testing, you may need to insert a few records into your database before executing your test. Instead of manually specifying the value of each column when you create this test data, Laravel allows you to define a default set of attributes for each of your [Eloquent models](/docs/{{version}}/eloquent) using model factories. To get started, take a look at the `database/factories/ModelFactory.php` file in your application. Out of the box, this file contains one factory definition:
+Во время тестирования может потребоваться вставить в вашу БД несколько записей перед выполнением теста. Вместо того, чтобы указывать значение каждой колонки вручную во время создания тестовых данных, Laravel позволяет задать набор атрибутов по умолчанию для каждой из ваших [моделей Eloquent](/docs/{{version}}/eloquent), используя фабрики моделей. Для начала взгляните на файл `database/factories/ModelFactory.php` в вашем приложении. Изначально в этом файле содержится только одно определение фабрики:
 
     $factory->define(App\User::class, function (Faker\Generator $faker) {
         static $password;
@@ -115,14 +119,14 @@ When testing, you may need to insert a few records into your database before exe
         ];
     });
 
-Within the Closure, which serves as the factory definition, you may return the default test values of all attributes on the model. The Closure will receive an instance of the [Faker](https://github.com/fzaninotto/Faker) PHP library, which allows you to conveniently generate various kinds of random data for testing.
+В рамках функции Closure, которая служит определением фабрики, можно возвращать тестовые значения по умолчанию для всех атрибутов модели. Функция Closure получит экземпляр PHP-библиотеки [Faker](https://github.com/fzaninotto/Faker), которая позволяет удобно генерировать различные типы рандомных данных для тестирования.
 
-Of course, you are free to add your own additional factories to the `ModelFactory.php` file. You may also create additional factory files for each model for better organization. For example, you could create `UserFactory.php` and `CommentFactory.php` files within your `database/factories` directory. All of the files within the `factories` directory will automatically be loaded by Laravel.
+Конечно, можно добавить свои дополнительные фабрики к файлу `ModelFactory.php`. Вы можете также создать дополнительные файлы фабрик для каждой модели с целью лучшей организации. Например, можно создать файлы `UserFactory.php` и `CommentFactory.php` в директории `database/factories`. Все эти файлы в директории `factories` будут автоматически загружены Laravel.
 
 <a name="factory-states"></a>
-### Factory States
+### Состояния фабрик
 
-States allow you to define discrete modifications that can be applied to your model factories in any combination. For example, your `User` model might have a `delinquent` state that modifies one of its default attribute values. You may define your state transformations using the `state` method:
+Состояния позволяют определить дискретные модификации, которые можно применить к фабрикам ваших моделей в любой комбинации. Например, у вашей модели `User` может быть состояние `delinquent`, которое изменяет одно из его значений атрибутов по умолчанию. Трансформации состояний можно задать методом `state`:
 
     $factory->state(App\User::class, 'delinquent', function ($faker) {
         return [
@@ -131,12 +135,12 @@ States allow you to define discrete modifications that can be applied to your mo
     });
 
 <a name="using-factories"></a>
-## Using Factories
+## Использование фабрик
 
 <a name="creating-models"></a>
-### Creating Models
+### Создание моделей
 
-Once you have defined your factories, you may use the global `factory` function in your tests or seed files to generate model instances. So, let's take a look at a few examples of creating models. First, we'll use the `make` method to create models but not save them to the database:
+Как только определены ваши фабрики, можно использовать глобальную функцию `factory` в ваших тестах или файлах пополнения БД для генерирования экземпляров моделей. Давайте рассмотрим несколько примеров создания моделей. Во-первых, мы будем использовать метод `make` для создания моделей, но не будем сохранять их в базу данных:
 
     public function testDatabase()
     {
@@ -145,31 +149,31 @@ Once you have defined your factories, you may use the global `factory` function 
         // Use model in tests...
     }
 
-You may also create a Collection of many models or create models of a given type:
+Ещё можно создать коллекцию из множества моделей или создать модели заданного типа:
 
     // Create three App\User instances...
     $users = factory(App\User::class, 3)->make();
 
-#### Applying States
+#### Применение состояний
 
-You may also apply any of your [states](#factory-states) to the models. If you would like to apply multiple state transformations to the models, you should specify the name of each state you would like to apply:
+Можно применить любое из ваших [состояний](#factory-states) к моделям. Если нужно применить несколько трансформаций состояний к моделям, вам следует указать название каждого состояния, которое желаете применить:
 
     $users = factory(App\User::class, 5)->states('delinquent')->make();
 
     $users = factory(App\User::class, 5)->states('premium', 'delinquent')->make();
 
-#### Overriding Attributes
+#### Переопределение атрибутов
 
-If you would like to override some of the default values of your models, you may pass an array of values to the `make` method. Only the specified values will be replaced while the rest of the values remain set to their default values as specified by the factory:
+Если вам нужно переопределить некоторые из значений своих моделей по умолчанию, можно передать массив значений методу `make`. Будут заменены только указанные значения, в то время как оставшиеся значения будут без изменений, как указано фабрикой:
 
     $user = factory(App\User::class)->make([
         'name' => 'Abigail',
     ]);
 
 <a name="persisting-models"></a>
-### Persisting Models
+### Сохранение моделей
 
-The `create` method not only creates the model instances but also saves them to the database using Eloquent's `save` method:
+Метод `create` не только создает экземпляры моделей, но также и сохраняет из в базу данных, используя Eloquent-метод `save`:
 
     public function testDatabase()
     {
@@ -182,16 +186,16 @@ The `create` method not only creates the model instances but also saves them to 
         // Use model in tests...
     }
 
-You may override attributes on the model by passing an array to the `create` method:
+Можно переопределить атрибуты модели, передав массив методу `create`:
 
     $user = factory(App\User::class)->create([
         'name' => 'Abigail',
     ]);
 
 <a name="relationships"></a>
-### Relationships
+### Отношения
 
-In this example, we'll attach a relation to some created models. When using the `create` method to create multiple models, an Eloquent [collection instance](/docs/{{version}}/eloquent-collections) is returned, allowing you to use any of the convenient functions provided by the collection, such as `each`:
+В данном примере мы прикрепи отношение к некоторым созданным моделям. При использовании метода `create` для создания нескольких моделей, возвращается [экземпляр коллекции](/docs/{{version}}/eloquent-collections) Eloquent, позволяя вам использовать любые из удобных функций, предоставляемых коллекцией, таких как `each`:
 
     $users = factory(App\User::class, 3)
                ->create()
@@ -199,9 +203,9 @@ In this example, we'll attach a relation to some created models. When using the 
                     $u->posts()->save(factory(App\Post::class)->make());
                 });
 
-#### Relations & Attribute Closures
+#### Отношения и замыкания атрибутов
 
-You may also attach relationships to models using Closure attributes in your factory definitions. For example, if you would like to create a new `User` instance when creating a `Post`, you may do the following:
+К моделям также можно прикрепить отношения, используя атрибуты Closure в ваших определениях фабрики. Например, если вы бы хотели создать новый экземпляр `User` при создании `Post`, можно сделать следующее:
 
     $factory->define(App\Post::class, function ($faker) {
         return [
@@ -213,7 +217,7 @@ You may also attach relationships to models using Closure attributes in your fac
         ];
     });
 
-These Closures also receive the evaluated attribute array of the factory that defines them:
+Эти функции-замыкания также получают оцененный массив атрибутов фабрики, который их определяет:
 
     $factory->define(App\Post::class, function ($faker) {
         return [
@@ -229,12 +233,12 @@ These Closures also receive the evaluated attribute array of the factory that de
     });
 
 <a name="available-assertions"></a>
-## Available Assertions
+## Доступные утверждения
 
-Laravel provides several database assertions for your [PHPUnit](https://phpunit.de/) tests:
+Laravel предоставляет несколько БД-утверждения для ваших тестов [PHPUnit](https://phpunit.de/):
 
-Method  | Description
+Метод  | Описание
 ------------- | -------------
-`$this->assertDatabaseHas($table, array $data);`  |  Assert that a table in the database contains the given data.
-`$this->assertDatabaseMissing($table, array $data);`  |  Assert that a table in the database does not contain the given data.
-`$this->assertSoftDeleted($table, array $data);`  |  Assert that the given record has been soft deleted.
+`$this->assertDatabaseHas($table, array $data);`  |  Таблица в БД содержит заданные данные.
+`$this->assertDatabaseMissing($table, array $data);`  |  Таблица в БД не содержит заданные данные.
+`$this->assertSoftDeleted($table, array $data);`  |  Заданная запись была мягко удалена.
