@@ -1,23 +1,27 @@
-# Contribution Guide
+git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
-- [Bug Reports](#bug-reports)
-- [Core Development Discussion](#core-development-discussion)
-- [Which Branch?](#which-branch)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [Coding Style](#coding-style)
+---
+
+# Помощь в разработке фреймворка
+
+- [Сообщения о багах](#bug-reports)
+- [Обсуждение разработки](#core-development-discussion)
+- [Какая ветка?](#which-branch)
+- [Уязвимости безопасности](#security-vulnerabilities)
+- [Стиль оформления кода](#coding-style)
     - [PHPDoc](#phpdoc)
     - [StyleCI](#styleci)
 
 <a name="bug-reports"></a>
-## Bug Reports
+## Сообщения о багах
 
-To encourage active collaboration, Laravel strongly encourages pull requests, not just bug reports. "Bug reports" may also be sent in the form of a pull request containing a failing test.
+Чтобы стимулировать активное сотрудничество, Laravel настоятельно рекомендует отправлять запросы на исправления и улучшения, а не только отчёты об ошибках. "Отчёт о баге" также может быть отправлен в виде запроса на улучшение, содержащего проваленный тест.
 
-However, if you file a bug report, your issue should contain a title and a clear description of the issue. You should also include as much relevant information as possible and a code sample that demonstrates the issue. The goal of a bug report is to make it easy for yourself - and others - to replicate the bug and develop a fix.
+А если вы отправляете отчёт об ошибке, то ваша заявка должна содержать заголовок и понятное описание проблемы. Вам следует прикрепить как можно больше сопутствующей информации и пример кода, демонстрирующий проблему. Цель отчёта — упростить вам (и остальным) возможность воспроизвести ошибку и разработать исправление.
 
-Remember, bug reports are created in the hope that others with the same problem will be able to collaborate with you on solving it. Do not expect that the bug report will automatically see any activity or that others will jump to fix it. Creating a bug report serves to help yourself and others start on the path of fixing the problem.
+Помните, отчёт об ошибке создаётся с целью объединения людей, столкнувшихся с той же проблемой, для её решения. Не ждите, что отчёт автоматически приведёт к скорейшему решению, и остальные разработчики кинуться решать проблему. Создание отчёта служит началом для вас и остальных в решении проблемы.
 
-The Laravel source code is managed on GitHub, and there are repositories for each of the Laravel projects:
+Исходный код Laravel расположен на Github. Вот репозитории каждого из проектов Laravel:
 
 <div class="content-list" markdown="1">
 - [Laravel Application](https://github.com/laravel/laravel)
@@ -36,40 +40,40 @@ The Laravel source code is managed on GitHub, and there are repositories for eac
 </div>
 
 <a name="core-development-discussion"></a>
-## Core Development Discussion
+## Обсуждение разработки
 
-You may propose new features or improvements of existing Laravel behavior in the Laravel Internals [issue board](https://github.com/laravel/internals/issues). If you propose a new feature, please be willing to implement at least some of the code that would be needed to complete the feature.
+Вы можете предложить новую функцию или исправление существующего поведения Laravel на внутренней [доске проблем](https://github.com/laravel/internals/issues) Laravel Internals. Пожалуйста, когда предлагаете новую функцию, напишите хотя бы часть необходимого для её реализации кода.
 
-Informal discussion regarding bugs, new features, and implementation of existing features takes place in the `#internals` channel of the [LaraChat](https://larachat.co) Slack team. Taylor Otwell, the maintainer of Laravel, is typically present in the channel on weekdays from 8am-5pm (UTC-06:00 or America/Chicago), and sporadically present in the channel at other times.
+Обсуждение относительно багов, новых функций и реализации существующих функций ведётся на канале `#internals` в чате [LaraChat](https://larachat.co) команды Slack. Тэйлор Отвелл, создатель Laravel, обычно присутствует на канале по будням с 8 утра до 5 вечера (по чикагскому времени UTC-06:00), а иногда и в другое время.
 
 <a name="which-branch"></a>
-## Which Branch?
+## Какая ветка?
 
-**All** bug fixes should be sent to the latest stable branch or to the current LTS branch (5.1). Bug fixes should **never** be sent to the `master` branch unless they fix features that exist only in the upcoming release.
+**Все** исправления багов должны отправляться в последнюю стабильную ветку. Исправления багов **никогда** не должны отправляться в ветку `master`, только если они относятся к функциям, которые есть только в следующем релизе.
 
-**Minor** features that are **fully backwards compatible** with the current Laravel release may be sent to the latest stable branch.
+**Небольшие** функции, которые **полностью обратно совместимы** с текущим релизом Laravel, могут быть отправлены в последнюю стабильную ветку.
 
-**Major** new features should always be sent to the `master` branch, which contains the upcoming Laravel release.
+**Крупные**  новые функции должны всегда отправляться в ветку `master`, которая содержит следующий релиз Laravel.
 
-If you are unsure if your feature qualifies as a major or minor, please ask Taylor Otwell in the `#internals` channel of the [LaraChat](https://larachat.co) Slack team.
+Если вы не уверены к каким функциям относится ваша, мажорным или минорным, спросите об этом Тэйлора Отвелла на канале `#internals` в [LaraChat](https://larachat.co) команды Slack.
 
 <a name="security-vulnerabilities"></a>
-## Security Vulnerabilities
+## Уязвимости безопасности
 
-If you discover a security vulnerability within Laravel, please send an email to Taylor Otwell at <a href="mailto:taylor@laravel.com">taylor@laravel.com</a>. All security vulnerabilities will be promptly addressed.
+Если вы обнаружите уязвимость в безопасности Laravel, пожалуйста, напишите об этом Тэйлору Отвеллу по адресу <a href="mailto:taylor@laravel.com">taylor@laravel.com</a>. Все уязвимости будут оперативно устранены.
 
 <a name="coding-style"></a>
-## Coding Style
+## Стиль оформления кода
 
-Laravel follows the [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding standard and the [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md) autoloading standard.
+Laravel следует стандарту написания кода [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) и стандарту автозагрузки [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md).
 
 <a name="phpdoc"></a>
 ### PHPDoc
 
-Below is an example of a valid Laravel documentation block. Note that the `@param` attribute is followed by two spaces, the argument type, two more spaces, and finally the variable name:
+Ниже приведён пример правильного блока документации Laravel. Обратите внимание, что после атрибута `@param` стоят два пробела, тип аргумента, ещё два пробела и в конце имя переменной:
 
     /**
-     * Register a binding with the container.
+     * Зарегистрировать связку с контейнером.
      *
      * @param  string|array  $abstract
      * @param  \Closure|string|null  $concrete
@@ -84,4 +88,4 @@ Below is an example of a valid Laravel documentation block. Note that the `@para
 <a name="styleci"></a>
 ### StyleCI
 
-Don't worry if your code styling isn't perfect! [StyleCI](https://styleci.io/) will automatically merge any style fixes into the Laravel repository after pull requests are merged. This allows us to focus on the content of the contribution and not the code style.
+Если ваш стиль написания кода не идеален, не волнуйтесь! [StyleCI](https://styleci.io/) автоматически поместит в репозиторий Laravel все исправления стиля после размещения запроса на включение. Это позволяет нам сконцентрироваться на содержании, а не форме.
