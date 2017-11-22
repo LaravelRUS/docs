@@ -15,4 +15,5 @@ Laravel 5
 
 ## Инструкция по переводу
 
-[http://laravel.su/articles/rus-documentation-contribution-guide](http://laravel.su/articles/rus-documentation-contribution-guide)
+- Wiki: [https://github.com/LaravelRUS/docs/wiki](https://github.com/LaravelRUS/docs/wiki)
+- Подробнее: [http://laravel.su/articles/rus-documentation-contribution-guide](http://laravel.su/articles/rus-documentation-contribution-guide)
