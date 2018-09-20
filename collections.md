@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 ---
 
@@ -6,6 +6,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 - [Введение](#introduction)
     - [Создание коллекций](#creating-collections)
+    - [Расширение коллекций](#extending-collections)
 - [Доступные методы](#available-methods)
 - [Операции высшего порядка](#higher-order-messages)
 
@@ -21,7 +22,6 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
         return empty($name);
     });
 
-
 Как видите, класс `Collection` позволяет использовать свои методы в связке для гибкого отображения и уменьшения исходного массива. В общем, коллекции "неизменны", то есть каждый метод класса `Collection` возвращает совершенно новый экземпляр `Collection`.
 
 <a name="creating-collections"></a>
@@ -32,6 +32,27 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     $collection = collect([1, 2, 3]);
 
 > {tip} Результаты запросов [Eloquent](/docs/{{version}}/eloquent) всегда возвращаются в виде экземпляров класса `Collection`.
+
+<a name="extending-collections"></a>
+### Расширение коллекций
+
+Коллекции могут содержать макросы, что позволяет во время выполнения добавлять дополнительные методы для класса `Collection`. Например, следующий код добавляет метод `toUpper` в класс `Collection`:
+
+     use Illuminate\Support\Str;
+     
+     Collection::macro('toUpper', function () {
+        return $this->map(function ($value) {
+            return Str::upper($value);
+        });
+    });
+    
+    $collection = collect(['first', 'second']);
+
+    $upper = $collection->toUpper();
+
+    // ['FIRST', 'SECOND']
+ 
+Как правило, вы должны объявлять макросы коллекции в [сервис-провайдере](/docs/{{version}}/providers).
 
 <a name="available-methods"></a>
 ## Доступные методы
@@ -225,6 +246,19 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // ['name' => 'George', 'age' => 29]
 
+<a name="method-concat"></a>
+#### `concat()` {#collection-method}
+
+Метод `concat` добавляет заданные значения массива или коллекции в конец коллекции:
+ 
+    $collection = collect(['John Doe']);
+
+    $concatenated = $collection->concat(['Jane Doe'])->concat(['name' => 'Johnny Doe']);
+
+    $concatenated->all();
+
+    // ['John Doe', 'Jane Doe', 'Johnny Doe']
+
 <a name="method-contains"></a>
 #### `contains()` {#collection-method}
 
@@ -279,6 +313,63 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // 4
 
+<a name="method-crossjoin"></a>
+#### `crossJoin()` {#collection-method}
+
+Метод `crossJoin` перекрестно объединяет значения коллекции среди заданных массивов или коллекций, возвращая прямое (декартово) произведение со всеми возможными перестановками:
+
+    $collection = collect([1, 2]);
+
+    $matrix = $collection->crossJoin(['a', 'b']);
+
+    $matrix->all();
+
+    /*
+    [
+        [1, 'a'],
+        [1, 'b'],
+        [2, 'a'],
+        [2, 'b'],
+    ]
+    */
+
+    $collection = collect([1, 2]);
+
+    $matrix = $collection->crossJoin(['a', 'b'], ['I', 'II']);
+
+    $matrix->all();
+
+    /*
+    [
+        [1, 'a', 'I'],
+        [1, 'a', 'II'],
+        [1, 'b', 'I'],
+        [1, 'b', 'II'],
+        [2, 'a', 'I'],
+        [2, 'a', 'II'],
+        [2, 'b', 'I'],
+        [2, 'b', 'II'],
+    ]
+    */
+    
+<a name="method-dd"></a>
+#### `dd()` {#collection-method}
+
+Метод `dd` сбрасывает элементы коллекции и завершает выполнение скрипта:
+
+    $collection = collect(['John Doe', 'Jane Doe']);
+    $collection->dd();
+    /*
+    Collection {
+        #items: array:2 [
+            0 => "John Doe"
+            1 => "Jane Doe"
+        ]
+    }
+    */
+
+Если вы не хотите прекращать выполнение скрипта, используйте вместо этого метод [`dump`](#method-dump).
+
 <a name="method-diff"></a>
 #### `diff()` {#collection-method}
 
@@ -302,16 +393,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
         'type' => 'fruit',
         'remain' => 6
     ]);
-    
+
     $diff = $collection->diffAssoc([
         'color' => 'yellow',
         'type' => 'fruit',
         'remain' => 3,
         'used' => 6
     ]);
-    
+
     $diff->all();
-    
+
     // ['color' => 'orange', 'remain' => 6]
 
 <a name="method-diffkeys"></a>
@@ -338,6 +429,26 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // ['one' => 10, 'three' => 30, 'five' => 50]
 
+<a name="method-dump"></a>
+#### `dump()` {#collection-method}
+
+Метод `dump` сбрасывает элементы коллекции:
+ 
+    $collection = collect(['John Doe', 'Jane Doe']);
+
+    $collection->dump();
+
+    /*
+    Collection {
+        #items: array:2 [
+            0 => "John Doe"
+            1 => "Jane Doe"
+        ]
+    }
+    */
+
+Если вы хотите прекратить выполнение сценария после сброса коллекции, используйте вместо этого метод [`dd`](#method-dd).
+
 <a name="method-each"></a>
 #### `each()` {#collection-method}
 
@@ -353,6 +464,23 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
         if (/* some condition */) {
             return false;
         }
+    });
+
+<a name="method-eachspread"></a>
+#### `eachSpread()` {#collection-method}
+
+Метод `eachSpread` метод производит итерацию по элементам коллекции, передавая каждое значение вложенного элемента в заданную функцию обратного вызова:
+
+    $collection = collect([['John Doe', 35], ['Jane Doe', 33]]);
+
+    $collection->eachSpread(function ($name, $age) {
+        //
+    });
+
+Вы можете прекратить итерацию по элементам, возвращая `false` из функции обратного вызова:
+
+    $collection->eachSpread(function ($name, $age) {
+        return false;
     });
 
 <a name="method-every"></a>
@@ -422,6 +550,28 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     collect([1, 2, 3, 4])->first();
 
     // 1
+
+<a name="method-first-where"></a>
+#### `firstWhere()` {#collection-method}
+
+Метод `firstWhere` возвращает первый элемент в коллекции с заданной парой ключ-значение:
+
+    $collection = collect([
+        ['name' => 'Regena', 'age' => 12],
+        ['name' => 'Linda', 'age' => 14],
+        ['name' => 'Diego', 'age' => 23],
+        ['name' => 'Linda', 'age' => 84],
+    ]);
+    
+    $collection->firstWhere('name', 'Linda');
+
+    // ['name' => 'Linda', 'age' => 14
+
+Вы также можете вызвать метод `firstWhere` с оператором:
+
+    $collection->firstWhere('age', '>=', 18);
+
+    // ['name' => 'Diego', 'age' => 23]
 
 <a name="method-flatmap"></a>
 #### `flatMap()` {#collection-method}
@@ -594,6 +744,47 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
         ]
     */
 
+В качестве массива можно передать несколько критериев группировки. Каждый элемент массива будет применяться для соответствующего уровня в многомерном массиве:
+
+    $data = new Collection([
+        10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+        20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+        30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
+        40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
+    ]);
+
+    $result = $data->groupBy([
+        'skill',
+        function ($item) {
+            return $item['roles'];
+        },
+    ], $preserveKeys = true);
+
+    /*
+    [
+        1 => [
+            'Role_1' => [
+                10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+                20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+            ],
+            'Role_2' => [
+                20 => ['user' => 2, 'skill' => 1, 'roles' => ['Role_1', 'Role_2']],
+            ],
+            'Role_3' => [
+                10 => ['user' => 1, 'skill' => 1, 'roles' => ['Role_1', 'Role_3']],
+            ],
+        ],
+        2 => [
+            'Role_1' => [
+                30 => ['user' => 3, 'skill' => 2, 'roles' => ['Role_1']],
+            ],
+            'Role_2' => [
+                40 => ['user' => 4, 'skill' => 2, 'roles' => ['Role_2']],
+            ],
+        ],
+    ];
+    */
+
 <a name="method-has"></a>
 #### `has()` {#collection-method}
 
@@ -638,16 +829,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // [0 => 'Desk', 2 => 'Chair']
 
-<a name="method-intersectkey"></a>
-#### `intersectKey()` {#collection-method}
+<a name="method-intersectbykeys"></a>
+#### `intersectByKeys()` {#collection-method}
 
-Метод `intersectKey` удаляет любые ключи из исходной коллекции, которых нет в переданном `array` или коллекции:
+Метод `intersectByKeys` удаляет любые ключи из исходной коллекции, которых нет в переданном `array` или коллекции:
 
     $collection = collect([
         'serial' => 'UX301', 'type' => 'screen', 'year' => 2009
     ]);
 
-    $intersect = $collection->intersectKey([
+    $intersect = $collection->intersectByKeys([
         'reference' => 'UX404', 'type' => 'tab', 'year' => 2011
     ]);
 
@@ -679,8 +870,8 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 Метод `keyBy` возвращает коллекцию по указанному ключу. Если несколько элементов имеют одинаковый ключ, в результирующей коллекции появится только последний их них:
 
     $collection = collect([
-        ['product_id' => 'prod-100', 'name' => 'desk'],
-        ['product_id' => 'prod-200', 'name' => 'chair'],
+        ['product_id' => 'prod-100', 'name' => 'Desk'],
+        ['product_id' => 'prod-200', 'name' => 'Chair'],
     ]);
 
     $keyed = $collection->keyBy('product_id');
@@ -742,6 +933,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // 4
 
+<a name="method-macro"></a>
+#### `macro()` {#collection-method}
+
+Статический метод `macro` позволяет во время выполнения добавлять методы в класс` Collection`. Для получения дополнительной информации смотрите документацию по [расширению коллекций](#extending-collections).
+ 
+<a name="method-make"></a>
+#### `make()` {#collection-method}
+
+Статический метод `make` создает новый экземпляр коллекции. Смотрите раздел [Создание коллекций](#creating-collections).
+
 <a name="method-map"></a>
 #### `map()` {#collection-method}
 
@@ -758,6 +959,87 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     // [2, 4, 6, 8, 10]
 
 > {note} Как и большинство других методов коллекции, метод `map` возвращает новый экземпляр коллекции. Он не изменяет коллекцию при вызове. Если вы хотите преобразовать оригинальную коллекцию, используйте метод[`transform`](#method-transform).
+
+<a name="method-mapinto"></a>
+#### `mapInto()` {#collection-method}
+
+Метод `mapInto()` производит итерацию по коллекции, создавая новый экземпляр данного класса, передавая значение в конструктор:
+ 
+    class Currency
+    {
+        /**
+         * Create a new currency instance.
+         *
+         * @param  string  $code
+         * @return void
+         */
+        function __construct(string $code)
+        {
+            $this->code = $code;
+        }
+    }
+    
+    $collection = collect(['USD', 'EUR', 'GBP']);
+
+    $currencies = $collection->mapInto(Currency::class);
+
+    $currencies->all();
+
+    // [Currency('USD'), Currency('EUR'), Currency('GBP')]
+
+<a name="method-mapspread"></a>
+#### `mapSpread()` {#collection-method}
+
+Метод `mapSpread` производит итерацию по элементам коллекции, передавая каждое значение вложенного элемента в заданную функцию обратного вызова. Функция обратного вызова может свободно изменять элемент и возвращать его, формируя таким образом новую коллекцию измененных элементов:
+ 
+    $collection = collect([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+
+    $chunks = $collection->chunk(2);
+
+    $sequence = $chunks->mapSpread(function ($odd, $even) {
+        return $odd + $even;
+    });
+
+    $sequence->all();
+
+    // [1, 5, 9, 13, 17]
+ 
+ <a name="method-maptogroups"></a>
+#### `mapToGroups()` {#collection-method}
+
+Метод `mapToGroups` группирует элементы коллекции по заданной функции обратного вызова. Функция обратного вызова должна возвращать ассоциативный массив, содержащий одну пару ключ-значение, формируя таким образом новый набор сгруппированных значений:
+
+    $collection = collect([
+        [
+            'name' => 'John Doe',
+            'department' => 'Sales',
+        ],
+        [
+            'name' => 'Jane Doe',
+            'department' => 'Sales',
+        ],
+        [
+            'name' => 'Johnny Doe',
+            'department' => 'Marketing',
+        ]
+    ]);
+
+    $grouped = $collection->mapToGroups(function ($item, $key) {
+        return [$item['department'] => $item['name']];
+    });
+
+    $grouped->toArray();
+
+     /*
+        [
+            'Sales' => ['John Doe', 'Jane Doe'],
+            'Marketing' => ['Johhny Doe'],
+        ]
+    */
+
+     $grouped->get('Sales')->all();
+ 
+     // ['John Doe', 'Jane Doe']
 
 <a name="method-mapwithkeys"></a>
 #### `mapWithKeys()` {#collection-method}
@@ -896,6 +1178,27 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     // ['product_id' => 1, 'name' => 'Desk']
 
 Метод [except](#method-except) - инверсный для метода `only`.
+
+<a name="method-pad"></a>
+#### `pad()` {#collection-method}
+
+Метод `pad` заполнит массив заданным значением до тех пор, пока массив не достигнет указанного размера. Этот метод работает как PHP-функция [array_pad](https://secure.php.net/manual/ru/function.array-pad.php).
+
+Чтобы поместить влево, вам следует указать отрицательный размер. Заполнение не произойдет, если абсолютное значение заданного размера меньше или равно длине массива:
+
+    $collection = collect(['A', 'B', 'C']);
+
+    $filtered = $collection->pad(5, 0);
+
+    $filtered->all();
+
+    // ['A', 'B', 'C', 0, 0]
+
+    $filtered = $collection->pad(-5, 0);
+
+    $filtered->all();
+
+    // [0, 0, 'A', 'B', 'C']
 
 <a name="method-partition"></a>
 #### `partition()` {#collection-method}
@@ -1084,15 +1387,23 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="method-reverse"></a>
 #### `reverse()` {#collection-method}
 
-Метод `reverse` меняет порядок элементов коллекции:
+Метод `reverse` меняет порядок элементов коллекции, сохраняя исходные ключи:
 
-    $collection = collect([1, 2, 3, 4, 5]);
+    $collection = collect(['a', 'b', 'c', 'd', 'e']);
 
     $reversed = $collection->reverse();
 
     $reversed->all();
 
-    // [5, 4, 3, 2, 1]
+    /*
+        [
+            4 => 'e',
+            3 => 'd',
+            2 => 'c',
+            1 => 'b',
+            0 => 'a',
+        ]
+    */
 
 <a name="method-search"></a>
 #### `search()` {#collection-method}
@@ -1183,7 +1494,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     // [1, 2, 3, 4, 5]
 
-Если вам необходимо отсортировать коллекцию с дополнительными условиями, вы можете передать функцию обратного вызова в метод `sort` с вашим собственным алгоритмом. См. PHP документацию по [`usort`](https://secure.php.net/manual/en/function.usort.php#refsect1-function.usort-parameters), который вызывается внутри метода `sort` вашей коллекции.
+Если вам необходимо отсортировать коллекцию с дополнительными условиями, вы можете передать функцию обратного вызова в метод `sort` с вашим собственным алгоритмом. См. PHP документацию по [`uasort`](https://secure.php.net/manual/ru/function.uasort.php#refsect1-function.uasort-parameters), который вызывается внутри метода `sort` вашей коллекции.
 
 > {tip} Для сортировки коллекции вложенных массивов или объектов, смотрите методы [`sortBy`](#method-sortby) и [`sortByDesc`](#method-sortbydesc) methods.
 
@@ -1511,6 +1822,44 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 У этого метода та же сигнатура, как и у метода [`unique`](#method-unique); однако, все значения сравниваются путем "строгих" сравнений.
 
+<a name="method-unless"></a>
+#### `unless()` {#collection-method}
+
+Метод `unless` будет выполнять заданную функцию обратного вызова до тех пор, пока первый аргумент, переданный методу, не станет равен `true`:
+
+    $collection = collect([1, 2, 3]);
+
+    $collection->unless(true, function ($collection) {
+        return $collection->push(4);
+    });
+
+    $collection->unless(false, function ($collection) {
+        return $collection->push(5);
+    });
+
+    $collection->all();
+
+    // [1, 2, 3, 5]
+
+В качестве противоположности методу `unless`, смотрите метод [`when`](#method-when).
+
+<a name="method-unwrap"></a>
+#### `unwrap()` {#collection-method}
+
+Статический метод `unwrap` возвращает базовые элементы коллекции из заданного значения, когда это применимо:
+
+    Collection::unwrap(collect('John Doe'));
+
+    // ['John Doe']
+
+    Collection::unwrap(['John Doe']);
+
+    // ['John Doe']
+
+    Collection::unwrap('John Doe');
+
+    // 'John Doe'
+
 <a name="method-values"></a>
 #### `values()` {#collection-method}
 
@@ -1542,10 +1891,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     $collection->when(true, function ($collection) {
         return $collection->push(4);
     });
+    
+    $collection->when(false, function ($collection) {
+        return $collection->push(5);
+    });
 
     $collection->all();
 
     // [1, 2, 3, 4]
+
+В качестве протиповоложности методу `when`, смотрите метод [`unless`](#method-unless).
 
 <a name="method-where"></a>
 #### `where()` {#collection-method}
@@ -1637,6 +1992,29 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 Этот метод имеет такую же сигнатуру, как и метод [`whereNotIn`](#method-wherenotin); однако, все значения сравниваются с использованием строгого сравнения.
 
+<a name="method-wrap"></a>
+#### `wrap()` {#collection-method}
+
+Статический метод `wrap` обертывает заднное значение в коллекции, когда это применимо:
+
+    $collection = Collection::wrap('John Doe');
+
+    $collection->all();
+
+    // ['John Doe']
+
+    $collection = Collection::wrap(['John Doe']);
+
+    $collection->all();
+
+    // ['John Doe']
+
+    $collection = Collection::wrap(collect('John Doe'));
+
+    $collection->all();
+
+    // ['John Doe']
+
 <a name="method-zip"></a>
 #### `zip()` {#collection-method}
 
@@ -1653,7 +2031,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="higher-order-messages"></a>
 ## Операции высшего порядка
 
-Коллекции также поддерживают [операции высшего порядка](https://en.wikipedia.org/wiki/Higher_order_message), которые служат сокращениями для выполнения обычных действий с коллекциями. Методы коллекций, которые предоставляют операции высшего порядка: `average`, `avg`, `contains`, `each`, `every`, `filter`, `first`, `flatMap`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc` и `sum`.
+Коллекции также поддерживают [операции высшего порядка](https://en.wikipedia.org/wiki/Higher_order_message), которые служат сокращениями для выполнения обычных действий с коллекциями. Методы коллекций, которые предоставляют операции высшего порядка: `average`, `avg`, `contains`, `each`, `every`, `filter`, `first`, `flatMap`, `map`, `partition`, `reject`, `sortBy`, `sortByDesc`, `sum` и `unique`.
 
 Доступ к каждой операции высшего порядка можно получить как к динамическому свойству экземпляра коллекции. К примеру, давайте используем операцию `each`, чтобы вызывать метод для каждого объекта в коллекции:
 
