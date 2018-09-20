@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 ---
 
@@ -14,6 +14,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     - [Метод Make](#the-make-method)
     - [Автоматическое внедрение](#automatic-injection)
 - [События контейнера](#container-events)
+- [PSR-11](#psr-11)
 
 <a name="introduction"></a>
 ## Введение
@@ -256,3 +257,19 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     });
 
 Как видите, объект, получаемый из контейнера, передаётся в функцию обратного вызова, что позволяет вам задать любые дополнительные свойства для объекта перед тем, как отдать его тому, кто его запросил.
+
+<a name="psr-11"></a>
+## PSR-11
+
+Сервис-контейнер Laravel реализует интерфейс [PSR-11](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-11-container.md). Поэтому вы можете использовать интерфейс контейнера PSR-11 в качестве подсказки типа для получения экземпляра контейнера Laravel:
+ 
+     use Psr\Container\ContainerInterface;
+     
+     Route::get('/', function (ContainerInterface $container) {
+        $service = $container->get('Service');
+        
+        //
+    });
+
+ > {note} Вызов метода `get` выбросит исключение, если идентификатор не был явно привязан к контейнеру.
+ 
