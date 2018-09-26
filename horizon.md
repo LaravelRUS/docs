@@ -20,7 +20,7 @@ All of your worker configuration is stored in a single, simple configuration fil
 <a name="installation"></a>
 ## Installation
 
-> {note} Due to its usage of async process signals, Horizon requires PHP 7.1+.
+> {note} Due to its usage of async process signals, Horizon requires PHP 7.1+. Secondly, you should ensure that your queue driver is set to `redis` in your `queue` configuration file.
 
 You may use Composer to install Horizon into your Laravel project:
 
@@ -46,7 +46,7 @@ The `auto` strategy adjusts the number of worker processes per queue based on th
 <a name="dashboard-authentication"></a>
 ### Dashboard Authentication
 
-Horizon exposes a dashboard at `/horizon`. By default, you will only be able to access this dashboard in the `local` environment. To define a more specific access policy for the dashboard, you should use the `Horizon::auth` method. The `auth` method accepts a callback which should return `true` or `false`, indicating whether the user should have access to the Horizon dashboard:
+Horizon exposes a dashboard at `/horizon`. By default, you will only be able to access this dashboard in the `local` environment. To define a more specific access policy for the dashboard, you should use the `Horizon::auth` method. The `auth` method accepts a callback which should return `true` or `false`, indicating whether the user should have access to the Horizon dashboard. Typically, you should call `Horizon::auth` in the `boot` method of your `AppServiceProvider`:
 
     Horizon::auth(function ($request) {
         // return true / false;
@@ -73,10 +73,6 @@ You may gracefully terminate the master Horizon process on your machine using th
 ### Deploying Horizon
 
 If you are deploying Horizon to a live server, you should configure a process monitor to monitor the `php artisan horizon` command and restart it if it quits unexpectedly. When deploying fresh code to your server, you will need to instruct the master Horizon process to terminate so it can be restarted by your process monitor and receive your code changes.
-
-You may gracefully terminate the master Horizon process on your machine using the `horizon:terminate` Artisan command. Any jobs that Horizon is currently processing will be completed and then Horizon will exit:
-
-    php artisan horizon:terminate
 
 #### Supervisor Configuration
 
@@ -168,7 +164,7 @@ If you would like to manually define the tags for one of your queueable objects,
 <a name="notifications"></a>
 ## Notifications
 
-> **Note:** Before using notifications, you should add the `guzzlehttp/guzzle` Composer package to your project. When configuring Horizon to send SMS notifications, you should also review the [prerequisites for the Nexmo notification driver](https://laravel.com/docs/5.5/notifications#sms-notifications).
+> **Note:** Before using notifications, you should add the `guzzlehttp/guzzle` Composer package to your project. When configuring Horizon to send SMS notifications, you should also review the [prerequisites for the Nexmo notification driver](https://laravel.com/docs/5.6/notifications#sms-notifications).
 
 If you would like to be notified when one of your queues has a long wait time, you may use the `Horizon::routeMailNotificationsTo`, `Horizon::routeSlackNotificationsTo`, and `Horizon::routeSmsNotificationsTo` methods. You may call these methods from your application's `AppServiceProvider`:
 
