@@ -1,10 +1,11 @@
-git ffdc112f8a5b9225cba6b5b4d7db85e36ba67877
+git 83729f79c83e6d8838540492b15519530a877fee
 
 ---
 
 # Консоль Artisan
 
 - [Введение](#introduction)
+    - [Tinker (REPL)](#tinker)
 - [Написание команд](#writing-commands)
     - [Генерация команд](#generating-commands)
     - [Структура команды](#command-structure)
@@ -33,11 +34,31 @@ Artisan - это интерфейс командной строки (CLI) вхо
 
     php artisan help migrate
 
-#### Интерфейс ввода/вывода Laravel REPL
+### Tinker (REPL)
 
 В состав всех Laravel приложений входит Tinker, REPL интерфейс основанный на пакете [PsySH](https://github.com/bobthecow/psysh). Tinker позволяет вам взаимодействовать полностью со всем Laravel приложением из командной строки, включая Eloquent ORM, задачи в очереди, события, и т.д. Чтобы запустить Tinker, выполните Artisan команду `tinker`:
 
     php artisan tinker
+
+Вы можете опубликовать файл конфигурации Tinker, используя команду vendor:publish:
+
+    php artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"
+
+#### Белый список команд
+
+Тинкер использует белый список, чтобы определить, какие Artisan-команды разрешено запускать в своей оболочке. По умолчанию вы можете запускать команды `clear-compiled`,` down`, `env`,` inspire`, `migrate`,` optimize` и `up`. Если вы хотите добавить в белый список больше команд, вы можете добавить их в массив `commands` в вашем файле конфигурации `tinker.php`:
+
+    'commands' => [
+        // App\Console\Commands\ExampleCommand::class,
+    ],
+
+#### Псевдонимы черного счиска
+
+Как правило, Tinker автоматически создает псевдонимы классов, когда они вам нужны в Tinker. Тем не менее, вы можете не использовать псевдонимы для некоторых классов. Вы можете сделать это, перечислив классы в массиве `dont_alias` вашего конфигурационного файла `tinker.php`:
+
+    'dont_alias' => [
+        App\User::class,
+    ],
 
 <a name="writing-commands"></a>
 ## Написание команд
