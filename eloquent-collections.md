@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 ---
 
@@ -23,7 +23,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 Тем не менее, коллекции гораздо мощнее, чем массивы и предоставляют различные варианты операций map/reduce, которые могут быть сцеплены с использованием интуитивно понятного интерфейса. Например, давайте удалим все неактивные модели и возвратим имена для каждого оставшегося пользователя:
 
-    $users = App\User::where('active', 1)->get();
+    $users = App\User::all();
 
     $names = $users->reject(function ($user) {
         return $user->active === false;
@@ -60,12 +60,17 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 [chunk](/docs/{{version}}/collections#method-chunk)
 [collapse](/docs/{{version}}/collections#method-collapse)
 [combine](/docs/{{version}}/collections#method-combine)
+[concat](/docs/{{version}}/collections#method-concat)
 [contains](/docs/{{version}}/collections#method-contains)
 [containsStrict](/docs/{{version}}/collections#method-containsstrict)
 [count](/docs/{{version}}/collections#method-count)
+[crossJoin](/docs/{{version}}/collections#method-crossjoin)
+[dd](/docs/{{version}}/collections#method-dd)
 [diff](/docs/{{version}}/collections#method-diff)
 [diffKeys](/docs/{{version}}/collections#method-diffkeys)
+[dump](/docs/{{version}}/collections#method-dump)
 [each](/docs/{{version}}/collections#method-each)
+[eachSpread](/docs/{{version}}/collections#method-eachspread)
 [every](/docs/{{version}}/collections#method-every)
 [except](/docs/{{version}}/collections#method-except)
 [filter](/docs/{{version}}/collections#method-filter)
@@ -86,6 +91,9 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 [keys](/docs/{{version}}/collections#method-keys)
 [last](/docs/{{version}}/collections#method-last)
 [map](/docs/{{version}}/collections#method-map)
+[mapInto](/docs/{{version}}/collections#method-mapinto)
+[mapSpread](/docs/{{version}}/collections#method-mapspread)
+[mapToGroups](/docs/{{version}}/collections#method-maptogroups)
 [mapWithKeys](/docs/{{version}}/collections#method-mapwithkeys)
 [max](/docs/{{version}}/collections#method-max)
 [median](/docs/{{version}}/collections#method-median)
@@ -94,6 +102,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 [mode](/docs/{{version}}/collections#method-mode)
 [nth](/docs/{{version}}/collections#method-nth)
 [only](/docs/{{version}}/collections#method-only)
+[pad](/docs/{{version}}/collections#method-pad)
 [partition](/docs/{{version}}/collections#method-partition)
 [pipe](/docs/{{version}}/collections#method-pipe)
 [pluck](/docs/{{version}}/collections#method-pluck)
@@ -124,6 +133,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 [union](/docs/{{version}}/collections#method-union)
 [unique](/docs/{{version}}/collections#method-unique)
 [uniqueStrict](/docs/{{version}}/collections#method-uniquestrict)
+[unless](/docs/{{version}}/collections#method-unless)
 [values](/docs/{{version}}/collections#method-values)
 [when](/docs/{{version}}/collections#method-when)
 [where](/docs/{{version}}/collections#method-where)
