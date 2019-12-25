@@ -1,4 +1,4 @@
-git 83729f79c83e6d8838540492b15519530a877fee
+git 3d8f8e57b57735c03ebe7157c1c8fa09616f4e19
 
 ---
 
@@ -36,13 +36,25 @@ Artisan - это интерфейс командной строки (CLI) вхо
 
 ### Tinker (REPL)
 
-В состав всех Laravel приложений входит Tinker, REPL интерфейс основанный на пакете [PsySH](https://github.com/bobthecow/psysh). Tinker позволяет вам взаимодействовать полностью со всем Laravel приложением из командной строки, включая Eloquent ORM, задачи в очереди, события, и т.д. Чтобы запустить Tinker, выполните Artisan команду `tinker`:
+В состав всех Laravel приложений входит Tinker, REPL интерфейс основанный на пакете [PsySH](https://github.com/bobthecow/psysh).
+
+#### Установка
+
+Все Laravel-приложения включают Tinker по умолчанию. Вы также можете установить его вручную при помощи Composer:
+
+    composer require laravel/tinker
+
+#### Использование
+
+Tinker позволяет вам использовать все части Laravel-приложения в командной строке, включая Eloquent ORM, задачи в очереди, события, и т.д. Чтобы запустить Tinker, выполните Artisan команду `tinker`:
 
     php artisan tinker
 
 Вы можете опубликовать файл конфигурации Tinker, используя команду vendor:publish:
 
     php artisan vendor:publish --provider="Laravel\Tinker\TinkerServiceProvider"
+
+> {note} Хелпер `dispatch` и метод `dispatch` класса `Dispatchable` зависят от сборщика мусора, который помещает свои задания в очередь. Поэтому, используя Tinker, вы должны использовать `Bus::dispatch` или `Queue::push` для запуска задачи на выполнение.    
 
 #### Белый список команд
 
@@ -85,8 +97,8 @@ Artisan - это интерфейс командной строки (CLI) вхо
 
     namespace App\Console\Commands;
 
-    use App\User;
     use App\DripEmailer;
+    use App\User;
     use Illuminate\Console\Command;
 
     class SendEmails extends Command
@@ -163,8 +175,8 @@ Artisan - это интерфейс командной строки (CLI) вхо
 
 Помимо получения аргументов и опций, в команде на основе анонимной функции могут быть дополнительно объявлены типы зависимостей, которые вы захотите получить из [сервис-контейнера](/docs/{{version}}/container):
 
-    use App\User;
     use App\DripEmailer;
+    use App\User;
 
     Artisan::command('email:send {user}', function (DripEmailer $drip, $user) {
         $drip->send(User::find($user));
@@ -343,6 +355,12 @@ Artisan - это интерфейс командной строки (CLI) вхо
 Метод `anticipate` может использоваться, чтобы обеспечить автовыбор возможных вариантов. Пользователь может выбрать любой ответ, независимо от подсказок автовыбора:
 
     $name = $this->anticipate('What is your name?', ['Taylor', 'Dayle']);
+
+Вместо вариантов можно передать функцию, которая будет выполняться каждый раз, когда пользователь вводит очередной символ. Функция принимает на вход строку - текущий пользовательский ввод и возвращает массив подсказок для автовыбора.
+
+    $name = $this->anticipate('What is your name?', function ($input) {
+        // Return auto-completion options...
+    });
 
 #### Вопросы с множественным выбором
 
