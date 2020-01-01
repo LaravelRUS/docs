@@ -57,6 +57,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 [chunk](#method-chunk)
 [collapse](#method-collapse)
 [combine](#method-combine)
+[concat](#method-concat)
 [contains](#method-contains)
 [containsStrict](#method-containsstrict)
 [count](#method-count)
@@ -224,6 +225,19 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     $combined->all();
 
     // ['name' => 'George', 'age' => 29]
+
+<a name="method-concat"></a>
+#### `concat()` {#collection-method}
+ 
+Метод `concat` добавляет массив в конец коллекции. Если массив ассоциативный, ключи игнорируются.
+ 
+    $collection = collect(['John Doe']);
+ 
+    $concatenated = $collection->concat(['Jane Doe'])->concat(['name' => 'Johnny Doe']);
+ 
+    $concatenated->all();
+ 
+    // ['John Doe', 'Jane Doe', 'Johnny Doe']     
 
 <a name="method-contains"></a>
 #### `contains()` {#collection-method}
@@ -1042,6 +1056,8 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     $random->all();
 
     // [2, 4, 5] - (получены в случайном порядке)
+
+Если коллекция содержит меньше элементов, чем запрошено, то выбрасывается исключение `InvalidArgumentException`.    
 
 <a name="method-reduce"></a>
 #### `reduce()` {#collection-method}
