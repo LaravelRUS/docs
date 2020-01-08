@@ -15,7 +15,7 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
 > {tip} Ищете больше информации о том, как писать Blade-шаблоны? Для начала ознакомьтесь с [документацией Blade](/docs/{{version}}/blade).
 
 
-Шаблоны содержат HTML-разметку вашего приложения и отделяют контроллеры/бизнес-логику от логики отображения данных. Шаблоны расположены в директории `resources/views`. Давайте посмотрим, как выглядит простой шаблон:
+Шаблоны содержат HTML-разметку вашего приложения и отделяют контроллеры / бизнес-логику от логики отображения данных. Шаблоны расположены в директории `resources/views`. Давайте посмотрим, как выглядит простой шаблон:
 
     <!-- Шаблон располагается в resources/views/greeting.blade.php -->
 
@@ -33,7 +33,7 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
 
 Как видите, первый передаваемый в хелпер `view` аргумент соответствует названию файла шаблона в папке `resources/views`. Вторым аргументом передается массив с данными, которые будут доступны в шаблоне. В данном случае мы передаем переменную `name`, которая отображается с помощью [синтаксиса Blade](/docs/{{version}}/blade).
 
-Конечно, шаблоны могут находиться в поддиректориях внутри `resources/views`. Для обращения к ним следует использовать синтаксис с точкой. Например, если шаблон хранится в `resources/views/admin/profile.blade.php`, то вы можете обратиться к нему таким образом:
+Шаблоны могут находиться в поддиректориях внутри `resources/views`. Для обращения к ним следует использовать точечную запись (dot notation). Например, если шаблон хранится в `resources/views/admin/profile.blade.php`, то вы можете обратиться к нему таким образом:
 
     return view('admin.profile', $data);
 
@@ -46,6 +46,17 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
     if (View::exists('emails.customer')) {
         //
     }
+
+#### Использование первого доступного шаблона
+Используя метод `first`, вы можете использовать первый шаблон, который существует в указанном массиве шаблонов. Это полезно, если ваше приложение или пакет позволяют настраивать или перезаписывать шаблоны:
+
+    return view()->first(['custom.admin', 'admin'], $data);
+    
+Вы также можете вызвать данный метод используя фасад `View`:
+
+    use Illuminate\Support\Facades\View;
+    
+    return View::first(['custom.admin', 'admin'], $data);
 
 <a name="passing-data-to-views"></a>
 ## Передача данных в шаблоны
@@ -72,6 +83,16 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
     class AppServiceProvider extends ServiceProvider
     {
         /**
+         * Register any application services.
+         *
+         * @return void
+         */
+        public function register()
+        {
+            //
+        }
+        
+        /**
          * Bootstrap any application services.
          *
          * @return void
@@ -81,23 +102,12 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
             View::share('key', 'value');
         }
 
-        /**
-         * Register the service provider.
-         *
-         * @return void
-         */
-        public function register()
-        {
-            //
-        }
-    }
-
 <a name="view-composers"></a>
 ## Вью-композеры
 
-Вью-композеры — это функции обратного вызова или методы класса, которые вызываются при отображении шаблона. Если у вас есть данные, которые вы хотели бы отправлять в шаблон при каждом его отображении, то композеры могут помочь организовать такую логику в одном месте.
+Вью-композеры (от англ. composer - композитор) — это функции обратного вызова или методы класса, которые вызываются при отображении шаблона. Если у вас есть данные, которые вы хотели бы отправлять в шаблон при каждом его отображении, то композеры могут помочь организовать такую логику в одном месте.
 
-Давайте для примера зарегистрируем композер внутри [сервис провайдера](/docs/{{version}}/providers). Мы будем использовать фасад `View` для доступа к основному контракту `Illuminate\Contracts\View\Factory`. По умолчанию в Laravel нет папки для хранения вью-композеров. Вы можете создать её там, где посчитаете нужным. Например, можно создать папку `app\Http\ViewComposers`:
+Для примера, зарегистрируем композер внутри [сервис провайдера](/docs/{{version}}/providers). Мы будем использовать фасад `View` для доступа к основному контракту `Illuminate\Contracts\View\Factory`. По умолчанию в Laravel нет папки для хранения вью-композеров. Вы можете создать её там, где посчитаете нужным. Например, можно создать папку `app/Http/View/Composers`:
 
     <?php
 
@@ -106,28 +116,10 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
     use Illuminate\Support\Facades\View;
     use Illuminate\Support\ServiceProvider;
 
-    class ComposerServiceProvider extends ServiceProvider
+    class ViewServiceProvider extends ServiceProvider
     {
         /**
-         * Register bindings in the container.
-         *
-         * @return void
-         */
-        public function boot()
-        {
-            // Using class based composers...
-            View::composer(
-                'profile', 'App\Http\ViewComposers\ProfileComposer'
-            );
-
-            // Using Closure based composers...
-            View::composer('dashboard', function ($view) {
-                //
-            });
-        }
-
-        /**
-         * Register the service provider.
+         * Register any application services.
          *
          * @return void
          */
@@ -135,18 +127,36 @@ git b1b37c94754d45a6c70acb955b387f305ec8927e
         {
             //
         }
+        
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            // Using class based composers...
+            View::composer(
+                'profile', 'App\Http\View\Composers\ProfileComposer'
+            );
+    
+            // Using Closure based composers...
+            View::composer('dashboard', function ($view) {
+                //
+            });
+        }
     }
 
-> {note} Помните, если вы создаёте новый сервис-провайдер для хранения ваших композеров, то также следует добавить его в массив `providers` внутри конфига `config/app.php`.
+> {note} Помните, если вы создаёте новый сервис-провайдер для хранения ваших композеров, то также следует добавить его в массив `providers` в конфигурационном файле `config/app.php`.
 
 Теперь, когда мы зарегистрировали композер, метод `ProfileComposer@compose` будет вызываться при каждом отображении шаблона `profile`. Давайте создадим класс композера:
 
     <?php
 
-    namespace App\Http\ViewComposers;
+    namespace App\Http\View\Composers;
 
-    use Illuminate\View\View;
     use App\Repositories\UserRepository;
+    use Illuminate\View\View;
 
     class ProfileComposer
     {
