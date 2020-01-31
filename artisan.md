@@ -1,4 +1,4 @@
-git 3d8f8e57b57735c03ebe7157c1c8fa09616f4e19
+git 7005d182a24351202eb839b03ede048d7fb72fdd
 
 ---
 
@@ -367,6 +367,16 @@ Tinker позволяет вам использовать все части Lara
 Если вам нужно дать пользователю набор предопределенных вариантов, вы можете использовать метод `choice`. Вы можете установить индекс массива в качестве значения по умолчанию, если никакой вариант не выбран:
 
     $name = $this->choice('What is your name?', ['Taylor', 'Dayle'], $defaultIndex);
+
+Также метод `choice` принимает необязательные четвертый и пятый аргументы. `$maxAttempts` определяет максимальное количество попыток для выбора допустимого ответа. `$allowMultipleSelections` разрешает множественную выборку.
+
+    $name = $this->choice(
+        'What is your name?',
+        ['Taylor', 'Dayle'],
+        $defaultIndex,
+        $maxAttempts = null,
+        $allowMultipleSelections = false
+    );
 
 <a name="writing-output"></a>
 ### Вывод данных
