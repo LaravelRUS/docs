@@ -370,6 +370,14 @@ Tinker позволяет вам использовать все части Lara
 
 Также метод `choice` принимает необязательные четвертый и пятый аргументы. `$maxAttempts` определяет максимальное количество попыток для выбора допустимого ответа. `$allowMultipleSelections` разрешает множественную выборку.
 
+    $name = $this->choice(
+        'What is your name?',
+        ['Taylor', 'Dayle'],
+        $defaultIndex,
+        $maxAttempts = null,
+        $allowMultipleSelections = false
+    );
+
 <a name="writing-output"></a>
 ### Вывод данных
 
