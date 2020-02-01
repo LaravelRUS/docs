@@ -1,27 +1,31 @@
-# API Authentication
+git 63a231cc5940dda64e8f0b08e0b9e7be33b6e27c
 
-- [Introduction](#introduction)
-- [Configuration](#configuration)
-    - [Database Preparation](#database-preparation)
-- [Generating Tokens](#generating-tokens)
-    - [Hashing Tokens](#hashing-tokens)
-- [Protecting Routes](#protecting-routes)
-- [Passing Tokens In Requests](#passing-tokens-in-requests)
+---
+
+# Аутентификация API
+
+- [Введение](#introduction)
+- [Настройка](#configuration)
+    - [Подготовка базы данных](#database-preparation)
+- [Создание токенов](#generating-tokens)
+    - [Хэширование токенов](#hashing-tokens)
+- [Применение в роутах](#protecting-routes)
+- [Способы передачи токена в запросе](#passing-tokens-in-requests)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-By default, Laravel ships with a simple solution to API authentication via a random token assigned to each user of your application. In your `config/auth.php` configuration file, an `api` guard is already defined and utilizes a `token` driver. This driver is responsible for inspecting the API token on the incoming request and verifying that it matches the user's assigned token in the database.
+В Laravel встроен простой способ для аутентификации API - при помощи случайного строкового токена, который присваивается каждому залогиненному пользователю. Этот токен сообщается клиентскому приложению при логине, сохраняется в базе данных на сервере и проверяется при каждом запросе. В `config/auth.php` гвард `api` уже настроен на работу с этим типом авторизации - в качестве драйвера там по умолчанию указан `token`.
 
-> **Note:** While Laravel ships with a simple, token based authentication guard, we strongly recommend you consider using [Laravel Passport](/docs/{{version}}/passport) for robust, production applications that offer API authentication.
+> **Примечание** Если вам нужна аутентификация API, рекомендуем также рассмотреть [Laravel Passport](/docs/{{version}}/passport)
 
 <a name="configuration"></a>
-## Configuration
+## Настройка
 
 <a name="database-preparation"></a>
-### Database Preparation
+### Подготовка базы данных
 
-Before using the `token` driver, you will need to [create a migration](/docs/{{version}}/migrations) which adds an `api_token` column to your `users` table:
+Для того, чтобы сохранять токен в базе данных, создайте [миграцию](/docs/{{version}}/migrations) для создания столбца `api_token` в таблице `users`: 
 
     Schema::table('users', function ($table) {
         $table->string('api_token', 80)->after('password')
@@ -30,14 +34,14 @@ Before using the `token` driver, you will need to [create a migration](/docs/{{v
                             ->default(null);
     });
 
-Once the migration has been created, run the `migrate` Artisan command.
+Примените миграцию при помощи команды `php artisan migrate`
 
-> {tip} If you choose to use a different column name, be sure to update your API's `storage_key` configuration option within the `config/auth.php` configuration file.
+> {tip} Если название столбца `api_token` вам не подходит, задайте своё, параллельно указав его в `storage_key` в конфигурационном файле `config/auth.php`
 
 <a name="generating-tokens"></a>
-## Generating Tokens
+## Создание токенов
 
-Once the `api_token` column has been added to your `users` table, you are ready to assign random API tokens to each user that registers with your application. You should assign these tokens when a `User` model is created for the user during registration. When using the [authentication scaffolding](/docs/{{version}}/authentication#authentication-quickstart) provided by the `laravel/ui` Composer package, this may be done in the `create` method of the `RegisterController`:
+В момент регистрации пользователя вам нужно предусмотреть создание токена в виде случайной строки и запись его в поле `api_token`. Если вы используете [генераторы файлов аутентификации](/docs/{{version}}/authentication#authentication-quickstart) помощи пакета `laravel/ui`, вы должны изменить метод `create` контроллера `RegisterController`:
 
     use Illuminate\Support\Facades\Hash;
     use Illuminate\Support\Str;
@@ -59,9 +63,9 @@ Once the `api_token` column has been added to your `users` table, you are ready 
     }
 
 <a name="hashing-tokens"></a>
-### Hashing Tokens
+### Хэширование токенов
 
-In the examples above, API tokens are stored in your database as plain-text. If you would like to hash your API tokens using SHA-256 hashing, you may set the `hash` option of your `api` guard configuration to `true`. The `api` guard is defined in your `config/auth.php` configuration file:
+Если вы не хотите хранить токены в открытом виде (как в примере выше), вы можете указать, что в базе хранится их хэш (SHA-256). Для этого установите параметр `hash` у гварда `api` в `config/auth.php`:
 
     'api' => [
         'driver' => 'token',
@@ -69,11 +73,11 @@ In the examples above, API tokens are stored in your database as plain-text. If 
         'hash' => true,
     ],
 
-#### Generating Hashed Tokens
+#### Генерация хэша для токенов
 
-When using hashed API tokens, you should not generate your API tokens during user registration. Instead, you will need to implement your own API token management page within your application. This page should allow users to initialize and refresh their API token. When a user makes a request to initialize or refresh their token, you should store a hashed copy of the token in the database, and return the plain-text copy of token to the view / frontend client for one-time display.
+При использовании хешированных токенов вы не должны генерировать их при регистрации пользователя. Вместо этого вам потребуется реализовать собственную страницу управления токенами в своем приложении. Эта страница должна позволять пользователям инициализировать и обновлять свой токен. Когда пользователь делает запрос на инициализацию или обновление своего токена, вы должны сохранить хешированную копию токена в базе данных и возвратить текстовую копию токена клиенту. 
 
-For example, a controller method that initializes / refreshes the token for a given user and returns the plain-text token as a JSON response might look like the following:
+Вот пример метода обновления токена:
 
     <?php
 
@@ -102,12 +106,12 @@ For example, a controller method that initializes / refreshes the token for a gi
         }
     }
 
-> {tip} Since the API tokens in the example above have sufficient entropy, it is impractical to create "rainbow tables" to lookup the original value of the hashed token. Therefore, slow hashing methods such as `bcrypt` are unnecessary.
+> {tip} Поскольку токены API в виде случайных строк имеют достаточную энтропию, нецелесообразно использовать «радужные таблицы» для подбора исходного значения хешированного токена. Следовательно, методы медленного хеширования, такие как `bcrypt`, тут не нужны, достаточно `hash`.
 
 <a name="protecting-routes"></a>
-## Protecting Routes
+## Применение в роутах
 
-Laravel includes an [authentication guard](/docs/{{version}}/authentication#adding-custom-guards) that will automatically validate API tokens on incoming requests. You only need to specify the `auth:api` middleware on any route that requires a valid access token:
+В Laravel есть [гвард аутентификации](/docs/{{version}}/authentication#adding-custom-guards) API, который автоматически проверяет токены. Чтобы включить его на заданных роутах используйте посредника (middleware) `auth:api`:
 
     use Illuminate\Http\Request;
 
@@ -116,19 +120,19 @@ Laravel includes an [authentication guard](/docs/{{version}}/authentication#addi
     });
 
 <a name="passing-tokens-in-requests"></a>
-## Passing Tokens In Requests
+## Способы передачи токена в запросе
 
-There are several ways of passing the API token to your application. We'll discuss each of these approaches while using the Guzzle HTTP library to demonstrate their usage. You may choose any of these approaches based on the needs of your application.
+Существует несколько способов как передать токен в запросе к серверу, чтобы гвард аутентификации его смог проверить. Примеры ниже даны с использованием библиотеки Guzzle HTTP.
 
-#### Query String
+#### В урле запроса
 
-Your application's API consumers may specify their token as an `api_token` query string value:
+Вы можете поставить `api_token` в качестве GET-параметра:
 
     $response = $client->request('GET', '/api/user?api_token='.$token);
 
-#### Request Payload
+#### В теле запроса
 
-Your application's API consumers may include their API token in the request's form parameters as an `api_token`:
+Вы можете добавить `api_token` одним из полей в POST запросе:
 
     $response = $client->request('POST', '/api/user', [
         'headers' => [
@@ -139,9 +143,9 @@ Your application's API consumers may include their API token in the request's fo
         ],
     ]);
 
-#### Bearer Token
+#### Bearer токен
 
-Your application's API consumers may provide their API token as a `Bearer` token in the `Authorization` header of the request:
+Вы можете добавить `api_token` в заголовки запроса:
 
     $response = $client->request('POST', '/api/user', [
         'headers' => [
