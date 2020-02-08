@@ -1,26 +1,32 @@
-# Deployment
+git 89a3928f9120fcaf8a3a1499d7a5db4d08ea2eee
 
-- [Introduction](#introduction)
-- [Server Configuration](#server-configuration)
+---
+
+# Развёртывание (деплой)
+
+- [Введение](#introduction)
+- [Настройка сервера](#server-configuration)
     - [Nginx](#nginx)
-- [Optimization](#optimization)
-    - [Autoloader Optimization](#autoloader-optimization)
-    - [Optimizing Configuration Loading](#optimizing-configuration-loading)
-    - [Optimizing Route Loading](#optimizing-route-loading)
-- [Deploying With Forge](#deploying-with-forge)
+- [Оптимизация](#optimization)
+    - [Автозагрузка классов](#autoloader-optimization)
+    - [Загрузка конфигурационных файлов](#optimizing-configuration-loading)
+    - [Загрузка роутов](#optimizing-route-loading)
+- [Развёртывание при помощи Forge](#deploying-with-forge)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-When you're ready to deploy your Laravel application to production, there are some important things you can do to make sure your application is running as efficiently as possible. In this document, we'll cover some great starting points for making sure your Laravel application is deployed properly.
+Есть несколько моментов, на которые нужно обратить внимание во время деплоя приложения на продакшн-сервер.
+
+> {tip} Если вы испытываете трудности в настройке сервера, используйте [Laravel Forge](https://forge.laravel.com)
 
 <a name="server-configuration"></a>
-## Server Configuration
+## Настройка сервера
 
 <a name="nginx"></a>
 ### Nginx
 
-If you are deploying your application to a server that is running Nginx, you may use the following configuration file as a starting point for configuring your web server. Most likely, this file will need to be customized depending on your server's configuration. If you would like assistance in managing your server, consider using a service such as [Laravel Forge](https://forge.laravel.com):
+Если на вашем сервере используется nginx, вы можете использовать следующий конфиг для домена:
 
     server {
         listen 80;
@@ -57,42 +63,40 @@ If you are deploying your application to a server that is running Nginx, you may
     }
 
 <a name="optimization"></a>
-## Optimization
+## Оптимизация
 
 <a name="autoloader-optimization"></a>
-### Autoloader Optimization
+### Автозагрузка классов
 
-When deploying to production, make sure that you are optimizing Composer's class autoloader map so Composer can quickly find the proper file to load for a given class:
+Убедитесь, что у вас сгенерирован оптимизированный автозагрузчик классов:
 
     composer install --optimize-autoloader --no-dev
 
-> {tip} In addition to optimizing the autoloader, you should always be sure to include a `composer.lock` file in your project's source control repository. Your project's dependencies can be installed much faster when a `composer.lock` file is present.
+> {tip} Чтобы команда `composer install` отрабатывала быстрее, в репозитории вашего кода должен присутствовать файл `composer.lock`
 
 <a name="optimizing-configuration-loading"></a>
-### Optimizing Configuration Loading
+### Загрузка конфигурационных файлов
 
-When deploying your application to production, you should make sure that you run the `config:cache` Artisan command during your deployment process:
+После выгрузки вашего приложения на продакшн-сервер задайте кэширование конфигов для более быстрой загрузки:
 
     php artisan config:cache
 
-This command will combine all of Laravel's configuration files into a single, cached file, which greatly reduces the number of trips the framework must make to the filesystem when loading your configuration values.
+Эта команда соберёт все файлы конфигов в один быстроисполняемый файл.
 
-> {note} If you execute the `config:cache` command during your deployment process, you should be sure that you are only calling the `env` function from within your configuration files. Once the configuration has been cached, the `.env` file will not be loaded and all calls to the `env` function will return `null`.
+> {note} Если вы выполняете `config:cache` в процессе разработки, вы должны быть уверены, что вызываете функцию `env` только из ваших конфигурационных файлов. Как только вы включите кэширование конфигов, функция `env` будет возвращать `null`
 
 <a name="optimizing-route-loading"></a>
-### Optimizing Route Loading
+### Загрузка роутов
 
-If you are building a large application with many routes, you should make sure that you are running the `route:cache` Artisan command during your deployment process:
+Если в вашем приложении много роутов, вы можете ускорить их загрузку, закешировав их:
 
     php artisan route:cache
 
-This command reduces all of your route registrations into a single method call within a cached file, improving the performance of route registration when registering hundreds of routes.
+Команда трансформирует стандартный файл роутов в кэшированную версию с уменьшенным количеством регистраций роутов и т.п., которая выполняется быстрее.
 
-> {note} Since this feature uses PHP serialization, you may only cache the routes for applications that exclusively use controller based routes. PHP is not able to serialize Closures.
+> {note} Кешированию поддаются только роуты с использованием контроллеров.
 
 <a name="deploying-with-forge"></a>
-## Deploying With Forge
+## Развёртывание при помощи Forge
 
-If you aren't quite ready to manage your own server configuration or aren't comfortable configuring all of the various services needed to run a robust Laravel application, [Laravel Forge](https://forge.laravel.com) is a wonderful alternative.
-
-Laravel Forge can create servers on various infrastructure providers such as DigitalOcean, Linode, AWS, and more. In addition, Forge installs and manages all of the tools needed to build robust Laravel applications, such as Nginx, MySQL, Redis, Memcached, Beanstalk, and more.
+Если вы испытываете трудности в установке и настройке сервера, используйте [Laravel Forge](https://forge.laravel.com). Этот сервис позволяет регистрировать VPS таки провайдеров как DigitalOcean, Linode, AWS, настраивать произвольный VPS, устанавливать на нём Nginx, MySQL, Redis, Memcached, Beanstalk и т.п. и предоставлять единую админку для управления VPS. 
