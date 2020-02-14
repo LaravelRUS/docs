@@ -1,26 +1,26 @@
 # URL Generation
 
-- [Introduction](#introduction)
-- [The Basics](#the-basics)
-    - [Generating Basic URLs](#generating-basic-urls)
-    - [Accessing The Current URL](#accessing-the-current-url)
-- [URLs For Named Routes](#urls-for-named-routes)
-    - [Signed URLs](#signed-urls)
-- [URLs For Controller Actions](#urls-for-controller-actions)
-- [Default Values](#default-values)
+- [Введение](#introduction)
+- [Основы](#the-basics)
+    - [Генерация URL-адреса](#generating-basic-urls)
+    - [Доступ к текущему URL](#accessing-the-current-url)
+- [URL-адреса для именованных маршрутов](#urls-for-named-routes)
+    - [Подписанные URL-адреса](#signed-urls)
+- [URL-адреса для экшенов контроллеров](#urls-for-controller-actions)
+- [Значения по умолчанию](#default-values)
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel provides several helpers to assist you in generating URLs for your application. These are mainly helpful when building links in your templates and API responses, or when generating redirect responses to another part of your application.
+Laravel поставляется несколькими вспомогательными функциями, которые помогут в построении URL для вашего приложения. Они в основном полезны когда необходимо сгенерировать ссылки в ваших шаблонах и API ответах или для отправки ответа для перенаправления на другую страницу вашего приложения.
 
 <a name="the-basics"></a>
-## The Basics
+## Основы
 
 <a name="generating-basic-urls"></a>
-### Generating Basic URLs
+### Генерация URL-адреса
 
-The `url` helper may be used to generate arbitrary URLs for your application. The generated URL will automatically use the scheme (HTTP or HTTPS) and host from the current request:
+Вспомогательная функция `url` может быть использована для построения любых URL для вашего приложения. Для генерации URL адреса будет использован протокол (HTTP or HTTPS) и хост из текущего запроса:
 
     $post = App\Post::find(1);
 
@@ -29,45 +29,45 @@ The `url` helper may be used to generate arbitrary URLs for your application. Th
     // http://example.com/posts/1
 
 <a name="accessing-the-current-url"></a>
-### Accessing The Current URL
+### Доступ к текущему URL
 
-If no path is provided to the `url` helper, a `Illuminate\Routing\UrlGenerator` instance is returned, allowing you to access information about the current URL:
+При вызове функции `url` без указания пути (первого аргумента) будет возвращен объект `Illuminate\Routing\UrlGenerator`, с помощью которого вы сможете получить доступ к информации о текущем URL:
 
-    // Get the current URL without the query string...
+    // Получение текущего URL без query string...
     echo url()->current();
 
-    // Get the current URL including the query string...
+    // Получение текущего URL включая query string...
     echo url()->full();
 
-    // Get the full URL for the previous request...
+    // Получение полного URL для предыдущего запроса..
     echo url()->previous();
 
-Each of these methods may also be accessed via the `URL` [facade](/docs/{{version}}/facades):
+Получить доступ к каждому из этих методов можно также через `URL` [facade](/docs/{{version}}/facades):
 
     use Illuminate\Support\Facades\URL;
 
     echo URL::current();
 
 <a name="urls-for-named-routes"></a>
-## URLs For Named Routes
+## URL-адреса для именованных маршрутов
 
-The `route` helper may be used to generate URLs to named routes. Named routes allow you to generate URLs without being coupled to the actual URL defined on the route. Therefore, if the route's URL changes, no changes need to be made to your `route` function calls. For example, imagine your application contains a route defined like the following:
+Вспомогательная функция `route` будет полезна для генерация URL для именованных маршрутов. Именованные маршруты позволяют создавать URL-адреса без привязки к фактическому URL-адресу, определенному в маршруте. Поэтому, если изменится URL адрес в определении маршрута, нет необходимости вносить изменения в вызываемой функции `route`. Например, допустим ваше приложение содержит следующий маршрут: 
 
     Route::get('/post/{post}', function () {
         //
     })->name('post.show');
 
-To generate a URL to this route, you may use the `route` helper like so:
+Для генерации URL адреса для этого маршрута можно использовать функцию `route` таким образом:
 
     echo route('post.show', ['post' => 1]);
 
     // http://example.com/post/1
 
-You will often be generating URLs using the primary key of [Eloquent models](/docs/{{version}}/eloquent). For this reason, you may pass Eloquent models as parameter values. The `route` helper will automatically extract the model's primary key:
+Вам часто придется генерировать URL-адреса используя первичный ключ модели [Eloquent models](/docs/{{version}}/eloquent). Поэтому можно в качестве аргумента передавать объект Eloquent модели, функция `route` автоматически извлечет первичный ключи из объекта:
 
     echo route('post.show', ['post' => $post]);
 
-The `route` helper may also be used to generate URLs for routes with multiple parameters:
+Также в функцию `route` может быть передано несколько аргументов:
 
     Route::get('/post/{post}/comment/{comment}', function () {
         //
@@ -78,17 +78,17 @@ The `route` helper may also be used to generate URLs for routes with multiple pa
     // http://example.com/post/1/comment/3
 
 <a name="signed-urls"></a>
-### Signed URLs
+### Подписанные URL-адреса
 
-Laravel allows you to easily create "signed" URLs to named routes. These URLs have a "signature" hash appended to the query string which allows Laravel to verify that the URL has not been modified since it was created. Signed URLs are especially useful for routes that are publicly accessible yet need a layer of protection against URL manipulation.
+Laravel позволит вам с легкостью создавать "подписанные" URL-адреса для именованных маршрутов. В эти адреса будет добавлен "подпись" хэш в виде query string параметра, который позволит Laravel приложению проверить, что URL адрес не был изменен с момента его генерации. Подписанные URL-адреса особенно полезны для публичных маршрутов, которые необходимо защитить от изменения.
 
-For example, you might use signed URLs to implement a public "unsubscribe" link that is emailed to your customers. To create a signed URL to a named route, use the `signedRoute` method of the `URL` facade:
+Например, вы можете использовать подписанный URL адрес для генерации ссылок "отписки", который отправляются клиентам по электронной почте. Для создания подписанного URL адреса используйте метод `signedRoute` из `URL` фасада:
 
     use Illuminate\Support\Facades\URL;
 
     return URL::signedRoute('unsubscribe', ['user' => 1]);
 
-If you would like to generate a temporary signed route URL that expires, you may use the `temporarySignedRoute` method:
+Если вы хотите сгенерировать временную ссылку, которая должна быть действительно некоторое время, вы можете использовать метод `temporarySignedRoute`:
 
     use Illuminate\Support\Facades\URL;
 
@@ -96,9 +96,9 @@ If you would like to generate a temporary signed route URL that expires, you may
         'unsubscribe', now()->addMinutes(30), ['user' => 1]
     );
 
-#### Validating Signed Route Requests
+#### Валидация запроса с подписью
 
-To verify that an incoming request has a valid signature, you should call the `hasValidSignature` method on the incoming `Request`:
+Для проверки, что входящий запрос имеет валидную подпись, вы должны использовать метод `hasValidSignature` входящего запроса `Request`:
 
     use Illuminate\Http\Request;
 
@@ -110,7 +110,7 @@ To verify that an incoming request has a valid signature, you should call the `h
         // ...
     })->name('unsubscribe');
 
-Alternatively, you may assign the `Illuminate\Routing\Middleware\ValidateSignature` middleware to the route. If it is not already present, you should assign this middleware a key in your HTTP kernel's `routeMiddleware` array:
+Альтернативный вариант, вы можете использовать middleware `Illuminate\Routing\Middleware\ValidateSignature`, который можно назначить определенному маршруту. Если его еще нет, вам следует назначить этому middleware ключ в массиве `routeMiddleware` в `Http\Kernel.php`:
 
     /**
      * The application's route middleware.
@@ -123,39 +123,39 @@ Alternatively, you may assign the `Illuminate\Routing\Middleware\ValidateSignatu
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
     ];
 
-Once you have registered the middleware in your kernel, you may attach it to a route. If the incoming request does not have a valid signature, the middleware will automatically return a `403` error response:
+Как только middleware был зарегистрирован в `Http\Kernel.php`, вы можете применять его к маршрутам. Если входящий запрос не содержит валидной подписи, middleware автоматически вернет ответ с кодом `403`:
 
     Route::post('/unsubscribe/{user}', function (Request $request) {
         // ...
     })->name('unsubscribe')->middleware('signed');
 
 <a name="urls-for-controller-actions"></a>
-## URLs For Controller Actions
+## URL-адреса для экшенов контроллеров
 
-The `action` function generates a URL for the given controller action. You do not need to pass the full namespace of the controller. Instead, pass the controller class name relative to the `App\Http\Controllers` namespace:
+Вспомогательная функция `action` позволяет генерировать URL-адреса для экшеном контроллера. Вам не нужно передавать полный путь до контроллера (Namespace), вместо это вы можете передавать только название контроллера относительно пространства имен `App\Http\Controllers`:
 
     $url = action('HomeController@index');
 
-You may also reference actions with a "callable" array syntax:
+Также вы можете ссылаться на экшн с помощью "callable" синтаксиса:
 
     use App\Http\Controllers\HomeController;
 
     $url = action([HomeController::class, 'index']);
 
-If the controller method accepts route parameters, you may pass them as the second argument to the function:
+Если метод экшена ожидает аргументы функции, вы можете передать их вторых аргументом функции:
 
     $url = action('UserController@profile', ['id' => 1]);
 
 <a name="default-values"></a>
-## Default Values
+## Значения по умолчанию
 
-For some applications, you may wish to specify request-wide default values for certain URL parameters. For example, imagine many of your routes define a `{locale}` parameter:
+Для некоторых приложений возможно вы захотите определить значения по умолчанию для определенных параметров URL адреса. Например, допустим ваш маршрут имеет параметр `{locale}`:
 
     Route::get('/{locale}/posts', function () {
         //
     })->name('post.index');
 
-It is cumbersome to always pass the `locale` every time you call the `route` helper. So, you may use the `URL::defaults` method to define a default value for this parameter that will always be applied during the current request. You may wish to call this method from a [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes) so that you have access to the current request:
+Передавать каждый раз параметр `locale` при вызове функции `route` накладно. Поэтому вы можете использовать метод `URL::defaults` для определения значений по умолчанию, которые всегда будут устанавливаться для текущего запроса. Данный метод вы можете вызывать через [route middleware](/docs/{{version}}/middleware#assigning-middleware-to-routes), чтобы получить доступ к объекту текущего запроса:
 
     <?php
 
@@ -174,4 +174,4 @@ It is cumbersome to always pass the `locale` every time you call the `route` hel
         }
     }
 
-Once the default value for the `locale` parameter has been set, you are no longer required to pass its value when generating URLs via the `route` helper.
+После того, как значение по умолчанию для параметра `locale` было установлено, больше нет необходимости передавать его при генерации URL-адресов с помощью функции `route`.
