@@ -1,4 +1,8 @@
-# URL Generation
+git b1b37c94754d45a6c70acb955b387f305ec8927e
+
+---
+
+# Генерация URL
 
 - [Введение](#introduction)
 - [Основы](#the-basics)
