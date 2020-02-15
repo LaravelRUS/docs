@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git 63a231cc5940dda64e8f0b08e0b9e7be33b6e27c
 
 ---
 
@@ -17,6 +17,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 - [Авторизация на каналах](#authorizing-channels)
     - [Определение роутов авторизации](#defining-authorization-routes)
     - [Определение анонимных функций авторизации](#defining-authorization-callbacks)
+    - [Классы каналов](#defining-channel-classes)
 - [Широковещание событий](#broadcasting-events)
     - [Только другим](#only-to-others)
 - [Получение широковещаний](#receiving-broadcasts)
@@ -43,7 +44,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="configuration"></a>
 ### Настройка
 
-Все настройки широковещания событий вашего приложения хранятся в конфиге `config/broadcasting.php`. Laravel изначально поддерживает несколько драйверов вещания: [Pusher](https://pusher.com), [Redis](/docs/{{version}}/redis) и драйвер `log` для локальной разработки и отладки. Дополнительно включен драйвер `null`, который позволяет полностью отключить широковещание. Для каждого из этих драйверов есть пример настройки в конфиге `config/broadcasting.php`.
+Все настройки широковещания (broadcast) событий вашего приложения хранятся в конфиге `config/broadcasting.php`. Laravel изначально поддерживает несколько драйверов вещания: [Pusher Channels](https://pusher.com/channels), [Redis](/docs/{{version}}/redis) и драйвер `log` для локальной разработки и отладки. Дополнительно включен драйвер `null`, который позволяет полностью отключить широковещание. Для каждого из этих драйверов есть пример настройки в конфиге `config/broadcasting.php`.
 
 #### Сервис-провайдер широковещания
 
@@ -51,7 +52,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 #### CSRF токен
 
-У [Laravel Echo](#installing-laravel-echo) должен быть доступ к CSRF токену текущей сессии. Если доступно, Echo вытащит токен из JavaScript-объекта `Laravel.csrfToken`. Данный объект определен в макете `resources/views/layouts/app.blade.php`, который создается при запуске Artisan-команды `make:auth`. Если вы не используете этот макет, можно задать тег `meta` в HTML-элементе `head` вашего приложения:
+У [Laravel Echo](#installing-laravel-echo) должен быть доступ к CSRF токену текущей сессии. Вы должны задать тег `meta` в HTML-элементе `head` вашего приложения:
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -60,35 +61,35 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 #### Pusher
 
-Если вы вещаете свои события через [Pusher](https://pusher.com), вам нужно установить Pusher PHP SDK, используя менеджер пакетов Composer:
+Если вы вещаете свои события через [Pusher Channels](https://pusher.com/channels), вам нужно установить Pusher PHP SDK, используя менеджер пакетов Composer:
 
-    composer require pusher/pusher-php-server "~2.6"
+    composer require pusher/pusher-php-server "~4.0"
 
-Далее нужно настроить учетные данные Pusher в конфиге `config/broadcasting.php`. Пример конфига Pusher уже включен в этот файл, что позволит вам быстро указать ваш ключ Pusher, секрет, а также ID приложения. Настройка `pusher` файла `config/broadcasting.php` позволяет указать дополнительные опции `options`, поддерживаемые Pusher, такие как кластер:
+Далее нужно настроить учетные данные Pusher Channels в конфиге `config/broadcasting.php`. Пример конфига уже включен в этот файл, что позволит вам быстро указать ваш ключ Pusher Channels, секрет, а также ID приложения. Настройка `pusher` файла `config/broadcasting.php` позволяет указать дополнительные опции `options`, поддерживаемые Pusher, такие как кластер:
 
     'options' => [
         'cluster' => 'eu',
-        'encrypted' => true
+        'useTLS' => true
     ],
 
-При использовании Pusher и [Laravel Echo](#installing-laravel-echo) следует указать `pusher` в качестве желаемого широковещателя при установке экземпляра Echo в файле `resources/assets/js/bootstrap.js`:
+При использовании Pusher Channels и [Laravel Echo](#installing-laravel-echo) следует указать `pusher` в качестве желаемого широковещателя при установке экземпляра Echo в файле `resources/assets/js/bootstrap.js`:
 
-    import Echo from "laravel-echo"
+    import Echo from "laravel-echo";
 
     window.Pusher = require('pusher-js');
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key'
+        key: 'your-pusher-channels-key'
     });
 
 #### Redis
 
-Нужно установать библиотеку Predis, если вы используете широковещатель Redis:
+Если вы используете широковещание при помощи Redis, вам нужно установить php-расширение `phpredis` или библиотеку `Predis` при помощи Composer:
 
     composer require predis/predis
 
-Широковещатель Redis будет вещать сообщения через функцию Redis pub / sub; однако, потребуется связать его с WebSocket-сервером, который может получать сообщения от Redis и вещать их на ваши WebSocket-каналы.
+Широковещатель Redis будет вещать сообщения через функцию Redis pub/sub; однако, потребуется связать его с WebSocket-сервером, который может получать сообщения от Redis и вещать их на ваши WebSocket-каналы.
 
 Когда широковещатель Redis публикует событие, оно будет опубликовано на каналах события с ранее указанными именами. Информационным наполнением будет служить кодированная строка JSON, содержащая имя события, `data` и пользователя, который сгенерировал сокет ID события (если применимо).
 
@@ -98,9 +99,15 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     <script src="//{{ Request::getHost() }}:6001/socket.io/socket.io.js"></script>
 
+Если вы собираетесь соединить широковещатель Redis с сервером Socket.IO, потребуется установить клиентскую библиотеку Socket.IO: 
+
+    npm install --save socket.io-client
+
 Затем нужно инстанцировать Echo с коннектором `socket.io` и хостом `host`.
 
     import Echo from "laravel-echo"
+
+    window.io = require('socket.io-client');
 
     window.Echo = new Echo({
         broadcaster: 'socket.io',
@@ -116,14 +123,14 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="concept-overview"></a>
 ## Обзор концепции
 
-Широковещание событий Laravel позволяет вещать свои серверные события Laravel клиентскому JavaScript приложения, используя подход, основанный на драйверах. Сейчас Laravel поставляется с драйверами [Pusher](https://pusher.com) и Redis. События могут быть легко использованы кодом на стороне клиента благодаря Javascript-пакету [Laravel Echo](#installing-laravel-echo).
+Широковещание событий Laravel позволяет вещать свои серверные события Laravel клиентскому JavaScript приложения, используя подход, основанный на драйверах. Сейчас Laravel поставляется с драйверами [Pusher Channels](https://pusher.com/channels) и Redis. События могут быть легко использованы кодом на стороне клиента благодаря Javascript-пакету [Laravel Echo](#installing-laravel-echo).
 
 События вещаются по "каналам", которые можно указать как общедоступные или приватные. Любой посетитель вашего приложения может подписаться на общедоступный канал без аутентификации или авторизации; однако, чтобы подписаться на приватный канал пользователь должен быть аутентифицирован и авторизован прослушивать этот канал.
 
 <a name="using-example-application"></a>
 ### Использование примера приложения
 
-Прежде чем погрузиться в каждый компонент вещания событий, давайте рассмотрим общий пример - онлайн-магазин. Мы не будем обсуждать детали настройки [Pusher](https://pusher.com) или [Laravel Echo](#installing-laravel-echo), так как более детальное обсуждение вас ждет в других разделах этой документации.
+Прежде чем погрузиться в каждый компонент вещания событий, давайте рассмотрим общий пример - онлайн-магазин. Мы не будем обсуждать детали настройки [Pusher Channels](https://pusher.com/channels) или [Laravel Echo](#installing-laravel-echo), так как более детальное обсуждение вас ждет в других разделах этой документации.
 
 Давайте предположим, что в нашем приложении есть страница, которая позволяет пользователям просматривать статус отправки своих заказов. Также предположим, что когда приложением обрабатывается обновление статуса отправки, выдается событие `ShippingStatusUpdated`:
 
@@ -138,11 +145,11 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     namespace App\Events;
 
     use Illuminate\Broadcasting\Channel;
-    use Illuminate\Queue\SerializesModels;
-    use Illuminate\Broadcasting\PrivateChannel;
-    use Illuminate\Broadcasting\PresenceChannel;
     use Illuminate\Broadcasting\InteractsWithSockets;
+    use Illuminate\Broadcasting\PresenceChannel;
+    use Illuminate\Broadcasting\PrivateChannel;
     use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+    use Illuminate\Queue\SerializesModels;
 
     class ShippingStatusUpdated implements ShouldBroadcast
     {
@@ -159,7 +166,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array
+     * @return \Illuminate\Broadcasting\PrivateChannel
      */
     public function broadcastOn()
     {
@@ -198,12 +205,13 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     namespace App\Events;
 
+    use App\User;
     use Illuminate\Broadcasting\Channel;
-    use Illuminate\Queue\SerializesModels;
-    use Illuminate\Broadcasting\PrivateChannel;
-    use Illuminate\Broadcasting\PresenceChannel;
     use Illuminate\Broadcasting\InteractsWithSockets;
+    use Illuminate\Broadcasting\PresenceChannel;
+    use Illuminate\Broadcasting\PrivateChannel;
     use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+    use Illuminate\Queue\SerializesModels;
 
     class ServerCreated implements ShouldBroadcast
     {
@@ -303,6 +311,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     {
         //
     }
+
 <a name="broadcast-conditions"></a>
 ### Условия широковещания
 
@@ -334,6 +343,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     Broadcast::routes($attributes);
 
+#### Настройка урла авторизации
+
+По умолчанию Echo использует урл `/broadcasting/auth` для авторизации каналов. Вы можете изменить это в параметре `authEndpoint` настройки инстанса Echo:
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: 'your-pusher-channels-key',
+        authEndpoint: '/custom/endpoint/auth'
+    });
+
 <a name="defining-authorization-callbacks"></a>
 ### Определение анонимных функций авторизации
 
@@ -345,7 +364,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 Метод `channel` принимает два аргумента: имя канала и обратную функцию, которая возвращает `true` или `false`, указывая авторизован ли пользователь слушать канал.
 
-Все анонимные функции авторизации получают аутентифицированнного в данный момент пользователя в качестве своего первого аргументу, и любые дополнительные подстановочные параметры в качестве дополнительных аргументов. В этом примере мы используем заполнитель `{orderId}` для указания, что "ID"-часть канала является спецсимволом.
+Все анонимные функции авторизации получают аутентифицированнного в данный момент пользователя в качестве своего первого аргумента, и любые дополнительные подстановочные параметры в качестве дополнительных аргументов. В этом примере мы используем заполнитель `{orderId}` для указания, что "ID"-часть канала является спецсимволом.
 
 #### Привязка моделей анонимной функции авторизации
 
@@ -356,6 +375,63 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     Broadcast::channel('order.{order}', function ($user, Order $order) {
         return $user->id === $order->user_id;
     });
+
+#### Аутентификация анонимной функции авторизации
+
+Приватные (private) каналы и каналы присутствия (presence) аутентифицируют пользователя при помощи дефолтного гварда аутентификации, если пользователь не аутентифицирован, функция авторизации канала не вызывается. Вы также можете указать, что для аутентификации нужно использовать заданные гварды, отличающиеся от дефолтного:
+
+    Broadcast::channel('channel', function () {
+        // ...
+    }, ['guards' => ['web', 'admin']]);
+
+<a name="defining-channel-classes"></a>
+### Классы каналов
+
+Если ваше приложение использует большое число каналов, `routes/channels.php` может получиться слишком раздутым. Поэтому вместо анонимных функций авторизации каналов вы можете использовать классы каналов. Класс можно создать командой `make:channel`, класс создастся в папке `App/Broadcasting`:
+
+    php artisan make:channel OrderChannel
+
+Далее надо зарегистрировать класс в `routes/channels.php`:
+
+    use App\Broadcasting\OrderChannel;
+
+    Broadcast::channel('order.{order}', OrderChannel::class);
+
+Логику авторизации нужно разместить в методе `join` созданного класса. Принципы написания те же, что и при использовании анонимнах функций авторизации, включая неявную привязку моделей: 
+
+    <?php
+
+    namespace App\Broadcasting;
+
+    use App\Order;
+    use App\User;
+
+    class OrderChannel
+    {
+        /**
+         * Create a new channel instance.
+         *
+         * @return void
+         */
+        public function __construct()
+        {
+            //
+        }
+
+        /**
+         * Authenticate the user's access to the channel.
+         *
+         * @param  \App\User  $user
+         * @param  \App\Order  $order
+         * @return array|bool
+         */
+        public function join(User $user, Order $order)
+        {
+            return $user->id === $order->user_id;
+        }
+    }
+
+> {tip} Классаы каналов, как и другие классы Laravel, вызываются при помощи [сервис-контейнера](/docs/{{version}}/container), поэтому в них работает автоподстановка классов (type-hint) в аргументах конструктора
 
 <a name="broadcasting-events"></a>
 ## Широковещание событий
@@ -375,16 +451,16 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     broadcast(new ShippingStatusUpdated($update))->toOthers();
 
-Чтобы лучше понять когда мы можете захотеть использовать метод `toOthers`, давайте представим приложение со списком задач, где пользователь может создавать новую задачу путем ввода имени задачи. Чтобы создать задачу, ваше приложение может сделать запрос к конечной точке `/task`, которая вещает результат этой задачи и возвращает JSON-представление новой задачи. Когда ваше JavaScript-приложение получает ответ от конечной точки, оно может напрямую вставить новую задачу в свой список задач, как указано ниже:
+Чтобы лучше понять когда мы можете захотеть использовать метод `toOthers`, давайте представим приложение со списком задач, где пользователь может создавать новую задачу путем ввода имени задачи. Чтобы создать задачу, ваше приложение может сделать запрос к api-эндпоинту (урлу) `/task`, которая вещает результат этой задачи и возвращает JSON-представление новой задачи. Когда ваше JavaScript-приложение получает ответ от эндпоинта, оно может напрямую вставить новую задачу в свой список задач, как указано ниже:
 
     axios.post('/task', task)
         .then((response) => {
             this.tasks.push(response.data);
         });
 
-Но не забывайте, что мы так же вещает и результат задачи. Если ваше JavaScript-приложение слушает это событие, чтобы добавить задачи в список задач, вы создадите дубли задач в своем списке: одну от конечной точки и одну от широковещателя.
+Но не забывайте, что факт создания задачи мы так же и вещаем. Если ваше JavaScript-приложение слушает это событие, чтобы добавить задачи в список задач, вы создадите дубли задач в своем списке: одну от эндпоинта и одну от широковещателя. С этим можно разобраться используя метод `toOthers`, чтобы сообщить широковещателю не вещать событие текущему пользователю.
 
-С этим можно разобраться используя метод `toOthers`, чтобы сообщить широковещателю не вещать событие текущему пользователю.
+> {note} Ваше событие должно использовать трейт `Illuminate\Broadcasting\InteractsWithSockets` , чтобы в нём был доступен метод `toOthers`.
 
 #### Настройка
 
@@ -400,7 +476,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="installing-laravel-echo"></a>
 ### Установка Laravel Echo
 
-Laravel Echo - это JavaScript-библиотека, которая делает подписку на каналы и слушание вещания событий Laravel безболезненным. Echo можно установить через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`, так как мы собираемся использовать вещатель Pusher:
+Laravel Echo - это JavaScript-библиотека, которая делает подписку на каналы и слушание вещания событий Laravel безболезненным. Echo можно установить через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`, так как мы собираемся использовать вещатель Pusher Channels:
 
     npm install --save laravel-echo pusher-js
 
@@ -410,20 +486,32 @@ Laravel Echo - это JavaScript-библиотека, которая делае
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key'
+        key: 'your-pusher-channels-key'
     });
 
-При создании экземпляра Echo, который использует коннектор `pusher`, также можно указать и `cluster`, а также должно ли подключение быть зашифрованным:
+При создании экземпляра Echo, который использует коннектор `pusher`, также можно указать и `cluster`, а также должно ли подключение шифроваться при помощи TLS:
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key',
+        key: 'your-pusher-channels-key',
         cluster: 'eu',
-        encrypted: true
+        forceTLS: true
     });
 
+#### Использование существующего экземпляра приложения
+
+Если у вас в приложении уже используется Pusher Channels или Socket.io клиент, вы можете использовать его, указав его как `client` при конфигурировании:
+
+    const client = require('pusher-js');
+
+    window.Echo = new Echo({
+        broadcaster: 'pusher',
+        key: 'your-pusher-channels-key',
+        client: client
+    });    
+
 <a name="listening-for-events"></a>
-### Прослушивание событий
+### Слушание событий
 
 Как только вы установили и инстанцировали Echo, вы готовы начать слушать широковещания событий. Сначала используйте метод `channel`, чтобы получить экземпляр канала, затем вызовите метод `listen`, чтобы слушать указанное событие:
 
@@ -442,7 +530,11 @@ Laravel Echo - это JavaScript-библиотека, которая делае
 <a name="leaving-a-channel"></a>
 ### Уход с канала
 
-Чтобы уйти с канала можно вызвать метод `leave` на своем экземпляре Echo:
+Чтобы уйти с канала можно вызвать метод `leaveChannel` на экземпляре Echo:
+
+    Echo.leaveChannel('orders');
+
+Если вы хотите покинуть канал, а также связанные с ним приватные каналы и каналы присутствия, вы можете вызвать метод `leave`:
 
     Echo.leave('orders');
 
@@ -453,23 +545,23 @@ Laravel Echo - это JavaScript-библиотека, которая делае
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key',
+        key: 'your-pusher-channels-key',
         namespace: 'App.Other.Namespace'
     });
 
 Или же, можно добавить к классам событий префикс `.` при подписке на них с использованием Echo. Это позволит всегда указывать полное имя класса:
 
     Echo.channel('orders')
-        .listen('.Namespace.Event.Class', (e) => {
+        .listen('.Namespace\\Event\\Class', (e) => {
             //
         });
 
 <a name="presence-channels"></a>
-## Каналы присутствия
+## Каналы присутствия (presence)
 
-Каналы присутствия строятся на безопасности приватных каналов, предоставляя дополнительную особенность осведомленности о том, кто подписан на канал. Это упрощает построение мощных, коллаборативных функций приложения, таких как уведомление пользователей о том, когда другой пользователь просматривает ту же страницу.
+Каналы присутствия (presence channels) строятся на безопасности приватных каналов, предоставляя дополнительную особенность осведомленности о том, кто подписан на канал. Это упрощает построение мощных, коллаборативных функций приложения, таких как уведомление пользователей о том, когда другой пользователь просматривает ту же страницу.
 
-<a name="joining-a-presence-channel"></a>
+<a name="authorizing-presence-channels"></a>
 ### Авторизация каналов присутствия
 
 Все каналы присутствия также являются приватными каналами; таким образом, пользователи должны быть [авторизованы, чтобы получить к ним доступ](#authorizing-channels). Однако, при определении анонимных функций авторизации для каналов присутствия вы не будете возвращать `true`, если пользователь авторизован присоединяться к каналу. Вместо этого вы должны вернуть массив данных о пользователе.
@@ -532,18 +624,22 @@ Laravel Echo - это JavaScript-библиотека, которая делае
         });
 
 <a name="client-events"></a>
-## События клиента
+## Клиентские события
 
-Иногда вам может потребоваться вещать событие другим клиентам подключения, совсем не трогая ваше Laravel-приложение. Это может особенно пригодится для таких вещей, как уведомлений о том, что пользователь "печатает", где одному из пользователей на экране приложения будет отображаться уведомление, что другу пользователь в данный момент печатает ему сообщение. Для вещания событий клиента можно использовать метод Echo `whisper`:
+> {tip} Если вы используете [Pusher Channels](https://pusher.com/channels), для использования клиентских событий вы должны включить опцию "Client Events" в разделе "App Settings" [дашбоарда на pusher.com](https://dashboard.pusher.com/)
 
-    Echo.channel('chat')
+Иногда вам может потребоваться вещать событие другим клиентам подключения, совсем не трогая ваше Laravel-приложение. Это может особенно пригодится для таких вещей, как уведомлений о том, что пользователь "печатает", где одному из пользователей на экране приложения будет отображаться уведомление, что другу пользователь в данный момент печатает ему сообщение. 
+
+Для вещания событий клиента можно использовать метод Echo `whisper`:
+
+    Echo.private('chat')
         .whisper('typing', {
             name: this.user.name
         });
 
 Чтобы слушать события клиентов можно использовать метод `listenForWhisper`:
 
-    Echo.channel('chat')
+    Echo.private('chat')
         .listenForWhisper('typing', (e) => {
             console.log(e.name);
         });
