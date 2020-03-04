@@ -1,4 +1,4 @@
-git e73c40f0dea4db1205c83584d6c5b544b5ff1683
+git 328b76a3bd519338dc09ab170764334b623239ea
 
 ---
 
@@ -39,11 +39,13 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 ### Базовая коллекция
 
-Все коллекции Eloquent наследуют объект базовой [коллекции Laravel](/docs/{{version}}/collections); поэтому они наследуют все мощные методы, предоставляемые базовым классом коллекции:
+Все коллекции Eloquent наследуют класс [коллекций Laravel](/docs/{{version}}/collections); поэтому они наследуют все методы, предоставляемые базовым классом коллекций.
+
+Дополнительно класс `Illuminate\Database\Eloquent\Collection` содержит несколько методов, специфичных для работы именно с моделями коллекций. В основном они возвращают `Illuminate\Database\Eloquent\Collection`, но некоторые возвращают и базовые коллекции, `Illuminate\Support\Collection`.
 
 <style>
     #collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
+        column-count: 1; -moz-column-count: 1; -webkit-column-count: 1;
         column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
     }
 
@@ -54,97 +56,128 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 <div id="collection-method-list" markdown="1">
 
-[all](/docs/{{version}}/collections#method-all)
-[average](/docs/{{version}}/collections#method-average)
-[avg](/docs/{{version}}/collections#method-avg)
-[chunk](/docs/{{version}}/collections#method-chunk)
-[collapse](/docs/{{version}}/collections#method-collapse)
-[combine](/docs/{{version}}/collections#method-combine)
-[concat](/docs/{{version}}/collections#method-concat)
-[contains](/docs/{{version}}/collections#method-contains)
-[containsStrict](/docs/{{version}}/collections#method-containsstrict)
-[count](/docs/{{version}}/collections#method-count)
-[crossJoin](/docs/{{version}}/collections#method-crossjoin)
-[dd](/docs/{{version}}/collections#method-dd)
-[diff](/docs/{{version}}/collections#method-diff)
-[diffKeys](/docs/{{version}}/collections#method-diffkeys)
-[dump](/docs/{{version}}/collections#method-dump)
-[each](/docs/{{version}}/collections#method-each)
-[eachSpread](/docs/{{version}}/collections#method-eachspread)
-[every](/docs/{{version}}/collections#method-every)
-[except](/docs/{{version}}/collections#method-except)
-[filter](/docs/{{version}}/collections#method-filter)
-[first](/docs/{{version}}/collections#method-first)
-[flatMap](/docs/{{version}}/collections#method-flatmap)
-[flatten](/docs/{{version}}/collections#method-flatten)
-[flip](/docs/{{version}}/collections#method-flip)
-[forget](/docs/{{version}}/collections#method-forget)
-[forPage](/docs/{{version}}/collections#method-forpage)
-[get](/docs/{{version}}/collections#method-get)
-[groupBy](/docs/{{version}}/collections#method-groupby)
-[has](/docs/{{version}}/collections#method-has)
-[implode](/docs/{{version}}/collections#method-implode)
-[intersect](/docs/{{version}}/collections#method-intersect)
-[isEmpty](/docs/{{version}}/collections#method-isempty)
-[isNotEmpty](/docs/{{version}}/collections#method-isnotempty)
-[keyBy](/docs/{{version}}/collections#method-keyby)
-[keys](/docs/{{version}}/collections#method-keys)
-[last](/docs/{{version}}/collections#method-last)
-[map](/docs/{{version}}/collections#method-map)
-[mapInto](/docs/{{version}}/collections#method-mapinto)
-[mapSpread](/docs/{{version}}/collections#method-mapspread)
-[mapToGroups](/docs/{{version}}/collections#method-maptogroups)
-[mapWithKeys](/docs/{{version}}/collections#method-mapwithkeys)
-[max](/docs/{{version}}/collections#method-max)
-[median](/docs/{{version}}/collections#method-median)
-[merge](/docs/{{version}}/collections#method-merge)
-[min](/docs/{{version}}/collections#method-min)
-[mode](/docs/{{version}}/collections#method-mode)
-[nth](/docs/{{version}}/collections#method-nth)
-[only](/docs/{{version}}/collections#method-only)
-[pad](/docs/{{version}}/collections#method-pad)
-[partition](/docs/{{version}}/collections#method-partition)
-[pipe](/docs/{{version}}/collections#method-pipe)
-[pluck](/docs/{{version}}/collections#method-pluck)
-[pop](/docs/{{version}}/collections#method-pop)
-[prepend](/docs/{{version}}/collections#method-prepend)
-[pull](/docs/{{version}}/collections#method-pull)
-[push](/docs/{{version}}/collections#method-push)
-[put](/docs/{{version}}/collections#method-put)
-[random](/docs/{{version}}/collections#method-random)
-[reduce](/docs/{{version}}/collections#method-reduce)
-[reject](/docs/{{version}}/collections#method-reject)
-[reverse](/docs/{{version}}/collections#method-reverse)
-[search](/docs/{{version}}/collections#method-search)
-[shift](/docs/{{version}}/collections#method-shift)
-[shuffle](/docs/{{version}}/collections#method-shuffle)
-[slice](/docs/{{version}}/collections#method-slice)
-[sort](/docs/{{version}}/collections#method-sort)
-[sortBy](/docs/{{version}}/collections#method-sortby)
-[sortByDesc](/docs/{{version}}/collections#method-sortbydesc)
-[splice](/docs/{{version}}/collections#method-splice)
-[split](/docs/{{version}}/collections#method-split)
-[sum](/docs/{{version}}/collections#method-sum)
-[take](/docs/{{version}}/collections#method-take)
-[tap](/docs/{{version}}/collections#method-tap)
-[toArray](/docs/{{version}}/collections#method-toarray)
-[toJson](/docs/{{version}}/collections#method-tojson)
-[transform](/docs/{{version}}/collections#method-transform)
-[union](/docs/{{version}}/collections#method-union)
-[unique](/docs/{{version}}/collections#method-unique)
-[uniqueStrict](/docs/{{version}}/collections#method-uniquestrict)
-[unless](/docs/{{version}}/collections#method-unless)
-[values](/docs/{{version}}/collections#method-values)
-[when](/docs/{{version}}/collections#method-when)
-[where](/docs/{{version}}/collections#method-where)
-[whereStrict](/docs/{{version}}/collections#method-wherestrict)
-[whereIn](/docs/{{version}}/collections#method-wherein)
-[whereInStrict](/docs/{{version}}/collections#method-whereinstrict)
-[whereNotIn](/docs/{{version}}/collections#method-wherenotin)
-[whereNotInStrict](/docs/{{version}}/collections#method-wherenotinstrict)
-[zip](/docs/{{version}}/collections#method-zip)
+[contains](#method-contains)
+[diff](#method-diff)
+[except](#method-except)
+[find](#method-find)
+[fresh](#method-fresh)
+[intersect](#method-intersect)
+[load](#method-load)
+[loadMissing](#method-loadMissing)
+[modelKeys](#method-modelKeys)
+[makeVisible](#method-makeVisible)
+[makeHidden](#method-makeHidden)
+[only](#method-only)
+[unique](#method-unique)
 
 </div>
+
+<a name="method-contains"></a>
+#### `contains($key, $operator = null, $value = null)`
+
+Метод `contains` позволяет понять, есть ли в коллекции заданная модель. Если аргумент числовой, он рассматривается как id модели.
+
+    $users->contains(1);
+    
+    $users->contains(User::find(1));
+
+<a name="method-diff"></a>
+#### `diff($items)`
+
+Метод `diff` возвращает все модели, которых нет в переданной коллекции.
+
+    use App\User;
+
+    $users = $users->diff(User::whereIn('id', [1, 2, 3])->get());
+
+<a name="method-except"></a>
+#### `except($keys)`
+
+Метод `except` возвращает все модели, кроме тех, чьи id перечислены в аргументе.
+
+    $users = $users->except([1, 2, 3]);
+
+<a name="method-find"></a>
+#### `find($key)` {#collection-method .first-collection-method}
+
+Метод `find` находит модели по переданным id. Если вместо id передаётся экземпляр модели, поиск идёт про его id. Если передаётся массив из id, `find` вернёт все эти модели, будет искать по моделям при помощи `whereIn()`:
+
+    $users = User::all();
+
+    $user = $users->find(1);
+
+<a name="method-fresh"></a>
+#### `fresh($with = [])`
+
+Метод `fresh` обновляет все модели в коллекции, запрашивая данные из БД. В аргументах можно задать отношение, которое автоматически подгрузится в каждую модель.
+
+    $users = $users->fresh();
+
+    $users = $users->fresh('comments');
+
+<a name="method-intersect"></a>
+#### `intersect($items)`
+
+Метод `intersect` возвращает модели которые также присутствуют в коллекции, поданной в аргументе.
+
+    use App\User;
+
+    $users = $users->intersect(User::whereIn('id', [1, 2, 3])->get());
+
+<a name="method-load"></a>
+#### `load($relations)`
+
+Метод `load` загружает заданные отношения во все модели.
+
+    $users->load('comments', 'posts');
+
+    $users->load('comments.author');
+
+<a name="method-loadMissing"></a>
+#### `loadMissing($relations)`
+
+Метод `loadMissing` загружает отношения во все модели, если они ещё не загружены.
+
+    $users->loadMissing('comments', 'posts');
+
+    $users->loadMissing('comments.author');
+
+<a name="method-modelKeys"></a>
+#### `modelKeys()`
+
+Метод `modelKeys` возвращает массив с id моделей из коллекции:
+
+    $users->modelKeys();
+
+    // [1, 2, 3, 4, 5]
+    
+<a name="method-makeVisible"></a>
+#### `makeVisible($attributes)`
+
+Метод `makeVisible` делает поля, обозначенные в моделях как "hidden" видимыми.
+
+    $users = $users->makeVisible(['address', 'phone_number']);
+
+<a name="method-makeHidden"></a>
+#### `makeHidden($attributes)`
+
+Метод `makeHidden` добавляет указанные поля моделей в группу "hidden" - эти поля перестанут выводиться в json и т.п.
+
+    $users = $users->makeHidden(['address', 'phone_number']);
+
+<a name="method-only"></a>
+#### `only($keys)`
+
+Метод `only` возвращает модели, которые содержат указанные id:
+
+    $users = $users->only([1, 2, 3]);
+
+<a name="method-unique"></a>
+#### `unique($key = null, $strict = false)`
+
+Метод `unique` возвращает уникальные модели из коллекции. Уникальность определяется по названию класса модели и id.
+
+    $users = $users->unique();
 
 <a name="custom-collections"></a>
 ## Пользовательские коллекции
