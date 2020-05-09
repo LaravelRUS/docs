@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git 5c0ac70badd535c4679e1ff303df6a04842a8589
 
 ---
 
@@ -12,6 +12,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 - [Посредник контроллера](#controller-middleware)
 - [Контроллеры ресурсов](#resource-controllers)
     - [Частичные роуты ресурсов](#restful-partial-resource-routes)
+    - [Вложенные ресурсы](#restful-nested-resources)
     - [Именование роутов ресурсов](#restful-naming-resource-routes)
     - [Именование параметров роутов ресурса](#restful-naming-resource-route-parameters)
     - [Локализация URI ресурсов](#restful-localizing-resource-uris)
@@ -22,7 +23,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="introduction"></a>
 ## Введение
 
-Вместо того, чтобы определять всю логику обработки запросов в виде замыканий в файлах роутов, вы можете организовать её с помощью классов контроллеров. Контроллеры могут группировать связанную с обработкой HTTP-запросов логику в отдельный класс. Контроллеры хранятся в директории `app/Http/Controllers`.
+Вместо того, чтобы определять всю логику обработки запросов в виде функций в файлах роутов, вы можете организовать её с помощью классов контроллеров. Контроллеры могут группировать связанную с обработкой HTTP-запросов логику в отдельный класс. Контроллеры хранятся в директории `app/Http/Controllers`.
 
 <a name="basic-controllers"></a>
 ## Простейшие контроллеры
@@ -36,8 +37,8 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     namespace App\Http\Controllers;
 
-    use App\User;
     use App\Http\Controllers\Controller;
+    use App\User;
 
     class UserController extends Controller
     {
@@ -45,7 +46,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
          * Показать профиль данного пользователя.
          *
          * @param  int  $id
-         * @return Response
+         * @return View
          */
         public function show($id)
         {
@@ -57,9 +58,13 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     Route::get('user/{id}', 'UserController@show');
 
+Или таким:
+
+    Route::get('user/{id}', [UserController::class, 'show']);
+
 Теперь при соответствии запроса указанному URI роута будет выполняться метод `show` класса `UserController`. Конечно, параметры роута также будут переданы в метод.
 
-> {tip} Контроллерам не **обязательно** наследовать базовый класс. Но тогда у вас не будет таких удобных возможностей, как методы `middleware`, `validate` и `dispatch`.
+> {tip} Контроллерам не обязательно наследовать базовый класс. Но тогда у вас не будет таких удобных возможностей, как методы `middleware`, `validate` и `dispatch`.
 
 <a name="controllers-and-namespaces"></a>
 ### Контроллеры и пространства имён
@@ -88,7 +93,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
          * Показать профиль данного пользователя.
          *
          * @param  int  $id
-         * @return Response
+         * @return View
          */
         public function __invoke($id)
         {
@@ -99,6 +104,10 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 При регистрации роутов для контроллеров одного действия вам не надо указывать метод:
 
     Route::get('user/{id}', 'ShowProfile');
+
+Сгенерировать контроллер одного действия можно при указании опции `--invokable` в artisan-команде `make:controller`
+
+    php artisan make:controller ShowProfile --invokable    
 
 <a name="controller-middleware"></a>
 ## Посредник контроллера
@@ -139,7 +148,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="resource-controllers"></a>
 ## Контроллеры ресурсов
 
-Маршрутизация ресурсов Laravel назначает обычные CRUD-роуты на контроллеры одной строчкой кода. Например, вы можете создать контроллер, обрабатывающий все HTTP-запросы к фотографиям, хранимым вашим приложением. Вы можете быстро создать такой контроллер с помощью Artisan-команды `make:controller`:
+Маршрутизация ресурсов Laravel назначает обычные CRUD-роуты на контроллеры одной строчкой кода. Например, вы можете создать контроллер, обрабатывающий все HTTP-запросы к фотографиям, хранимым вашим приложением. Вы можете быстро создать такой контроллер с помощью artisan-команды `make:controller`:
 
     php artisan make:controller PhotoController --resource
 
@@ -150,6 +159,13 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
     Route::resource('photos', 'PhotoController');
 
 Один этот вызов создаёт множество роутов для обработки различных действий для ресурса. Сгенерированный контроллер уже имеет методы-заглушки для каждого из этих действий с комментариями о том, какие URI и типы запросов они обрабатывают.
+
+Вы можете зарегистрировать сразу несколько контроллеров ресурсов, передав массив:
+
+    Route::resources([
+        'photos' => 'PhotoController',
+        'posts' => 'PostController'
+    ]);
 
 #### Действия, обрабатываемые контроллером ресурсов
 
@@ -171,44 +187,92 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
 
 #### Подмена методов формы
 
-Поскольку HTML-формы не могут выполнять запросы `PUT`, `PATCH` или `DELETE`, вам надо добавить скрытое поле `_method` для подмены этих HTTP-запросов. Хелпер `method_field` создаст это поле для вас:
+Поскольку HTML-формы не могут выполнять запросы `PUT`, `PATCH` или `DELETE`, вам надо добавить скрытое поле `_method` для подмены этих HTTP-запросов. Blade-директива `@method` создаст это поле для вас:
 
-    {{ method_field('PUT') }}
+    <form action="/foo/bar" method="POST">
+        @method('PUT')
+    </form>
 
 <a name="restful-partial-resource-routes"></a>
 ### Частичные роуты ресурсов
 
 При объявлении роута вы можете указать подмножество всех возможных действий, которые должен обрабатывать контроллер вместо полного набора стандартных действий:
 
-    Route::resource('photo', 'PhotoController', ['only' => [
+    Route::resource('photos', 'PhotoController')->only([
         'index', 'show'
-    ]]);
+    ]);
 
-    Route::resource('photo', 'PhotoController', ['except' => [
+    Route::resource('photos', 'PhotoController')->except([
         'create', 'store', 'update', 'destroy'
-    ]]);
+    ]);
+
+#### Роуты для API-ресурсов
+
+При объявлении маршрутов ресурсов, которые будут использоваться в API, вы как правило захотите исключить роуты, которые ведут на HTML-шаблоны с формами, такие как `create` и `edit`. Для удобства вы можете использовать метод `apiResource` для автоматического исключения этих двух маршрутов:
+
+    Route::apiResource('photos', 'PhotoController');
+
+Вы можете зарегистрировать сразу несколько API-контроллеров ресурсов, передав массив:
+
+    Route::apiResources([
+        'photos' => 'PhotoController',
+        'posts' => 'PostController'
+    ]);
+
+Сгенерировать API-контроллер можно при указании опции `--api` в artisan-команде `make:controller`
+
+    php artisan make:controller API/PhotoController --api
+
+<a name="restful-nested-resources"></a>
+### Вложенные ресурсы
+
+Иногда может понадобиться определить роуты к вложенному ресурсу. Например, фоторесурс может иметь несколько комментариев, которые могут быть прикреплены к фотографии. Для вложенных контроллеров ресурсов используйте dot-нотацию в декларации роута.
+
+    Route::resource('photos.comments', 'PhotoCommentController');
+
+Этот маршрут зарегистрирует вложенный ресурс, к которому можно получить доступ с помощью такого URI:
+
+    /photos/{photo}/comments/{comment}
+
+#### Неглубокое вложение
+
+Часто не обязательно иметь и родительский, и дочерний идентификатор в URI, так как дочерний идентификатор уже является уникальным идентификатором. При использовании уникального идентификатора, такого как первичные ключи для идентификации ваших моделей в сегментах URI, вы можете использовать "неглубокое вложение":
+
+    Route::resource('photos.comments', 'CommentController')->shallow();
+
+Данная конструкция зарегистрирует следующие роуты:
+
+Verb      | URI                               | Action       | Route Name
+----------|-----------------------------------|--------------|---------------------
+GET       | `/photos/{photo}/comments`        | index        | photos.comments.index
+GET       | `/photos/{photo}/comments/create` | create       | photos.comments.create
+POST      | `/photos/{photo}/comments`        | store        | photos.comments.store
+GET       | `/comments/{comment}`             | show         | comments.show
+GET       | `/comments/{comment}/edit`        | edit         | comments.edit
+PUT/PATCH | `/comments/{comment}`             | update       | comments.update
+DELETE    | `/comments/{comment}`             | destroy      | comments.destroy    
 
 <a name="restful-naming-resource-routes"></a>
 ### Именование роутов ресурса
 
 По умолчанию все действия контроллера ресурсов имеют имена роутов, но вы можете переопределить эти имена, передав массив `names` вместе с остальными параметрами:
 
-    Route::resource('photo', 'PhotoController', ['names' => [
-        'create' => 'photo.build'
-    ]]);
+    Route::resource('photos', 'PhotoController')->names([
+        'create' => 'photos.build'
+    ]);
 
 <a name="restful-naming-resource-route-parameters"></a>
 ### Именование параметров роута ресурса
 
-По умолчанию `Route::resource` создаст параметры для ваших роутов ресурсов на основе имени ресурса в единственном числе. Это легко можно изменить для каждого ресурса, передав `parameters` в массив опций. Массив `parameters` должен быть ассоциативным массивом имён ресурсов и имён параметров:
+По умолчанию `Route::resource` создаст параметры для ваших роутов ресурсов на основе имени ресурса в единственном числе. Это легко можно изменить для каждого ресурса, используй метод `parameters`. Этот метод должен принимать ассоциативный массив имён ресурсов и имён параметров:
 
-    Route::resource('user', 'AdminUserController', ['parameters' => [
-        'user' => 'admin_user'
-    ]]);
+    Route::resource('users', 'AdminUserController')->parameters([
+        'users' => 'admin_user'
+    ]);
 
  Этот пример генерирует следующие URI для роута ресурса `show`:
 
-    /user/{admin_user}
+    /users/{admin_user}
 
 <a name="restful-localizing-resource-uris"></a>
 ### Локализация URI ресурсов
@@ -230,7 +294,7 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
         ]);
     }
 
-Как только глаголы были настроены, регистрация роута ресурса, такая как `Route::resource('fotos', 'PhotoController')`, воспроизведет следующие URI:
+С этими настройками регистрация роута ресурса, такая как `Route::resource('fotos', 'PhotoController')`, воспроизведет следующие URI:
 
     /fotos/crear
 
@@ -279,7 +343,7 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
         }
     }
 
-Разумеется, вы можете также указать в качестве аргумента тип любого [Laravel-контракта](/docs/{{version}}/contracts). Если контейнер может с ним работать, значит вы можете указывать его тип. В некоторых случаях внедрение зависимостей в контроллер обеспечивает лучшую тестируемость приложения.
+Вы можете также указать в качестве аргумента тип любого [Laravel-контракта](/docs/{{version}}/contracts). Если контейнер может с ним работать, значит вы можете указывать его тип. В некоторых случаях внедрение зависимостей в контроллер обеспечивает лучшую тестируемость приложения.
 
 #### Внедрение в метод
 
@@ -307,7 +371,7 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
         }
     }
 
-Если метод вашего контроллера также ожидает данные из параметра роута, просто перечислите аргументы роута после остальных зависимостей. Например, если ваш роут определён так:
+Если метод вашего контроллера также ожидает данные из параметра роута, перечислите аргументы роута после остальных зависимостей. Например, если ваш роут определён так:
 
     Route::put('user/{id}', 'UserController@update');
 
