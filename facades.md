@@ -9,7 +9,7 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
     - [Фасады в сравнении с Внедрением зависимостей](#facades-vs-dependency-injection)
     - [Фасады в сравнении с Вспомогательными функциями](#facades-vs-helper-functions)
 - [Как работают фасады](#how-facades-work)
-- [Real-Time Facades](#real-time-facades)
+- [Создание фасадов на лету](#real-time-facades)
 - [Справочное описание классов фасадов](#facade-class-reference)
 
 <a name="introduction"></a>
