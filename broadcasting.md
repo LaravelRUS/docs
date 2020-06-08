@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git 4c1026d1b71967cac2d445a614fc6ad27e501233
 
 ---
 
@@ -43,7 +43,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="configuration"></a>
 ### Настройка
 
-Все настройки широковещания событий вашего приложения хранятся в конфиге `config/broadcasting.php`. Laravel изначально поддерживает несколько драйверов вещания: [Pusher](https://pusher.com), [Redis](/docs/{{version}}/redis) и драйвер `log` для локальной разработки и отладки. Дополнительно включен драйвер `null`, который позволяет полностью отключить широковещание. Для каждого из этих драйверов есть пример настройки в конфиге `config/broadcasting.php`.
+Все настройки широковещания событий вашего приложения хранятся в конфиге `config/broadcasting.php`. Laravel изначально поддерживает несколько драйверов вещания: [Pusher Channels](https://pusher.com/channels), [Redis](/docs/{{version}}/redis) и драйвер `log` для локальной разработки и отладки. Дополнительно включен драйвер `null`, который позволяет полностью отключить широковещание. Для каждого из этих драйверов есть пример настройки в конфиге `config/broadcasting.php`.
 
 #### Сервис-провайдер широковещания
 
@@ -58,20 +58,20 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="driver-prerequisites"></a>
 ### Требования драйвера
 
-#### Pusher
+#### Pusher Channels
 
-Если вы вещаете свои события через [Pusher](https://pusher.com), вам нужно установить Pusher PHP SDK, используя менеджер пакетов Composer:
+Если вы вещаете свои события через [Pusher Channels](https://pusher.com/channels), вам нужно установить Pusher PHP SDK, используя менеджер пакетов Composer:
 
     composer require pusher/pusher-php-server "~2.6"
 
-Далее нужно настроить учетные данные Pusher в конфиге `config/broadcasting.php`. Пример конфига Pusher уже включен в этот файл, что позволит вам быстро указать ваш ключ Pusher, секрет, а также ID приложения. Настройка `pusher` файла `config/broadcasting.php` позволяет указать дополнительные опции `options`, поддерживаемые Pusher, такие как кластер:
+Далее нужно настроить учетные данные Pusher Channels в конфиге `config/broadcasting.php`. Пример конфига Pusher уже включен в этот файл, что позволит вам быстро указать ваш ключ Pusher, секрет, а также ID приложения. Настройка `pusher` файла `config/broadcasting.php` позволяет указать дополнительные опции `options`, поддерживаемые Pusher, такие как кластер:
 
     'options' => [
         'cluster' => 'eu',
-        'encrypted' => true
+        'useTLS' => true
     ],
 
-При использовании Pusher и [Laravel Echo](#installing-laravel-echo) следует указать `pusher` в качестве желаемого широковещателя при установке экземпляра Echo в файле `resources/assets/js/bootstrap.js`:
+При использовании Pusher Channels и [Laravel Echo](#installing-laravel-echo) следует указать `pusher` в качестве желаемого широковещателя при установке экземпляра Echo в файле `resources/assets/js/bootstrap.js`:
 
     import Echo from "laravel-echo"
 
@@ -79,7 +79,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key'
+        key: 'your-pusher-channels-key'
     });
 
 #### Redis
@@ -123,7 +123,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="using-example-application"></a>
 ### Использование примера приложения
 
-Прежде чем погрузиться в каждый компонент вещания событий, давайте рассмотрим общий пример - онлайн-магазин. Мы не будем обсуждать детали настройки [Pusher](https://pusher.com) или [Laravel Echo](#installing-laravel-echo), так как более детальное обсуждение вас ждет в других разделах этой документации.
+Прежде чем погрузиться в каждый компонент вещания событий, давайте рассмотрим общий пример - онлайн-магазин. Мы не будем обсуждать детали настройки [Pusher Channels](https://pusher.com/channels) или [Laravel Echo](#installing-laravel-echo), так как более детальное обсуждение вас ждет в других разделах этой документации.
 
 Давайте предположим, что в нашем приложении есть страница, которая позволяет пользователям просматривать статус отправки своих заказов. Также предположим, что когда приложением обрабатывается обновление статуса отправки, выдается событие `ShippingStatusUpdated`:
 
@@ -400,7 +400,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 <a name="installing-laravel-echo"></a>
 ### Установка Laravel Echo
 
-Laravel Echo - это JavaScript-библиотека, которая делает подписку на каналы и слушание вещания событий Laravel безболезненным. Echo можно установить через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`, так как мы собираемся использовать вещатель Pusher:
+Laravel Echo - это JavaScript-библиотека, которая делает подписку на каналы и слушание вещания событий Laravel безболезненным. Echo можно установить через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`, так как мы собираемся использовать вещатель Pusher Channels:
 
     npm install --save laravel-echo pusher-js
 
@@ -410,16 +410,16 @@ Laravel Echo - это JavaScript-библиотека, которая делае
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key'
+        key: 'your-pusher-channels-key'
     });
 
 При создании экземпляра Echo, который использует коннектор `pusher`, также можно указать и `cluster`, а также должно ли подключение быть зашифрованным:
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: 'your-pusher-key',
+        key: 'your-pusher-channels-key',
         cluster: 'eu',
-        encrypted: true
+        forceTLS: true
     });
 
 <a name="listening-for-events"></a>
