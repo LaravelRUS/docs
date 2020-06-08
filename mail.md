@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git a59634ffbf2417aa8cd0050819619996aa1bcd41
 
 ---
 
@@ -403,8 +403,8 @@ Markdown mailable-сообщения используют комбинацию B
     @component('mail::table')
     | Laravel       | Table         | Example  |
     | ------------- |:-------------:| --------:|
-    | Col 2 is      | Centered      | $10      |
-    | Col 3 is      | Right-Aligned | $20      |
+    | Col 2 is      | Centered      |      $10 |
+    | Col 3 is      | Right-Aligned |      $20 |
     @endcomponent
 
 <a name="customizing-the-components"></a>
