@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git fbc4a96bf50642b7ea2180ea7d7a32b8bc0b41ab
 
 ---
 
@@ -19,7 +19,7 @@ git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
 
 <div class="content-list" markdown="1">
 - MySQL
-- Postgres
+- PostgreSQL
 - SQLite
 - SQL Server
 </div>
