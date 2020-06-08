@@ -1,4 +1,4 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+git f02fc7e8717a24c160bd4978a0b912aef2a6b52c
 
 ---
 
@@ -754,7 +754,7 @@ The `title_case` преобразует строку в `Title Case`:
 
 Генерирует URL для ресурса с использованием HTTPS:
 
-    echo secure_asset('foo/bar.zip', $title, $attributes = []);
+    echo secure_asset('foo/bar.zip');
 
 <a name="method-route"></a>
 #### `route()` {#collection-method}
