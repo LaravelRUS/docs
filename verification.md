@@ -1,4 +1,4 @@
-git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
+git f2c39c65358a0f2cb896d9c97b6f64095ba13dad
 
 ---
 
@@ -66,7 +66,7 @@ Laravel включает класс `Auth\VerificationController`, которы�
 
 Для того чтобы сгенерировать все необходимые шаблоны для подтверждения электронной почты, Вы можете использовать пакет `laravel/ui` для Composer:
 
-    composer require laravel/ui --dev
+    composer require laravel/ui  "^1.2" --dev
     
     php artisan ui vue --auth
     
