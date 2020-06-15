@@ -1,4 +1,4 @@
-git e73c40f0dea4db1205c83584d6c5b544b5ff1683
+git 5785a472304309dfb7fe8bf6978852ef36c2bc65
 
 ---
 
@@ -14,7 +14,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 <a name="introduction"></a>
 ## Введение
 
-> {tip} **Хотите быстро приступить к работе?** Просто запустите `php artisan make:auth` в новом приложении Laravel и перейдите в браузере по адресу `http://your-app.dev/register` или по любому другому URL, который назначен вашему приложению. Эта единственная команда позаботится о создании всей вашей системы аутентификации, включая сброс паролей!
+> {tip} **Хотите быстро приступить к работе?** Установите с помощью Сomposer пакет `laravel/ui` и запустите `php artisan make:auth` в новом приложении Laravel. После выполнения миграций, откройте в браузере `http://your-app.dev/register` или любой другой URL, который принадлежит вашему приложению. Эта единственная команда позаботится о создании всей системы аутентификации, включая сброс паролей!
 
 Большинство веб-приложений предоставляют пользователям возможность сбросить забытые пароли. Вместо того, чтобы заставлять вас повторять это в каждом приложении, Laravel предлагает удобные методы для отправки напоминаний о пароле и сброса пароля.
 
@@ -23,7 +23,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 <a name="resetting-database"></a>
 ## О базе данных
 
-Для начала убедитесь, что ваша модель `App\User` реализует контракт `Illuminate\Contracts\Auth\CanResetPassword`. Конечно, модель `App\User` включенная в инфраструктуру, уже реализует этот интерфейс и использует трейт `Illuminate\Auth\Passwords\CanResetPassword`, чтобы включить методы, необходимые для реализации интерфейса.
+Для начала убедитесь, что ваша модель `App\User` реализует контракт `Illuminate\Contracts\Auth\CanResetPassword`. Модель `App\User` включенная в фреймворк, уже реализует этот интерфейс и использует трейт `Illuminate\Auth\Passwords\CanResetPassword`, чтобы включить методы, необходимые для реализации интерфейса.
 
 #### Создание таблицы токенов сброса пароля
 
@@ -34,14 +34,22 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 <a name="resetting-routing"></a>
 ## Роутинг
 
-Laravel включает классы `Auth\ForgotPasswordController` и `Auth\ResetPasswordController`, которые содержат логику, необходимую для отправки по электронной почте ссылок для сброса пароля и сброса пользовательских паролей. Все роуты, необходимые для выполнения сброса пароля, могут быть сгенерированы командой:
+Laravel включает классы `Auth\ForgotPasswordController` и `Auth\ResetPasswordController`, которые содержат логику, необходимую для отправки по электронной почте ссылок для сброса пароля и сброса пользовательских паролей. Все роуты, необходимые для реализации сброса паролей могут быть созданы с помощью Composer пакета `laravel/ui`:
 
-    php artisan make:auth
+    composer require laravel/ui --dev
+
+    php artisan ui vue --auth
 
 <a name="resetting-views"></a>
 ## Шаблоны
 
-Опять же, Laravel сгенерирует все необходимые шаблоны для сброса пароля, когда выполняется команда `make:auth`. Эти шаблоны размещаются в `resources/views/auth/passwords`. Вы можете настроить их по мере необходимости для своего приложения.
+Чтобы создать все необходимые шаблоны для сброса паролей, вы можете использовать Composer пакет `laravel/ui`:
+
+    composer require laravel/ui --dev
+
+    php artisan ui vue --auth
+
+Созданные шаблоны будут размещены в `resources/views/auth/passwords`. Вы можете изменять их по мере необходимости для вашего приложения.
 
 <a name="after-resetting-passwords"></a>
 ## После сброса паролей
@@ -63,6 +71,11 @@ Laravel включает классы `Auth\ForgotPasswordController` и `Auth\R
 
     use Illuminate\Support\Facades\Auth;
 
+    /**
+     * Get the guard to be used during password reset.
+     *
+     * @return \Illuminate\Contracts\Auth\StatefulGuard
+     */
     protected function guard()
     {
         return Auth::guard('guard-name');
@@ -75,11 +88,11 @@ Laravel включает классы `Auth\ForgotPasswordController` и `Auth\R
     use Illuminate\Support\Facades\Password;
 
     /**
-     * Получите брокер, который будет использоваться при сбросе пароля.
+     * Get the broker to be used during password reset.
      *
      * @return PasswordBroker
      */
-    protected function broker()
+    public function broker()
     {
         return Password::broker('name');
     }
@@ -98,4 +111,3 @@ Laravel включает классы `Auth\ForgotPasswordController` и `Auth\R
     {
         $this->notify(new ResetPasswordNotification($token));
     }
-
