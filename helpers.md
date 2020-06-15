@@ -1,4 +1,4 @@
-git 131b0d33e10ac5516abb203f5744eb75f17697c7
+git 195e65d6a2dd689ae7584478054618ffee94deff
 
 ---
 
@@ -26,30 +26,38 @@ Laravel включает множество глобальных вспомог�
     }
 </style>
 
-### Массивы
+### Массивы и объекты
 
 <div class="collection-method-list" markdown="1">
 
-[array_add](#method-array-add)
-[array_collapse](#method-array-collapse)
-[array_divide](#method-array-divide)
-[array_dot](#method-array-dot)
-[array_except](#method-array-except)
-[array_first](#method-array-first)
-[array_flatten](#method-array-flatten)
-[array_forget](#method-array-forget)
-[array_get](#method-array-get)
-[array_has](#method-array-has)
-[array_last](#method-array-last)
-[array_only](#method-array-only)
-[array_pluck](#method-array-pluck)
-[array_prepend](#method-array-prepend)
-[array_pull](#method-array-pull)
-[array_set](#method-array-set)
-[array_sort](#method-array-sort)
-[array_sort_recursive](#method-array-sort-recursive)
-[array_where](#method-array-where)
-[array_wrap](#method-array-wrap)
+[Arr::add](#method-array-add)
+[Arr::collapse](#method-array-collapse)
+[Arr::crossJoin](#method-array-crossjoin)
+[Arr::divide](#method-array-divide)
+[Arr::dot](#method-array-dot)
+[Arr::except](#method-array-except)
+[Arr::first](#method-array-first)
+[Arr::flatten](#method-array-flatten)
+[Arr::forget](#method-array-forget)
+[Arr::get](#method-array-get)
+[Arr::has](#method-array-has)
+[Arr::isAssoc](#method-array-isassoc)
+[Arr::last](#method-array-last)
+[Arr::only](#method-array-only)
+[Arr::pluck](#method-array-pluck)
+[Arr::prepend](#method-array-prepend)
+[Arr::pull](#method-array-pull)
+[Arr::random](#method-array-random)
+[Arr::query](#method-array-query)
+[Arr::set](#method-array-set)
+[Arr::shuffle](#method-array-shuffle)
+[Arr::sort](#method-array-sort)
+[Arr::sortRecursive](#method-array-sort-recursive)
+[Arr::where](#method-array-where)
+[Arr::wrap](#method-array-wrap)
+[data_fill](#method-data-fill)
+[data_get](#method-data-get)
+[data_set](#method-data-set)
 [head](#method-head)
 [last](#method-last)
 </div>
@@ -73,25 +81,39 @@ Laravel включает множество глобальных вспомог�
 
 <div class="collection-method-list" markdown="1">
 
-[camel_case](#method-camel-case)
+[\__](#method-__)
 [class_basename](#method-class-basename)
 [e](#method-e)
-[ends_with](#method-ends-with)
-[kebab_case](#method-kebab-case)
-[snake_case](#method-snake-case)
-[str_limit](#method-str-limit)
-[starts_with](#method-starts-with)
-[str_after](#method-str-after)
-[str_before](#method-str-before)
-[str_contains](#method-str-contains)
-[str_finish](#method-str-finish)
-[str_is](#method-str-is)
-[str_plural](#method-str-plural)
-[str_random](#method-str-random)
-[str_singular](#method-str-singular)
-[str_slug](#method-str-slug)
-[studly_case](#method-studly-case)
-[title_case](#method-title-case)
+[preg_replace_array](#method-preg-replace-array)
+[Str::after](#method-str-after)
+[Str::afterLast](#method-str-after-last)
+[Str::before](#method-str-before)
+[Str::beforeLast](#method-str-before-last)
+[Str::camel](#method-camel-case)
+[Str::contains](#method-str-contains)
+[Str::containsAll](#method-str-contains-all)
+[Str::endsWith](#method-ends-with)
+[Str::finish](#method-str-finish)
+[Str::is](#method-str-is)
+[Str::isUuid](#method-str-is-uuid)
+[Str::kebab](#method-kebab-case)
+[Str::limit](#method-str-limit)
+[Str::orderedUuid](#method-str-ordered-uuid)
+[Str::plural](#method-str-plural)
+[Str::random](#method-str-random)
+[Str::replaceArray](#method-str-replace-array)
+[Str::replaceFirst](#method-str-replace-first)
+[Str::replaceLast](#method-str-replace-last)
+[Str::singular](#method-str-singular)
+[Str::slug](#method-str-slug)
+[Str::snake](#method-snake-case)
+[Str::start](#method-str-start)
+[Str::startsWith](#method-starts-with)
+[Str::studly](#method-studly-case)
+[Str::title](#method-title-case)
+[Str::ucfirst](#method-str-ucfirst)
+[Str::uuid](#method-str-uuid)
+[Str::words](#method-str-words)
 [trans](#method-trans)
 [trans_choice](#method-trans-choice)
 
@@ -103,8 +125,8 @@ Laravel включает множество глобальных вспомог�
 
 [action](#method-action)
 [asset](#method-asset)
-[secure_asset](#method-secure-asset)
 [route](#method-route)
+[secure_asset](#method-secure-asset)
 [secure_url](#method-secure-url)
 [url](#method-url)
 
@@ -117,32 +139,54 @@ Laravel включает множество глобальных вспомог�
 [abort](#method-abort)
 [abort_if](#method-abort-if)
 [abort_unless](#method-abort-unless)
+[app](#method-app)
 [auth](#method-auth)
 [back](#method-back)
 [bcrypt](#method-bcrypt)
+[blank](#method-blank)
+[broadcast](#method-broadcast)
 [cache](#method-cache)
+[class_uses_recursive](#method-class-uses-recursive)
 [collect](#method-collect)
 [config](#method-config)
+[cookie](#method-cookie)
 [csrf_field](#method-csrf-field)
 [csrf_token](#method-csrf-token)
 [dd](#method-dd)
+[decrypt](#method-decrypt)
 [dispatch](#method-dispatch)
+[dispatch_now](#method-dispatch-now)
+[dump](#method-dump)
+[encrypt](#method-encrypt)
 [env](#method-env)
 [event](#method-event)
 [factory](#method-factory)
+[filled](#method-filled)
 [info](#method-info)
 [logger](#method-logger)
 [method_field](#method-method-field)
+[now](#method-now)
 [old](#method-old)
+[optional](#method-optional)
+[policy](#method-policy)
 [redirect](#method-redirect)
 [report](#method-report)
 [request](#method-request)
+[rescue](#method-rescue)
+[resolve](#method-resolve)
 [response](#method-response)
 [retry](#method-retry)
 [session](#method-session)
 [tap](#method-tap)
+[throw_if](#method-throw-if)
+[throw_unless](#method-throw-unless)
+[today](#method-today)
+[trait_uses_recursive](#method-trait-uses-recursive)
+[transform](#method-transform)
+[validator](#method-validator)
 [value](#method-value)
 [view](#method-view)
+[with](#method-with)
 
 </div>
 
@@ -160,216 +204,391 @@ Laravel включает множество глобальных вспомог�
 </style>
 
 <a name="arrays"></a>
-## Массивы
+## Массивы и объекты
 
 <a name="method-array-add"></a>
-#### `array_add()` {#collection-method .first-collection-method}
+#### `Arr::add()` {#collection-method .first-collection-method}
 
-Функция `array_add` добавляет указанную пару ключ/значение в массив, если она там еще не существует:
+Метод `Arr::add()` добавляет заданную пару ключ/значение в массив, если данный ключ еще не существует в массиве или имеет значение `null`.
 
-    $array = array_add(['name' => 'Desk'], 'price', 100);
+    use Illuminate\Support\Arr;
+
+    $array = Arr::add(['name' => 'Desk'], 'price', 100);
+
+    // ['name' => 'Desk', 'price' => 100]
+
+    $array = Arr::add(['name' => 'Desk', 'price' => null], 'price', 100);
 
     // ['name' => 'Desk', 'price' => 100]
 
 <a name="method-array-collapse"></a>
-#### `array_collapse()` {#collection-method}
+#### `Arr::collapse()` {#collection-method}
 
+Метод `Arr::collapse()` объединяет массив массивов в единый массив:
 Функция `array_collapse` собирает массив массивов в единый массив:
 
-    $array = array_collapse([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
+    use Illuminate\Support\Arr;
+
+    $array = Arr::collapse([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
 
     // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+<a name="method-array-crossjoin"></a>
+#### `Arr::crossJoin()` {#collection-method}
+
+Метод `Arr::crossJoin` перекрёстно объединяет переданные массивы, возвращая декартово произведение всех возможных перестановок:
+
+    use Illuminate\Support\Arr;
+
+    $matrix = Arr::crossJoin([1, 2], ['a', 'b']);
+
+    /*
+        [
+            [1, 'a'],
+            [1, 'b'],
+            [2, 'a'],
+            [2, 'b'],
+        ]
+    */
+
+    $matrix = Arr::crossJoin([1, 2], ['a', 'b'], ['I', 'II']);
+
+    /*
+        [
+            [1, 'a', 'I'],
+            [1, 'a', 'II'],
+            [1, 'b', 'I'],
+            [1, 'b', 'II'],
+            [2, 'a', 'I'],
+            [2, 'a', 'II'],
+            [2, 'b', 'I'],
+            [2, 'b', 'II'],
+        ]
+    */
+
 <a name="method-array-divide"></a>
-#### `array_divide()` {#collection-method}
+#### `Arr::divide()` {#collection-method}
 
-Функция `array_divide` возвращает два массива — один с ключами, другой со значениями оригинального массива:
+Метод `Arr::divide` возвращает два массива, один из которых содержит ключи, а другой — значения переданного массива:
 
-    list($keys, $values) = array_divide(['name' => 'Desk']);
+    use Illuminate\Support\Arr;
+
+    [$keys, $values] = Arr::divide(['name' => 'Desk']);
 
     // $keys: ['name']
 
     // $values: ['Desk']
 
 <a name="method-array-dot"></a>
-#### `array_dot()` {#collection-method}
+#### `Arr::dot()` {#collection-method}
 
-Функция `array_dot` делает многоуровневый массив одноуровневым, объединяя вложенные массивы с помощью точки в именах:
+Метод `Arr::dot` преобразует многомерный массив в одномерный, который использует точку для указания глубины:
 
-    $array = array_dot(['foo' => ['bar' => 'baz']]);
+    use Illuminate\Support\Arr;
 
-    // ['foo.bar' => 'baz'];
+    $array = ['products' => ['desk' => ['price' => 100]]];
+
+    $flattened = Arr::dot($array);
+
+    // ['products.desk.price' => 100]
 
 <a name="method-array-except"></a>
-#### `array_except()` {#collection-method}
+#### `Arr::except()` {#collection-method}
 
-Функция `array_except` удаляет указанную пару ключ/значение из массива:
+Метод `Arr::except` удаляет из массива заданные пары ключ/значение:
+
+    use Illuminate\Support\Arr;
 
     $array = ['name' => 'Desk', 'price' => 100];
 
-    $array = array_except($array, ['price']);
+    $filtered = Arr::except($array, ['price']);
 
     // ['name' => 'Desk']
 
 <a name="method-array-first"></a>
-#### `array_first()` {#collection-method}
+#### `Arr::first()` {#collection-method}
 
-Функция `array_first` возвращает первый элемент массива, удовлетворяющий требуемому условию:
+Метод `Arr::first` возвращает первый элемент массива, удовлетворяющий требуемому условию:
+
+    use Illuminate\Support\Arr;
 
     $array = [100, 200, 300];
 
-    $value = array_first($array, function ($value, $key) {
+    $first = Arr::first($array, function ($value, $key) {
         return $value >= 150;
     });
 
     // 200
 
-Третьим параметром можно передать значение по умолчанию на случай, если ни одно значение не пройдет условие:
+Значение по умолчанию может быть передано в качестве третьего аргумента. Это значение будет возвращено, если ни одно из значений не удовлетворяет условию:
 
-    $value = array_first($array, $callback, $default);
+    use Illuminate\Support\Arr;
+
+    $first = Arr::first($array, $callback, $default);
 
 <a name="method-array-flatten"></a>
-#### `array_flatten()` {#collection-method}
+#### `Arr::flatten()` {#collection-method}
 
-Функция `array_flatten` сделает многоуровневый массив плоским.
+Метод `Arr::flatten` преобразует многомерный массив в одномерный:
+
+    use Illuminate\Support\Arr;
 
     $array = ['name' => 'Joe', 'languages' => ['PHP', 'Ruby']];
 
-    $array = array_flatten($array);
+    $flattened = Arr::flatten($array);
 
-    // ['Joe', 'PHP', 'Ruby'];
+    // ['Joe', 'PHP', 'Ruby']
 
 <a name="method-array-forget"></a>
-#### `array_forget()` {#collection-method}
+#### `Arr::forget()` {#collection-method}
 
-Функция `array_forget` удалит указанную пару ключ/значение из многоуровневого массива, используя синтаксис имени с точкой:
+Метод `Arr::forget` удаляет заданную пару ключ/значение из многомерного массива, используя синтаксис с точкой ("dot" notation):
+
+    use Illuminate\Support\Arr;
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
-    array_forget($array, 'products.desk');
+    Arr::forget($array, 'products.desk');
 
     // ['products' => []]
 
 <a name="method-array-get"></a>
-#### `array_get()` {#collection-method}
+#### `Arr::get()` {#collection-method}
 
-Функция `array_get` вернет значение из многоуровневого массива, используя синтаксис имени с точкой:
+Метод `Arr::get` возвращает значение из многомерного массива, используя синтаксис с точкой ("dot" notation):
+
+    use Illuminate\Support\Arr;
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
-    $value = array_get($array, 'products.desk');
+    $price = Arr::get($array, 'products.desk.price');
 
-    // ['price' => 100]
+    // 100
 
-Также третьим аргументом функции `array_get` можно передать значение по умолчанию на случай, если указанный ключ не будет найден:
+Метод `Arr::get` также принимает значение по умолчанию, которое будет возвращено, если заданный ключ не будет найден:
 
-    $value = array_get($array, 'names.john', 'default');
+    use Illuminate\Support\Arr;
+
+    $discount = Arr::get($array, 'products.desk.discount', 0);
+
+    // 0
 
 <a name="method-array-has"></a>
-#### `array_has()` {#collection-method}
+#### `Arr::has()` {#collection-method}
 
-Функция `array_has` проверяет существование данного элемента или элементов в массиве, используя синтаксис имени с точкой:
+Метод `Arr::has` проверяет существование заданного элемента или элементов в массиве, используя синтаксис с точкой ("dot" notation):
 
-    $array = ['product' => ['name' => 'desk', 'price' => 100]];
+    use Illuminate\Support\Arr;
 
-    $hasItem = array_has($array, 'product.name');
+    $array = ['product' => ['name' => 'Desk', 'price' => 100]];
+
+    $contains = Arr::has($array, 'product.name');
 
     // true
 
-    $hasItems = array_has($array, ['product.price', 'product.discount']);
+    $contains = Arr::has($array, ['product.price', 'product.discount']);
+
+    // false
+
+<a name="method-array-isassoc"></a>
+#### `Arr::isAssoc()` {#collection-method}
+
+Метод `Arr::isAssoc` возвращает `true`, если данный массив является ассоциативным. Массив считается "ассоциативным", если в нем нет последовательных числовых ключей, начинающихся с нуля:
+
+    use Illuminate\Support\Arr;
+
+    $isAssoc = Arr::isAssoc(['product' => ['name' => 'Desk', 'price' => 100]]);
+
+    // true
+
+    $isAssoc = Arr::isAssoc([1, 2, 3]);
 
     // false
 
 <a name="method-array-last"></a>
-#### `array_last()` {#collection-method}
+#### `Arr::last()` {#collection-method}
 
-Функция `array_last` возвращает последний элемент массива, удовлетворяющий требуемому условию:
+Метод `Arr::last` возвращает последний элемент массива, удовлетворяющий требуемому условию:
+
+    use Illuminate\Support\Arr;
 
     $array = [100, 200, 300, 110];
 
-    $value = array_last($array, function ($value, $key) {
+    $last = Arr::last($array, function ($value, $key) {
         return $value >= 150;
     });
 
     // 300
 
-<a name="method-array-only"></a>
-#### `array_only()` {#collection-method}
+Значение по умолчанию может быть передано в качестве третьего аргумента. Это значение будет возвращено, если ни одно из значений не удовлетворяет условию:
 
-Функция `array_only` вернет из массива только указанные пары ключ/значения:
+    use Illuminate\Support\Arr;
+
+    $last = Arr::last($array, $callback, $default);
+
+<a name="method-array-only"></a>
+#### `Arr::only()` {#collection-method}
+
+Метод `Arr::only` возвращает из заданного массива только указанные пары ключ/значение:
+
+    use Illuminate\Support\Arr;
 
     $array = ['name' => 'Desk', 'price' => 100, 'orders' => 10];
 
-    $array = array_only($array, ['name', 'price']);
+    $slice = Arr::only($array, ['name', 'price']);
 
     // ['name' => 'Desk', 'price' => 100]
 
 <a name="method-array-pluck"></a>
-#### `array_pluck()` {#collection-method}
+#### `Arr::pluck()` {#collection-method}
 
-Функция `array_pluck` извлекает значения из многоуровневого массива, соответствующие переданному ключу:
+Метод `Arr::pluck` возвращает из массива все значения для данного ключа:
+
+    use Illuminate\Support\Arr;
 
     $array = [
         ['developer' => ['id' => 1, 'name' => 'Taylor']],
         ['developer' => ['id' => 2, 'name' => 'Abigail']],
     ];
 
-    $array = array_pluck($array, 'developer.name');
+    $names = Arr::pluck($array, 'developer.name');
 
-    // ['Taylor', 'Abigail'];
+    // ['Taylor', 'Abigail']
 
 Также вы можете указать ключ для полученного списка:
 
-    $array = array_pluck($array, 'developer.name', 'developer.id');
+    use Illuminate\Support\Arr;
 
-    // [1 => 'Taylor', 2 => 'Abigail'];
+    $names = Arr::pluck($array, 'developer.name', 'developer.id');
+
+    // [1 => 'Taylor', 2 => 'Abigail']
 
 <a name="method-array-prepend"></a>
-#### `array_prepend()` {#collection-method}
+#### `Arr::prepend()` {#collection-method}
 
-Функция `array_prepend` поместит элемент в начало массива:
+Метод `Arr::prepend` вставит элемент в начало массива:
+
+    use Illuminate\Support\Arr;
 
     $array = ['one', 'two', 'three', 'four'];
 
-    $array = array_prepend($array, 'zero');
+    $array = Arr::prepend($array, 'zero');
 
-    // $array: ['zero', 'one', 'two', 'three', 'four']
+    // ['zero', 'one', 'two', 'three', 'four']
+
+При необходимости можно указать ключ, который будет использоваться для значения:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['price' => 100];
+
+    $array = Arr::prepend($array, 'Desk', 'name');
+
+    // ['name' => 'Desk', 'price' => 100]
 
 <a name="method-array-pull"></a>
-#### `array_pull()` {#collection-method}
+#### `Arr::pull()` {#collection-method}
 
-Функция `array_pull` извлечет значения из многоуровневого массива, соответствующие переданному ключу, и удалит их:
+Метод `Arr::pull` возвращает и удаляет пару ключ/значение из массива:
+
+    use Illuminate\Support\Arr;
 
     $array = ['name' => 'Desk', 'price' => 100];
 
-    $name = array_pull($array, 'name');
+    $name = Arr::pull($array, 'name');
 
     // $name: Desk
 
     // $array: ['price' => 100]
 
-<a name="method-array-set"></a>
-#### `array_set()` {#collection-method}
+Значение по умолчанию может быть передано в качестве третьего аргумента методу. Это значение будет возвращено, если ключа не существует:
 
-Функция `array_set` установит значение в многоуровневом массиве, используя синтаксис имени с точкой:
+    use Illuminate\Support\Arr;
+
+    $value = Arr::pull($array, $key, $default);
+
+<a name="method-array-random"></a>
+#### `Arr::random()` {#collection-method}
+
+Метод `Arr::random` возвращает случайное значение из массива:
+
+    use Illuminate\Support\Arr;
+
+    $array = [1, 2, 3, 4, 5];
+
+    $random = Arr::random($array);
+
+    // 4 - (полученно случайным образом)
+
+Вы также можете указать количество возвращаемых элементов в качестве необязательного второго аргумента. Обратите внимание, что при указании этого аргумента будет возвращен массив, даже если требуется только один элемент:
+
+    use Illuminate\Support\Arr;
+
+    $items = Arr::random($array, 2);
+
+    // [2, 5] - (полученно случайным образом)
+
+<a name="method-array-query"></a>
+#### `Arr::query()` {#collection-method}
+
+Метод `Arr::query` преобразует массив в строку запроса:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['name' => 'Taylor', 'order' => ['column' => 'created_at', 'direction' => 'desc']];
+
+    Arr::query($array);
+
+    // name=Taylor&order[column]=created_at&order[direction]=desc
+
+<a name="method-array-set"></a>
+#### `Arr::set()` {#collection-method}
+
+Метод `Arr::set` устанавливает значение в многомерном массиве, используя синтаксис с точкой ("dot" notation):
+
+    use Illuminate\Support\Arr;
 
     $array = ['products' => ['desk' => ['price' => 100]]];
 
-    array_set($array, 'products.desk.price', 200);
+    Arr::set($array, 'products.desk.price', 200);
 
     // ['products' => ['desk' => ['price' => 200]]]
 
-<a name="method-array-sort"></a>
-#### `array_sort()` {#collection-method}
+<a name="method-array-shuffle"></a>
+#### `Arr::shuffle()` {#collection-method}
 
-Функция `array_sort` отсортирует массив по результатам вызовов переданной функции-замыкания:
+Метод `Arr::shuffle` случайным образом перемешивает элементы в массиве:
+
+    use Illuminate\Support\Arr;
+
+    $array = Arr::shuffle([1, 2, 3, 4, 5]);
+
+    // [3, 2, 5, 1, 4] - (сформированный случайным образом)
+
+<a name="method-array-sort"></a>
+#### `Arr::sort()` {#collection-method}
+
+Метод `Arr::sort` сортирует массив по его значениям:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['Desk', 'Table', 'Chair'];
+
+    $sorted = Arr::sort($array);
+
+    // ['Chair', 'Desk', 'Table']
+
+Также можно отсортировать массив по результату переданной функции:
+
+    use Illuminate\Support\Arr;
 
     $array = [
         ['name' => 'Desk'],
+        ['name' => 'Table'],
         ['name' => 'Chair'],
     ];
 
-    $array = array_values(array_sort($array, function ($value) {
+    $sorted = array_values(Arr::sort($array, function ($value) {
         return $value['name'];
     }));
 
@@ -377,67 +596,172 @@ Laravel включает множество глобальных вспомог�
         [
             ['name' => 'Chair'],
             ['name' => 'Desk'],
+            ['name' => 'Table'],
         ]
     */
 
 <a name="method-array-sort-recursive"></a>
-#### `array_sort_recursive()` {#collection-method}
+#### `Arr::sortRecursive()` {#collection-method}
 
-Функция `array_sort_recursive` рекурсивно сортирует массив с помощью функции `sort`:
+Метод `Arr::sortRecursive` рекурсивно сортирует массив, используя функцию `sort` для числовых подмассивов и `ksort` для ассоциативных подмассивов:
+
+    use Illuminate\Support\Arr;
 
     $array = [
-        [
-            'Roman',
-            'Taylor',
-            'Li',
-        ],
-        [
-            'PHP',
-            'Ruby',
-            'JavaScript',
-        ],
+        ['Roman', 'Taylor', 'Li'],
+        ['PHP', 'Ruby', 'JavaScript'],
+        ['one' => 1, 'two' => 2, 'three' => 3],
     ];
 
-    $array = array_sort_recursive($array);
+    $sorted = Arr::sortRecursive($array);
 
     /*
         [
-            [
-                'Li',
-                'Roman',
-                'Taylor',
-            ],
-            [
-                'JavaScript',
-                'PHP',
-                'Ruby',
-            ]
-        ];
+            ['JavaScript', 'PHP', 'Ruby'],
+            ['one' => 1, 'three' => 3, 'two' => 2],
+            ['Li', 'Roman', 'Taylor'],
+        ]
     */
 
 <a name="method-array-where"></a>
-#### `array_where()` {#collection-method}
+#### `Arr::where()` {#collection-method}
 
-Функция `array_where` фильтрует массив с помощью переданной функции-замыкания:
+Метод `Arr::where` фильтрует массив с помощью переданной функции:
+
+    use Illuminate\Support\Arr;
 
     $array = [100, '200', 300, '400', 500];
 
-    $array = array_where($array, function ($value, $key) {
+    $filtered = Arr::where($array, function ($value, $key) {
         return is_string($value);
     });
 
-    // [1 => 200, 3 => 400]
+    // [1 => '200', 3 => '400']
 
 <a name="method-array-wrap"></a>
-#### `array_wrap()` {#collection-method}
+#### `Arr::wrap()` {#collection-method}
 
-Функция `array_wrap` поместит заданное значение в массив. Если это значение уже в массиве, то функция никак его не изменит:
+Метод `Arr::wrap` обёртывает заданное значение в массив. Если значение уже является массивом, то оно не будет изменено:
+
+    use Illuminate\Support\Arr;
 
     $string = 'Laravel';
 
-    $array = array_wrap($string);
+    $array = Arr::wrap($string);
 
-    // [0 => 'Laravel']
+    // ['Laravel']
+
+Если заданное значение является `null`, то будет возвращен пустой массив:
+
+    use Illuminate\Support\Arr;
+
+    $nothing = null;
+
+    $array = Arr::wrap($nothing);
+
+    // []
+
+<a name="method-data-fill"></a>
+#### `data_fill()` {#collection-method}
+
+Функция `data_fill` устанавливает недостающее значение внутри вложенного массива или объекта, используя синтаксис с точкой ("dot" notation):
+
+    $data = ['products' => ['desk' => ['price' => 100]]];
+
+    data_fill($data, 'products.desk.price', 200);
+
+    // ['products' => ['desk' => ['price' => 100]]]
+
+    data_fill($data, 'products.desk.discount', 10);
+
+    // ['products' => ['desk' => ['price' => 100, 'discount' => 10]]]
+
+Эта функция также принимает звездочки `*` в качестве подстановки (wildcards) и соответственно заполняет массив:
+
+    $data = [
+        'products' => [
+            ['name' => 'Desk 1', 'price' => 100],
+            ['name' => 'Desk 2'],
+        ],
+    ];
+
+    data_fill($data, 'products.*.price', 200);
+
+    /*
+        [
+            'products' => [
+                ['name' => 'Desk 1', 'price' => 100],
+                ['name' => 'Desk 2', 'price' => 200],
+            ],
+        ]
+    */
+
+<a name="method-data-get"></a>
+#### `data_get()` {#collection-method}
+
+Функция `data_get` получает значение из вложенного массива или объекта, используя синтаксис с точкой ("dot" notation):
+
+    $data = ['products' => ['desk' => ['price' => 100]]];
+
+    $price = data_get($data, 'products.desk.price');
+
+    // 100
+
+Функция `data_get` также принимает значение по умолчанию, которое будет возвращено, если указанный ключ не будет найден:
+
+    $discount = data_get($data, 'products.desk.discount', 0);
+
+    // 0
+
+Функция также принимает подстановки (wildcards), используя звездочки `*`, которые могут использоваться вместо любого ключа массива или объекта:
+
+    $data = [
+        'product-one' => ['name' => 'Desk 1', 'price' => 100],
+        'product-two' => ['name' => 'Desk 2', 'price' => 150],
+    ];
+
+    data_get($data, '*.name');
+
+    // ['Desk 1', 'Desk 2'];
+
+<a name="method-data-set"></a>
+#### `data_set()` {#collection-method}
+
+Функция `data_set` устанавливает значение внутри многомерного массива или объекта, используя синтаксис с точкой ("dot" notation):
+
+    $data = ['products' => ['desk' => ['price' => 100]]];
+
+    data_set($data, 'products.desk.price', 200);
+
+    // ['products' => ['desk' => ['price' => 200]]]
+
+Функция также принимает подстановки (wildcards), используя звездочки `*`, и устанавливает значения соответственно:
+
+    $data = [
+        'products' => [
+            ['name' => 'Desk 1', 'price' => 100],
+            ['name' => 'Desk 2', 'price' => 150],
+        ],
+    ];
+
+    data_set($data, 'products.*.price', 200);
+
+    /*
+        [
+            'products' => [
+                ['name' => 'Desk 1', 'price' => 200],
+                ['name' => 'Desk 2', 'price' => 200],
+            ],
+        ]
+    */
+
+По умолчанию существующее значение перезаписывается. Если вы хотите установить значение только в том случае, если оно не существует, вы можете передать в качестве четвертого аргумента `false`:
+
+    $data = ['products' => ['desk' => ['price' => 100]]];
+
+    data_set($data, 'products.desk.price', 200, false);
+
+    // ['products' => ['desk' => ['price' => 100]]]
 
 <a name="method-head"></a>
 #### `head()` {#collection-method}
@@ -485,44 +809,50 @@ Laravel включает множество глобальных вспомог�
 <a name="method-config-path"></a>
 #### `config_path()` {#collection-method}
 
-Функция `config_path` возвращает полный путь к папке настройки приложения:
+Функция `config_path` возвращает полный путь к папке `config`. Вы также можете использовать функцию `config_path` для получения полного пути к файлу в папке конфигурации:
 
     $path = config_path();
+
+    $path = config_path('app.php');
 
 <a name="method-database-path"></a>
 #### `database_path()` {#collection-method}
 
-Функция `database_path` возвращает полный путь к папке базы данных приложения:
+Функция `database_path` возвращает полный путь к папке `database`. Вы также можете использовать функцию `database_path` для получения полного пути к файлу в папке `database`:
 
     $path = database_path();
+
+    $path = database_path('factories/UserFactory.php');
 
 <a name="method-mix"></a>
 #### `mix()` {#collection-method}
 
-Функция `mix` получает путь к [версионированному файлу Mix](/docs/{{version}}/mix):
+Функция `mix` возвращает путь к [версионированному файлу Mix](/docs/{{version}}/mix):
 
-    mix($file);
+    $path = mix('css/app.css');
 
 <a name="method-public-path"></a>
 #### `public_path()` {#collection-method}
 
-Функция `public_path` возвращает полный путь к папке `public`:
+Функция `public_path` возвращает полный путь к папке `public`. Вы также можете использовать функцию `public_path` для получения полного пути к файлу в папке `public`:
 
     $path = public_path();
+
+    $path = public_path('css/app.css');
 
 <a name="method-resource-path"></a>
 #### `resource_path()` {#collection-method}
 
-Функция `resource_path` возвращает полный путь к папке `resources`. Также можно использовать функцию `resource_path` для получения полного пути к указанному файлу относительно каталога с ресурсами:
+Функция `resource_path` возвращает полный путь к папке `resources`. Вы также можете использовать функцию `resource_path` для получения полного пути к файлу в папке `resources`:
 
     $path = resource_path();
 
-    $path = resource_path('assets/sass/app.scss');
+    $path = resource_path('sass/app.scss');
 
 <a name="method-storage-path"></a>
 #### `storage_path()` {#collection-method}
 
-Функция `storage_path` возвращает полный путь к папке `storage`. Также можно использовать функцию `storage_path` для получения полного пути к указанному файлу относительно каталога хранилища:
+Функция `storage_path` возвращает полный путь к папке `storage`. Вы также можете использовать функцию `storage_path` для получения полного пути к файлу в папке `storage`:
 
     $path = storage_path();
 
@@ -531,19 +861,21 @@ Laravel включает множество глобальных вспомог�
 <a name="strings"></a>
 ## Строки
 
-<a name="method-camel-case"></a>
-#### `camel_case()` {#collection-method}
+<a name="method-__"></a>
+#### `__()` {#collection-method}
 
-Функция `camel_case` преобразует строку в `camelCase`:
+Функция `__` получает перевод для строки или ключа перевода, используя [файлы локализации](/docs/{{version}}/localization):
 
-    $camel = camel_case('foo_bar');
+    echo __('Welcome to our application');
 
-    // fooBar
+    echo __('messages.welcome');
+
+Если указанная строка или ключ перевода не существует, функция `__` вернет переданное ей значение. Таким образом, используя приведенный выше пример, функция `__` вернет `messages.welcome`, если указанного ключа не существует.
 
 <a name="method-class-basename"></a>
 #### `class_basename()` {#collection-method}
 
-`class_basename` возвращает имя переданного класса без пространства имен:
+Функция `class_basename` возвращает имя переданного класса без пространства имен:
 
     $class = class_basename('Foo\Bar\Baz');
 
@@ -552,193 +884,420 @@ Laravel включает множество глобальных вспомог�
 <a name="method-e"></a>
 #### `e()` {#collection-method}
 
-Функция `e` выполняет функцию PHP `htmlspecialchars` с опцией `double_encode`, равной `false`:
+Функция `e` выполняет функцию PHP `htmlspecialchars` с опцией `double_encode`, установленной по умолчанию в `true`:
 
     echo e('<html>foo</html>');
 
     // &lt;html&gt;foo&lt;/html&gt;
 
-<a name="method-ends-with"></a>
-#### `ends_with()` {#collection-method}
+<a name="method-preg-replace-array"></a>
+#### `preg_replace_array()` {#collection-method}
 
-Функция `ends_with` определяет заканчивается ли строка переданной подстрокой:
+Функция `preg_replace_array` последовательно заменяет заданный паттерн в строке, используя массив:
 
-    $value = ends_with('This is my name', 'name');
+    $string = 'The event will take place between :start and :end';
 
-    // true
+    $replaced = preg_replace_array('/:[a-z_]+/', ['8:30', '9:00'], $string);
 
-<a name="method-kebab-case"></a>
-#### `kebab_case()` {#collection-method}
-
-Функция `kebab_case` преобразует строку в `kebab-case`:
-
-    $value = kebab_case('fooBar');
-
-    // foo-bar
-
-
-<a name="method-snake-case"></a>
-#### `snake_case()` {#collection-method}
-
-Функция `snake_case` преобразует строку в `snake_case`:
-
-    $snake = snake_case('fooBar');
-
-    // foo_bar
-
-<a name="method-str-limit"></a>
-#### `str_limit()` {#collection-method}
-
-Функция `str_limit` ограничивает число сиволов в строке. Функция принимает строку первым аргументом, а вторым — максимальное число символов:
-
-    $value = str_limit('The PHP framework for web artisans.', 7);
-
-    // The PHP...
-
-<a name="method-starts-with"></a>
-#### `starts_with()` {#collection-method}
-
-Функция `starts_with` определяет начинается ли строка с переданной подстроки:
-
-    $value = starts_with('This is my name', 'This');
-
-    // true
+    // The event will take place between 8:30 and 9:00
 
 <a name="method-str-after"></a>
-#### `str_after()` {#collection-method}
+#### `Str::after()` {#collection-method}
 
-Функция `str_after` возвращает все, что содержится в строке после переданной подстроки:
+Метод `Str::after` возвращает часть строки после заданного значения. Вся строка будет возвращена, если она не содержит заданного значения:
 
-    $value = str_after('This is: a test', 'This is:');
+    use Illuminate\Support\Str;
 
-    // ' a test'
+    $slice = Str::after('This is my name', 'This is');
+
+    // ' my name'
+
+<a name="method-str-after-last"></a>
+#### `Str::afterLast()` {#collection-method}
+
+Метод `Str::afterLast` возвращает часть строки после последнего вхождения заданного значения. Вся строка будет возвращена, если она не содержит заданного значения:
+
+    use Illuminate\Support\Str;
+
+    $slice = Str::afterLast('App\Http\Controllers\Controller', '\\');
+
+    // 'Controller'
 
 <a name="method-str-before"></a>
-#### `str_before()` {#collection-method}
+#### `Str::before()` {#collection-method}
 
-Функция `str_before` возвращает все, что содержится в строке до переданной подстроки:
+Метод `Str::before` возвращает часть строки до заданного значения:
 
-    $value = str_before('Test :it before', ':it before');
+    use Illuminate\Support\Str;
 
-    // 'Test '
+    $slice = Str::before('This is my name', 'my name');
+
+    // 'This is '
+
+<a name="method-str-before-last"></a>
+#### `Str::beforeLast()` {#collection-method}
+
+Метод `Str::beforeLast` возвращает часть строки до последнего вхождения заданного значения:
+
+    use Illuminate\Support\Str;
+
+    $slice = Str::beforeLast('This is my name', 'is');
+
+    // 'This '
+
+<a name="method-camel-case"></a>
+#### `Str::camel()` {#collection-method}
+
+Метод `Str::camel` преобразует строку в `camelCase`:
+
+    use Illuminate\Support\Str;
+
+    $converted = Str::camel('foo_bar');
+
+    // fooBar
 
 <a name="method-str-contains"></a>
-#### `str_contains()` {#collection-method}
+#### `Str::contains()` {#collection-method}
 
-Функция `str_contains` определяет содержит ли строка переданную подстроку:
+Метод `Str::contains` определяет, содержит ли строка заданное значение (с учетом регистра):
 
-    $value = str_contains('This is my name', 'my');
+    use Illuminate\Support\Str;
+
+    $contains = Str::contains('This is my name', 'my');
+
+    // true
+
+Также можно передать массив значений, чтобы определить, содержит ли строка какое-либо из значений:
+
+    use Illuminate\Support\Str;
+
+    $contains = Str::contains('This is my name', ['my', 'foo']);
 
     // true
 
-Также вы можете передать массив значений, чтобы определить, содержит ли строка любое из них:
+<a name="method-str-contains-all"></a>
+#### `Str::containsAll()` {#collection-method}
 
-    $value = str_contains('This is my name', ['my', 'foo']);
+Метод `Str::containsAll` определяет, содержит ли строка все значения заданного массива:
+
+    use Illuminate\Support\Str;
+
+    $containsAll = Str::containsAll('This is my name', ['my', 'name']);
 
     // true
+
+<a name="method-ends-with"></a>
+#### `Str::endsWith()` {#collection-method}
+
+Метод `Str::endsWith` определяет, заканчивается ли строка заданным значением:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::endsWith('This is my name', 'name');
+
+    // true
+
+
+Также можно передать массив значений, чтобы определить, заканчивается ли строка каким-либо из заданных значений:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::endsWith('This is my name', ['name', 'foo']);
+
+    // true
+
+    $result = Str::endsWith('This is my name', ['this', 'foo']);
+
+    // false
 
 <a name="method-str-finish"></a>
-#### `str_finish()` {#collection-method}
+#### `Str::finish()` {#collection-method}
 
-Функция `str_finish` добавляет одно вхождение подстроки в конец переданной строки, если она уже не заканчивается этим вхождением:
+Метод `Str::finish` добавляет одно вхождение подстроки в конец строки, если она уже не заканчивается этим вхождением:
 
-    $string = str_finish('this/string', '/');
-    $string2 = str_finish('this/string/', '/');
+    use Illuminate\Support\Str;
+
+    $adjusted = Str::finish('this/string', '/');
+
+    // this/string/
+
+    $adjusted = Str::finish('this/string/', '/');
 
     // this/string/
 
 <a name="method-str-is"></a>
-#### `str_is()` {#collection-method}
+#### `Str::is()` {#collection-method}
 
-Функция `str_is` определяет соответствует ли строка маске. Можно использовать звёздочки (*) как символы подстановки:
+Метод `Str::is` определяет, соответствует ли строка заданному шаблону. Звездочки `*` могут использоваться как символы подстановки:
 
-    $value = str_is('foo*', 'foobar');
+    use Illuminate\Support\Str;
+
+    $matches = Str::is('foo*', 'foobar');
 
     // true
 
-    $value = str_is('baz*', 'foobar');
+    $matches = Str::is('baz*', 'foobar');
 
     // false
 
+<a name="method-str-ucfirst"></a>
+#### `Str::ucfirst()` {#collection-method}
+
+Метод `Str::ucfirst` возвращает строку с первым символом в верхнем регистре:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::ucfirst('foo bar');
+
+    // Foo bar
+
+<a name="method-str-is-uuid"></a>
+#### `Str::isUuid()` {#collection-method}
+
+Метод `Str::isUuid` определяет, является ли строка валидным UUID:
+
+    use Illuminate\Support\Str;
+
+    $isUuid = Str::isUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de');
+
+    // true
+
+    $isUuid = Str::isUuid('laravel');
+
+    // false
+
+<a name="method-kebab-case"></a>
+#### `Str::kebab()` {#collection-method}
+
+Метод `Str::kebab` преобразует строку в `kebab-case`:
+
+    use Illuminate\Support\Str;
+
+    $converted = Str::kebab('fooBar');
+
+    // foo-bar
+
+<a name="method-str-limit"></a>
+#### `Str::limit()` {#collection-method}
+
+Метод `Str::limit` обрезает строку до заданной длины:
+
+    use Illuminate\Support\Str;
+
+    $truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20);
+
+    // The quick brown fox...
+
+Вы также можете передать третий аргумент для изменения фрагмента, который будет добавлен к строке:
+
+    use Illuminate\Support\Str;
+
+    $truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20, ' (...)');
+
+    // The quick brown fox (...)
+
+<a name="method-str-ordered-uuid"></a>
+#### `Str::orderedUuid()` {#collection-method}
+
+Метод `Str::orderedUuid` генерирует "timestamp first" UUID, который может быть эффективно сохранен в индексируемой колонке базы данных:
+
+    use Illuminate\Support\Str;
+
+    return (string) Str::orderedUuid();
+
 <a name="method-str-plural"></a>
-#### `str_plural()` {#collection-method}
+#### `Str::plural()` {#collection-method}
 
-Функция `str_plural` преобразовывает слово-строку во множественное число. На данные момент функция поддерживает только английский язык:
+Метод `Str::plural` преобразует слово-строку во множественное число. В настоящее время эта функция поддерживает только английский язык:
 
-    $plural = str_plural('car');
+    use Illuminate\Support\Str;
+
+    $plural = Str::plural('car');
 
     // cars
 
-    $plural = str_plural('child');
+    $plural = Str::plural('child');
 
     // children
 
-Вы можете указать число вторым аргументом функции для получения единственного или множественного числа строки:
+Вы можете передать целое число в качестве второго аргумента функции, чтобы получить единственное или множественное число:
 
-    $plural = str_plural('child', 2);
+    use Illuminate\Support\Str;
+
+    $plural = Str::plural('child', 2);
 
     // children
 
-    $plural = str_plural('child', 1);
+    $plural = Str::plural('child', 1);
 
     // child
 
 <a name="method-str-random"></a>
-#### `str_random()` {#collection-method}
+#### `Str::random()` {#collection-method}
 
-Функция `str_random` создает последовательность случайных символов заданной длины. Эта функция использует PHP-функцию `random_bytes`:
+Метод `Str::random` создает случайную строку заданной длины. Эта функция использует функцию PHP `random_bytes`:
 
-    $string = str_random(40);
+    use Illuminate\Support\Str;
+
+    $random = Str::random(40);
+
+<a name="method-str-replace-array"></a>
+#### `Str::replaceArray()` {#collection-method}
+
+Метод `Str::replaceArray` последовательно заменяет заданное значение в строке массивом:
+
+    use Illuminate\Support\Str;
+
+    $string = 'The event will take place between ? and ?';
+
+    $replaced = Str::replaceArray('?', ['8:30', '9:00'], $string);
+
+    // The event will take place between 8:30 and 9:00
+
+<a name="method-str-replace-first"></a>
+#### `Str::replaceFirst()` {#collection-method}
+
+Метод `Str::replaceFirst` заменяет первое вхождение подстроки в строке:
+
+    use Illuminate\Support\Str;
+
+    $replaced = Str::replaceFirst('the', 'a', 'the quick brown fox jumps over the lazy dog');
+
+    // a quick brown fox jumps over the lazy dog
+
+<a name="method-str-replace-last"></a>
+#### `Str::replaceLast()` {#collection-method}
+
+Метод `Str::replaceLast` заменяет последнее вхождение подстроки в строке:
+
+    use Illuminate\Support\Str;
+
+    $replaced = Str::replaceLast('the', 'a', 'the quick brown fox jumps over the lazy dog');
+
+    // the quick brown fox jumps over a lazy dog
 
 <a name="method-str-singular"></a>
-#### `str_singular()` {#collection-method}
+#### `Str::singular()` {#collection-method}
 
-Функция `str_singular` преобразует слово-строку в единственное число. Функция поддерживает только английский язык:
+Метод `Str::singular` преобразует слово-строку в единственное число. В настоящее время эта функция поддерживает только английский язык:
 
-    $singular = str_singular('cars');
+    use Illuminate\Support\Str;
+
+    $singular = Str::singular('cars');
 
     // car
 
+    $singular = Str::singular('children');
+
+    // child
+
 <a name="method-str-slug"></a>
-#### `str_slug()` {#collection-method}
+#### `Str::slug()` {#collection-method}
 
-Функция `str_slug` генерирует подходящую для URL "заготовку" из переданной строки:
+Метод `Str::slug` генерирует "slug" подходящий для URL из строки:
 
-    $title = str_slug('Laravel 5 Framework', '-');
+    use Illuminate\Support\Str;
+
+    $slug = Str::slug('Laravel 5 Framework', '-');
 
     // laravel-5-framework
 
+<a name="method-snake-case"></a>
+#### `Str::snake()` {#collection-method}
+
+Метод `Str::snake` преобразует строку в `snake_case`:
+
+    use Illuminate\Support\Str;
+
+    $converted = Str::snake('fooBar');
+
+    // foo_bar
+
+<a name="method-str-start"></a>
+#### `Str::start()` {#collection-method}
+
+Метод `Str::start` добавляет подстроку в начало переданной строки, если она еще не начинается с этой подстроки:
+
+    use Illuminate\Support\Str;
+
+    $adjusted = Str::start('this/string', '/');
+
+    // /this/string
+
+    $adjusted = Str::start('/this/string', '/');
+
+    // /this/string
+
+<a name="method-starts-with"></a>
+#### `Str::startsWith()` {#collection-method}
+
+Метод `Str::startsWith` определяет, начинается ли строка с заданного значения:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::startsWith('This is my name', 'This');
+
+    // true
+
 <a name="method-studly-case"></a>
-#### `studly_case()` {#collection-method}
+#### `Str::studly()` {#collection-method}
 
-Функция `studly_case` преобразует строку в `StudlyCase`:
+Метод `Str::studly` преобразует строку в `StudlyCase`:
 
-    $value = studly_case('foo_bar');
+    use Illuminate\Support\Str;
+
+    $converted = Str::studly('foo_bar');
 
     // FooBar
 
 <a name="method-title-case"></a>
-#### `title_case()` {#collection-method}
+#### `Str::title()` {#collection-method}
 
-The `title_case` преобразует строку в `Title Case`:
+Метод `Str::title` преобразует строку в `Title Case`:
 
-    $title = title_case('хороший заголовок пишется в правильном регистре');
+    use Illuminate\Support\Str;
 
-    // Хороший Заголовок Пишется В Правильном Регистре
+    $converted = Str::title('a nice title uses the correct case');
+
+    // A Nice Title Uses The Correct Case
+
+<a name="method-str-uuid"></a>
+#### `Str::uuid()` {#collection-method}
+
+Метод `Str::uuid` генерирует UUID (версия 4):
+
+    use Illuminate\Support\Str;
+
+    return (string) Str::uuid();
+
+<a name="method-str-words"></a>
+#### `Str::words()` {#collection-method}
+
+Метод `Str::words` ограничивает количество слов в строке:
+
+    use Illuminate\Support\Str;
+
+    return Str::words('Perfectly balanced, as all things should be.', 3, ' >>>');
+
+    // Perfectly balanced, as >>>
 
 <a name="method-trans"></a>
 #### `trans()` {#collection-method}
 
-Функция `trans` переводит переданную языковую строку с помощью ваших [файлов локализации](/docs/{{version}}/localization):
+Функция `trans` переводит переданный ключ перевода с помощью ваших [файлов локализации](/docs/{{version}}/localization):
 
-    echo trans('validation.required'):
+    echo trans('messages.welcome');
+
+Если указанного ключа перевода не существует, функция `trans` вернет переданный ей ключ. Таким образом, используя вышеприведенный пример, функция `trans` вернет `messages.welcome`, если ключ перевода не существует.
 
 <a name="method-trans-choice"></a>
 #### `trans_choice()` {#collection-method}
 
-Функция `trans_choice` переводит переданную языковую строку с изменениями:
+Функция `trans_choice` переводит переданный ключ перевода с изменениями:
 
-    $value = trans_choice('foo.bar', $count);
+    echo trans_choice('messages.notifications', $unreadCount);
+
+Если указанного ключа перевода не существует, функция `trans_choice` вернет переданный ей ключ. Таким образом, используя вышеприведенный пример, функция `trans_choice` вернет `messages.notifications`, если ключ перевода не существует.
 
 <a name="urls"></a>
 ## URL
@@ -746,9 +1305,11 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-action"></a>
 #### `action()` {#collection-method}
 
-Функция `action` генерирует URL для заданного действия контроллера. Вам не надо передавать полное пространство имён в контроллер. Вместо этого передайте имя класса контроллера в пространстве имён `App\Http\Controllers`:
+Функция `action` генерирует URL для заданного метода контроллера. Вам не нужно передавать полное пространство имён контроллера. Вместо этого передайте имя класса контроллера относительно пространства имен `App\Http\Controllers`:
 
-    $url = action('HomeController@getIndex');
+    $url = action('HomeController@index');
+
+    $url = action([HomeController::class, 'index']);
 
 Если метод принимает параметры маршрута, вы можете передать их вторым аргументом:
 
@@ -757,16 +1318,15 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-asset"></a>
 #### `asset()` {#collection-method}
 
-Генерирует URL к ресурсу (изображению и пр.) на основе текущей схемы запроса (HTTP или HTTPS):
+Функция `asset` создает URL для ресурса, используя текущую схему запроса (HTTP или HTTPS):
 
     $url = asset('img/photo.jpg');
 
-<a name="method-secure-asset"></a>
-#### `secure_asset()` {#collection-method}
+Вы можете настроить хост URL адреса, установив параметр `ASSET_URL` в файле `.env`. Это может быть полезно, если вы размещаете свои ресурсы на внешнем сервисе, таком как Amazon S3:
 
-Генерирует URL для ресурса с использованием HTTPS:
+    // ASSET_URL=http://example.com/assets
 
-    echo secure_asset('foo/bar.zip', $title, $attributes = []);
+    $url = asset('img/photo.jpg'); // http://example.com/assets/img/photo.jpg
 
 <a name="method-route"></a>
 #### `route()` {#collection-method}
@@ -779,33 +1339,42 @@ The `title_case` преобразует строку в `Title Case`:
 
     $url = route('routeName', ['id' => 1]);
 
-По-умолчанию функция `route` генерирует абсолютный URL-адрес. Если вы хотите сгенерировать относительный URL-адрес, можно передать `false` в качестве третьего параметра:
+По-умолчанию функция `route` генерирует абсолютный URL-адрес. Если вы хотите сгенерировать относительный URL-адрес, можно передать `false` в качестве третьего аргумента:
 
     $url = route('routeName', ['id' => 1], false);
+
+<a name="method-secure-asset"></a>
+#### `secure_asset()` {#collection-method}
+
+Функция `secure_asset` создает URL для ресурса с использованием HTTPS:
+
+    $url = secure_asset('img/photo.jpg');
 
 <a name="method-secure-url"></a>
 #### `secure_url()` {#collection-method}
 
 Функция `secure_url` генерирует полный HTTPS URL по заданному пути:
 
-    echo secure_url('user/profile');
+    $url = secure_url('user/profile');
 
-    echo secure_url('user/profile', [1]);
+    $url = secure_url('user/profile', [1]);
 
 <a name="method-url"></a>
 #### `url()` {#collection-method}
 
 Функция `url` генерирует полный URL по заданному пути:
 
-    echo url('user/profile');
+    $url = url('user/profile');
 
-    echo url('user/profile', [1]);
+    $url = url('user/profile', [1]);
 
 Если путь не указан, вернется экземпляр `Illuminate\Routing\UrlGenerator`:
 
-    echo url()->current();
-    echo url()->full();
-    echo url()->previous();
+    $current = url()->current();
+
+    $full = url()->full();
+
+    $previous = url()->previous();
 
 <a name="miscellaneous"></a>
 ## Прочее
@@ -813,13 +1382,13 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-abort"></a>
 #### `abort()` {#collection-method}
 
-Функция `abort` выбрасывает HTTP-исключение, которое будет отображено обработчиком исключений:
+Функция `abort` выбрасывает [HTTP-исключение](/docs/{{version}}/errors#http-exceptions), которое будет отображено [обработчиком исключений](/docs/{{version}}/errors#the-exception-handler):
 
-    abort(401);
+    abort(403);
 
-Вы можете передать текст для вывода при ответе с этим исключением:
+Вы также можете передать текст и заголовки ответа:
 
-    abort(401, 'Unauthorized.');
+    abort(403, 'Unauthorized.', $headers);
 
 <a name="method-abort-if"></a>
 #### `abort_if()` {#collection-method}
@@ -828,6 +1397,8 @@ The `title_case` преобразует строку в `Title Case`:
 
     abort_if(! Auth::user()->isAdmin(), 403);
 
+Как и в методе `abort`, вы можете передать текст ответа в качестве третьего аргумента и массив заголовков четвертым аргументом.
+
 <a name="method-abort-unless"></a>
 #### `abort_unless()` {#collection-method}
 
@@ -835,61 +1406,121 @@ The `title_case` преобразует строку в `Title Case`:
 
     abort_unless(Auth::user()->isAdmin(), 403);
 
+Как и в методе `abort`, вы можете передать текст ответа в качестве третьего аргумента и массив заголовков четвертым аргументом.
+
+<a name="method-app"></a>
+#### `app()` {#collection-method}
+
+Функция `app` возвращает экземпляр [сервис-контейнера](/docs/{{version}}}/container):
+
+    $container = app();
+
+Вы можете передать имя класса или интерфейса для получения его из контейнера:
+
+    $api = app('HelpSpot\API');
+
 <a name="method-auth"></a>
 #### `auth()` {#collection-method}
 
-Функция `auth` возвращает экземпляр аутентификатора. Вы можете использовать ее вместо фасада `Auth` для удобства:
+Функция `auth` возвращает экземпляр [аутентификатора](/docs/{{version}}/authentication). Вы можете использовать ее вместо фасада `Auth` для удобства:
 
     $user = auth()->user();
+
+При необходимости вы можете указать, к какому гварду вы хотите получить доступ:
+
+    $user = auth('admin')->user();
 
 <a name="method-back"></a>
 #### `back()` {#collection-method}
 
-Функция `back()` создает отклик-переадресацию на предыдущую страницу пользователя:
+Функция `back()` создает [ответ с редиректом](/docs/{{version}}/responses#redirects) на предыдущую страницу пользователя:
+
+    return back($status = 302, $headers = [], $fallback = false);
 
     return back();
 
 <a name="method-bcrypt"></a>
 #### `bcrypt()` {#collection-method}
 
-Функция `bcrypt` хеширует переданное значение с помощью Bcrypt. Вы можете использовать ее вместо фасада `Hash`:
+Функция `bcrypt` [хеширует](/docs/{{version}}/hashing) переданное значение с помощью Bcrypt. Вы можете использовать ее вместо фасада `Hash`:
 
     $password = bcrypt('my-secret-password');
+
+<a name="method-blank"></a>
+#### `blank()` {#collection-method}
+
+Функция `blank` определяет является ли данное значение "пустым":
+
+    blank('');
+    blank('   ');
+    blank(null);
+    blank(collect());
+
+    // true
+
+    blank(0);
+    blank(true);
+    blank(false);
+
+    // false
+
+Функция, обратная `blank` — [`filled`](#method-filled).
+
+<a name="method-broadcast"></a>
+#### `broadcast()` {#collection-method}
+
+Функция `broadcast` выполняет [широковещание](/docs/{{version}}/broadcasting) переданного [события](/docs/{{version}}/events) для обработчиков:
+
+    broadcast(new UserRegistered($user));
 
 <a name="method-cache"></a>
 #### `cache()` {#collection-method}
 
-Функцию `cache` можно использовать для получения значений из кэша. Если в кэше нет заданного ключа, будет возвращено необязательное значение по умолчанию:
+Функцию `cache` можно использовать для получения значений из [кэша](/docs/{{version}}/cache). Если в кэше нет заданного ключа, будет возвращено необязательное значение по умолчанию:
 
     $value = cache('key');
 
     $value = cache('key', 'default');
 
-Вы можете добавить элементы в кэш, передав массив пар ключ/значение. Также вам надо передать количество минут или время, в течение которого кэшированные значения будут считаться действительными:
+Вы можете добавить элементы в кэш, передав массив пар ключ/значение. Также вам надо передать количество секунд или время, в течение которого кэшированные значения будут считаться действительными:
 
-    cache(['key' => 'value'], 5);
+    cache(['key' => 'value'], 300);
 
-    cache(['key' => 'value'], Carbon::now()->addSeconds(10));
+    cache(['key' => 'value'], now()->addSeconds(10));
+
+<a name="method-class-uses-recursive"></a>
+#### `class_uses_recursive()` {#collection-method}
+
+Функция `class_uses_recursive` возвращает все трейты, используемые классом, включая трейты, используемые его родительскими классами:
+
+    $traits = class_uses_recursive(App\User::class);
 
 <a name="method-collect"></a>
 #### `collect()` {#collection-method}
 
-Функция `collect` создает экземпляр [коллекции](/docs/{{version}}/collections) из переданного массива:
+Функция `collect` создает экземпляр [коллекции](/docs/{{version}}/collections) из переданного значения:
 
     $collection = collect(['taylor', 'abigail']);
 
 <a name="method-config"></a>
 #### `config()` {#collection-method}
 
-Функция `config` получает значение переменной из конфигурации. К значениям конфигурации можно обращаться с помощью "точечного" синтаксиса, в котором указывается имя файла и необходимый параметр. Можно указать значение по умолчанию, которое будет возвращено, если параметра не существует:
+Функция `config` получает значение переменной из [конфигурации](/docs/{{version}}/configuration). К значениям конфигурации можно обращаться с помощью "точечного" синтаксиса, в котором указывается имя файла и необходимый параметр. Можно указать значение по умолчанию, которое будет возвращено, если параметра не существует:
 
     $value = config('app.timezone');
 
     $value = config('app.timezone', $default);
 
-Хелпер `config` можно использовать для задания переменных конфигурации во время выполнения, передав массив пар ключ/значение:
+Вы можете задать переменные конфигурации во время выполнения, передав массив пар ключ/значение:
 
     config(['app.debug' => true]);
+
+<a name="method-cookie"></a>
+#### `cookie()` {#collection-method}
+
+Функция `cookie` создает новый экземпляр [cookie](/docs/{{version}}/requests#cookies):
+
+    $cookie = cookie('name', 'value', $minutes);
 
 <a name="method-csrf-field"></a>
 #### `csrf_field()` {#collection-method}
@@ -914,26 +1545,58 @@ The `title_case` преобразует строку в `Title Case`:
 
     dd($value1, $value2, $value3, ...);
 
-Если вы не хотите останавливать выполнение скрипта, вместо этого используйте функцию `dump`:
+Если вы не хотите останавливать выполнение скрипта, вместо этого используйте функцию [`dump`](#method-dump):
 
-    dump($value);
+<a name="method-decrypt"></a>
+#### `decrypt()` {#collection-method}
+
+Функция `decrypt` расшифровывает заданное значение, используя [шифрование](/docs/{{version}}/encryption) Laravel:
+
+    $decrypted = decrypt($encrypted_value);
 
 <a name="method-dispatch"></a>
 #### `dispatch()` {#collection-method}
 
-Функция `dispatch` помещает новую задачу в [список задач](/docs/{{version}}/queues) Laravel:
+Функция `dispatch` помещает [задачу](/docs/{{version}}/queues#creating-jobs) в [очередь задач](/docs/{{version}}/queues) Laravel:
 
     dispatch(new App\Jobs\SendEmails);
+
+<a name="method-dispatch-now"></a>
+#### `dispatch_now()` {#collection-method}
+
+Функция `dispatch_now` запускает [задачу](/docs/{{version}}/queues#creating-jobs) немедленно и возвращает значение её метода `handle`:
+
+    $result = dispatch_now(new App\Jobs\SendEmails);
+
+<a name="method-dump"></a>
+#### `dump()` {#collection-method}
+
+Функция `dump` производит дамп переменных:
+
+    dump($value);
+
+    dump($value1, $value2, $value3, ...);
+
+Если вы хотите остановить выполнение после вывода переменных, используйте функцию [`dd`](#method-dd).
+
+<a name="method-encrypt"></a>
+#### `encrypt()` {#collection-method}
+
+Функция `encrypt` шифрует заданное значение, используя [шифрование](/docs/{{version}}/encryption) Laravel:
+
+    $encrypted = encrypt($unencrypted_value);
 
 <a name="method-env"></a>
 #### `env()` {#collection-method}
 
-Функция `env` позволяет получить значение переменной среды или вернуть значение по умолчанию:
+Функция `env` получает значение [переменной окружения](/docs/{{version}}/configuration#environment-configuration) или возвращает значение по умолчанию:
 
     $env = env('APP_ENV');
 
-    // Return a default value if the variable doesn't exist...
+    // Returns 'production' if APP_ENV is not set...
     $env = env('APP_ENV', 'production');
+
+> {note} Если вы выполняете команду `config:cache` во время вашего процесса деплоя, вы должны быть уверены, что вызываете функцию `env` только в конфигурационных файлах. Как только конфигурация будет закэширована, файл `.env` не будет загружаться и все вызовы функции `env` вернут `null`.
 
 <a name="method-event"></a>
 #### `event()` {#collection-method}
@@ -949,10 +1612,30 @@ The `title_case` преобразует строку в `Title Case`:
 
     $user = factory(App\User::class)->make();
 
+<a name="method-filled"></a>
+#### `filled()` {#collection-method}
+
+Функция `filled` определяет, не является ли заданное значение "пустым":
+
+    filled(0);
+    filled(true);
+    filled(false);
+
+    // true
+
+    filled('');
+    filled('   ');
+    filled(null);
+    filled(collect());
+
+    // false
+
+Функция, обратная `filled` — [`blank`](#method-blank).
+
 <a name="method-info"></a>
 #### `info()` {#collection-method}
 
-Функция `info` будет записывать информацию в журнал:
+Функция `info` запишет информацию в [лог](/docs/{{version}}/logging):
 
     info('Некая полезная информация!');
 
@@ -963,7 +1646,7 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-logger"></a>
 #### `logger()` {#collection-method}
 
-Функцию `logger` можно использовать, чтобы записать в журнал сообщение уровня `debug`:
+Функцию `logger` можно использовать, чтобы записать в [лог](/docs/{{version}}/logging) сообщение уровня `debug`:
 
     logger('Отладочное сообщение');
 
@@ -984,19 +1667,50 @@ The `title_case` преобразует строку в `Title Case`:
         {{ method_field('DELETE') }}
     </form>
 
+<a name="method-now"></a>
+#### `now()` {#collection-method}
+
+Функция `now` создает экземпляр класса `Illuminate\Support\Carbon` с текущим временем:
+
+    $now = now();
+
 <a name="method-old"></a>
 #### `old()` {#collection-method}
 
-Функция `old` [получает](/docs/{{version}}/requests#retrieving-input) значение "старого" ввода, переданного в сессию:
+Функция `old` [получает](/docs/{{version}}/requests#retrieving-input) значение ["старого" ввода](/docs/{{version}}/requests#old-input), переданного в сессию:
 
     $value = old('value');
 
     $value = old('value', 'default');
 
+<a name="method-optional"></a>
+#### `optional()` {#collection-method}
+
+Функция `optional` принимает любой аргумент и позволяет получить доступ к свойствам или вызвать методы на этом объекте. Если переданный объект — `null`, то свойства и методы будут возвращать `null` вместо того, чтобы вызывать ошибку:
+
+    return optional($user->address)->street;
+
+    {!! old('name', optional($user)->name) !!}
+
+Функция `optional` также принимает функцию в качестве второго аргумента. Функция будет вызвана если значение переданное в первом аргументе не является `null`:
+
+    return optional(User::find($id), function ($user) {
+        return new DummyUser;
+    });
+
+<a name="method-policy"></a>
+#### `policy()` {#collection-method}
+
+Функция `policy` получает экземпляр [политик](/docs/{{version}}/authorization#creating-policies) для заданного класса:
+
+    $policy = policy(App\User::class);
+
 <a name="method-redirect"></a>
 #### `redirect()` {#collection-method}
 
-Функция `redirect` возвращает HTTP-отклик переадресации, или экземпляр переадресатора, если вызывается без аргументов:
+Функция `redirect` возвращает [HTTP-ответ с редиректом](/docs/{{version}}/responses#redirects), или экземпляр переадресатора, если вызывается без аргументов:
+
+    return redirect($to = null, $status = 302, $headers = [], $secure = null);
 
     return redirect('/home');
 
@@ -1005,7 +1719,7 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-report"></a>
 #### `report()` {#collection-method}
 
-Функция `report` сообщит об исключении, используя метод` report` обработчика исключения:
+Функция `report` сообщит об исключении, используя метод` report` [обработчика исключения](/docs/{{version}}/errors#the-exception-handler):
 
     report($e);
 
@@ -1016,7 +1730,35 @@ The `title_case` преобразует строку в `Title Case`:
 
     $request = request();
 
-    $value = request('key', $default = null)
+    $value = request('key', $default);
+
+<a name="method-rescue"></a>
+#### `rescue()` {#collection-method}
+
+Функция `rescue` выполняет переданную функцию и перехватывает любые исключения, возникающие во время её выполнения. Все пойманные исключения будет отправлены в метод `report` [обработчика исключений](/docs/{{version}}/errors#the-exception-handler); однако, выполнение продолжиться:
+
+    return rescue(function () {
+        return $this->method();
+    });
+
+Вы также можете передать второй аргумент в функцию `rescue`. Этот аргумент будет значением «по умолчанию», которое должно быть возвращено, если во время выполнения функции возникнет исключение:
+
+    return rescue(function () {
+        return $this->method();
+    }, false);
+
+    return rescue(function () {
+        return $this->method();
+    }, function () {
+        return $this->failure();
+    });
+
+<a name="method-resolve"></a>
+#### `resolve()` {#collection-method}
+
+Функция `resolve` получает экземпляр класса или интерфейса из [сервис-контейнера](/docs/{{version}}/container) по его имени:
+
+    $api = resolve('HelpSpot\API');
 
 <a name="method-response"></a>
 #### `response()` {#collection-method}
@@ -1039,7 +1781,7 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-session"></a>
 #### `session()` {#collection-method}
 
-Функция `session` используется для получения или задания значений сессии:
+Функция `session` используется для получения или задания значений [сессии](/docs/{{version}}/session):
 
     $value = session('key');
 
@@ -1056,7 +1798,7 @@ The `title_case` преобразует строку в `Title Case`:
 <a name="method-tap"></a>
 #### `tap()` {#collection-method}
 
-Функция `tap` принимает два аргумента: некоторую переменную `$value` и функцию. Эта переменная передается в функцию-аргумент в виде аргумента. Эта же переменная возвращается какрезультат выполнения хелпера. Возвращаемое значение функции-аргумента игнорируется:
+Функция `tap` принимает два аргумента: некоторую переменную `$value` и функцию. Эта переменная передается в функцию-аргумент в виде аргумента. Эта же переменная возвращается как результат выполнения хелпера. Возвращаемое значение функции-аргумента игнорируется:
 
     $user = tap(User::first(), function ($user) {
         $user->name = 'taylor';
@@ -1068,17 +1810,95 @@ The `title_case` преобразует строку в `Title Case`:
 
     $user = tap($user)->update([
         'name' => $name,
-        'email' => $email
+        'email' => $email,
     ]);
+
+Для добавления метода `tap` в класс, вы можете добавить трейт `Illuminate\Support\Traits\Tappable`. Метод `tap` этого трейта принимает функцию в качестве единственного аргумента. Сам экземпляр объекта будет передан в функцию, а затем возвращен методом `tap`:
+
+    return $user->tap(function ($user) {
+        //
+    });
+
+<a name="method-throw-if"></a>
+#### `throw_if()` {#collection-method}
+
+Функция `throw_if` выбрасывает заданное исключение, если логическое выражение равно `true`:
+
+    throw_if(! Auth::user()->isAdmin(), AuthorizationException::class);
+
+    throw_if(
+        ! Auth::user()->isAdmin(),
+        AuthorizationException::class,
+        'You are not allowed to access this page'
+    );
+
+<a name="method-throw-unless"></a>
+#### `throw_unless()` {#collection-method}
+
+Функция `throw_unless` выбрасывает заданное исключение, если логическое выражение равно `false`:
+
+    throw_unless(Auth::user()->isAdmin(), AuthorizationException::class);
+
+    throw_unless(
+        Auth::user()->isAdmin(),
+        AuthorizationException::class,
+        'You are not allowed to access this page'
+    );
+
+<a name="method-today"></a>
+#### `today()` {#collection-method}
+
+Функция `today` создает экземпляр класса `Illuminate\Support\Carbon` для текущей даты:
+
+    $today = today();
+
+<a name="method-trait-uses-recursive"></a>
+#### `trait_uses_recursive()` {#collection-method}
+
+Функция `trait_uses_recursive` возвращает все трейты, используемые трейтом:
+
+    $traits = trait_uses_recursive(\Illuminate\Notifications\Notifiable::class);
+
+<a name="method-transform"></a>
+#### `transform()` {#collection-method}
+
+Функция `transform` выполняет функцию для заданного значения, если значение не является [blank](#method-blank) и возвращает результат функции:
+
+    $callback = function ($value) {
+        return $value * 2;
+    };
+
+    $result = transform(5, $callback);
+
+    // 10
+
+Значение по умолчанию или функция могут быть переданы в качестве третьего аргумента метода. Это значение будет возвращено, если переданное значение пустое:
+
+    $result = transform(null, $callback, 'The value is blank');
+
+    // The value is blank
+
+<a name="method-validator"></a>
+#### `validator()` {#collection-method}
+
+Функция `validator` создает новый экземпляр [валидатора](/docs/{{version}}/validation) с заданными аргументами. Для удобства вы можете использовать его вместо фасада `Validator`:
+
+    $validator = validator($data, $rules, $messages);
 
 <a name="method-value"></a>
 #### `value()` {#collection-method}
 
-Поведение функции `value` просто вернет данное функции значение. Однако, если передать `Closure` функции, будет выполнено `Closure` и возвращен результат:
+Функция `value` возвращает переданное ей значение. Однако, если передать функцию, она будет выполнена и её результат будет возвращен:
 
-    $value = value(function () {
-        return 'bar';
+    $result = value(true);
+
+    // true
+
+    $result = value(function () {
+        return false;
     });
+
+    // false
 
 <a name="method-view"></a>
 #### `view()` {#collection-method}
@@ -1086,3 +1906,24 @@ The `title_case` преобразует строку в `Title Case`:
 Функция `view` получает экземпляр [шаблона](/docs/{{version}}/views):
 
     return view('auth.login');
+
+<a name="method-with"></a>
+#### `with()` {#collection-method}
+
+Функция `with` возвращает переданное ей значение. Если в качестве второго арумента передать функцию, то она будет выполненна и её результат будет возвращен:
+
+    $callback = function ($value) {
+        return (is_numeric($value)) ? $value * 2 : 0;
+    };
+
+    $result = with(5, $callback);
+
+    // 10
+
+    $result = with(null, $callback);
+
+    // 0
+
+    $result = with(5, null);
+
+    // 5
