@@ -1,4 +1,4 @@
-git 63a231cc5940dda64e8f0b08e0b9e7be33b6e27c
+git c924f87f2ade6c34cf7f87fbd363f04d676f6436
 
 ---
 
@@ -83,11 +83,19 @@ git 63a231cc5940dda64e8f0b08e0b9e7be33b6e27c
         key: 'your-pusher-channels-key'
     });
 
+Наконец, вам необходимо изменить драйвер широковещания на `pusher` в вашем `.env` файле:
+
+    BROADCAST_DRIVER=pusher
+
 #### Redis
 
 Если вы используете широковещание при помощи Redis, вам нужно установить php-расширение `phpredis` или библиотеку `Predis` при помощи Composer:
 
     composer require predis/predis
+
+Далее, вам необходимо изменить драйвер широковещания на `redis` в вашем `.env` файле:
+
+    BROADCAST_DRIVER=redis
 
 Широковещатель Redis будет вещать сообщения через функцию Redis pub/sub; однако, потребуется связать его с WebSocket-сервером, который может получать сообщения от Redis и вещать их на ваши WebSocket-каналы.
 
