@@ -1,4 +1,4 @@
-git e73c40f0dea4db1205c83584d6c5b544b5ff1683
+git 3e64a11762a486b34d490f87ed0845134b6e1950
 
 ---
 
@@ -10,6 +10,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
     - [Связывание интерфейса с реализацией](#binding-interfaces-to-implementations)
     - [Контекстное связывание](#contextual-binding)
     - [Тегирование](#tagging)
+    - [Расширение связываний](#extending-bindings)
 - [Применение на практике](#resolving)
     - [Метод Make](#the-make-method)
     - [Автоматическое внедрение](#automatic-injection)
@@ -27,9 +28,9 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
     namespace App\Http\Controllers;
 
-    use App\User;
-    use App\Repositories\UserRepository;
     use App\Http\Controllers\Controller;
+    use App\Repositories\UserRepository;
+    use App\User;
 
     class UserController extends Controller
     {
@@ -77,15 +78,14 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 Поскольку почти все ваши привязки сервис-контейнеров будут зарегистрированы в [сервис-провайдерах](/docs/{{version}}/providers), то все следующие примеры демонстрируют использование контейнеров в данном контексте.
 
-> {tip} Если классы не зависят от каких-либо интерфейсов, то нет необходимости связывать их в контейнере. Не нужно объяснять контейнеру, как создавать эти объекты, поскольку он автоматически извлекает такие 
- объекты при помощи рефлексии.
+> {tip} Если классы не зависят от каких-либо интерфейсов, то нет необходимости связывать их в контейнере. Не нужно объяснять контейнеру, как создавать эти объекты, поскольку он автоматически извлекает такие объекты при помощи рефлексии.
 
 #### Простые связывания
 
 В сервис-провайдере всегда есть доступ к контейнеру через свойство `$this->app`. Зарегистрировать привязку можно методом `bind`, передав имя того класса или интерфейса, который мы хотим зарегистрировать, вместе с функцией-замыкания `Closure`, которая возвращает экземпляр класса:
 
     $this->app->bind('HelpSpot\API', function ($app) {
-        return new HelpSpot\API($app->make('HttpClient'));
+        return new \HelpSpot\API($app->make('HttpClient'));
     });
 
 Обратите внимание, что мы получаем сам контейнер в виде аргумента ресолвера. Затем мы можем использовать контейнер, чтобы получать под-зависимости создаваемого объекта.
@@ -95,14 +95,14 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 Метод `singleton` привязывает класс или интерфейс к контейнеру, который должен быть создан только один раз, и все последующие обращения к нему будут возвращать этот созданный экземпляр:
 
     $this->app->singleton('HelpSpot\API', function ($app) {
-        return new HelpSpot\API($app->make('HttpClient'));
+        return new \HelpSpot\API($app->make('HttpClient'));
     });
 
 #### Привязка экземпляра
 
 Вы можете также привязать существующий экземпляр объекта к контейнеру, используя метод `instance`. Данный экземпляр будет всегда возвращаться при последующих обращениях к контейнеру:
 
-    $api = new HelpSpot\API(new HttpClient);
+    $api = new \HelpSpot\API(new HttpClient);
 
     $this->app->instance('HelpSpot\API', $api);
 
@@ -144,10 +144,11 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 
 Иногда у вас может быть два класса, которые используют один интерфейс. Но вы хотите внедрить различные реализации в каждый класс. Например, два контроллера могут зависеть от различных реализаций [контракта](/docs/{{version}}/contracts) `Illuminate\Contracts\Filesystem\Filesystem`. Laravel предоставляет простой и гибкий интерфейс для описания такого поведения:
 
-    use Illuminate\Support\Facades\Storage;
     use App\Http\Controllers\PhotoController;
+    use App\Http\Controllers\UploadController;
     use App\Http\Controllers\VideoController;
     use Illuminate\Contracts\Filesystem\Filesystem;
+    use Illuminate\Support\Facades\Storage;
 
     $this->app->when(PhotoController::class)
               ->needs(Filesystem::class)
@@ -155,7 +156,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
                   return Storage::disk('local');
               });
 
-    $this->app->when(VideoController::class)
+    $this->app->when([VideoController::class, UploadController::class])
               ->needs(Filesystem::class)
               ->give(function () {
                   return Storage::disk('s3');
@@ -182,6 +183,15 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
         return new ReportAggregator($app->tagged('reports'));
     });
 
+<a name="extending-bindings"></a>
+### Расширение связываний
+
+Метод `extend` позволяет модифицировать полученные из контейнера сервисы. Например, когда сервис получен, вы можете запустить дополнительный код для декорации или настройки сервиса. Метод `extend` в качестве единственного аргумента принимает функцию, которая должна возвращать измененный сервис. Функция получает сервис из контейнера и экземпляр самого контейнера:
+
+    $this->app->extend(Service::class, function ($service, $app) {
+        return new DecoratedService($service);
+    });
+
 <a name="resolving"></a>
 ## Применение на практике
 
@@ -203,7 +213,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
 <a name="automatic-injection"></a>
 #### Автоматическое внедрение
 
-И, наконец, самое главное, вы можете просто указать тип зависимости в конструкторе класса, который имеется в контейнере, включая [контроллеры](/docs/{{version}}/controllers), [слушателей событий](/docs/{{version}}/events), [очереди задач](/docs/{{version}}/queues), [посредников](/docs/{{version}}/middleware) и др. Это те способы, с помощью которых получаются большинство объектов из контейнера на практике.
+И, наконец, самое главное, вы можете просто указать тип зависимости в конструкторе класса, который имеется в контейнере, включая [контроллеры](/docs/{{version}}/controllers), [слушатели событий](/docs/{{version}}/events), [посредники](/docs/{{version}}/middleware) и др. Кроме того, вы можете указать тип зависимости в методе `handle` [задач в очереди](/docs/{{version}}/queues). Это те способы, с помощью которых получаются большинство объектов из контейнера на практике.
 
 Например, вы можете указать тип репозитория, определённого вашим приложением в конструкторе контроллера. Репозиторий будет автоматически получен и внедрён в класс:
 
@@ -252,7 +262,7 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
         // Вызывается при извлечении объекта любого типа...
     });
 
-    $this->app->resolving(HelpSpot\API::class, function ($api, $app) {
+    $this->app->resolving(\HelpSpot\API::class, function ($api, $app) {
         // Вызывается при извлечении объекта типа "HelpSpot\API"...
     });
 
@@ -271,5 +281,4 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
         //
     });
 
- > {note} Вызов метода `get` выбросит исключение, если идентификатор не был явно привязан к контейнеру.
- 
+Исключение будет выброшено, если заданный идентификатор не может быть получен. Исключение будет экземпляром `Psr\Container\NotFoundExceptionInterface`, если идентификатор никогда не был связан. Если идентификатор был связан, но но его не удалось получить, то будет выброшен экземпляр `Psr\Container\ContainerExceptionInterface`.
