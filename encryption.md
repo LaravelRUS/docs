@@ -1,75 +1,62 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
-
----
-
-# Шифрование
+# Laravel 8 · Шифрование
 
 - [Введение](#introduction)
-- [Настройка](#configuration)
-- [Использование шифратора](#using-the-encrypter)
+- [Конфигурирование](#configuration)
+- [Использование шифровальщика](#using-the-encrypter)
 
 <a name="introduction"></a>
 ## Введение
 
-Шифратор Laravel использует OpenSSL для шифрования по алгоритмам AES-256 и AES-128. Настоятельно призываем вас использовать встроенные в Laravel возможности шифрования и не пытаться применять свои "самодельные" алгоритмы шифрования. Все шифрованные значения подписаны кодом аутентификации сообщения (MAC) для предотвращения любых изменений в зашифрованной строке.
+Сервисы шифрования Laravel предоставляют простой и удобный интерфейс для шифрования и дешифрования текста через OpenSSL с использованием шифрования AES-256 и AES-128. Все зашифрованные значения Laravel подписываются с использованием кода аутентификации сообщения (MAC), поэтому их базовое значение не может быть изменено или подделано после шифрования.
 
 <a name="configuration"></a>
-## Настройка
+## Конфигурирование
 
-Перед использованием шифрования Laravel обязательно задайте ключ `key` в конфиге `config/app.php`. Для этого вам надо использовать команду `php artisan key:generate`, которая использует надёжный генератор случайных чисел для создания вашего ключа. Без этого ключа все зашифрованные Laravel значения не будут безопасными.
+Перед использованием шифровальщика Laravel вы должны установить параметр `key` в конфигурационном файле `config/app.php`. Это значение конфигурации управляется переменной окружения `APP_KEY`. Вы должны использовать команду `php artisan key:generate` для генерации значения этой переменной, поскольку команда `key:generate` будет использовать безопасный генератор случайных байтов PHP для создания криптографически безопасного ключа для вашего приложения. Обычно значение переменной среды `APP_KEY` генерируется для вас во время [установки Laravel](installation).
 
 <a name="using-the-encrypter"></a>
-## Использование шифратора
+## Использование шифровальщика
 
+<a name="encrypting-a-value"></a>
 #### Шифрование значения
 
-Вы можете зашифровать значение с помощью хелпера `encrypt`. Все значения шифруются с помощью OpenSSL и шифра `AES-256-CBC`. Более того, все шифрованные значения подписаны кодом аутентификации сообщения (MAC) для обнаружения любых изменений в зашифрованной строке:
+Вы можете зашифровать значение, используя метод `encryptString` фасада `Crypt`. Все значения будут зашифрованы с использованием OpenSSL и шифра `AES-256-CBC`. Кроме того, все зашифрованные значения подписываются кодом аутентификации сообщения (MAC). Встроенный код аутентификации сообщений предотвратит расшифровку любых значений, которые были подделаны злоумышленниками:
 
     <?php
 
     namespace App\Http\Controllers;
 
-    use App\User;
-    use Illuminate\Http\Request;
     use App\Http\Controllers\Controller;
+    use App\Models\User;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Crypt;
 
-    class UserController extends Controller
+    class DigitalOceanTokenController extends Controller
     {
         /**
-         * Сохранение секретного сообщения для пользователя.
+         * Сохраните DigitalOcean API-токен пользователя.
          *
-         * @param  Request  $request
-         * @param  int  $id
-         * @return Response
+         * @param  \Illuminate\Http\Request  $request
+         * @return \Illuminate\Http\Response
          */
-        public function storeSecret(Request $request, $id)
+        public function storeSecret(Request $request)
         {
-            $user = User::findOrFail($id);
-
-            $user->fill([
-                'secret' => encrypt($request->secret)
+            $request->user()->fill([
+                'token' => Crypt::encryptString($request->token),
             ])->save();
         }
     }
 
-#### Шифрование без сериализации
-
-При шифровании значения подвергаются "сериализации", что позволяет шифровать объекты и массивы. Поэтому при получении шифрованных значений не-PHP клиентам необходимо будет "десериализовать" данные. Если вы хотите зашифровать и расшифровать данные без сериализации, то можете использовать методы `encryptString` и `decryptString` фасада `Crypt`:
-
-    use Illuminate\Support\Facades\Crypt;
-
-    $encrypted = Crypt::encryptString('Hello world.');
-
-    $decrypted = Crypt::decryptString($encrypted);
-
+<a name="decrypting-a-value"></a>
 #### Расшифровка значения
 
-Вы можете расшифровать значение при помощи хелпера `decrypt`. Если значение не может быть корректно расшифровано, например, при неверном MAC, будет выброшено исключение `Illuminate\Contracts\Encryption\DecryptException`:
+Вы можете расшифровать значения, используя метод `decryptString` фасада `Crypt`. Если значение не может быть правильно расшифровано, например, когда код аутентификации сообщения недействителен, будет выброшено исключение `Illuminate\Contracts\Encryption\DecryptException`:
 
     use Illuminate\Contracts\Encryption\DecryptException;
+    use Illuminate\Support\Facades\Crypt;
 
     try {
-        $decrypted = decrypt($encryptedValue);
+        $decrypted = Crypt::decryptString($encryptedValue);
     } catch (DecryptException $e) {
         //
     }

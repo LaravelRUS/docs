@@ -1,561 +1,437 @@
-git 22951bd4bcc7a559cb3d991095ad8c7a087ca010
+# Laravel 8 · Руководство по обновлению
 
----
+- [Обновление с 7.x версии до 8.0](#upgrade-8.0)
 
-# Руководство по обновлению
+<a name="high-impact-changes"></a>
+## Изменения, оказывающие большое влияние
 
-- [Обновление с 5.3 до 5.4.0](#upgrade-5.4.0)
+<!-- <div class="content-list" markdown="1"> -->
+- [Фабрики модели](#model-factories)
+- [Метод очереди `retryAfter`](#queue-retry-after-method)
+- [Свойство очереди `timeoutAt`](#queue-timeout-at-property)
+- [Методы очереди `allOnQueue` и `allOnConnection`](#queue-allOnQueue-allOnConnection)
+- [Пагинация по умолчанию](#pagination-defaults)
+- [Пространства имен наполнителей и фабрик](#seeder-factory-namespaces)
+<!-- </div> -->
 
-<a name="upgrade-5.4.0"></a>
-## Обновление с 5.3 до 5.4.0
+<a name="medium-impact-changes"></a>
+## Изменения со средней степенью воздействия
 
-#### Примерное время обновления: 1-2 часа 
+<!-- <div class="content-list" markdown="1"> -->
+- [Требование PHP 7.3.0](#php-7.3.0-required)
+- [Поддержка пакетной обработки и таблица невыполненных заданий](#failed-jobs-table-batch-support)
+- [Обновления режима обслуживания](#maintenance-mode-updates)
+- [Параметр `php artisan down --message`](#artisan-down-message)
+- [Метод `assertExactJson`](#assert-exact-json-method)
+<!-- </div> -->
 
-> {note} Мы стараемся задокументировать все изменения, которые могут вызывать проблемы. Однако так как некоторые изменения фреймворка находятся в малоизвестных областях, только некоторые из них могут действительно повлиять на работу вашего приложения.
+<a name="upgrade-8.0"></a>
+## Обновление с 7.x версии до 8.0
 
+<a name="estimated-upgrade-time-15-minutes"></a>
+#### Приблизительное время обновления: 15 минут
+
+> {note} Мы стараемся задокументировать все возможные критические изменения. Поскольку некоторые из этих критических изменений находятся в малоизвестных частях фреймворка, только часть этих изменений может повлиять на ваше приложение.
+
+<a name="php-7.3.0-required"></a>
+### Требование PHP 7.3.0
+
+**Вероятность воздействия: средняя**
+
+Новая минимальная версия PHP теперь 7.3.0.
+
+<a name="updating-dependencies"></a>
 ### Обновление зависимостей
 
-В вашем файле `composer.json` обновите зависимость `laravel/framework` до `5.4.*`. Кроме того, необходимо обновить зависимость `phpunit/phpunit` до `~5.7`.
+Обновите следующие зависимости в вашем файле `composer.json`:
 
-#### Удаление файла скомпилированных сервисов
+<!-- <div class="content-list" markdown="1"> -->
+- `guzzlehttp/guzzle` до `^7.0.1`
+- `facade/ignition` до `^2.3.6`
+- `laravel/framework` до `^8.0`
+- `laravel/ui` до `^3.0`
+- `nunomaduro/collision` до `^5.0`
+- `phpunit/phpunit` до `^9.0`
+<!-- </div> -->
 
-Вы можете удалить файл `bootstrap/cache/compiled.php`, если он существует. Он больше не используется фреймворком.
+Следующие сторонние пакеты имеют новые основные выпуски для поддержки Laravel 8. Если возможно, вы должны прочитать соответствующие руководства перед обновлением:
 
-#### Очистка кэша
+<!-- <div class="content-list" markdown="1"> -->
+- [Horizon v5.0](https://github.com/laravel/horizon/blob/master/UPGRADE)
+- [Passport v10.0](https://github.com/laravel/passport/blob/master/UPGRADE)
+- [Socialite v5.0](https://github.com/laravel/socialite/blob/master/UPGRADE)
+- [Telescope v4.0](https://github.com/laravel/telescope/blob/master/UPGRADE)
+<!-- </div> -->
 
-После обновления всех пакетов вам следует выполнить команду `php artisan view:clear`, чтобы избежать ошибок Blade, связанных с удалением `Illuminate\View\Factory::getFirstLoop()`. Также вам может потребоваться выполнить `php artisan route:clear` для очистки кэша роутов.
+Кроме того, установщик Laravel был обновлен для поддержки `composer create-project` и Laravel Jetstream. Любой установщик старше 4.0 перестанет работать после октября 2020 года. Вам следует как можно скорее обновить глобальный установщик до `^4.0`.
 
-#### Laravel Cashier
+Наконец, изучите любые другие сторонние пакеты, используемые вашим приложением, и убедитесь, что вы используете корректную версию с поддержкой Laravel 8.
 
-Laravel Cashier уже совместим с Laravel 5.4..
-
-#### Laravel Passport
-
-Вышел Laravel Passport `2.0.0`, предоставляющий совместимость с Laravel 5.4 и JavaScript-библиотекой [Axios](https://github.com/mzabriskie/axios). Если вы обновляете с Laravel 5.3 и используете предварительно созданные компоненты Vue Passport, стоит убедиться в том, что библиотека Axios глобально доступна вашему приложению через кючевое слово `axios`.
-
-#### Laravel Scout
-
-Вышел Laravel Scout `3.0.0`, предоставляющий совместимость с Laravel 5.4.
-
-#### Laravel Socialite
-
-Вышел Laravel Socialite `3.0.0`, предоставляющий совместимость с Laravel 5.4.
-
-#### Laravel Tinker
-
-Чтобы продолжить использовать Artisan команду `tinker`, вам следует установить пакет `laravel/tinker`:
-
-    composer require laravel/tinker
-
-Как только пакет будет установлен, необходимо добавить `Laravel\Tinker\TinkerServiceProvider::class` в массив `providers` в конфиге `config/app.php`.
-
-#### Guzzle
-
-Laravel 5.4 требует Guzzle 6.0 или выше.
-
-### Авторизация
-
-#### Метод `getPolicyFor`
-
-Раньше, вызывая метод `Gate::getPolicyFor($class)`, возникало исключение в случае, если политика не была найдена. Теперь метод возвращает `null`, если политика для данного класса не будет найдена. Если вы вызываете этот метод напрямую, убедитесь в том, что в вашем коде происходит проверка на возвращаемое значение `null`:
-
-```php
-$policy = Gate::getPolicyFor($class);
-
-if ($policy) {
-    // code that was previously in the try block
-} else {
-    // code that was previously in the catch block
-}
-```
-
-### Blade
-
-#### Экранирование `@section`
-
-В Laravel 5.4, контент, переданный в секцию, автоматически экранируется:
-
-    @section('title', $content)
-
-Если вы хотите передать в секцию неэкранированный контент, вам необходимо определять секцию с помощью традиционного стиля "длинной формы":
-
-    @section('title')
-        {!! $content !!}
-    @stop
-
-### Bootstrappers
-
-Если вы вручную переопределяете массив `$bootstrappers` в HTTP-ядре или ядре консоли, то вам следует переименовать `DetectEnvironment` на `LoadEnvironmentVariables` и убрать `ConfigureLogging`.
-
-### Бродкастинг
-
-#### Связывание моделей каналов
-
-При определении заполнителя названия канала в Laravel 5.3 используется символ '*'. В Laravel 5.4 вам следует определять их с помощью синтаксиса `{foo}`, как роуты:
-
-    Broadcast::channel('App.User.{userId}', function ($user, $userId) {
-        return (int) $user->id === (int) $userId;
-    });
-
+<a name="collections"></a>
 ### Коллекции
 
-#### Метод `every`
+<a name="the-isset-method"></a>
+#### Метод `isset`
 
-Функционал метода `every` был перемещён в метод `nth` для соответсвия названию метода, определенному в Lodash.
+**Вероятность воздействия: низкая**
 
-#### Метод `random`
+Чтобы соответствовать типичному поведению PHP, метод `offsetExists` в `Illuminate\Support\Collection` был обновлен и теперь использует `isset` вместо `array_key_exists`. Это может привести к изменению поведения при работе с элементами коллекции, имеющими значение `null`:
 
-Вызов `$collection->random(1)` теперь будет возвращать новый экземпляр коллекции с одним элементом. Ранее, это возращало единственный объект. Этот метод будет возвращать единственный объект только в случае, если аргументы не переданы.
+    $collection = collect([null]);
 
-### Контейнер
+    // Laravel 7.x - true
+    isset($collection[0]);
 
-#### Псевдонимы через `bind` / `instance`
+    // Laravel 8.x - false
+    isset($collection[0]);
 
-В предыдущих версиях Laravel вы могли передать массив в качестве первого аргумента методов `bind` или `instance` для регистрации псевдонима:
-
-    $container->bind(['foo' => FooContract::class], function () {
-        return 'foo';
-    });
-
-Однако, это поведение было удалено в Laravel 5.4. Для регистрации псевдонима теперь необходимо использовать метод `alias`:
-
-    $container->alias(FooContract::class, 'foo');
-
-#### Связывание классов через косую черту
-
-Связывание классов в контейнер через косую черту больше не поддерживаются. Этот функционал требовал значительного количества вызовов форматирования строки внутри контейнера. Вместо этого просто зарегистрируйте свои классы без косой черты:
-
-    $container->bind('Class\Name', function () {
-        //
-    });
-
-    $container->bind(ClassName::class, function () {
-        //
-    });
-
-#### Параметры метода `make`
-
-Метод контейнера `make` больше не принимает вторым аргументом массив параметров. Этот функционал был признаком некачественного кода. Вы всегда можете построить объект другим путём, что является более интуитивным вариантом.
-
-#### Резолвинг анонимных функций
-
-Методам контейнера `resolving` и `afterResolving` необходимо передавать название класса или ключ в качестве первого аргумента:
-
-    $container->resolving('Class\Name', function ($instance) {
-        //
-    });
-
-    $container->afterResolving('Class\Name', function ($instance) {
-        //
-    });
-
-#### Удален метод `share`
-
-Метод `share` был удален из контейнера. Он считался устаревшим и не упоминался в документации уже несколько лет. Если вы используете его, то в качестве альтернативы вам следует использовать метод `singleton`:
-
-    $container->singleton('foo', function () {
-        return 'foo';
-    });
-
-### Консоль
-
-#### Трейт `Illuminate\Console\AppNamespaceDetectorTrait`
-
-Если вы напрямую ссылаетесь на трейт `Illuminate\Console\AppNamespaceDetectorTrait`, то внесите изменения в свой код, где вместо этого будете ссылаться на трейт `Illuminate\Console\DetectsApplicationNamespace`.
-
+<a name="database"></a>
 ### База данных
 
-#### Кастомные соединения
+<a name="seeder-factory-namespaces"></a>
+#### Пространства имен наполнителей и фабрик
 
-Если ранее вы указывали в контейнере свой ключ для соединения с базой данных как `db.connection.{driver-name}`, теперь необходимо использовать `Illuminate\Database\Connection::resolverFor` в методе `register` вашего `AppServiceProvider`:
+**Вероятность воздействия: высокая**
 
-    use Illuminate\Database\Connection;
-
-    Connection::resolverFor('driver-name', function ($connection, $database, $prefix, $config) {
-        //
-    });
-
-#### Режим выбора
-
-Laravel больше не включает возможность настройки PDO в "режиме выбора" в зависимости от ваших конфигурационных файлов. Взамен этого всегда используется  `PDO::FETCH_OBJ`. Если все еще есть необходимость настроить режим для вашего приложения, можно прослушивать событие `Illuminate\Database\Events\StatementPrepared`:
-
-    Event::listen(StatementPrepared::class, function ($event) {
-        $event->statement->setFetchMode(...);
-    });
-
-### Eloquent
-
-#### Событие Date
-
-Выброс события `date`,  теперь преобразует столбец в объект  `Carbon` и вызывает метод `startOfDay`. Если вы хотите сохранить время, вы должны использовать `datetime`.
-
-#### Соглашения для внешнего ключа
-
-Если внешний ключ не  задан в явном виде при определении отношений, Eloquent, будет использовать имя таблицы и первичного ключа модели для  создания внешний ключа. Для подавляющего большинства приложений это поведение не изменяется. Например:
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-Точно так же, как и в предыдущих версиях Laravel эти отношения будут  использовать `user_id` в качестве внешнего ключа. Однако поведение могло отличаться от предыдущих выпусков, если вы переопределяли метод`getKeyName` модели `User`. Например:
-
-    public function getKeyName()
-    {
-        return 'key';
-    }
-
-Когда дело обстоит так, Laravel будет уважать вашу настройку и решит, что имя столбца внешнего ключа - `user_key` вместо `user_id`.
-
-#### BelongsToMany `setJoin`
-
-Метод `setJoin` был переименован в `performJoin`.
-
-#### Has One / Many `createMany`
-
-Метод `createMany` имеющий `hasOne` или  `hasMany`  теперь возвращает объект с коллекцией, а не массив.
-
-#### Соединения моделей с отношениями
-
-Отношение моделей теперь будут использовать те же соединения, что и родительская модель, к примеру если выполнить запрос:
-
-    User::on('example')->with('posts');
-
-Eloquent будет запрашивать таблицу posts через соединение `example` вместо соединения базы данных по умолчанию. Если вы хотите прочитать `posts` через соединение по умолчанию, необходимо явно установить соединение модели на подключение вашего приложения.
-
-#### Метод `chunk`
-
-Метод построителя запросов `chunk` теперь требует условие `orderBy`, которое предоставляет консистентность с методом `each`. Если условие `orderBy` не предоставлено - будет выброшено исключение. Например:
-
-    DB::table('users')->orderBy('id')->chunk(100, function ($users) {
-        foreach ($users as $user) {
-            //
-        }
-    });
-
-Метод построителя запросов Eloquent `chunk` будет автоматически применять условие `orderBy` на первичный ключ модели, если он не предоставлен.
-
-#### Методы `create` & `forceCreate`
-
-Методы `Model::create` & `Model:: forceCreate` были перемещены в класс `Illuminate\Database\Eloquent\Builder` для обеспечения лучшей поддержки создания моделей для нескольких соединений. Однако, если наследовать эти методы в свои собственных моделях, потребуется изменить реализацию, чтобы вызвать метод `create` из строителя. Например:
-
-    public static function create(array $attributes = [])
-    {
-        $model = static::query()->create($attributes);
-
-        // ...
-
-        return $model;
-    }
-
-#### Метод `hydrate`
-
-Если вы передаете имя соединения, необходимо использовать метод `on`:
-
-    User::on('connection')->hydrate($records);
-
-#### `Метод `hydrateRaw`
-
-Метод `Model::hydrateRaw` был переименован в `fromQuery`. Eсли вы передаете имя настраиваемого подключения  к этому методу, нужно использовать метод `on`:
-
-    User::on('connection')->fromQuery('...');
-
-#### Метод `whereKey`
-
-Метод `whereKey($id)` сейчас добавляет условие "where" для получения первичного ключа. Ранее, это передавалось в условие "where" и внутри него еще добавлялось "where" для столбца "key". Если вы используете метод `whereKey`, чтобы динамически добавлять условие для столбцов `key`, вместо этого необходимо использовать `where('key', ...)`.
-
-#### Хелпер `factory`
-
-Вызов `factory(User::class, 1)->make()` или `factory(User::class, 1)->create()`, возвращает коллекцию с одним элементом. Метод будет возвращает одну модель, если число не передается в параметры.
-
-### События
-
-#### Изменения в Contract
-
-Если вы самостоятельно  реализуете контракт `Illuminate\Contracts\Events\Dispatcher` в своем  приложение или пакете, нужно переименовать метод `fire` в метод `dispatch`.
-
-#### Приоритет событий
-
-Поддержка  события  "priorities"  была удалена. Это возможность, не описывалась в документации и обычно указывает на злоупотребление функцией события. Взамен рассмотрите использование серий синхронных вызовов. Кроме того, вы можете отправить новое событие из обработчика другого события, чтобы гарантировать, что данное событие будет обработано после несвязанного обработчика.
-
-#### Сигнатуры обработчиков событий
-
-Обработчики событий теперь получают в качестве первого аргумента имя события  и массив с  данными  в качестве второго аргумента.Метод `Event::firing` был удален:
-
-    Event::listen('*', function ($eventName, array $data) {
-        //
-    });
-
-#### Событие `kernel.handled`
-
-Событие `kernel.handled` сейчас объект на основе событий, используя класс `Illuminate\Foundation\Http\Events\RequestHandled`.
-
-#### Событие `locale.changed`
-
-Событие `locale.changed` сейчас объект на основе, используя класс `Illuminate\Foundation\Events\LocaleUpdated`.
-
-#### Событие `illuminate.log`
-
-Событие `illuminate.log` сейчас объект на основе используя класс `Illuminate\Log\Events\MessageLogged`.
-
-### Исключения
-
-`Illuminate\Http\Exception\HttpResponseException` был переименован 
-`Illuminate\Http\Exceptions\HttpResponseException`. Отметим, что `Exceptions` теперь во множественном числе. кроме того, `Illuminate\Http\Exception\PostTooLargeException` был переименован в `Illuminate\Http\Exceptions\PostTooLargeException`.
-
-### Почта
-
-#### Синтаксис `Class@method`
-
-Отправка почты с помощью `Class@method` уже долгое время не поддерживается. Например:
-
-    Mail::send('view.name', $data, 'Class@send');
-
-Если вы отправляете почту таким образом, нужно конвертировать эти вызовы в [mailable](/docs/{{version}}/mail).
-
-#### Новые опции настройки
-
-Для того, чтобы обеспечить поддержку новых компонентов с разметкой Markdown в Laravel 5.4 необходимо добавить следующий блок в нижней части файла конфигурации `mail`:
-
-    'markdown' => [
-        'theme' => 'default',
-
-        'paths' => [
-            resource_path('views/vendor/mail'),
-        ],
-    ],
-
-#### Помещение почты в очередь при помощи функций Closure
-
-Для организации почтовой очереди используйте [mailable](/docs/{{version}}/mail). Методы `Mail::queue` и`Mail::later`  больше не поддерживают использование анонимных функций для настройки почтового сообщения. Эта функция требует использования специальных библиотек для закрытия, поскольку PHP не поддерживает эту функцию.
-
-### Очередь
-
-#### Таблица проваленных задач
-
-Если ваше приложение содержит таблицу `failed_jobs`, вам нужно добавить столбец `exception` в эту таблицу:
-
-    $table->longText('exception')->after('payload');
-
-### Redis
-
-#### Улучшена поддержка кластеризации
-
-В Laravel 5.4  улучшена поддержка кластера Redis. Если вы используете кластеры для Redis, нужно разместить свои соединения в блоке `clusters` внутри конфига `config/database.php`:
-
-    'redis' => [
-
-        'client' => 'predis',
-
-        'options' => [
-            'cluster' => 'redis',
-        ],
-
-        'clusters' => [
-            'default' => [
-                [
-                    'host' => env('REDIS_HOST', '127.0.0.1'),
-                    'password' => env('REDIS_PASSWORD', null),
-                    'port' => env('REDIS_PORT', 6379),
-                    'database' => 0,
-                ],
-            ],
-        ],
-
-    ],
-
-### Роутинг
-
-#### Post Size Middleware
-
-Класс `Illuminate\Foundation\Http\Middleware\VerifyPostSize` был переименован в  `Illuminate\Foundation\Http\Middleware\ValidatePostSize`.
-
-#### Метод `middleware`
-
-Метод `middleware` в классе `Illuminate\Routing\Router` был переименован в `aliasMiddleware()`. Вероятно большинство приложений не вызывает этот метод вручную, как правило, это происходит  через  HTTP kernel в массиве `$routeMiddleware`.
-
-#### Методы `Route` 
-
-Метод `getUri` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `uri`.
-
-Метод `getMethods` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `methods`.
-
-Метод`getParameter` из класса `Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `parameter`.
-
-Метод `getPath` из класса`Illuminate\Routing\Route` был удален. Вместо него необходимо использовать метод `uri`.
-
-### Сессии
-
-#### Совместимость с Symfony
-
-Обработчики сессий Laravel больше не реализуют Symfony интерфейс `SessionInterface`. Реализация этого интерфейса требует посторонних опций, которые не были необходимы во фреймворке. Взамен этого, был определен новый интерфейс `Illuminate\Contracts\Session\Session`. Следующие изменения кода должны быть также быть применены:
-
-Все вызовы метода `->set()` должны быть изменены на `->put()`. Обычно, в приложениях Laravel  метод `set` не используются, поскольку это не было описано в документации Laravel. Тем не менее, это указано из за осторожности.
-
-Все вызовы `->getToken()` следует заменить на `->token()`.
-
-Все вызовы `$request->setSession()` следует заменить на `setLaravelSession()`.
-
-### Тестирование
-
-Если вы хотите продолжать использовать функционал тестирования, который остался в версии Laravel 5.3 можно установить [пакет](https://github.com/laravel/browser-kit-testing) `laravel/browser-kit-testing` в ваше приложение. Он обеспечивает полную совместимость с версией Laravel 5.3. В действительности, вы можете запустить тестирование Laravel 5.4 бок-о-бок со средой тестирования из версии Laravel 5.3.
-
-Чтобы позволить Laravel автоматически загружать любые новые тесты, которые вы генерируете с использованием генератороа тестов Laravel 5.4, вам нужно добавить пространство имён `Tests` к вашему блоку `autoload-dev` файла `composer.json`:
-
-    "psr-4": {
-        "Tests\\": "tests/"
-    }
-
-#### Запуск тестов в  Laravel 5.3 и 5.4  в одном приложении
-
-Установите пакет `laravel/browser-kit-testing`:
-
-    composer require laravel/browser-kit-testing="1.*" --dev
-
-После того, как пакет был установлен, создайте копию файла `tests/TestCase.php` и сохраните ее в директорию `tests` как файл `BrowserKitTestCase.php`. Затем, внесите изменения в него, наследуя `Laravel\BrowserKitTesting\TestCase`. Как только это сделано, в вашей директории `tests` будет находиться два базовых класса для тестирования: `TestCase.php` и `BrowserKitTestCase.php`. Для правильной загрузки класса `BrowserKitTestCase`, возможно понадобится его добавить в `composer.json`:
-
-    "autoload-dev": {
-        "classmap": [
-            "tests/TestCase.php",
-            "tests/BrowserKitTestCase.php"
-        ]
-    },
-
-Тесты, написанные на версии Laravel 5.3 будут наследовать класс `BrowserKitTestCase`, в то время как любые новые тесты, которые используют Laravel 5.4 будут наследовать класс `TestCase`. Класс `BrowserKitTestCase` выглядит следующим образом:
+Наполнители и фабрики теперь имеют пространство имен. Чтобы учесть эти изменения, добавьте пространство имен `Database\Seeders` в ваши классы наполнителей. Кроме того, имеющийся каталог `database/seeds` должен быть переименован в `database/seeders`:
 
     <?php
 
-    use Illuminate\Contracts\Console\Kernel;
-    use Laravel\BrowserKitTesting\TestCase as BaseTestCase;
+    namespace Database\Seeders;
 
-    abstract class BrowserKitTestCase extends BaseTestCase
+    use App\Models\User;
+    use Illuminate\Database\Seeder;
+
+    class DatabaseSeeder extends Seeder
     {
         /**
-         * The base URL of the application.
+         * Заполнить базу данных приложения.
+         *
+         * @return void
+         */
+        public function run()
+        {
+            ...
+        }
+    }
+
+Если вы решите использовать пакет `laravel/legacy-factories`, то никаких изменений в классах ваших фабрик не требуется. Однако, если вы обновляете свои фабрики, вы должны добавить к этим классам пространство имен `Database\Factories`.
+
+Затем в вашем файле `composer.json` удалите блок `classmap` из раздела `autoload` и добавьте новые сопоставления каталогов классов с пространством имен:
+
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
+    },
+
+<a name="eloquent"></a>
+### Eloquent
+
+<a name="model-factories"></a>
+#### Фабрики модели
+
+**Вероятность воздействия: высокая**
+
+Функция Laravel [фабрики модели](/docs/database-testing.md#defining-model-factories) была полностью переписана для поддержки классов и несовместима с фабриками стиля Laravel 7.x. Однако, чтобы упростить процесс обновления, был создан новый пакет `laravel/legacy-factories`, чтобы продолжать использовать ваши существующие фабрики с Laravel 8.x. Вы можете установить этот пакет через Composer:
+
+    composer require laravel/legacy-factories
+
+<a name="the-castable-interface"></a>
+#### Интерфейс `Castable`
+
+**Вероятность воздействия: низкая**
+
+Метод `castUsing` интерфейса `Castable` обновлен и теперь принимает массив аргументов. Если вы реализуете этот интерфейс, вам, соответственно, следует обновить реализацию:
+
+    public static function castUsing(array $arguments);
+
+<a name="increment-decrement-events"></a>
+#### События Increment / Decrement
+
+**Вероятность воздействия: низкая**
+
+События модели, связанные с «обновлением» и «сохранением», теперь будут вызываться при выполнении методов `increment` или `decrement` экземпляров модели Eloquent.
+
+<a name="events"></a>
+### События
+
+<a name="the-event-service-provider-class"></a>
+#### Класс `EventServiceProvider`
+
+**Вероятность воздействия: низкая**
+
+Если ваш класс `App\Providers\EventServiceProvider` содержит метод `register`, то вы должны убедиться, что вы вызываете `parent::register` в начале этого метода. В противном случае события вашего приложения не будут зарегистрированы.
+
+<a name="the-dispatcher-contract"></a>
+#### Контракт `Dispatcher`
+
+**Вероятность воздействия: низкая**
+
+Метод `listen` контракта `Illuminate\Contracts\Events\Dispatcher` был обновлен, чтобы сделать свойство `$listener` необязательным. Это изменение было внесено для поддержки автоматического определения обрабатываемых типов событий через рефлексию. Если вы реализуете этот интерфейс, вам, соответственно, следует обновить реализацию:
+
+    public function listen($events, $listener = null);
+
+<a name="framework"></a>
+### Фреймворк
+
+<a name="maintenance-mode-updates"></a>
+#### Обновления режима обслуживания
+
+**Вероятность воздействия: необязательно**
+
+[Режим обслуживания](/docs/configuration.md#maintenance-mode) был улучшен в Laravel 8.x. Теперь поддерживается предварительный рендеринг шаблона режима обслуживания, что исключает вероятность того, что конечные пользователи столкнутся с ошибками в режиме обслуживания. Однако для поддержки этого в ваш файл `public/index.php` необходимо добавить следующие строки. Эти строки следует разместить непосредственно под существующим определением константы `LARAVEL_START`:
+
+    define('LARAVEL_START', microtime(true));
+
+    if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
+        require __DIR__.'/../storage/framework/maintenance.php';
+    }
+
+<a name="artisan-down-message"></a>
+#### Параметр `php artisan down --message`
+
+**Вероятность воздействия: средняя**
+
+Параметр `--message` команды `php artisan down` была удалена. В качестве альтернативы рассмотрите возможность [предварительного рендеринга шаблонов в режиме обслуживания](/docs/configuration.md#maintenance-mode) с желаемым сообщением.
+
+<a name="php-artisan-serve-no-reload-option"></a>
+#### Параметр `php artisan serve --no-reload`
+
+**Вероятность воздействия: низкая**
+
+В команде `php artisan serve` добавлен параметр `--no-reload`. Это даст указание встроенному серверу не перезагружаться при обнаружении изменений файла окружения. Эта опция в первую очередь полезна при запуске тестов Laravel Dusk в среде CI (непрерывной интеграции).
+
+<a name="manager-app-property"></a>
+#### Свойство `$app` Менеджера
+
+**Вероятность воздействия: низкая**
+
+Ранее устаревшее свойство `$app` класса `Illuminate\Support\Manager` было удалено. Если вы полагались на это свойство, вам следует использовать вместо него свойство `$container`.
+
+<a name="the-elixir-helper"></a>
+#### Помощник `elixir`
+
+**Вероятность воздействия: низкая**
+
+Ранее устаревший помощник `elixir` был удален. Приложениям, все еще использующим данный метод сборки, рекомендуется перейти на [Laravel Mix](https://github.com/JeffreyWay/laravel-mix).
+
+<a name="mail"></a>
+### Почта
+
+<a name="the-sendnow-method"></a>
+#### Метод `sendNow`
+
+**Вероятность воздействия: низкая**
+
+Ранее устаревший метод `sendNow` был удален. Вместо этого используйте метод `send`.
+
+<a name="pagination"></a>
+### Постраничная навигация
+
+<a name="pagination-defaults"></a>
+#### Пагинация по умолчанию
+
+**Вероятность воздействия: высокая**
+
+Пагинатор теперь использует [CSS-фреймворк Tailwind](https://tailwindcss.com) для стилизации по умолчанию. Чтобы продолжить использование Bootstrap, вы должны добавить следующий вызов метода в методе `boot` поставщика служб приложения `AppServiceProvider`:
+
+    use Illuminate\Pagination\Paginator;
+
+    Paginator::useBootstrap();
+
+<a name="queue"></a>
+### Очереди
+
+<a name="queue-retry-after-method"></a>
+#### Метод `retryAfter`
+
+**Вероятность воздействия: высокая**
+
+Для согласованности с другой функциональностью Laravel, метод `retryAfter` и свойство `retryAfter` заданий в очереди, почтовых программ, уведомлений и слушателей были переименованы в `backoff`. Вам следует обновить имя этого метода / свойства в соответствующих классах вашего приложения.
+
+<a name="queue-timeout-at-property"></a>
+#### Свойство `timeoutAt`
+
+**Вероятность воздействия: высокая**
+
+Свойство `timeoutAt` заданий в очереди, уведомлений и слушателей переименовано в `retryUntil`. Вам следует обновить имя этого свойства в соответствующих классах вашего приложения.
+
+<a name="queue-allOnQueue-allOnConnection"></a>
+#### Методы `allOnQueue()` / `allOnConnection()`
+
+**Вероятность воздействия: высокая**
+
+Для согласованности с другими методами диспетчеризации были удалены методы `allOnQueue()` и `allOnConnection()`, используемые с цепочкой заданий. Вместо этого вы можете использовать методы `onQueue()` и `onConnection()`. Эти методы следует вызывать перед вызовом метода `dispatch`:
+
+    ProcessPodcast::withChain([
+        new OptimizePodcast,
+        new ReleasePodcast
+    ])->onConnection('redis')->onQueue('podcasts')->dispatch();
+
+Обратите внимание, что это изменение влияет только на код, использующий метод `withChain`. В то время как методы `allOnQueue()` и `allOnConnection()` по-прежнему доступны при использовании глобального помощника `dispatch()`.
+
+<a name="failed-jobs-table-batch-support"></a>
+#### Поддержка пакетной обработки и таблица невыполненных заданий
+
+**Вероятность воздействия: необязательно**
+
+Если вы планируете использовать функционал [пакетной обработки заданий](/docs/queues.md#job-batching) Laravel 8.x, то таблица `failed_jobs` БД должна быть обновлена. Во-первых, в эту таблицу должен быть добавлен новый столбец `uuid`:
+
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
+
+    Schema::table('failed_jobs', function (Blueprint $table) {
+        $table->string('uuid')->after('id')->nullable()->unique();
+    });
+
+Затем, параметр конфигурации `failed.driver` в конфигурационном файле `config/queue.php` должен быть изменен на `database-uuids`.
+
+Кроме того, вы можете сгенерировать UUID для существующих невыполненных заданий:
+
+    DB::table('failed_jobs')->whereNull('uuid')->cursor()->each(function ($job) {
+        DB::table('failed_jobs')
+            ->where('id', $job->id)
+            ->update(['uuid' => (string) Illuminate\Support\Str::uuid()]);
+    });
+
+<a name="routing"></a>
+### Маршрутизация
+
+<a name="automatic-controller-namespace-prefixing"></a>
+#### Автоматическое префикс пространства имен контроллера
+
+**Вероятность воздействия: необязательно**
+
+В предыдущих выпусках Laravel класс `RouteServiceProvider` содержал свойство `$namespace` со значением `App\Http\Controllers`. Это значение этого свойства использовалось для объявлений автоматического префикса маршрута контроллера и генерации URL маршрута контроллера, например, при вызове помощника `action`.
+
+В Laravel 8 для этого свойства по умолчанию установлено значение `null`. Это позволяет объявлениям маршрута вашего контроллера использовать стандартный вызываемый синтаксис PHP, который обеспечивает лучшую поддержку перехода к классу контроллера во многих IDE:
+
+    use App\Http\Controllers\UserController;
+
+    // Использование вызываемого синтаксиса PHP ...
+    Route::get('/users', [UserController::class, 'index']);
+
+    // Использование строкового синтаксиса ...
+    Route::get('/users', 'App\Http\Controllers\UserController@index');
+
+В большинстве случаев это не повлияет на обновляемые приложения, потому что ваш `RouteServiceProvider` по-прежнему будет содержать свойство `$namespace` с его предыдущим значением. Однако, если вы обновите свое приложение, создав новый проект Laravel, то это изменение может стать критическим.
+
+Если вы хотите по-прежнему использовать исходную маршрутизацию контроллера с автоматическим префиксом, вы можете просто установить значение свойства `$namespace` в` RouteServiceProvider` и обновить регистрации маршрута в методе `boot`, чтобы использовать свойство `$namespace`:
+
+    class RouteServiceProvider extends ServiceProvider
+    {
+        /**
+         * Путь к «домашнему» маршруту вашего приложения.
+         *
+         * Используется аутентификацией Laravel для перенаправления пользователей после входа в систему.
          *
          * @var string
          */
-        public $baseUrl = 'http://localhost';
+        public const HOME = '/home';
 
         /**
-         * Creates the application.
+         * Если указано, это пространство имен автоматически применяется к маршрутам вашего контроллера.
          *
-         * @return \Illuminate\Foundation\Application
+         * Кроме того, оно устанавливается как корневое пространство имен генератора URL.
+         *
+         * @var string
          */
-        public function createApplication()
+        protected $namespace = 'App\Http\Controllers';
+
+        /**
+         * Определить связывание модели и маршрута, фильтры шаблонов и т.д.
+         *
+         * @return void
+         */
+        public function boot()
         {
-            $app = require __DIR__.'/../bootstrap/app.php';
+            $this->configureRateLimiting();
 
-            $app->make(Kernel::class)->bootstrap();
+            $this->routes(function () {
+                Route::middleware('web')
+                    ->namespace($this->namespace)
+                    ->group(base_path('routes/web.php'));
 
-            return $app;
+                Route::prefix('api')
+                    ->middleware('api')
+                    ->namespace($this->namespace)
+                    ->group(base_path('routes/api.php'));
+            });
+        }
+
+        /**
+         * Настроить ограничения запросов для приложения.
+         *
+         * @return void
+         */
+        protected function configureRateLimiting()
+        {
+            RateLimiter::for('api', function (Request $request) {
+                return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+            });
         }
     }
 
-После того, как класс создан, не забудьте обновить все тесты, наследуя их новым классом `BrowserKitTestCase`. Это позволит всем тестам, написанным на Laravel 5.3, успешно продолжить работу на Laravel 5.4. После можно заняться рефакторингом с использованием [нового синтаксиса Laravel 5.4](/docs/5.4/http-tests) или [Laravel Dusk](/docs/5.4/dusk).
+<a name="scheduling"></a>
+### Планирование задач
 
-> {note} Если вы пишете новые тесты и используете тестирование из Laravel 5.4, убедитесь в том, что наследует класс `TestCase`.
+<a name="the-cron-expression-library"></a>
+#### Библиотека `cron-expression`
 
-#### Установка Dusk в обновленное приложение
+**Вероятность воздействия: низкая**
 
-Если вы хотите установить Laravel Dusk в приложении, который обновлен до версии Laravel 5.3, сначала установите его через Composer:
+Зависимость Laravel от `dragonmantank/cron-expression` была обновлена с `2.x` до `3.x`. Это не должно вызывать каких-либо критических изменений в вашем приложении, если вы не взаимодействуете напрямую с библиотекой `cron-expression`. Если вы напрямую взаимодействуете с этой библиотекой, просмотрите ее [журнал изменений](https://github.com/dragonmantank/cron-expression/blob/master/CHANGELOG).
 
-    composer require laravel/dusk
+<a name="session"></a>
+### Сессия
 
-Далее, нужно создать трейт `CreatesApplication` в директории `tests`. Этот трейт отвечает за создание новых экземпляров для тестов. Он должен выглядеть следующим образом:
+<a name="the-session-contract"></a>
+#### Контракт `Session`
 
-    <?php
+**Вероятность воздействия: низкая**
 
-    use Illuminate\Contracts\Console\Kernel;
-
-    trait CreatesApplication
-    {
-        /**
-         * Creates the application.
-         *
-         * @return \Illuminate\Foundation\Application
-         */
-        public function createApplication()
-        {
-            $app = require __DIR__.'/../bootstrap/app.php';
-
-            $app->make(Kernel::class)->bootstrap();
-
-            return $app;
-        }
-    }
-
-> {note} Если вы используете пространство имён по стандарту PSR-4 для загрузки каталога "тесты", необходимо поместить трейт `CreatesApplication` в соответствующее пространство имён.
-
-После завершения этого подготовительного этапа, можно изучить обычную [инструкцию по установке Dusk](/docs/{{version}}/dusk#installation).
-
-#### Окружение
-
-Тестовый класс Laravel 5.4 уже не вручную  использует `putenv('APP_ENV=testing')` для каждого теста. Вместо этого, фреймворк использует переменную `APP_ENV` в  файле `.env`.
-
-#### Event Fake
-
-Фейковый `Event` метод `assertFired` следует обновить до `assertDispatched`, а метод `assertNotFired` нужно обновить до `assertNotDispatched`. Сиггнатуры метода не были изменены.
-
-#### Mail Fake
-
-Фейковый `Mail` был значительно упрощен для релиза Laravel 5.4. Вместо использования метода `assertSentTo`, вам следует теперь просто использовать метод `assertSent` и пользоваться методами хелперами `hasTo`, `hasCc` и т.д. в рамках своей анонимной функции:
-
-    Mail::assertSent(MailableName::class, function ($mailable) {
-        return $mailable->hasTo('email@example.com');
-    });
-
-### Перевод
-
-#### Шаблон `{Inf}`
-
-Если вы используете шаблон `{Inf}` для заполнения строк с переводом, нужно обновить эти строки, используя вместо этого знак `*`:
-
-    {0} First Message|{1,*} Second Message
-    
-#### Хелперы `trans`
-
-Сигнатура хелпера `trans` была обновлена, чтобы убрать ненужный аргумент `$domain`. Новая сигнатура выглядит так:
+Контракт `Illuminate\Contracts\Session\Session` получил новый метод `pull`. Если вы реализуете этот контракт самостоятельно, то вам следует соответствующим образом обновить его реализацию:
 
     /**
-     * Translate the given message.
+     * Получите значение переданного ключа и удалить его.
      *
-     * @param  string  $id
-     * @param  array   $replace
-     * @param  string  $locale
-     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
+     * @param  string  $key
+     * @param  mixed  $default
+     * @return mixed
      */
-    function trans($id = null, $replace = [], $locale = null);
+    public function pull($key, $default = null);
 
-Также был обновлен хелпер `trans_choice`:
+<a name="testing"></a>
+### Тестирование
 
-    /**
-     * Translates the given message based on a count.
-     *
-     * @param  string  $id
-     * @param  int|array|\Countable  $number
-     * @param  array   $replace
-     * @param  string  $locale
-     * @return string
-     */
-    function trans_choice($id, $number, array $replace = [], $locale = null);
+<a name="decode-response-json-method"></a>
+#### Метод `decodeResponseJson`
 
-### Генерация URL
+**Вероятность воздействия: низкая**
 
-#### Метод `forceSchema`
+Метод `decodeResponseJson`, принадлежащий классу `Illuminate\Testing\TestResponse`, больше не принимает никаких аргументов. Пожалуйста, подумайте об использовании вместо этого метода `json`.
 
-Метод `forceSchema` класса`Illuminate\Routing\UrlGenerator` был переименован в `forceScheme`.
+<a name="assert-exact-json-method"></a>
+#### Метод `assertExactJson`
 
+**Вероятность воздействия: средняя**
+
+Метод `assertExactJson` теперь требует, чтобы числовые ключи сравниваемых массивов совпадали и располагались в том же порядке. Если вы хотите сравнить JSON с массивом, не требуя, чтобы массивы с числовыми ключами имели одинаковый порядок, вы можете вместо этого использовать метод `assertSimilarJson`.
+
+<a name="validation"></a>
 ### Валидация
 
-#### Валидация формата даты
+<a name="database-rule-connections"></a>
+### Соединения для правил, использующих БД
 
-Проверка формата даты стала строже, так же поддерживает заполнители из документации по РНР [функции даты](http://php.net/manual/en/function.date.php). К сведению, в  предыдущих версиях Laravel часовой пояс с заполнителем `P` принимал все форматы, однако, в  Laravel 5.4 каждый пояс имеет уникальный заполнитель согласно документации PHP.
+**Вероятность воздействия: низкая**
 
-#### Названия методов
+Правила `unique` и `exists` теперь будут учитывать указанное имя соединения моделей Eloquent при выполнении запросов. Это имя соединения доступно через метод `getConnectionName` модели.
 
-Метод `addError` был переименован в `addFailure`. Дополнительно, метод `doReplacements` был переименован в `makeReplacements`. Как правило, эти изменения будут релевантны только если вы наследуете класс `Validator`.
-
+<a name="miscellaneous"></a>
 ### Разное
 
-Мы также рекомендуем вам просмотреть изменение в [GitHub репозитории](https://github.com/laravel/laravel) `laravel/laravel`. Хотя сейчас многие из этих изменений не являются обязательными, можно синхронизировать эти файлы со своим приложением. Некоторые из этих изменений будут рассмотрены в данном руководстве по обновлению, но другие, такие как изменения в конфиги или комментарии - нет. Вы можете запросто просмотреть изменения, пользуясь [инструментом сравнения GitHub](https://github.com/laravel/laravel/compare/5.3...master) и выбрать какие обновления для вас наиболее важны.
+Мы также рекомендуем вам просматривать изменения в GitHub-репозитории [`laravel/laravel`](https://github.com/laravel/laravel). Хотя многие из этих изменений могут быть неважны, но вы можете синхронизировать эти файлы с вашим приложением. Некоторые из этих изменений будут рассмотрены в данном руководстве по обновлению, но другие, такие как изменения файлов конфигурации или комментарии, не будут. Вы можете легко просмотреть изменения с помощью [инструмента сравнения GitHub](https://github.com/laravel/laravel/compare/7.x...8.x) и выбрать, какие обновления важны для вас.

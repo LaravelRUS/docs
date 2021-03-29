@@ -1,56 +1,53 @@
-git e73c40f0dea4db1205c83584d6c5b544b5ff1683
+# HTTP Redirects
 
----
-
-# HTTP редиректы
-
-- [Создание редиректов](#creating-redirects)
-- [Редиректы на именованные роуты](#redirecting-named-routes)
-- [Редиректы на методы контроллера](#redirecting-controller-actions)
-- [Редиректы с данными сессии](#redirecting-with-flashed-session-data)
+- [Creating Redirects](#creating-redirects)
+- [Redirecting To Named Routes](#redirecting-named-routes)
+- [Redirecting To Controller Actions](#redirecting-controller-actions)
+- [Redirecting With Flashed Session Data](#redirecting-with-flashed-session-data)
 
 <a name="creating-redirects"></a>
-## Создание редиректов
+## Creating Redirects
 
-Отклики для редиректов — это экземпляры класса `Illuminate\Http\RedirectResponse`; они содержат соответствующие заголовки, необходимые для переадресации пользователя на другой URL. Есть несколько способов создания экземпляров `RedirectResponse`. Самый простой способ - использовать глобальный хелпер `redirect`:
+Redirect responses are instances of the `Illuminate\Http\RedirectResponse` class, and contain the proper headers needed to redirect the user to another URL. There are several ways to generate a `RedirectResponse` instance. The simplest method is to use the global `redirect` helper:
 
-    Route::get('dashboard', function () {
-        return redirect('home/dashboard');
+    Route::get('/dashboard', function () {
+        return redirect('/home/dashboard');
     });
 
-Иногда необходимо перенаправить пользователя в предыдущее место, например, когда в отправленной форме обнаружены ошибки. Вы можете сделать это с помощью глобального хелпера `back`. Так как для этой функции используются [сессии](/docs/{{version}}/session), убедитесь в том, что вызывающий функцию `back` роут использует группу посредников `web` или использует всех посредников сессий:
+Sometimes you may wish to redirect the user to their previous location, such as when a submitted form is invalid. You may do so by using the global `back` helper function. Since this feature utilizes the [session](/docs/{{version}}/session), make sure the route calling the `back` function is using the `web` middleware group or has all of the session middleware applied:
 
-    Route::post('user/profile', function () {
-        // Проверка запроса...
+    Route::post('/user/profile', function () {
+        // Validate the request...
 
         return back()->withInput();
     });
 
 <a name="redirecting-named-routes"></a>
-## Редиректы на именованные роуты
+## Redirecting To Named Routes
 
-При вызове хелпера `redirect` без параметров возвращается экземпляр `Illuminate\Routing\Redirector`, позволяя вам вызывать любой метод на экземпляре `Redirector`. Например, вы можете использовать метод `route`, чтобы сгенерировать `RedirectResponse` на именованный роут:
+When you call the `redirect` helper with no parameters, an instance of `Illuminate\Routing\Redirector` is returned, allowing you to call any method on the `Redirector` instance. For example, to generate a `RedirectResponse` to a named route, you may use the `route` method:
 
     return redirect()->route('login');
 
-Если у вашего роута есть параметры, то вы можете передать их в качестве второго аргумента метода `route`:
+If your route has parameters, you may pass them as the second argument to the `route` method:
 
-    // Для роута со следующим URI: profile/{id}
+    // For a route with the following URI: profile/{id}
 
     return redirect()->route('profile', ['id' => 1]);
 
-#### Получение параметров из моделей Eloquent
+<a name="populating-parameters-via-eloquent-models"></a>
+#### Populating Parameters Via Eloquent Models
 
-Если вы делаете переадресацию на роут с параметром "ID", который был получен из модели Eloquent, то вы можете передать саму модель. ID будет извлечён автоматически:
+If you are redirecting to a route with an "ID" parameter that is being populated from an Eloquent model, you may pass the model itself. The ID will be extracted automatically:
 
-    // Для роута со следующим URI: profile/{id}
+    // For a route with the following URI: profile/{id}
 
     return redirect()->route('profile', [$user]);
 
-Если вы хотите изменить значение, которое помещается в параметр роута, вам надо переопределить метод `getRouteKey` в вашей модели Eloquent:
+If you would like to customize the value that is placed in the route parameter, you should override the `getRouteKey` method on your Eloquent model:
 
     /**
-     * Получить значение ключа роута модели.
+     * Get the value of the model's route key.
      *
      * @return mixed
      */
@@ -60,30 +57,36 @@ git e73c40f0dea4db1205c83584d6c5b544b5ff1683
     }
 
 <a name="redirecting-controller-actions"></a>
-## Редиректы на методы контроллера
+## Redirecting To Controller Actions
 
-Также вы можете создать редиректы на [методы контроллера](/docs/{{version}}/controllers). Для этого передайте контроллер и имя метода контроллера в метод `action`. Помните, что вам не надо указывать полное пространство имён контроллера, потому что`RouteServiceProvider` Laravel автоматически задаст его сам:
+You may also generate redirects to [controller actions](/docs/{{version}}/controllers). To do so, pass the controller and action name to the `action` method:
 
-    return redirect()->action('HomeController@index');
+    use App\Http\Controllers\HomeController;
 
-Если роуту вашего контроллера нужны параметры, то вы можете передать их вторым аргументом метода `action`:
+    return redirect()->action([HomeController::class, 'index']);
+
+If your controller route requires parameters, you may pass them as the second argument to the `action` method:
 
     return redirect()->action(
-        'UserController@profile', ['id' => 1]
+        [UserController::class, 'profile'], ['id' => 1]
     );
 
 <a name="redirecting-with-flashed-session-data"></a>
-## Редирект с данными сессии
+## Redirecting With Flashed Session Data
 
-Редирект на новый URL и [передача данных в сессию](/docs/{{version}}/session#flash-data) обычно происходят одновременно. Обычно это делается после успешного выполнения действия, когда вы передаёте в сессию сообщение об успехе. Для удобства вы можете создать экземпляр `RedirectResponse` и передать данные в сессию в одной цепочке вызовов:
+Redirecting to a new URL and [flashing data to the session](/docs/{{version}}/session#flash-data) are usually done at the same time. Typically, this is done after successfully performing an action when you flash a success message to the session. For convenience, you may create a `RedirectResponse` instance and flash data to the session in a single, fluent method chain:
 
-    Route::post('user/profile', function () {
-        // Обновление профайла юзера...
+    Route::post('/user/profile', function () {
+        // Update the user's profile...
 
-        return redirect('dashboard')->with('status', 'Profile updated!');
+        return redirect('/dashboard')->with('status', 'Profile updated!');
     });
 
-Когда пользователь переадресован, то вы можете вывести сообщение из [сессии](/docs/{{version}}/session). Например, используя [синтаксис Blade](/docs/{{version}}/blade):
+You may use the `withInput` method provided by the `RedirectResponse` instance to flash the current request's input data to the session before redirecting the user to a new location. Once the input has been flashed to the session, you may easily [retrieve it](/docs/{{version}}/requests#retrieving-old-input) during the next request:
+
+    return back()->withInput();
+
+After the user is redirected, you may display the flashed message from the [session](/docs/{{version}}/session). For example, using [Blade syntax](/docs/{{version}}/blade):
 
     @if (session('status'))
         <div class="alert alert-success">
