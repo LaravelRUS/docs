@@ -1,47 +1,65 @@
-git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
-
----
-
-# Фасады
+# Laravel 8 · Фасады
 
 - [Введение](#introduction)
 - [Когда использовать фасады](#when-to-use-facades)
-    - [Фасады в сравнении с Внедрением зависимостей](#facades-vs-dependency-injection)
-    - [Фасады в сравнении с Вспомогательными функциями](#facades-vs-helper-functions)
-- [Как работают фасады](#how-facades-work)
-- [Создание фасадов на лету](#real-time-facades)
-- [Справочное описание классов фасадов](#facade-class-reference)
+    - [Фасады против внедрения зависимостей](#facades-vs-dependency-injection)
+    - [Фасады против глобальных помощников](#facades-vs-helper-functions)
+- [Как фасады работают](#how-facades-work)
+- [Фасады в реальном времени](#real-time-facades)
+- [Справочник фасадов](#facade-class-reference)
 
 <a name="introduction"></a>
 ## Введение
 
-Фасады предоставляют "статический" интерфейс к классам, доступным в [сервис-контейнере](/docs/{{version}}/container). Laravel поставляется со множеством фасадов, которые предоставляют доступ практически ко всем функциям Laravel. Фасады Laravel служат "статическими прокси" для основополагающих классов в сервис-контейнере, предоставляя преимущество лаконичного, выразительного синтаксиса, сохраняя при этом большую тестируемость и гибкость по сравнению с обычными статическими методами.
+В документации Laravel вы увидите примеры кода, демонстрирующего взаимодействия с функционалом Laravel через «фасады». Фасады предоставляют «статический» интерфейс для классов, доступных в [контейнере служб](container) приложения. Laravel из коробки включает множество фасадов, обеспечивающих доступ почти ко всему функционалу Laravel.
 
-Все фасады Laravel определены в пространстве имен `Illuminate\Support\Facades`. Таким образом, мы можем легко получить доступ к фасаду:
+Фасады Laravel служат «статическими прокси» для базовых классов в контейнере служб, обеспечивая преимущества краткого, выразительного синтаксиса при сохранении большей тестируемости и гибкости, чем традиционные статические методы. Если вы не совсем понимаете, как фасады работают под капотом – просто продолжайте изучать Laravel.
+
+Все фасады Laravel определены в пространстве имён `Illuminate\Support\Facades`. Таким образом, мы можем легко получить доступ к такому фасаду:
 
     use Illuminate\Support\Facades\Cache;
+    use Illuminate\Support\Facades\Route;
 
     Route::get('/cache', function () {
         return Cache::get('key');
     });
 
-В документации Laravel фасады будут использоваться во многих примерах, чтобы продемонстрировать различный функционал фреймворка.
+В документации Laravel во многих примерах будут использоваться фасады для демонстрации различного функционала фреймворка.
+
+<a name="helper-functions"></a>
+#### Глобальные помощники
+
+В дополнении к фасадам, Laravel предлагает множество глобальных «вспомогательных функций», которые упрощают взаимодействие с общими функциями Laravel. Вот некоторые из глобальных помощников, с которыми вы можете взаимодействовать – это `view`, `response`, `url`, `config` и т.д. Каждый помощник, предлагаемый Laravel, задокументирован с соответствующей функцией; однако полный список доступен в специальной [документации глобальных помощников](helpers).
+
+Например, вместо использования фасада `Illuminate\Support\Facades\Response` для генерации ответа JSON, мы можем просто использовать функцию `response`. Поскольку помощники доступны глобально, то вам не нужно импортировать какие-либо классы, чтобы использовать их:
+
+    use Illuminate\Support\Facades\Response;
+
+    Route::get('/users', function () {
+        return Response::json([
+            // ...
+        ]);
+    });
+
+    Route::get('/users', function () {
+        return response()->json([
+            // ...
+        ]);
+    });
 
 <a name="when-to-use-facades"></a>
 ## Когда использовать фасады
 
-У фасадов множество преимуществ. Они обеспечивают лаконичный, запоминающийся синтаксис, который позволяет использовать функции Laravel без необходимости запоминать длинные названия классов, которые нужно вставить или настроить вручную. Кроме того, из-за их уникального использования динамических методов PHP, их легко тестировать.
+У фасадов много преимуществ. Они предоставляют краткий, запоминающийся синтаксис, который позволяет вам использовать функции Laravel, не запоминая длинные имена классов, которые необходимо вводить или конфигурировать вручную. Более того, благодаря уникальному использованию динамических методов PHP их легко протестировать.
 
-Однако при использовании фасадов необходимо проявлять определенную осторожность. Основная опасность фасадов - расширение области ответственности класса. Поскольку фасады настолько просты в использовании и не требуют внедрения, легко будет позволить вашим классам продолжать расти и использовать много фасадов в одном классе. При использовании внедрения зависимостей этот потенциал подавляется визуальной обратной связью, которую дает большой конструктор относительно того, что ваш класс становится слишком большим - т.е. однажды вы посмотрите на конструктор с множеством подключённых сторонних классов и подумаете "что-то я тут увлёкся. разобью-ка этот класс на два", а при использовании фасадов накопление сторонних зависимостей в классе проходит гораздо незаметнее. Поэтому при использовании фасадов обращайте особое внимание на размер вашего класса, чтобы его область ответственности оставалась малой, чтобы он делал одну узкоспециализированную задачу.
-
-> {совет} При создании стороннего пакета, который взаимодействует с Laravel, лучше внедрять [контракты Laravel](/docs/{{version}}/contracts) вместо использования фасадов. Так как пакеты создаются вне самого Laravel, у вас не будет доступа к хелперам тестирования Laravel.
+Однако при использовании фасадов необходимо соблюдать некоторую осторожность. Основная опасность фасадов – «разрастание» класса. Поскольку фасады настолько просты в использовании и не требуют внедрений, что легко сказывается на разрастании класса и использовании множества фасадов в одном классе. При использовании внедрения зависимостей этот потенциал снижается за счет визуальной обратной связи, которую дает большой конструктор, сигнализируя о том, что ваш класс становится слишком большим. Поэтому, используя фасады, обратите особое внимание на размер вашего класса, чтобы уровень его ответственности оставался узким. Если ваш класс становится слишком большим, рассмотрите возможность разделения его на несколько более мелких классов.
 
 <a name="facades-vs-dependency-injection"></a>
-### Фасады в сравнении с Внедрением зависимостей
+### Фасады против внедрения зависимостей
 
-Одним из основных преимуществ внедрения зависимостей является возможность замены реализаций внедряемого класса. Это полезно во время тестирования, так как вы можете внедрить заглушку и утверждать, что на заглушке есть различные методы.
+Одним из основных преимуществ внедрения зависимостей является возможность изменения реализации внедренного класса. Это полезно во время тестирования, так как вы можете вставить имитацию или заглушку и утверждать, что для заглушки были вызваны различные методы.
 
-Для настоящих статических методов обычно невозможно сделать заглушку. Однако, поскольку фасады используют динамические методы для вызова метода прокси для объектов, отделенных от сервис-контейнеров, мы фактически можем тестировать фасады так же, как мы бы тестировали экземпляр внедренного класса. Например, учитывая следующий роут:
+Как правило, невозможно имитировать или заглушить действительно статический метод класса. Однако, поскольку фасады используют динамические методы для проксирования вызовов методов к объектам, извлекаемым из контейнера служб, мы фактически можем тестировать фасады так же, как тестировали бы внедренный экземпляр класса. Например, учитывая следующий маршрут:
 
     use Illuminate\Support\Facades\Cache;
 
@@ -49,12 +67,12 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         return Cache::get('key');
     });
 
-Мы можем написать следующий тест, чтобы проверить, что метод `Cache::get` был вызван с ожидаемым аргументом:
+Используя методы тестирования фасадов Laravel, мы можем написать следующий тест, чтобы проверить, что метод `Cache::get` был вызван с ожидаемым аргументом:
 
     use Illuminate\Support\Facades\Cache;
 
     /**
-     * Пример базового функционального теста.
+     * Отвлеченный пример функционального теста.
      *
      * @return void
      */
@@ -64,31 +82,32 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
              ->with('key')
              ->andReturn('value');
 
-        $this->visit('/cache')
-             ->see('value');
+        $response = $this->get('/cache');
+
+        $response->assertSee('value');
     }
 
 <a name="facades-vs-helper-functions"></a>
-### Фасады в сравнении с Хелперами
+### Фасады против глобальных помощников
 
-Помимо фасадов, Laravel включает множество вспомогательных функций, хелперов, которые могут выполнять общие задачи, такие как формирование шаблонов, запуск событий, постановка задач в очередь или отправка HTTP-ответов. Многие из этих хелперов выполняют ту же функцию, как и соответствующий фасад. Например, этот вызов фасада и этот вызов хелпера эквивалентны:
+Помимо фасадов, Laravel включает в себя множество «вспомогательных» функций, которые могут выполнять общие задачи, такие как генерация шаблонов, запуск событий, запуск заданий или отправка HTTP-ответов. Многие из этих вспомогательных функций выполняют ту же функцию, что и соответствующий фасад. Например, этот вызов фасада и вызов помощника эквивалентны:
 
-    return View::make('profile');
+    return Illuminate\Support\Facades\View::make('profile');
 
     return view('profile');
 
-Нет никакой практической разницы между фасадами и хелперами. При использовании хелперов вы можете тестировать их точно так же, как и соответствующие фасады. Например, учитывая следующий роут:
+Практической разницы между фасадами и глобальными помощниками нет абсолютно никакой. При использовании глобальных помощников вы все равно можете тестировать их точно так же, как и соответствующий фасад. Например, учитывая следующий маршрут:
 
     Route::get('/cache', function () {
         return cache('key');
     });
 
-С точки зрения внутренней структуры, помощник `cache` собирается вызвать метод `get` в классе, основополагающем для фасада `Cache`. Поэтому, хотя мы используем вспомогательную функцию, мы можем написать следующий тест, чтобы убедиться, что метод был вызван с ожидаемым аргументом:
+Под капотом помощник `cache` будет вызывать метод `get` класса, образующего фасад `Cache`. Итак, даже если мы используем глобальный помощник, мы можем написать следующий тест, чтобы убедиться, что метод был вызван с ожидаемым аргументом:
 
     use Illuminate\Support\Facades\Cache;
 
     /**
-     * Пример базового функционального теста.
+     * Отвлеченный пример функционального теста.
      *
      * @return void
      */
@@ -98,16 +117,17 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
              ->with('key')
              ->andReturn('value');
 
-        $this->visit('/cache')
-             ->see('value');
+        $response = $this->get('/cache');
+
+        $response->assertSee('value');
     }
 
 <a name="how-facades-work"></a>
-## Как работают фасады
+## Как фасады работают
 
-В контексте приложения на Laravel, фасад - это класс, который предоставляет доступ к объекту в контейнере. Весь этот механизм реализован в классе `Facade`. Фасады как Laravel, так и ваши собственные, наследуют этот базовый класс `Illuminate\Support\Facades\Facade`.
+В приложении Laravel фасад – это класс, который обеспечивает доступ к объекту из контейнера. Техника, которая выполняет эту работу, относится к классу `Facade`. Фасады Laravel и любые пользовательские фасады, которые вы создаете, будут расширять базовый класс `Illuminate\Support\Facades\Facade`.
 
-Класс `Facade` использует магический метод PHP `__callStatic()` для перенаправления вызовов методов с вашего фасада на полученный объект из контейнера. В примере ниже делается обращение к механизму кэширования Laravel. На первый взгляд может показаться, что статический метод `get` принадлежит классу `Cache`:
+Базовый класс `Facade` использует магический метод `__callStatic()`, чтобы делегировать вызовы с вашего фасада объекту, извлеченному из контейнера. В приведенном ниже примере выполняется вызов кеш-системы Laravel. Взглянув на этот код, можно предположить, что статический метод `get` вызывается в классе `Cache`:
 
     <?php
 
@@ -119,7 +139,7 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
     class UserController extends Controller
     {
         /**
-         * Показать профиль для данного пользователя.
+         * Показать профиль конкретного пользователя.
          *
          * @param  int  $id
          * @return Response
@@ -132,9 +152,9 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         }
     }
 
-Обратите внимание, что в верхней части файла мы "импортируем" фасад `Cache`. Этот фасад служит прокси-сервером для доступа к базовой реализации интерфейса `Illuminate\Contracts\Cache\Factory`. Любые вызовы, которые мы осуществляем с использованием фасада, будут переданы в исходный сервис кэша Laravel.
+Обратите внимание, что в верхней части файла мы «импортируем» фасад `Cache`. Этот фасад служит прокси для доступа к базовой реализации интерфейса `Illuminate\Contracts\Cache\Factory`. Любые вызовы, которые мы делаем с использованием фасада, будут переданы в базовый экземпляр службы кеширования Laravel.
 
-Однако, если вы посмотрите в исходный код класса `Illuminate\Support\Facades\Cache`, то увидите, что он не содержит метода `get`:
+Если мы посмотрим на этот класс `Illuminate\Support\Facades\Cache`, вы увидите, что статического метода `get` не существует:
 
     class Cache extends Facade
     {
@@ -146,16 +166,16 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         protected static function getFacadeAccessor() { return 'cache'; }
     }
 
-Вместо этого фасад `Cache` расширяется на базе класса `Facade` и определяет метод `getFacadeAccessor()`. Задача этого метода - вернуть строковое имя (ключ) привязки объекта в сервис-контейнере. Когда вы обращаетесь к любому статическому методу фасада `Cache`, Laravel получает объект `cache` из [сервис-контейнера](/docs/{{version}}/container) и вызывает у него требуемый метод (в этом случае - `get`).
+Вместо этого фасад `Cache` расширяет базовый класс `Facade` и определяет метод `getFacadeAccessor()`. Задача этого метода – вернуть имя привязки контейнера службы. Когда пользователь ссылается на любой статический метод фасада `Cache`, Laravel извлекает объект из [контейнера служб](container), привязанный к `cache` и запускает запрошенный метод (в данном случае `get`) этого объекта.
 
 <a name="real-time-facades"></a>
-## Создание фасадов на лету
+## Фасады в реальном времени
 
-Вы можете относиться к любому классу в вашем приложении, как к фасаду. Чтобы проиллюстрировать, как это можно использовать, давайте рассмотрим альтернативу. Например, предположим, что наша модель `Podcast` имеет метод `publish`. Однако, для того, чтобы опубликовать подкаст, нам нужно заинжектить в подкаст экземпляр `Publisher`:
+Используя фасады в реальном времени, вы можете рассматривать любой класс в своем приложении, как если бы он был фасадом. Чтобы проиллюстрировать, как это можно использовать, давайте сначала рассмотрим код, который не использует фасады в реальном времени. Например, предположим, что наша модель `Podcast` имеет метод `publish`. Однако, чтобы опубликовать подкаст, нам нужно внедрить экземпляр `Publisher`:
 
     <?php
 
-    namespace App;
+    namespace App\Models;
 
     use App\Contracts\Publisher;
     use Illuminate\Database\Eloquent\Model;
@@ -163,7 +183,7 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
     class Podcast extends Model
     {
         /**
-         * Publish the podcast.
+         * Опубликовать подкаст.
          *
          * @param  Publisher  $publisher
          * @return void
@@ -176,11 +196,11 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         }
     }
 
-Подобная инъекция зависимости позволяет нам легко тестировать метод, так как мы можем "замокать" издателя. Однако, это требует от нас всегда передавать экземпляр издателя каждый раз, когда мы называем метод `publish`. Используя фасады на лету, мы можем сохранить ту же самую возможность тестирования, не требуя при этом явной передачи экземпляра `Publisher`. Для создания фасада на лету, добавим префикс `Facades` в пространство имён импортируемого класса - в итоге получится `Facades\App\Contracts\Publisher`:
+Внедрение реализации издателя (`Publisher`) в метод позволяет нам легко тестировать метод изолированно, поскольку мы можем имитировать внедренного издателя. Однако он требует от нас всегда передавать экземпляр издателя каждый раз, когда мы вызываем метод `publish`. Используя фасады в реальном времени, мы можем поддерживать такую же тестируемость, при этом не требуя явной передачи экземпляра `Publisher`. Чтобы сгенерировать фасад в реальном времени, добавьте к пространству имен импортируемого класса префикс `Facades`:
 
     <?php
 
-    namespace App;
+    namespace App\Models;
 
     use Facades\App\Contracts\Publisher;
     use Illuminate\Database\Eloquent\Model;
@@ -188,7 +208,7 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
     class Podcast extends Model
     {
         /**
-         * Publish the podcast.
+         * Опубликовать подкаст.
          *
          * @return void
          */
@@ -200,13 +220,13 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         }
     }
 
-При таком подходе `Publisher` будет автоматически взят из сервис-контейнера по неймспейсу, который идёт сразу за словом `Facades`. В тестах мы можем использовать встроенный хелпер Laravel для тестирования фасадов, который "мокает" заданный метод:
+Когда используется фасад реального времени, реализация издателя будет получена из контейнера службы с использованием той части интерфейса или имени класса, которая расположена после префикса `Facades`. При тестировании мы можем использовать встроенные в Laravel помощники для тестирования фасадов, чтобы имитировать вызов этого метода:
 
     <?php
 
     namespace Tests\Feature;
 
-    use App\Podcast;
+    use App\Models\Podcast;
     use Facades\App\Contracts\Publisher;
     use Illuminate\Foundation\Testing\RefreshDatabase;
     use Tests\TestCase;
@@ -216,13 +236,13 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         use RefreshDatabase;
 
         /**
-         * A test example.
+         * Отвлеченный пример функционального теста.
          *
          * @return void
          */
         public function test_podcast_can_be_published()
         {
-            $podcast = factory(Podcast::class)->create();
+            $podcast = Podcast::factory()->create();
 
             Publisher::shouldReceive('publish')->once()->with($podcast);
 
@@ -230,56 +250,57 @@ git 1b5d0e0e44128f0cb6210b4f481a603874dd852a
         }
     }
 
-
 <a name="facade-class-reference"></a>
-## Справочное описание классов фасадов
+## Справочник фасадов
 
-Ниже вы найдете каждый фасад и его основной класс. Это полезный инструмент для быстрой обработки документации API для данной корневой директории фасада. Ключ [привязки сервис-контейнера](/docs/{{version}}/container) также включен там, где это применимо.
+Ниже вы найдете каждый фасад и его базовый класс. Это полезный инструмент для быстрого поиска в документации API. Ключ [привязки в контейнере служб](container) также указан, где это возможно.
 
-Фасад  |  Класс  |  Привязка сервис-контейнера
+Фасад  |  Класс  |  Привязка в контейнере служб
 ------------- | ------------- | -------------
-App  |  [Illuminate\Foundation\Application](https://laravel.com/api/{{version}}/Illuminate/Foundation/Application.html)  | `app`
-Artisan  |  [Illuminate\Contracts\Console\Kernel](https://laravel.com/api/{{version}}/Illuminate/Contracts/Console/Kernel.html)  |  `artisan`
-Auth  |  [Illuminate\Auth\AuthManager](https://laravel.com/api/{{version}}/Illuminate/Auth/AuthManager.html)  |  `auth`
-Auth (Instance)  |  [Illuminate\Contracts\Auth\Guard](https://laravel.com/api/{{version}}/Illuminate/Contracts/Auth/Guard.html)  |  `auth.driver`
-Blade  |  [Illuminate\View\Compilers\BladeCompiler](https://laravel.com/api/{{version}}/Illuminate/View/Compilers/BladeCompiler.html)  |  `blade.compiler`
-Broadcast  |  [Illuminate\Contracts\Broadcasting\Factory](https://laravel.com/api/{{version}}/Illuminate/Contracts/Broadcasting/Factory.html)  |  &nbsp;
-Broadcast (Instance)  |  [Illuminate\Contracts\Broadcasting\Broadcaster](https://laravel.com/api/{{version}}/Illuminate/Contracts/Broadcasting/Broadcaster.html)  |  &nbsp;
-Bus  |  [Illuminate\Contracts\Bus\Dispatcher](https://laravel.com/api/{{version}}/Illuminate/Contracts/Bus/Dispatcher.html)  |  &nbsp;
-Cache  |  [Illuminate\Cache\CacheManager](https://laravel.com/api/{{version}}/Illuminate/Cache/CacheManager.html)  |  `cache`
-Cache (Instance)  |  [Illuminate\Cache\Repository](https://laravel.com/api/{{version}}/Illuminate/Cache/Repository.html)  |  `cache.store`
-Config  |  [Illuminate\Config\Repository](https://laravel.com/api/{{version}}/Illuminate/Config/Repository.html)  |  `config`
-Cookie  |  [Illuminate\Cookie\CookieJar](https://laravel.com/api/{{version}}/Illuminate/Cookie/CookieJar.html)  |  `cookie`
-Crypt  |  [Illuminate\Encryption\Encrypter](https://laravel.com/api/{{version}}/Illuminate/Encryption/Encrypter.html)  |  `encrypter`
-DB  |  [Illuminate\Database\DatabaseManager](https://laravel.com/api/{{version}}/Illuminate/Database/DatabaseManager.html)  |  `db`
-DB (Instance)  |  [Illuminate\Database\Connection](https://laravel.com/api/{{version}}/Illuminate/Database/Connection.html)  |  `db.connection`
-Event  |  [Illuminate\Events\Dispatcher](https://laravel.com/api/{{version}}/Illuminate/Events/Dispatcher.html)  |  `events`
-File  |  [Illuminate\Filesystem\Filesystem](https://laravel.com/api/{{version}}/Illuminate/Filesystem/Filesystem.html)  |  `files`
-Gate  |  [Illuminate\Contracts\Auth\Access\Gate](https://laravel.com/api/{{version}}/Illuminate/Contracts/Auth/Access/Gate.html)  |  &nbsp;
-Hash  |  [Illuminate\Contracts\Hashing\Hasher](https://laravel.com/api/{{version}}/Illuminate/Contracts/Hashing/Hasher.html)  |  `hash`
-Lang  |  [Illuminate\Translation\Translator](https://laravel.com/api/{{version}}/Illuminate/Translation/Translator.html)  |  `translator`
-Log  |  [Illuminate\Log\LogManager](https://laravel.com/api/{{version}}/Illuminate/Log/LogManager.html)  |  `log`
-Mail  |  [Illuminate\Mail\Mailer](https://laravel.com/api/{{version}}/Illuminate/Mail/Mailer.html)  |  `mailer`
-Notification  |  [Illuminate\Notifications\ChannelManager](https://laravel.com/api/{{version}}/Illuminate/Notifications/ChannelManager.html)  |  &nbsp;
-Password  |  [Illuminate\Auth\Passwords\PasswordBrokerManager](https://laravel.com/api/{{version}}/Illuminate/Auth/Passwords/PasswordBrokerManager.html)  |  `auth.password`
-Password (Instance)  |  [Illuminate\Auth\Passwords\PasswordBroker](https://laravel.com/api/{{version}}/Illuminate/Auth/Passwords/PasswordBroker.html)  |  `auth.password.broker`
-Queue  |  [Illuminate\Queue\QueueManager](https://laravel.com/api/{{version}}/Illuminate/Queue/QueueManager.html)  |  `queue`
-Queue (Instance)  |  [Illuminate\Contracts\Queue\Queue](https://laravel.com/api/{{version}}/Illuminate/Contracts/Queue/Queue.html)  |  `queue.connection`
-Queue (Base Class) |  [Illuminate\Queue\Queue](https://laravel.com/api/{{version}}/Illuminate/Queue/Queue.html)  |  &nbsp;
-Redirect  |  [Illuminate\Routing\Redirector](https://laravel.com/api/{{version}}/Illuminate/Routing/Redirector.html)  |  `redirect`
-Redis  |  [Illuminate\Redis\RedisManager](https://laravel.com/api/{{version}}/Illuminate/Redis/RedisManager.html)  |  `redis`
-Redis (Instance)  |  [Illuminate\Redis\Connections\Connection](https://laravel.com/api/{{version}}/Illuminate/Redis/Connections/Connection.html)  |  `redis.connection`
-Request  |  [Illuminate\Http\Request](https://laravel.com/api/{{version}}/Illuminate/Http/Request.html)  |  `request`
-Response  |  [Illuminate\Contracts\Routing\ResponseFactory](https://laravel.com/api/{{version}}/Illuminate/Contracts/Routing/ResponseFactory.html)  |  &nbsp;
-Response (Instance)  |  [Illuminate\Http\Response](https://laravel.com/api/{{version}}/Illuminate/Http/Response.html)  |  &nbsp;
-Route  |  [Illuminate\Routing\Router](https://laravel.com/api/{{version}}/Illuminate/Routing/Router.html)  |  `router`
-Schema  |  [Illuminate\Database\Schema\Builder](https://laravel.com/api/{{version}}/Illuminate/Database/Schema/Builder.html)  |  &nbsp;
-Session  |  [Illuminate\Session\SessionManager](https://laravel.com/api/{{version}}/Illuminate/Session/SessionManager.html)  |  `session`
-Session (Instance)  |  [Illuminate\Session\Store](https://laravel.com/api/{{version}}/Illuminate/Session/Store.html)  |  `session.store`
-Storage  |  [Illuminate\Filesystem\FilesystemManager](https://laravel.com/api/{{version}}/Illuminate/Filesystem/FilesystemManager.html)  |  `filesystem`
-Storage (Instance)  |  [Illuminate\Contracts\Filesystem\Filesystem](https://laravel.com/api/{{version}}/Illuminate/Contracts/Filesystem/Filesystem.html)  |  `filesystem.disk`
-URL  |  [Illuminate\Routing\UrlGenerator](https://laravel.com/api/{{version}}/Illuminate/Routing/UrlGenerator.html)  |  `url`
-Validator  |  [Illuminate\Validation\Factory](https://laravel.com/api/{{version}}/Illuminate/Validation/Factory.html)  |  `validator`
-Validator (Instance)  |  [Illuminate\Validation\Validator](https://laravel.com/api/{{version}}/Illuminate/Validation/Validator.html) |  &nbsp;
-View  |  [Illuminate\View\Factory](https://laravel.com/api/{{version}}/Illuminate/View/Factory.html)  |  `view`
-View (Instance)  |  [Illuminate\View\View](https://laravel.com/api/{{version}}/Illuminate/View/View.html)  |  &nbsp;
+App  |  [Illuminate\Foundation\Application](https://laravel.com/api/8.x/Illuminate/Foundation/Application.html)  |  `app`
+Artisan  |  [Illuminate\Contracts\Console\Kernel](https://laravel.com/api/8.x/Illuminate/Contracts/Console/Kernel.html)  |  `artisan`
+Auth  |  [Illuminate\Auth\AuthManager](https://laravel.com/api/8.x/Illuminate/Auth/AuthManager.html)  |  `auth`
+Auth (Instance)  |  [Illuminate\Contracts\Auth\Guard](https://laravel.com/api/8.x/Illuminate/Contracts/Auth/Guard.html)  |  `auth.driver`
+Blade  |  [Illuminate\View\Compilers\BladeCompiler](https://laravel.com/api/8.x/Illuminate/View/Compilers/BladeCompiler.html)  |  `blade.compiler`
+Broadcast  |  [Illuminate\Contracts\Broadcasting\Factory](https://laravel.com/api/8.x/Illuminate/Contracts/Broadcasting/Factory.html)  |  &nbsp;
+Broadcast (Instance)  |  [Illuminate\Contracts\Broadcasting\Broadcaster](https://laravel.com/api/8.x/Illuminate/Contracts/Broadcasting/Broadcaster.html)  |  &nbsp;
+Bus  |  [Illuminate\Contracts\Bus\Dispatcher](https://laravel.com/api/8.x/Illuminate/Contracts/Bus/Dispatcher.html)  |  &nbsp;
+Cache  |  [Illuminate\Cache\CacheManager](https://laravel.com/api/8.x/Illuminate/Cache/CacheManager.html)  |  `cache`
+Cache (Instance)  |  [Illuminate\Cache\Repository](https://laravel.com/api/8.x/Illuminate/Cache/Repository.html)  |  `cache.store`
+Config  |  [Illuminate\Config\Repository](https://laravel.com/api/8.x/Illuminate/Config/Repository.html)  |  `config`
+Cookie  |  [Illuminate\Cookie\CookieJar](https://laravel.com/api/8.x/Illuminate/Cookie/CookieJar.html)  |  `cookie`
+Crypt  |  [Illuminate\Encryption\Encrypter](https://laravel.com/api/8.x/Illuminate/Encryption/Encrypter.html)  |  `encrypter`
+Date | [Illuminate\Support\DateFactory](https://laravel.com/api/8.x/Illuminate/Support/DateFactory.html) | `date`
+DB  |  [Illuminate\Database\DatabaseManager](https://laravel.com/api/8.x/Illuminate/Database/DatabaseManager.html)  |  `db`
+DB (Instance)  |  [Illuminate\Database\Connection](https://laravel.com/api/8.x/Illuminate/Database/Connection.html)  |  `db.connection`
+Event  |  [Illuminate\Events\Dispatcher](https://laravel.com/api/8.x/Illuminate/Events/Dispatcher.html)  |  `events`
+File  |  [Illuminate\Filesystem\Filesystem](https://laravel.com/api/8.x/Illuminate/Filesystem/Filesystem.html)  |  `files`
+Gate  |  [Illuminate\Contracts\Auth\Access\Gate](https://laravel.com/api/8.x/Illuminate/Contracts/Auth/Access/Gate.html)  |  &nbsp;
+Hash  |  [Illuminate\Contracts\Hashing\Hasher](https://laravel.com/api/8.x/Illuminate/Contracts/Hashing/Hasher.html)  |  `hash`
+Http  |  [Illuminate\Http\Client\Factory](https://laravel.com/api/8.x/Illuminate/Http/Client/Factory.html)  |  &nbsp;
+Lang  |  [Illuminate\Translation\Translator](https://laravel.com/api/8.x/Illuminate/Translation/Translator.html)  |  `translator`
+Log  |  [Illuminate\Log\LogManager](https://laravel.com/api/8.x/Illuminate/Log/LogManager.html)  |  `log`
+Mail  |  [Illuminate\Mail\Mailer](https://laravel.com/api/8.x/Illuminate/Mail/Mailer.html)  |  `mailer`
+Notification  |  [Illuminate\Notifications\ChannelManager](https://laravel.com/api/8.x/Illuminate/Notifications/ChannelManager.html)  |  &nbsp;
+Password  |  [Illuminate\Auth\Passwords\PasswordBrokerManager](https://laravel.com/api/8.x/Illuminate/Auth/Passwords/PasswordBrokerManager.html)  |  `auth.password`
+Password (Instance)  |  [Illuminate\Auth\Passwords\PasswordBroker](https://laravel.com/api/8.x/Illuminate/Auth/Passwords/PasswordBroker.html)  |  `auth.password.broker`
+Queue  |  [Illuminate\Queue\QueueManager](https://laravel.com/api/8.x/Illuminate/Queue/QueueManager.html)  |  `queue`
+Queue (Instance)  |  [Illuminate\Contracts\Queue\Queue](https://laravel.com/api/8.x/Illuminate/Contracts/Queue/Queue.html)  |  `queue.connection`
+Queue (Base Class)  |  [Illuminate\Queue\Queue](https://laravel.com/api/8.x/Illuminate/Queue/Queue.html)  |  &nbsp;
+Redirect  |  [Illuminate\Routing\Redirector](https://laravel.com/api/8.x/Illuminate/Routing/Redirector.html)  |  `redirect`
+Redis  |  [Illuminate\Redis\RedisManager](https://laravel.com/api/8.x/Illuminate/Redis/RedisManager.html)  |  `redis`
+Redis (Instance)  |  [Illuminate\Redis\Connections\Connection](https://laravel.com/api/8.x/Illuminate/Redis/Connections/Connection.html)  |  `redis.connection`
+Request  |  [Illuminate\Http\Request](https://laravel.com/api/8.x/Illuminate/Http/Request.html)  |  `request`
+Response  |  [Illuminate\Contracts\Routing\ResponseFactory](https://laravel.com/api/8.x/Illuminate/Contracts/Routing/ResponseFactory.html)  |  &nbsp;
+Response (Instance)  |  [Illuminate\Http\Response](https://laravel.com/api/8.x/Illuminate/Http/Response.html)  |  &nbsp;
+Route  |  [Illuminate\Routing\Router](https://laravel.com/api/8.x/Illuminate/Routing/Router.html)  |  `router`
+Schema  |  [Illuminate\Database\Schema\Builder](https://laravel.com/api/8.x/Illuminate/Database/Schema/Builder.html)  |  &nbsp;
+Session  |  [Illuminate\Session\SessionManager](https://laravel.com/api/8.x/Illuminate/Session/SessionManager.html)  |  `session`
+Session (Instance)  |  [Illuminate\Session\Store](https://laravel.com/api/8.x/Illuminate/Session/Store.html)  |  `session.store`
+Storage  |  [Illuminate\Filesystem\FilesystemManager](https://laravel.com/api/8.x/Illuminate/Filesystem/FilesystemManager.html)  |  `filesystem`
+Storage (Instance)  |  [Illuminate\Contracts\Filesystem\Filesystem](https://laravel.com/api/8.x/Illuminate/Contracts/Filesystem/Filesystem.html)  |  `filesystem.disk`
+URL  |  [Illuminate\Routing\UrlGenerator](https://laravel.com/api/8.x/Illuminate/Routing/UrlGenerator.html)  |  `url`
+Validator  |  [Illuminate\Validation\Factory](https://laravel.com/api/8.x/Illuminate/Validation/Factory.html)  |  `validator`
+Validator (Instance)  |  [Illuminate\Validation\Validator](https://laravel.com/api/8.x/Illuminate/Validation/Validator.html)  |  &nbsp;
+View  |  [Illuminate\View\Factory](https://laravel.com/api/8.x/Illuminate/View/Factory.html)  |  `view`
+View (Instance)  |  [Illuminate\View\View](https://laravel.com/api/8.x/Illuminate/View/View.html)  |  &nbsp;

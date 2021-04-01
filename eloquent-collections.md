@@ -1,8 +1,4 @@
-git 328b76a3bd519338dc09ab170764334b623239ea
-
----
-
-# Eloquent: Коллекции
+# Laravel 8 · Eloquent · Коллекции
 
 - [Введение](#introduction)
 - [Доступные методы](#available-methods)
@@ -11,39 +7,39 @@ git 328b76a3bd519338dc09ab170764334b623239ea
 <a name="introduction"></a>
 ## Введение
 
-Все наборы результатов, возвращаемые Eloquent, являются экземплярами объекта `Illuminate\Database\Eloquent\Collection` , в том числе результаты, получаемые с помощью метода `get` или доступные через отношения. Объект коллекции Eloquent наследует [базовую коллекцию](/docs/{{version}}/collections) Laravel, поэтому он наследует десятки методов, используемых для гибкой работы с базовым набором моделей Eloquent.
+Все методы Eloquent, которые возвращают более одного результата модели, будут возвращать экземпляры класса `Illuminate\Database\Eloquent\Collection`, включая результаты, полученные с помощью метода `get` или доступные через отношения. Объект коллекции Eloquent расширяет [базовую коллекцию](collections) Laravel, поэтому он естественным образом наследует десятки методов, использующих в работе текучий интерфейс с базовым массивом моделей Eloquent. Обязательно ознакомьтесь с документацией по коллекции Laravel, чтобы узнать все об этих полезных методах!
 
-Конечно же, все коллекции также служат в качестве итераторов, позволяя вам перебирать их в цикле, как будто они простые PHP-массивы:
+Все коллекции также являются итераторами, что позволяет вам перебирать их, как если бы они были простыми массивами PHP:
 
-    $users = App\User::where('active', 1)->get();
+    use App\Models\User;
+
+    $users = User::where('active', 1)->get();
 
     foreach ($users as $user) {
         echo $user->name;
     }
 
-Тем не менее, коллекции гораздо мощнее, чем массивы и предоставляют различные варианты операций map/reduce, которые могут быть сцеплены с использованием интуитивно понятного интерфейса. Например, давайте удалим все неактивные модели и возвратим имена для каждого оставшегося пользователя:
+Однако, как упоминалось ранее, коллекции намного мощнее массивов и предоставляют множество методов типа `map` / `reduce`, которые могут быть связаны с помощью интуитивно понятного интерфейса. Например, мы можем удалить все неактивные модели, а затем собрать имена оставшихся пользователей:
 
-    $users = App\User::all();
-
-    $names = $users->reject(function ($user) {
+    $names = User::all()->reject(function ($user) {
         return $user->active === false;
-    })
-    ->map(function ($user) {
+    })->map(function ($user) {
         return $user->name;
     });
 
-> {note} Хотя большинство методов для работы с коллекциями Eloquent возвращают новый экземпляр коллекции Eloquent, методы `pluck`, `keys`, `zip`, `collapse`, `flatten` и `flip` возвращают экземпляр [базовой коллекции](/docs/{{version}}/collections). Более того, если операция `map` вернёт коллекцию, в которой нет моделей Eloquent, она будет автоматически приведена к базовой коллекции.
+<a name="eloquent-collection-conversion"></a>
+#### Преобразование коллекций Eloquent
+
+В то время как большинство методов коллекции Eloquent возвращают новый экземпляр коллекции Eloquent, методы `collapse`, `flatten`, `flip`, `keys`, `pluck`, и `zip` возвращают экземпляр [базовой коллекции](collections ). Аналогично, если метод `map` возвращает коллекцию, не содержащую никаких моделей Eloquent, она будет преобразована в экземпляр базовой коллекции.
 
 <a name="available-methods"></a>
 ## Доступные методы
 
-### Базовая коллекция
+Все коллекции Eloquent расширяют базовый класс [коллекций Laravel](collections#available-methods); поэтому они наследуют все мощные методы, предоставляемые классом базовой коллекции.
 
-Все коллекции Eloquent наследуют класс [коллекций Laravel](/docs/{{version}}/collections); поэтому они наследуют все методы, предоставляемые базовым классом коллекций.
+Кроме того, класс `Illuminate\Database\Eloquent\Collection` содержит расширенный набор методов, помогающих управлять коллекциями моделей. Большинство методов возвращают экземпляры `Illuminate\Database\Eloquent\Collection`; однако некоторые методы, такие как `modelKeys`, возвращают экземпляр `Illuminate\Support\Collection`.
 
-Дополнительно класс `Illuminate\Database\Eloquent\Collection` содержит несколько методов, специфичных для работы именно с моделями коллекций. В основном они возвращают `Illuminate\Database\Eloquent\Collection`, но некоторые возвращают и базовые коллекции, `Illuminate\Support\Collection`.
-
-<style>
+<!-- <style>
     #collection-method-list > p {
         column-count: 1; -moz-column-count: 1; -webkit-column-count: 1;
         column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
@@ -52,55 +48,56 @@ git 328b76a3bd519338dc09ab170764334b623239ea
     #collection-method-list a {
         display: block;
     }
-</style>
+</style> -->
 
-<div id="collection-method-list" markdown="1">
+<!-- <div id="collection-method-list" markdown="1"> -->
 
-[contains](#method-contains)
-[diff](#method-diff)
-[except](#method-except)
-[find](#method-find)
-[fresh](#method-fresh)
-[intersect](#method-intersect)
-[load](#method-load)
-[loadMissing](#method-loadMissing)
-[modelKeys](#method-modelKeys)
-[makeVisible](#method-makeVisible)
-[makeHidden](#method-makeHidden)
-[only](#method-only)
-[unique](#method-unique)
+- [contains](#method-contains)
+- [diff](#method-diff)
+- [except](#method-except)
+- [find](#method-find)
+- [fresh](#method-fresh)
+- [intersect](#method-intersect)
+- [load](#method-load)
+- [loadMissing](#method-loadMissing)
+- [modelKeys](#method-modelKeys)
+- [makeVisible](#method-makeVisible)
+- [makeHidden](#method-makeHidden)
+- [only](#method-only)
+- [toQuery](#method-toquery)
+- [unique](#method-unique)
 
-</div>
+<!-- </div> -->
 
 <a name="method-contains"></a>
 #### `contains($key, $operator = null, $value = null)`
 
-Метод `contains` позволяет понять, есть ли в коллекции заданная модель. Если аргумент числовой, он рассматривается как id модели.
+Метод `contains` используется для определения того, содержится ли переданный экземпляр модели в коллекции. Этот метод принимает первичный ключ или экземпляр модели:
 
     $users->contains(1);
-    
+
     $users->contains(User::find(1));
 
 <a name="method-diff"></a>
 #### `diff($items)`
 
-Метод `diff` возвращает все модели, которых нет в переданной коллекции.
+Метод `diff` возвращает все модели, которых нет в переданной коллекции:
 
-    use App\User;
+    use App\Models\User;
 
     $users = $users->diff(User::whereIn('id', [1, 2, 3])->get());
 
 <a name="method-except"></a>
 #### `except($keys)`
 
-Метод `except` возвращает все модели, кроме тех, чьи id перечислены в аргументе.
+Метод `except` возвращает все модели, у которых нет переданных первичных ключей:
 
     $users = $users->except([1, 2, 3]);
 
 <a name="method-find"></a>
-#### `find($key)` {#collection-method .first-collection-method}
+#### `find($key)`
 
-Метод `find` находит модели по переданным id. Если вместо id передаётся экземпляр модели, поиск идёт про его id. Если передаётся массив из id, `find` вернёт все эти модели, будет искать по моделям при помощи `whereIn()`:
+Метод `find` возвращает модель, у которой есть первичный ключ, соответствующий переданному ключу. Если `$key` является экземпляром модели, `find` попытается вернуть модель, соответствующую первичному ключу. Если `$key` является массивом ключей, `find` вернет все модели, у которых есть первичный ключ в переданном массиве:
 
     $users = User::all();
 
@@ -109,7 +106,7 @@ git 328b76a3bd519338dc09ab170764334b623239ea
 <a name="method-fresh"></a>
 #### `fresh($with = [])`
 
-Метод `fresh` обновляет все модели в коллекции, запрашивая данные из БД. В аргументах можно задать отношение, которое автоматически подгрузится в каждую модель.
+Метод `fresh` извлекает из базы данных свежий экземпляр каждой модели в коллекции. Кроме того, будут загружены любые указанные отношения:
 
     $users = $users->fresh();
 
@@ -118,91 +115,104 @@ git 328b76a3bd519338dc09ab170764334b623239ea
 <a name="method-intersect"></a>
 #### `intersect($items)`
 
-Метод `intersect` возвращает модели которые также присутствуют в коллекции, поданной в аргументе.
+Метод `intersect` возвращает все модели, которые также присутствуют в переданной коллекции:
 
-    use App\User;
+    use App\Models\User;
 
     $users = $users->intersect(User::whereIn('id', [1, 2, 3])->get());
 
 <a name="method-load"></a>
 #### `load($relations)`
 
-Метод `load` загружает заданные отношения во все модели.
+Метод `load` нетерпеливо загружает указанные отношения для всех моделей в коллекции:
 
-    $users->load('comments', 'posts');
+    $users->load(['comments', 'posts']);
 
     $users->load('comments.author');
 
 <a name="method-loadMissing"></a>
 #### `loadMissing($relations)`
 
-Метод `loadMissing` загружает отношения во все модели, если они ещё не загружены.
+Метод `loadMissing` нетерпеливо загружает указанные отношения для всех моделей в коллекции, если отношения еще не загружены:
 
-    $users->loadMissing('comments', 'posts');
+    $users->loadMissing(['comments', 'posts']);
 
     $users->loadMissing('comments.author');
 
 <a name="method-modelKeys"></a>
 #### `modelKeys()`
 
-Метод `modelKeys` возвращает массив с id моделей из коллекции:
+Метод `modelKeys` возвращает первичные ключи для всех моделей в коллекции:
 
     $users->modelKeys();
 
     // [1, 2, 3, 4, 5]
-    
+
 <a name="method-makeVisible"></a>
 #### `makeVisible($attributes)`
 
-Метод `makeVisible` делает поля, обозначенные в моделях как "hidden" видимыми.
+Метод `makeVisible` [делает видимыми атрибуты](eloquent-serialization#hiding-attributes-from-json), которые обычно «скрыты» для каждой модели коллекции:
 
     $users = $users->makeVisible(['address', 'phone_number']);
 
 <a name="method-makeHidden"></a>
 #### `makeHidden($attributes)`
 
-Метод `makeHidden` добавляет указанные поля моделей в группу "hidden" - эти поля перестанут выводиться в json и т.п.
+Метод `makeHidden` [скрывает атрибуты](eloquent-serialization#hiding-attributes-from-json), которые обычно «видны» для каждой модели в коллекции:
 
     $users = $users->makeHidden(['address', 'phone_number']);
 
 <a name="method-only"></a>
 #### `only($keys)`
 
-Метод `only` возвращает модели, которые содержат указанные id:
+Метод `only` возвращает все модели с указанными первичными ключами:
 
     $users = $users->only([1, 2, 3]);
+
+<a name="method-toquery"></a>
+#### `toQuery()`
+
+Метод `toQuery` возвращает экземпляр построителя запросов Eloquent, содержащий ограничение `whereIn` для первичных ключей модели коллекции:
+
+    use App\Models\User;
+
+    $users = User::where('status', 'VIP')->get();
+
+    $users->toQuery()->update([
+        'status' => 'Administrator',
+    ]);
 
 <a name="method-unique"></a>
 #### `unique($key = null, $strict = false)`
 
-Метод `unique` возвращает уникальные модели из коллекции. Уникальность определяется по названию класса модели и id.
+Метод `unique` возвращает все уникальные модели в коллекции. Все модели того же типа с тем же первичным ключом, что и другая модель в коллекции, удаляются:
 
     $users = $users->unique();
 
 <a name="custom-collections"></a>
 ## Пользовательские коллекции
 
-Если вам нужно использовать пользовательский объект `Collection` со своими собственными методами наследования, вы можете переопределить метод `newCollection` в своей модели:
+Если вы хотите использовать пользовательский класс `Collection` при взаимодействии с конкретной моделью, вы можете определить метод `newCollection` модели:
 
     <?php
 
-    namespace App;
+    namespace App\Models;
 
-    use App\CustomCollection;
+    use App\Support\UserCollection;
     use Illuminate\Database\Eloquent\Model;
 
     class User extends Model
     {
         /**
-         * Создание экземпляра новой Eloquent коллекции.
+         * Создать новый экземпляр коллекции Eloquent.
          *
          * @param  array  $models
          * @return \Illuminate\Database\Eloquent\Collection
          */
         public function newCollection(array $models = [])
         {
-            return new CustomCollection($models);
+            return new UserCollection($models);
         }
     }
 
-После определения метода `newCollection` вы получите экземпляр пользовательской коллекции при любом обращении к экземпляру `Collection` этой модели. Если вы хотите использовать собственную коллекцию для каждой модели в вашем приложении, вы должны переопределить метод `newCollection` в базовом классе модели, наследуемой всеми вашими моделями.
+После того как вы определили метод `newCollection`, вы будете получать экземпляр своей пользовательской коллекции в любое время, когда Eloquent обычно возвращает экземпляр `Illuminate\Database\Eloquent\Collection`. Если вы хотите использовать собственную коллекцию для каждой модели в вашем приложении, вы должны определить метод `newCollection` для класса базовой модели, который расширяется всеми моделями вашего приложения.
