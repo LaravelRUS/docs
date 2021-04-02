@@ -1,4 +1,8 @@
-# Laravel 8 · События
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
+# События
 
 - [Введение](#introduction)
 - [Регистрация событий и слушателей](#registering-events-and-listeners)

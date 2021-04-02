@@ -1,4 +1,8 @@
-# Laravel 8 · Eloquent · Мутаторы и типизация
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
+# Eloquent · Мутаторы и типизация
 
 - [Введение](#introduction)
 - [Аксессоры и мутаторы](#accessors-and-mutators)

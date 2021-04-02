@@ -1,4 +1,8 @@
-# Laravel 8 · HTTP-запросы
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
+# HTTP-запросы
 
 - [Введение](#introduction)
 - [Взаимодействие с запросом](#interacting-with-the-request)

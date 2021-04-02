@@ -1,4 +1,8 @@
-# Laravel 8 · База данных · Миграции
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
+# База данных · Миграции
 
 - [Введение](#introduction)
 - [Генерация миграций](#generating-migrations)

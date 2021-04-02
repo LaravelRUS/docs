@@ -1,4 +1,8 @@
-# Laravel 8 · Eloquent · Начало работы
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
+# Eloquent · Начало работы
 
 - [Введение](#introduction)
 - [Генерация классов модели](#generating-model-classes)
