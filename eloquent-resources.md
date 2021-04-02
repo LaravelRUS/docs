@@ -345,7 +345,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
         public static $wrap = 'user';
     }
 
-Если вы хотите отключить обертывание самого верхнего ресурса, то вы должны вызвать метод `withoutWrapping` базового класса `Illuminate\Http\Resources\Json\JsonResource`. Обычно вы должны вызывать этот метод из вашего `AppServiceProvider` или другого [поставщика служб](providers), загружаемый при каждом запросе к вашему приложению:
+Если вы хотите отключить обертывание самого верхнего ресурса, то вы должны вызвать метод `withoutWrapping` базового класса `Illuminate\Http\Resources\Json\JsonResource`. Обычно вы должны вызывать этот метод из вашего `AppServiceProvider` или другого [поставщика служб](/docs/{{version}}/providers), загружаемый при каждом запросе к вашему приложению:
 
     <?php
 
@@ -599,7 +599,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
         ];
     }
 
-Если ваши отношения используют [пользовательскую модель сводной таблицы](eloquent-relationships#defining-custom-intermediate-table-models), то вы можете передать экземпляр модели сводной таблицы в качестве первого аргумента методу `whenPivotLoaded`. :
+Если ваши отношения используют [пользовательскую модель сводной таблицы](/docs/{{version}}/eloquent-relationships#defining-custom-intermediate-table-models), то вы можете передать экземпляр модели сводной таблицы в качестве первого аргумента методу `whenPivotLoaded`. :
 
     'expires_at' => $this->whenPivotLoaded(new Membership, function () {
         return $this->pivot->expires_at;

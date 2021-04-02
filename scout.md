@@ -27,7 +27,7 @@
 <a name="introduction"></a>
 ## Introduction
 
-Laravel Scout provides a simple, driver based solution for adding full-text search to your [Eloquent models](/docs/{{version}}/eloquent). Using model observers, Scout will automatically keep your search indexes in sync with your Eloquent records.
+Laravel Scout provides a simple, driver based solution for adding full-text search to your [Eloquent models](/docs/{{version}}//docs/{{version}}/eloquent). Using model observers, Scout will automatically keep your search indexes in sync with your Eloquent records.
 
 Currently, Scout ships with an [Algolia](https://www.algolia.com/) driver; however, writing custom drivers is simple and you are free to extend Scout with your own search implementations.
 
@@ -68,12 +68,12 @@ When using the Algolia driver, you should configure your Algolia `id` and `secre
 
 #### MeiliSearch
 
-MeiliSearch is a powerful, open source search-engine that may be run locally using [Laravel Sail](/docs/{{version}}/sail). MeiliSearch provides and maintains an [official MeiliSearch driver for Laravel Scout](https://github.com/meilisearch/meilisearch-laravel-scout). Please consult this package's documentation to learn how to use MeiliSearch with Laravel Scout.
+MeiliSearch is a powerful, open source search-engine that may be run locally using [Laravel Sail](/docs/{{version}}//docs/{{version}}/sail). MeiliSearch provides and maintains an [official MeiliSearch driver for Laravel Scout](https://github.com/meilisearch/meilisearch-laravel-scout). Please consult this package's documentation to learn how to use MeiliSearch with Laravel Scout.
 
 <a name="queueing"></a>
 ### Queueing
 
-While not strictly required to use Scout, you should strongly consider configuring a [queue driver](/docs/{{version}}/queues) before using the library. Running a queue worker will allow Scout to queue all operations that sync your model information to your search indexes, providing much better response times for your application's web interface.
+While not strictly required to use Scout, you should strongly consider configuring a [queue driver](/docs/{{version}}//docs/{{version}}/queues) before using the library. Running a queue worker will allow Scout to queue all operations that sync your model information to your search indexes, providing much better response times for your application's web interface.
 
 Once you have configured a queue driver, set the value of the `queue` option in your `config/scout.php` configuration file to `true`:
 
@@ -232,7 +232,7 @@ Once you have added the `Laravel\Scout\Searchable` trait to a model, all you nee
 <a name="adding-records-via-query"></a>
 #### Adding Records Via Query
 
-If you would like to add a collection of models to your search index via an Eloquent query, you may chain the `searchable` method onto the Eloquent query. The `searchable` method will [chunk the results](/docs/{{version}}/eloquent#chunking-results) of the query and add the records to your search index. Again, if you have configured Scout to use queues, all of the chunks will be imported in the background by your queue workers:
+If you would like to add a collection of models to your search index via an Eloquent query, you may chain the `searchable` method onto the Eloquent query. The `searchable` method will [chunk the results](/docs/{{version}}//docs/{{version}}/eloquent#chunking-results) of the query and add the records to your search index. Again, if you have configured Scout to use queues, all of the chunks will be imported in the background by your queue workers:
 
     use App\Models\Order;
 
@@ -276,7 +276,7 @@ Or, if you already have a collection of Eloquent models in memory, you may call 
 <a name="removing-records"></a>
 ### Removing Records
 
-To remove a record from your index you may simply `delete` the model from the database. This may be done even if you are using [soft deleted](/docs/{{version}}/eloquent#soft-deleting) models:
+To remove a record from your index you may simply `delete` the model from the database. This may be done even if you are using [soft deleted](/docs/{{version}}//docs/{{version}}/eloquent#soft-deleting) models:
 
     use App\Models\Order;
 
@@ -367,7 +367,7 @@ Scout allows you to add simple "where" clauses to your search queries. Currently
 <a name="pagination"></a>
 ### Pagination
 
-In addition to retrieving a collection of models, you may paginate your search results using the `paginate` method. This method will return an `Illuminate\Pagination\LengthAwarePaginator` instance just as if you had [paginated a traditional Eloquent query](/docs/{{version}}/pagination):
+In addition to retrieving a collection of models, you may paginate your search results using the `paginate` method. This method will return an `Illuminate\Pagination\LengthAwarePaginator` instance just as if you had [paginated a traditional Eloquent query](/docs/{{version}}//docs/{{version}}/pagination):
 
     use App\Models\Order;
 
@@ -377,7 +377,7 @@ You may specify how many models to retrieve per page by passing the amount as th
 
     $orders = Order::search('Star Trek')->paginate(15);
 
-Once you have retrieved the results, you may display the results and render the page links using [Blade](/docs/{{version}}/blade) just as if you had paginated a traditional Eloquent query:
+Once you have retrieved the results, you may display the results and render the page links using [Blade](/docs/{{version}}//docs/{{version}}/blade) just as if you had paginated a traditional Eloquent query:
 
 ```html
 <div class="container">
@@ -401,7 +401,7 @@ Of course, if you would like to retrieve the pagination results as JSON, you may
 <a name="soft-deleting"></a>
 ### Soft Deleting
 
-If your indexed models are [soft deleting](/docs/{{version}}/eloquent#soft-deleting) and you need to search your soft deleted models, set the `soft_delete` option of the `config/scout.php` configuration file to `true`:
+If your indexed models are [soft deleting](/docs/{{version}}//docs/{{version}}/eloquent#soft-deleting) and you need to search your soft deleted models, set the `soft_delete` option of the `config/scout.php` configuration file to `true`:
 
     'soft_delete' => true,
 
@@ -485,7 +485,7 @@ Once your engine has been registered, you may specify it as your default Scout `
 <a name="builder-macros"></a>
 ## Builder Macros
 
-If you would like to define a custom Scout search builder method, you may use the `macro` method on the `Laravel\Scout\Builder` class. Typically, "macros" should be defined within a [service provider's](/docs/{{version}}/providers) `boot` method:
+If you would like to define a custom Scout search builder method, you may use the `macro` method on the `Laravel\Scout\Builder` class. Typically, "macros" should be defined within a [service provider's](/docs/{{version}}//docs/{{version}}/providers) `boot` method:
 
     use Illuminate\Support\Facades\Response;
     use Illuminate\Support\ServiceProvider;

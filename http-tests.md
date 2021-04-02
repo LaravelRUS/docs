@@ -503,7 +503,7 @@ Laravel также позволяет отображать шаблоны без
 <a name="sharing-errors"></a>
 #### Передача ошибок валидации в шаблоны
 
-Некоторые шаблоны могут зависеть от ошибок, хранящихся в [глобальной коллекции ошибок Laravel](validation#quick-displaying-the-validation-errors). Чтобы добавить в эту коллекцию сообщения об ошибках, вы можете использовать метод `withViewErrors`:
+Некоторые шаблоны могут зависеть от ошибок, хранящихся в [глобальной коллекции ошибок Laravel](/docs/{{version}}/validation#quick-displaying-the-validation-errors). Чтобы добавить в эту коллекцию сообщения об ошибках, вы можете использовать метод `withViewErrors`:
 
     $view = $this->withViewErrors([
         'name' => ['Please provide a valid name.']
@@ -514,7 +514,7 @@ Laravel также позволяет отображать шаблоны без
 <a name="rendering-blade-and-components"></a>
 ### Отрисовка Blade и компоненты
 
-Если необходимо, вы можете использовать метод `blade` для анализа и отрисовки необработанной строки [Blade](blade). Подобно методу `view`, метод `blade` возвращает экземпляр `Illuminate\Testing\TestView`:
+Если необходимо, вы можете использовать метод `blade` для анализа и отрисовки необработанной строки [Blade](/docs/{{version}}/blade). Подобно методу `view`, метод `blade` возвращает экземпляр `Illuminate\Testing\TestView`:
 
     $view = $this->blade(
         '<x-component :name="$name" />',
@@ -523,7 +523,7 @@ Laravel также позволяет отображать шаблоны без
 
     $view->assertSee('Taylor');
 
-Вы можете использовать метод `component` для анализа и отрисовки [компонента Blade](blade#components). Как и метод `view`, метод `component` возвращает экземпляр `Illuminate\Testing\TestView`:
+Вы можете использовать метод `component` для анализа и отрисовки [компонента Blade](/docs/{{version}}/blade#components). Как и метод `view`, метод `component` возвращает экземпляр `Illuminate\Testing\TestView`:
 
     $view = $this->component(Profile::class, ['name' => 'Taylor']);
 
@@ -902,7 +902,7 @@ Laravel также позволяет отображать шаблоны без
 <a name="assert-session-has-errors-in"></a>
 #### assertSessionHasErrorsIn
 
-Утверждает, что сессия содержит ошибку для переданных `$keys` в конкретной [коллекции ошибок](validation#named-error-bags). Если `$keys` является ассоциативным массивом, убедитесь, что сессия содержит конкретное сообщение об ошибке (значение) для каждого поля (ключа) в коллекции ошибок:
+Утверждает, что сессия содержит ошибку для переданных `$keys` в конкретной [коллекции ошибок](/docs/{{version}}/validation#named-error-bags). Если `$keys` является ассоциативным массивом, убедитесь, что сессия содержит конкретное сообщение об ошибке (значение) для каждого поля (ключа) в коллекции ошибок:
 
     $response->assertSessionHasErrorsIn($errorBag, $keys = [], $format = null);
 

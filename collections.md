@@ -35,7 +35,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
     $collection = collect([1, 2, 3]);
 
-> {tip} Результаты запросов [Eloquent](eloquent) всегда возвращаются как экземпляры `Collection`.
+> {tip} Результаты запросов [Eloquent](/docs/{{version}}/eloquent) всегда возвращаются как экземпляры `Collection`.
 
 <a name="extending-collections"></a>
 ### Расширение коллекций
@@ -57,7 +57,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
     // ['FIRST', 'SECOND']
 
-Обычно вы должны объявлять макрокоманды коллекций в методе `boot` [поставщика служб](providers).
+Обычно вы должны объявлять макрокоманды коллекций в методе `boot` [поставщика служб](/docs/{{version}}/providers).
 
 <a name="macro-arguments"></a>
 #### Аргументы макрокоманды
@@ -299,7 +299,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
     // [[1, 2, 3, 4], [5, 6, 7]]
 
-Этот метод особенно полезен в [шаблонах](views) при работе с сеткой, такой как [Bootstrap](https://getbootstrap.com/docs/4.1/layout/grid/). Например, представьте, что у вас есть коллекция моделей [Eloquent](eloquent), которые вы хотите отобразить в сетке:
+Этот метод особенно полезен в [шаблонах](/docs/{{version}}/views) при работе с сеткой, такой как [Bootstrap](https://getbootstrap.com/docs/4.1/layout/grid/). Например, представьте, что у вас есть коллекция моделей [Eloquent](/docs/{{version}}/eloquent), которые вы хотите отобразить в сетке:
 
     @foreach ($products->chunk(3) as $chunk)
         <div class="row">
@@ -443,7 +443,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
 Этот метод имеет ту же сигнатуру, что и метод [`contains`](#method-contains); однако, все значения сравниваются с использованием «жесткого» сравнения.
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-contains).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-contains).
 
 <a name="method-count"></a>
 #### `count()`
@@ -553,7 +553,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
     // [1, 3, 5]
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-diff).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-diff).
 
 <a name="method-diffassoc"></a>
 #### `diffAssoc()`
@@ -719,7 +719,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
 Противоположным методу `except` является метод [only](#method-only).
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-except).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-except).
 
 <a name="method-filter"></a>
 #### `filter()`
@@ -1063,7 +1063,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
     // [0 => 'Desk', 2 => 'Chair']
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-intersect).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-intersect).
 
 <a name="method-intersectbykeys"></a>
 #### `intersectByKeys()`
@@ -1465,7 +1465,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
 Противоположным методу `only` является метод [except](#method-except).
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-only).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-only).
 
 <a name="method-pad"></a>
 #### `pad()`
@@ -2344,7 +2344,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 <a name="method-toarray"></a>
 #### `toArray()`
 
-Метод `toArray` преобразует коллекцию в простой массив PHP. Если значениями коллекции являются модели [Eloquent](eloquent), то модели также будут преобразованы в массивы:
+Метод `toArray` преобразует коллекцию в простой массив PHP. Если значениями коллекции являются модели [Eloquent](/docs/{{version}}/eloquent), то модели также будут преобразованы в массивы:
 
     $collection = collect(['name' => 'Desk', 'price' => 200]);
 
@@ -2452,7 +2452,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 
 Метод `unique` использует «гибкое» сравнение при проверке значений элементов, то есть строка с целым значением будет считаться равной целому числу того же значения. Используйте метод [`uniqueStrict`](#method-uniquestrict) для фильтрации с использованием «жесткого» сравнения.
 
-> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](eloquent-collections#method-unique).
+> {tip} Поведение этого метода изменяется при использовании [коллекций Eloquent](/docs/{{version}}/eloquent-collections#method-unique).
 
 <a name="method-uniquestrict"></a>
 #### `uniqueStrict()`
@@ -3153,7 +3153,7 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
     // 58
     // 59
 
-Чтобы проиллюстрировать использование этого метода, представьте приложение, которое отправляет счета из базы данных с помощью курсора. Вы можете определить [запланированную задачу](scheduling), которая запускается каждые 15 минут и обрабатывает счета максимум 14 минут:
+Чтобы проиллюстрировать использование этого метода, представьте приложение, которое отправляет счета из базы данных с помощью курсора. Вы можете определить [запланированную задачу](/docs/{{version}}/scheduling), которая запускается каждые 15 минут и обрабатывает счета максимум 14 минут:
 
     use App\Models\Invoice;
     use Illuminate\Support\Carbon;

@@ -19,12 +19,12 @@ git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
 <a name="laravel-breeze"></a>
 ## Laravel Breeze
 
-**Laravel Breeze** – это минимальная и простая реализация всего [функционала аутентификации](authentication) Laravel, включая вход в систему, регистрацию, сброс пароля, подтверждение адреса электронной почты и пароля. Слой «View» комплекта Laravel Breeze по умолчанию состоит из простых [шаблонов Blade](blade), стилизованных с помощью [Tailwind CSS](https://tailwindcss.com). Breeze является прекрасной отправной точкой для создания нового приложения Laravel.
+**Laravel Breeze** – это минимальная и простая реализация всего [функционала аутентификации](authentication) Laravel, включая вход в систему, регистрацию, сброс пароля, подтверждение адреса электронной почты и пароля. Слой «View» комплекта Laravel Breeze по умолчанию состоит из простых [шаблонов Blade](/docs/{{version}}/blade), стилизованных с помощью [Tailwind CSS](https://tailwindcss.com). Breeze является прекрасной отправной точкой для создания нового приложения Laravel.
 
 <a name="laravel-breeze-installation"></a>
 ### Установка
 
-Сначала вы должны [создать новое приложение Laravel](installation), настроить свою базу данных и запустить [миграции базы данных](migrations):
+Сначала вы должны [создать новое приложение Laravel](/docs/{{version}}/installation), настроить свою базу данных и запустить [миграции базы данных](/docs/{{version}}/migrations):
 
 ```bash
 curl -s https://laravel.build/example-app | bash
@@ -54,7 +54,7 @@ php artisan migrate
 
 Затем, вы можете перейти в своем веб-браузере по URL-адресам вашего приложения `/login` или `/register`. Все маршруты Breeze определены в файле `routes/auth.php`.
 
-> {tip} Чтобы узнать больше о компиляции CSS и JavaScript вашего приложения, ознакомьтесь с [документацией Laravel Mix](mix#running-mix).
+> {tip} Чтобы узнать больше о компиляции CSS и JavaScript вашего приложения, ознакомьтесь с [документацией Laravel Mix](/docs/{{version}}/mix#running-mix).
 
 <a name="breeze-and-inertia"></a>
 #### Breeze и Inertia

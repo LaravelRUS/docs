@@ -53,9 +53,9 @@ Laravel Passport provides a full OAuth2 server implementation for your Laravel a
 <a name="passport-or-sanctum"></a>
 ### Passport Or Sanctum?
 
-Before getting started, you may wish to determine if your application would be better served by Laravel Passport or [Laravel Sanctum](/docs/{{version}}/sanctum). If your application absolutely needs to support OAuth2, then you should use Laravel Passport.
+Before getting started, you may wish to determine if your application would be better served by Laravel Passport or [Laravel Sanctum](/docs/{{version}}//docs/{{version}}/sanctum). If your application absolutely needs to support OAuth2, then you should use Laravel Passport.
 
-However, if you are attempting to authenticate a single-page application, mobile application, or issue API tokens, you should use [Laravel Sanctum](/docs/{{version}}/sanctum). Laravel Sanctum does not support OAuth2; however, it provides a much simpler API authentication development experience.
+However, if you are attempting to authenticate a single-page application, mobile application, or issue API tokens, you should use [Laravel Sanctum](/docs/{{version}}//docs/{{version}}/sanctum). Laravel Sanctum does not support OAuth2; however, it provides a much simpler API authentication development experience.
 
 <a name="installation"></a>
 ## Installation
@@ -64,7 +64,7 @@ To get started, install Passport via the Composer package manager:
 
     composer require laravel/passport
 
-Passport's [service provider](/docs/{{version}}/providers) registers its own database migration directory, so you should migrate your database after installing the package. The Passport migrations will create the tables your application needs to store OAuth2 clients and access tokens:
+Passport's [service provider](/docs/{{version}}//docs/{{version}}/providers) registers its own database migration directory, so you should migrate your database after installing the package. The Passport migrations will create the tables your application needs to store OAuth2 clients and access tokens:
 
     php artisan migrate
 
@@ -498,7 +498,7 @@ This `/oauth/token` route will return a JSON response containing `access_token`,
 <a name="revoking-tokens"></a>
 ### Revoking Tokens
 
-You may revoke a token by using the `revokeAccessToken` method on the `Laravel\Passport\TokenRepository`. You may revoke a token's refresh tokens using the `revokeRefreshTokensByAccessTokenId` method on the `Laravel\Passport\RefreshTokenRepository`. These classes may be resolved using Laravel's [service container](/docs/{{version}}/container):
+You may revoke a token by using the `revokeAccessToken` method on the `Laravel\Passport\TokenRepository`. You may revoke a token's refresh tokens using the `revokeRefreshTokensByAccessTokenId` method on the `Laravel\Passport\RefreshTokenRepository`. These classes may be resolved using Laravel's [service container](/docs/{{version}}//docs/{{version}}/container):
 
     use Laravel\Passport\TokenRepository;
     use Laravel\Passport\RefreshTokenRepository;
@@ -526,7 +526,7 @@ When tokens have been revoked or expired, you might want to purge them from the 
     # Only purge expired tokens and auth codes...
     php artisan passport:purge --expired
 
-You may also configure a [scheduled job](/docs/{{version}}/scheduling) in your application's `App\Console\Kernel` class to automatically prune your tokens on a schedule:
+You may also configure a [scheduled job](/docs/{{version}}//docs/{{version}}/scheduling) in your application's `App\Console\Kernel` class to automatically prune your tokens on a schedule:
 
     /**
      * Define the application's command schedule.
@@ -681,7 +681,7 @@ When using the password grant or client credentials grant, you may wish to autho
 <a name="customizing-the-user-provider"></a>
 ### Customizing The User Provider
 
-If your application uses more than one [authentication user provider](/docs/{{version}}/authentication#introduction), you may specify which user provider the password grant client uses by providing a `--provider` option when creating the client via the `artisan passport:client --password` command. The given provider name should match a valid provider defined in your application's `config/auth.php` configuration file. You can then [protect your route using middleware](#via-middleware) to ensure that only users from the guard's specified provider are authorized.
+If your application uses more than one [authentication user provider](/docs/{{version}}//docs/{{version}}/authentication#introduction), you may specify which user provider the password grant client uses by providing a `--provider` option when creating the client via the `artisan passport:client --password` command. The given provider name should match a valid provider defined in your application's `config/auth.php` configuration file. You can then [protect your route using middleware](#via-middleware) to ensure that only users from the guard's specified provider are authorized.
 
 <a name="customizing-the-username-field"></a>
 ### Customizing The Username Field
@@ -918,7 +918,7 @@ This route may be used to revoke personal access tokens:
 <a name="via-middleware"></a>
 ### Via Middleware
 
-Passport includes an [authentication guard](/docs/{{version}}/authentication#adding-custom-guards) that will validate access tokens on incoming requests. Once you have configured the `api` guard to use the `passport` driver, you only need to specify the `auth:api` middleware on any routes that should require a valid access token:
+Passport includes an [authentication guard](/docs/{{version}}//docs/{{version}}/authentication#adding-custom-guards) that will validate access tokens on incoming requests. Once you have configured the `api` guard to use the `passport` driver, you only need to specify the `auth:api` middleware on any routes that should require a valid access token:
 
     Route::get('/user', function () {
         //
