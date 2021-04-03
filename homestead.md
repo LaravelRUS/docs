@@ -545,7 +545,7 @@ Since LMM interacts with LVM, it must be run as `root`. To see all available com
 <a name="configuring-cron-schedules"></a>
 ### Configuring Cron Schedules
 
-Laravel provides a convenient way to [schedule cron jobs](/docs/{{version}}//docs/{{version}}/scheduling) by scheduling a single `schedule:run` Artisan command to run every minute. The `schedule:run` command will examine the job schedule defined in your `App\Console\Kernel` class to determine which scheduled tasks to run.
+Laravel provides a convenient way to [schedule cron jobs](/docs/{{version}}/scheduling) by scheduling a single `schedule:run` Artisan command to run every minute. The `schedule:run` command will examine the job schedule defined in your `App\Console\Kernel` class to determine which scheduled tasks to run.
 
 If you would like the `schedule:run` command to be run for a Homestead site, you may set the `schedule` option to `true` when defining the site:
 
@@ -617,7 +617,7 @@ Supported `policy` values include: `none`, `download`, `upload`, and `public`.
 <a name="laravel-dusk"></a>
 ### Laravel Dusk
 
-In order to run [Laravel Dusk](/docs/{{version}}//docs/{{version}}/dusk) tests within Homestead, you should enable the [`webdriver` feature](#installing-optional-features) in your Homestead configuration:
+In order to run [Laravel Dusk](/docs/{{version}}/dusk) tests within Homestead, you should enable the [`webdriver` feature](#installing-optional-features) in your Homestead configuration:
 
 ```yaml
 features:
