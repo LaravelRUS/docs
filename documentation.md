@@ -1,7 +1,11 @@
+git 75dd83e3aa5a2f5965bae1d2b4450f58170d2e93
+
+---
+
 - ## Пролог
     - [Примечания к релизу](/docs/{{version}}/releases)
     - [Руководство по обновлению](/docs/{{version}}/upgrade)
-    - [Руководство по вкладу](/docs/{{version}}/contributions)
+    - [Рекомендации по участию](/docs/{{version}}/contributions)
 - ## Начало работы
     - [Установка](/docs/{{version}}/installation)
     - [Конфигурация](/docs/{{version}}/configuration)
