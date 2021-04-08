@@ -1,23 +1,29 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 2e4596c3ac27f868ad995b28542c62bdaffb0392
 
 ---
 
 # Установка
 
-- [Встречайте Laravel](#meet-laravel)
-    - [Почему именно Laravel?](#why-laravel)
-- [Ваш первый проект на Laravel](#your-first-laravel-project)
-    - [Начало работы в macOS](#getting-started-on-macos)
-    - [Начало работы в Windows](#getting-started-on-windows)
-    - [Начало работы в Linux](#getting-started-on-linux)
-    - [Выбор служб Sail](#choosing-your-sail-services)
-    - [Установка через Composer](#installation-via-composer)
-- [Начальная конфигурация](#initial-configuration)
-    - [Конфигурация на основе окружения](#environment-based-configuration)
-    - [Конфигурация каталога](#directory-configuration)
-- [Следующие шаги](#next-steps)
-    - [Laravel как клиент-серверный фреймворк](#laravel-the-fullstack-framework)
-    - [Laravel в качестве сервера API](#laravel-the-api-backend)
+- [Установка](#установка)
+  - [Встречайте Laravel](#встречайте-laravel)
+    - [Почему именно Laravel?](#почему-именно-laravel)
+      - [Прогрессивный фреймворк](#прогрессивный-фреймворк)
+      - [Масштабируемый фреймворк](#масштабируемый-фреймворк)
+      - [Фреймворк сообщества](#фреймворк-сообщества)
+  - [Ваш первый проект на Laravel](#ваш-первый-проект-на-laravel)
+    - [Начало работы в macOS](#начало-работы-в-macos)
+    - [Начало работы в Windows](#начало-работы-в-windows)
+      - [Разработка в подсистеме WSL2](#разработка-в-подсистеме-wsl2)
+    - [Начало работы в Linux](#начало-работы-в-linux)
+    - [Выбор служб Sail](#выбор-служб-sail)
+    - [Установка через Composer](#установка-через-composer)
+      - [Установщик Laravel](#установщик-laravel)
+  - [Начальная конфигурация](#начальная-конфигурация)
+    - [Конфигурация на основе окружения](#конфигурация-на-основе-окружения)
+    - [Конфигурация каталога](#конфигурация-каталога)
+  - [Следующие шаги](#следующие-шаги)
+    - [Laravel как клиент-серверный фреймворк](#laravel-как-клиент-серверный-фреймворк)
+    - [Laravel в качестве сервера API](#laravel-в-качестве-сервера-api)
 
 <a name="meet-laravel"></a>
 ## Встречайте Laravel
