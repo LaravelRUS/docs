@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git f3f5a24aa228290d69404f4f4fbdb41a4b0b7d1b
 
 ---
 
@@ -922,7 +922,7 @@ use Illuminate\Database\DBAL\TimestampType;
         $table->string('name', 50)->nullable()->change();
     });
 
-> {note} Только следующие типы столбцов могут быть изменены: `bigInteger`, `binary`, `boolean`, `date`, `dateTime`, `dateTimeTz`, `decimal`, `integer`, `json`, `longText`, `mediumText`, `smallInteger`, `string`, `text`, `time`, `unsignedBigInteger`, `unsignedInteger`, `unsignedSmallInteger`, и `uuid`.
+> {note} Только следующие типы столбцов могут быть изменены: `bigInteger`, `binary`, `boolean`, `date`, `dateTime`, `dateTimeTz`, `decimal`, `integer`, `json`, `longText`, `mediumText`, `smallInteger`, `string`, `text`, `time`, `unsignedBigInteger`, `unsignedInteger`, `unsignedSmallInteger`, и `uuid`. Чтобы изменить типа столбца `timestamp` [у вас должна быть установлена библиотека Doctrine DBAL](#prerequisites).
 
 <a name="renaming-columns"></a>
 #### Переименование столбцов
