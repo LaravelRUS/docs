@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 46b944031a949f9763496fdcb3c30a79547ff880
 
 ---
 
@@ -344,7 +344,7 @@ Blade – это простой, но мощный движок шаблонов
     @foreach ($users as $user)
         @foreach ($user->posts as $post)
             @if ($loop->parent->first)
-                This is first iteration of the parent loop.
+                This is the first iteration of the parent loop.
             @endif
         @endforeach
     @endforeach
@@ -800,6 +800,10 @@ Blade отобразит следующий HTML-код:
 Для удобства вы можете использовать метод `whereStartsWith` для получения всех атрибутов, ключи которых начинаются с указанной строки:
 
     {{ $attributes->whereStartsWith('wire:model') }}
+
+И наоборот, метод `whereDoesntStartWith` может быть использован для исключения всех атрибутов, ключи которых начинаются с указанной строки:
+
+    {{ $attributes->whereDoesntStartWith('wire:model') }}    
 
 Используя метод `first`, вы можете отобразить первый атрибут в указанной коллекции атрибутов:
 
