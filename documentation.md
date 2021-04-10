@@ -36,7 +36,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
     - [Вещание](/docs/{{version}}/broadcasting)
     - [Кэширование](/docs/{{version}}/cache)
     - [Коллекции](/docs/{{version}}/collections)
-    - [Компеляция ресурсов](/docs/{{version}}/mix)
+    - [Компиляция ресурсов](/docs/{{version}}/mix)
     - [Контракты](/docs/{{version}}/contracts)
     - [События](/docs/{{version}}/events)
     - [Файловое хранилище](/docs/{{version}}/filesystem)
