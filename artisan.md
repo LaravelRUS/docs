@@ -1,4 +1,4 @@
-git 534aaa9e4789f0a6f5d55bc797f6a765f131cc63
+git 6d389bee512a629aebaf88f190d2b7ce4668fa59
 
 ---
 
@@ -22,7 +22,8 @@ git 534aaa9e4789f0a6f5d55bc797f6a765f131cc63
 - [Регистрация команд](#registering-commands)
 - [Программное выполнение команд](#programmatically-executing-commands)
     - [Вызов команд из других команд](#calling-commands-from-other-commands)
-- [Настройка заготовок](#stub-customization)
+- [Обработка сигналов](#signal-handling)
+- [Настройка заготовок команд (stubs)](#stub-customization)
 - [События](#events)
 
 <a name="introduction"></a>
@@ -408,7 +409,7 @@ Tinker использует список «разрешенных» команд
 <a name="writing-output"></a>
 ### Вывод данных
 
-Чтобы вывести в консоль, используйте методы `line`, `info`, `comment`, `question` и `error`. Каждый из этих методов будет использовать соответствующие ANSI-цвета. Например, давайте покажем пользователю некоторую общую информацию. Обычно метод `info` отображается в консоли в виде зеленого текста:
+Чтобы вывести в консоль, используйте методы `line`, `info`, `comment`, `question`, `warn` и `error`. Каждый из этих методов будет использовать соответствующие ANSI-цвета. Например, давайте покажем пользователю некоторую общую информацию. Обычно метод `info` отображается в консоли в виде зеленого текста:
 
     /**
      * Выполнить консольную команду.
@@ -591,8 +592,57 @@ Tinker использует список «разрешенных» команд
         'user' => 1, '--queue' => 'default'
     ]);
 
+<a name="signal-handling"></a>
+## Обработка сигналов
+
+The Symfony Console component, which powers the Artisan console, allows you to indicate which process signals (if any) your command handles. For example, you may indicate that your command handles the `SIGINT` and `SIGTERM` signals.
+
+Компонент Symfony Console, на основе которого сделан Artisan, позволяет указать, какие сигналы процессов обрабатываются вашей командой. Например, Вы можете указать, что Ваша команда обрабатывает сигналы `SIGINT` и `SIGTERM`.
+
+To get started, you should implement the  interface on your Artisan command class. This interface requires you to define two methods: `getSubscribedSignals` and `handleSignal`:
+
+Чтобы воспользоваться этой фичей, имплементируйте `Symfony\Component\Console\Command\SignalableCommandInterface`. Этот интерфейс требует наличия в классе методов `getSubscribedSignals` и `handleSignal`:
+
+```php
+<?php
+
+use Symfony\Component\Console\Command\SignalableCommandInterface;
+
+class StartServer extends Command implements SignalableCommandInterface
+{
+    // ...
+
+    /**
+     * Get the list of signals handled by the command.
+     *
+     * @return array
+     */
+    public function getSubscribedSignals(): array
+    {
+        return [SIGINT, SIGTERM];
+    }
+
+    /**
+     * Handle an incoming signal.
+     *
+     * @param  int  $signal
+     * @return void
+     */
+    public function handleSignal(int $signal): void
+    {
+        if ($signal === SIGINT) {
+            $this->stopServer();
+
+            return;
+        }
+    }
+}
+```
+
+Метод `getSubscribeSignals` должен возвращать массив сигналов, который ваша команда может обрабатывать, а метод `handleSignal` принимает сигнал и может реагировать соответственно.
+
 <a name="stub-customization"></a>
-## Настройка заготовок
+## Настройка заготовок команд (stubs)
 
 Команды `make` консоли Artisan используются для создания различных классов, таких как контроллеры, задания, миграции и тесты. Эти классы создаются с помощью файлов «заготовок», которые заполняются значениями на основе ваших входных данных. Однако, иногда может потребоваться внести небольшие изменения в файлы, создаваемые с помощью Artisan. Для этого можно использовать команду `stub:publish`, чтобы опубликовать наиболее распространенные заготовки для их дальнейшего изменения:
 
