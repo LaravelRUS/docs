@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 ---
 
@@ -1491,11 +1491,11 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 <a name="method-partition"></a>
 #### `partition()`
 
-Метод `partition` используется в связке с функцией `list` PHP, чтобы разделить элементы, прошедшие указанную проверку истинности, от тех, которые ее не прошли:
+Метод `partition` используется в связке с деструктуризацией массивов PHP (вместо функции list в предыдущих версиях), чтобы разделить элементы, прошедшие указанную проверку истинности, от тех, которые ее не прошли:
 
     $collection = collect([1, 2, 3, 4, 5, 6]);
 
-    list($underThree, $equalOrAboveThree) = $collection->partition(function ($i) {
+    [$underThree, $equalOrAboveThree] = $collection->partition(function ($i) {
         return $i < 3;
     });
 
