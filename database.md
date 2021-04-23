@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 6617cd011f75028b55581ca5a21d946eedd27b18
 
 ---
 
@@ -22,7 +22,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 - MySQL 5.7+ ([Version Policy](https://en.wikipedia.org/wiki/MySQL#Release_history))
 - PostgreSQL 9.6+ ([Version Policy](https://www.postgresql.org/support/versioning/))
 - SQLite 3.8.8+
-- SQL Server 2017+ ([Version Policy](https://support.microsoft.com/en-us/lifecycle/search))
+- SQL Server 2017+ ([Version Policy](https://docs.microsoft.com/en-us/lifecycle/products/?products=sql-server))
 <!-- </div> -->
 
 <a name="configuration"></a>
@@ -204,7 +204,7 @@ driver://username:password@host:port/database?options
 > {note} Поскольку неподготовленные запросы не связывают параметры, они могут быть уязвимы для SQL-инъекций. Вы никогда не должны пропускать в неподготовленное выражение значения, управляемые пользователем.
 
 <a name="implicit-commits-in-transactions"></a>
-#### Неявные фиксации
+#### Неявные фиксации (implicit commit)
 
 При использовании в транзакциях методов `statement` и `unprepared` фасада `DB` вы должны быть осторожны, чтобы избежать операторов, которые вызывают [неявные фиксации](https://dev.mysql.com/doc/refman/8.0/en/implicit-commit.html). Эти операторы заставят ядро базы данных косвенно зафиксировать всю транзакцию, в результате чего Laravel не будет знать об уровне транзакции базы данных. Примером такого оператора является создание таблицы базы данных:
 
@@ -310,7 +310,7 @@ driver://username:password@host:port/database?options
 > {tip} Методы транзакций фасада `DB` контролируют транзакции как для [построителя запросов](/docs/{{version}}/queries), так и для [Eloquent ORM](/docs/{{version}}/eloquent).
 
 <a name="connecting-to-the-database-cli"></a>
-## Подключение к базе данных с помощью интерфейса командной строки
+## Подключение к базе данных с помощью интерфейса командной строки Artisan
 
 Если вы хотите подключиться к своей базе данных с помощью интерфейса командной строки, то вы можете использовать команду `db` Artisan:
 
