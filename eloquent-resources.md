@@ -1,8 +1,8 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git e354ac4af15c16a8a8e3a38cbfdcce7010ca0afc
 
 ---
 
-# Eloquent · Ресурсы API
+# Eloquent · Ресурсы API (Resource)
 
 - [Введение](#introduction)
 - [Генерация ресурсов](#generating-resources)
@@ -345,7 +345,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
         public static $wrap = 'user';
     }
 
-Если вы хотите отключить обертывание самого верхнего ресурса, то вы должны вызвать метод `withoutWrapping` базового класса `Illuminate\Http\Resources\Json\JsonResource`. Обычно вы должны вызывать этот метод из вашего `AppServiceProvider` или другого [поставщика служб](/docs/{{version}}/providers), загружаемый при каждом запросе к вашему приложению:
+Если вы хотите отключить обертывание самого верхнего ресурса, то вы должны вызвать метод `withoutWrapping` базового класса `Illuminate\Http\Resources\Json\JsonResource`. Обычно вы должны вызывать этот метод из вашего `AppServiceProvider` или другого [сервис-провайдера](/docs/{{version}}/providers):
 
     <?php
 
