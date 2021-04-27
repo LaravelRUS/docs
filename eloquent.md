@@ -1,4 +1,4 @@
-git aa944d0df64deed668b28b2778a24c6fe4c1d3c0
+git bd5808288d5882b3177a80bda4825a50b5e02045
 
 ---
 
@@ -73,7 +73,10 @@ php artisan make:model Flight --controller
 php artisan make:model Flight -c
 
 # Создать модель и миграцию, фабрику, наполнитель и контроллер ...
-php artisan make:model Flight -mfsc
+php artisan make:model F
+
+# Создать сводную модель...
+php artisan make:model Member --pivot
 ```
 
 <a name="eloquent-model-conventions"></a>
