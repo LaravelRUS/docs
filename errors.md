@@ -1,8 +1,8 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 4b7909dec13adb5e0ed6544cecef9bc289e8e249
 
 ---
 
-# Обработка ошибок
+# Обработка ошибок (Exception)
 
 - [Введение](#introduction)
 - [Конфигурирование](#configuration)
