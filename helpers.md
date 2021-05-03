@@ -1,8 +1,8 @@
-git 7e489193f873a15c724c20f94ef48284cae16d62
+git 6e28d4224af33fa04038301e2ecb36327891ff2e
 
 ---
 
-# Глобальные помощники
+# Глобальные помощники (helpers)
 
 - [Введение](#introduction)
 - [Доступные методы](#available-methods)
@@ -118,6 +118,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::pluralStudly](#method-str-plural-studly)
 - [Str::random](#method-str-random)
 - [Str::remove](#method-str-remove)
+- [Str::replace](#method-str-replace)
 - [Str::replaceArray](#method-str-replace-array)
 - [Str::replaceFirst](#method-str-replace-first)
 - [Str::replaceLast](#method-str-replace-last)
@@ -133,6 +134,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::ucfirst](#method-str-ucfirst)
 - [Str::upper](#method-str-upper)
 - [Str::uuid](#method-str-uuid)
+- [Str::wordCount](#method-str-word-count)
 - [Str::words](#method-str-words)
 - [trans](#method-trans)
 - [trans_choice](#method-trans-choice)
@@ -141,6 +143,8 @@ Laravel содержит множество глобальных «вспомо�
 
 <a name="fluent-strings-method-list"></a>
 ### Строки Fluent
+
+Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
 
 <!-- <div class="collection-method-list" markdown="1"> -->
 
@@ -1442,6 +1446,20 @@ Laravel содержит множество глобальных «вспомо�
 
 Вы можете передать `false` в качестве третьего аргумента для игнорирования регистра удаляемых подстрок.
 
+<a name="method-str-replace"></a>
+#### `Str::replace()`
+
+Метод `Str::replace` заменяет в строке одну подстроку другой:
+
+    use Illuminate\Support\Str;
+
+    $string = 'Laravel 8.x';
+
+    $replaced = Str::replace('8.x', '9.x', $string);
+
+    // Laravel 9.x
+
+
 <a name="method-str-replace-array"></a>
 #### `Str::replaceArray()`
 
@@ -1614,6 +1632,17 @@ Laravel содержит множество глобальных «вспомо�
     use Illuminate\Support\Str;
 
     return (string) Str::uuid();
+
+<a name="method-str-word-count"></a>
+### `wordCount`
+
+Метод `wordCount` возвращает число слов в строке:
+
+```php
+use Illuminate\Support\Str;
+
+Str::wordCount('Hello, world!'); // 2
+```
 
 <a name="method-str-words"></a>
 #### `Str::words()`
@@ -2433,6 +2462,17 @@ If no matches are found, an empty collection will be returned.
     });
 
     // 'Laravel'
+
+<a name="method-fluent-str-word-count"></a>
+### `wordCount`
+
+Метод `wordCount` возвращает число слов в строке:
+
+```php
+use Illuminate\Support\Str;
+
+Str::of('Hello, world!')->wordCount(); // 2
+```
 
 <a name="method-fluent-str-words"></a>
 #### `words`
