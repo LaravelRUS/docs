@@ -1,8 +1,8 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git e2343d1fe91a2c36e7a6b220aff995c1f48a8405
 
 ---
 
-# Почтовые отправления
+# Отправка электронной почты
 
 - [Введение](#introduction)
     - [Конфигурирование](#configuration)
@@ -443,6 +443,8 @@ composer require aws/aws-sdk-php
                 'Custom-Header', 'Header Value'
             );
         });
+
+        return $this;
     }
 
 <a name="markdown-mailables"></a>
