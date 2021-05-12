@@ -1,4 +1,4 @@
-  egit 13f770acbfe97eaa2e77534144ab8d4513d04a04
+git 13f770acbfe97eaa2e77534144ab8d4513d04a04
 
 ---
 
