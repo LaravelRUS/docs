@@ -1,8 +1,8 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 3661bb0b61fd44cdb0d3b537df1cabf892ff99ac
 
 ---
 
-# Посредники
+# Посредники (middleware)
 
 - [Введение](#introduction)
 - [Определение посредника](#defining-middleware)
