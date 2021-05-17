@@ -1,4 +1,4 @@
-git faf6083f29e2ede4e71ee11d09d04998ec81daf7
+git bd5c7e072c7b20642200fa8ab715b49a35f215fd
 
 ---
 
@@ -697,7 +697,7 @@ Laravel содержит посредника, который может авт�
      * Определить, может ли пользователь обновить пост.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\  $post
+     * @param  \App\Models\Post  $post
      * @param  int  $category
      * @return bool
      */
