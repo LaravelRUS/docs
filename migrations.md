@@ -1,4 +1,4 @@
-git f3f5a24aa228290d69404f4f4fbdb41a4b0b7d1b
+git aed80b235f1acc8c4685f041a73e130f7aa24101
 
 ---
 
@@ -102,6 +102,20 @@ Laravel будет использовать имя миграции, чтобы 
             Schema::drop('flights');
         }
     }
+
+<a name="anonymous-migrations"></a>
+#### Анонимные миграции
+
+Как вы могли заметить в примере выше, Laravel автоматически присваивает имя класса всем миграциям, которые вы создаете с помощью команды `make:migration`. Однако, если вы хотите, вы можете вернуть анонимный класс из вашего файла миграции. Это может быть полезно, если в вашем приложении накопилось много миграций и некоторые имеют одинаковые названия.
+
+    <?php
+
+    use Illuminate\Database\Migrations\Migration;
+
+    return new class extends Migration
+    {
+        //
+    };
 
 <a name="setting-the-migration-connection"></a>
 #### Указание соединения миграции
@@ -366,6 +380,7 @@ Laravel будет использовать имя миграции, чтобы 
 - [timestamps](#column-method-timestamps)
 - [tinyIncrements](#column-method-tinyIncrements)
 - [tinyInteger](#column-method-tinyInteger)
+- [tinyText](#column-method-tinyText)
 - [unsignedBigInteger](#column-method-unsignedBigInteger)
 - [unsignedDecimal](#column-method-unsignedDecimal)
 - [unsignedInteger](#column-method-unsignedInteger)
@@ -506,7 +521,7 @@ Laravel будет использовать имя миграции, чтобы 
 <a name="column-method-ipAddress"></a>
 #### `ipAddress()`
 
-Метод `ipAddress` создает эквивалент столбца `INTEGER`:
+Метод `ipAddress` создает эквивалент столбца `VARCHAR`:
 
     $table->ipAddress('visitor');
 
@@ -742,6 +757,13 @@ Laravel будет использовать имя миграции, чтобы 
 Метод `tinyInteger` создает эквивалент столбца `TINYINT`:
 
     $table->tinyInteger('votes');
+
+<a name="column-method-tinyText"></a>
+#### `tinyText()` {#collection-method}
+
+Метод `tinyText` создаёт эквивалент столбца `TINYTEXT`:
+
+    $table->tinyText('notes');    
 
 <a name="column-method-unsignedBigInteger"></a>
 #### `unsignedBigInteger()`
