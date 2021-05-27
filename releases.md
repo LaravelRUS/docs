@@ -133,7 +133,7 @@ _Автор: [Taylor Otwell](https://github.com/taylorotwell)_.
 
 Чтобы упростить процесс обновления, был выпущен пакет [laravel/legacy-factories](https://github.com/laravel/legacy-factories), обеспечивающий поддержку предыдущей итерации фабрик модели в Laravel 8.x.
 
-Переписанные фабрики Laravel содержат гораздо больше функций, которые, как мы думаем, вам понравятся. Чтобы узнать больше о фабриках моделей, обратитесь к [документации по тестированию баз данных](/docs/{{version}}//docs/database-testing#defining-model-factories).
+Переписанные фабрики Laravel содержат гораздо больше функций, которые, как мы думаем, вам понравятся. Чтобы узнать больше о фабриках моделей, обратитесь к [документации по тестированию баз данных](/docs/{{version}}/database-testing#defining-model-factories).
 
 <a name="migration-squashing"></a>
 ### Сжатие миграций
@@ -180,7 +180,7 @@ _Авторы: [Taylor Otwell](https://github.com/taylorotwell) и [Mohamed Said
 
     return $batch->id;
 
-Чтобы узнать больше о пакетной обработки заданий, обратитесь к [документации по очередям](/docs/{{version}}//docs/queues#job-batching).
+Чтобы узнать больше о пакетной обработки заданий, обратитесь к [документации по очередям](/docs/{{version}}/queues#job-batching).
 
 <a name="improved-rate-limiting"></a>
 ### Улучшенное ограничение частоты запросов
@@ -214,7 +214,7 @@ _Автор: [Taylor Otwell](https://github.com/taylorotwell)_.
                     : Limit::perMinute(100)->by($request->ip());
     });
 
-Ограничители могут быть закреплены за маршрутами или группами маршрутов с помощью [посредника](/docs/{{version}}//docs/middleware) `throttle`. Посредник `throttle` принимает имя ограничителя, которое вы хотите назначить маршруту:
+Ограничители могут быть закреплены за маршрутами или группами маршрутов с помощью [посредника](/docs/{{version}}/middleware) `throttle`. Посредник `throttle` принимает имя ограничителя, которое вы хотите назначить маршруту:
 
     Route::middleware(['throttle:uploads'])->group(function () {
         Route::post('/audio', function () {
@@ -226,7 +226,7 @@ _Автор: [Taylor Otwell](https://github.com/taylorotwell)_.
         });
     });
 
-Чтобы узнать больше об ограничителях запросов, обратитесь к [документации по маршрутизации](/docs/{{version}}//docs/routing#rate-limiting).
+Чтобы узнать больше об ограничителях запросов, обратитесь к [документации по маршрутизации](/docs/{{version}}/routing#rate-limiting).
 
 <a name="improved-maintenance-mode"></a>
 ### Улучшенный режим обслуживания
@@ -278,7 +278,7 @@ _Автор: [Taylor Otwell](https://github.com/taylorotwell)_.
 
     <x-dynamic-component :component="$componentName" class="mt-4" />
 
-Чтобы узнать больше о компонентах Blade, обратитесь к [документации Blade](/docs/{{version}}//docs/blade#components).
+Чтобы узнать больше о компонентах Blade, обратитесь к [документации Blade](/docs/{{version}}/blade#components).
 
 <a name="event-listener-improvements"></a>
 ### Улучшения слушателей событий
