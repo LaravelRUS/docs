@@ -346,19 +346,13 @@ SAIL_XDEBUG_MODE=develop,debug
 
 #### Настройка IP хоста для Linux
 
-Internally, the `XDEBUG_CONFIG` environment variable is defined as `client_host=host.docker.internal` so that Xdebug will be properly configured for Mac and Windows (WSL2). If your local machine is running Linux, you will need to manually define this environment variable.
-
 Внутренняя переменная окружения `XDEBUG_CONFIG` определяется как `client_host=host.docker.internal`, чтобы Xdebug был правильно настроен для Mac и Windows (WSL2). Хост host.docker.internal существует только в системах под управлением Docker Desktop, т.е. Mac и Windows. Если ваша локальная машина работает под управлением Linux, вам нужно будет вручную определить эту переменную окружения.
-
-First, you should determine the correct host IP address to add to the environment variable by running the following command. Typically, the `<container-name>` should be the name of the container that serves your application and often ends with `_laravel.test_1`:
 
 Во-первых, вы должны определить правильный IP-адрес хоста для добавления в переменную окружения, выполнив следующую команду. Обычно `<container-name>` должно быть именем контейнера, обслуживающего ваше приложение, как правило это имя заканчивается на `_laravel.test_1`:
 
 ```bash
 docker inspect -f {{range.NetworkSettings.Networks}}{{.Gateway}}{{end}} <container-name>
 ```
-
-Once you have obtained the correct host IP address, you should define the `SAIL_XDEBUG_CONFIG` variable within your application's `.env` file:
 
 После того как вы получили IP-адрес хоста, на котором развёрнут Docker, вы должны определить переменную `SAIL_XDEBUG_CONFIG` в файле `.env` вашего приложения:
 
@@ -368,8 +362,6 @@ SAIL_XDEBUG_CONFIG="client_host=<host-ip-address>"
 
 <a name="xdebug-cli-usage"></a>
 ### Отладка Artisan-комманд
-
-A `sail debug` command may be used to start a debugging session when running an Artisan command:
 
 Для запуска Artisan-команд с включённым Xdebug используйте команду `sail debug`:
 
