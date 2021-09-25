@@ -1,4 +1,4 @@
-git a611323709b183d90705eee2affaeca8470a7160
+git 32379f881f777f9809372ed8cd784774d7c3b74e
 
 ---
 
@@ -58,6 +58,13 @@ Laravel Sail автоматически устанавливается со вс
 Наконец, вы можете запустить Sail. Чтобы продолжить изучение использования Sail, продолжайте читать оставшуюся часть этой документации:
 
     ./vendor/bin/sail up
+
+<a name="using-devcontainers"></a>
+#### Использование Devcontainer
+
+Если вы хотите разрабатывать с использованием [Devcontainer](https://code.visualstudio.com/docs/remote/containers), вы можете указать опцию `--devcontainer` команде `sail:install`. Эта опция создаст дефолтный конфиг `.devcontainer/devcontainer.json`.
+
+    php artisan sail:install --devcontainer    
 
 <a name="configuring-a-bash-alias"></a>
 ### Настройка Bash-псевдонимов
