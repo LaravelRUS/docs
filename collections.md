@@ -1,4 +1,4 @@
-git 7aab3644f018b0f4d73bf8418d811e0b828ade91
+git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 
 ---
 
@@ -18,7 +18,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="introduction"></a>
 ## Введение
 
-Класс `Illuminate\Support\Collection` обеспечивает гибкую и удобную обертку для работы с массивами данных. Например, посмотрите на следующий код. Здесь мы будем использовать помощник `collect`, чтобы создать новый экземпляр коллекции из массива, запустим функцию `strtoupper` для каждого элемента, а затем удалим все пустые элементы:
+Класс `Illuminate\Support\Collection` обеспечивает гибкую и удобную обертку для работы с массивами данных. Например, посмотрите на следующий код. Здесь мы будем использовать хелпер `collect`, чтобы создать новый экземпляр коллекции из массива, запустим функцию `strtoupper` для каждого элемента, а затем удалим все пустые элементы:
 
     $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
         return strtoupper($name);
@@ -26,7 +26,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         return empty($name);
     });
 
-Как видите, класс `Collection` позволяет объединять необходимые вам методы в цепочку для выполнения последовательного перебора и сокращения базового массива. В-основном коллекции неизменяемы, то есть каждый метод коллекции возвращает совершенно новый экземпляр `Collection`.
+Как видите, класс `Collection` позволяет объединять необходимые вам методы в цепочку для выполнения последовательного перебора и сокращения базового массива. В основном коллекции неизменяемы, то есть каждый метод коллекции возвращает совершенно новый экземпляр `Collection`.
 
 <a name="creating-collections"></a>
 ### Создание коллекций
@@ -40,7 +40,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="extending-collections"></a>
 ### Расширение коллекций
 
-Класс `Collection` являются «макропрограммируемым», что позволяет вам добавлять дополнительные методы к классу во время выполнения. Метод `macro` класса `Illuminate\Support\Collection` принимает замыкание, которое будет выполнено при вызове вашей макрокоманды. Замыкание макрокоманды может обращаться к другим методам коллекции через `$this`, как если бы это был реальный метод класса коллекции. Например, следующий код добавляет метод `toUpper` классу `Collection`:
+Класс `Collection` являются «макропрограммируемым», что позволяет вам добавлять дополнительные методы к классу во время выполнения. Метод `macro` класса `Illuminate\Support\Collection` принимает функцию, которая будет выполнена при вызове вашего макроса. Эта функция может обращаться к другим методам коллекции через `$this`, как если бы это был реальный метод класса коллекции. Например, следующий код добавляет метод `toUpper` классу `Collection`:
 
     use Illuminate\Support\Collection;
     use Illuminate\Support\Str;
@@ -57,16 +57,15 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // ['FIRST', 'SECOND']
 
-Обычно вы должны объявлять макрокоманды коллекций в методе `boot` [поставщика служб](/docs/{{version}}/providers).
+Обычно макросы коллекций объявляются в методе `boot` [сервис-провайдера](/docs/{{version}}/providers).
 
 <a name="macro-arguments"></a>
-#### Аргументы макрокоманды
+#### Макросы с аргументами
 
-При необходимости вы можете определить макрокоманды, которые принимают дополнительные аргументы:
+При необходимости вы можете определить макросы, которые принимают дополнительные аргументы:
 
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Lang;
-    use Illuminate\Support\Str;
 
     Collection::macro('toLocale', function ($locale) {
         return $this->map(function ($value) use ($locale) {
@@ -182,10 +181,12 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
       - [`search()`](#search)
       - [`shift()`](#shift)
       - [`shuffle()`](#shuffle)
+      - [sliding](#method-sliding)
       - [`skip()`](#skip)
       - [`skipUntil()`](#skipuntil)
       - [`skipWhile()`](#skipwhile)
       - [`slice()`](#slice)
+      - [sole](#method-sole)
       - [`some()`](#some)
       - [`sort()`](#sort)
       - [`sortBy()`](#sortby)
@@ -341,19 +342,6 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-<a name="method-combine"></a>
-#### `combine()`
-
-Метод `combine` объединяет значения коллекции в качестве ключей со значениями другого массива или коллекции:
-
-    $collection = collect(['name', 'age']);
-
-    $combined = $collection->combine(['George', 29]);
-
-    $combined->all();
-
-    // ['name' => 'George', 'age' => 29]
-
 <a name="method-collect"></a>
 #### `collect()`
 
@@ -387,6 +375,19 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 > {tip} Метод `collect` особенно полезен, когда у вас есть экземпляр `Enumerable` и вам нужен «не-отложенный» экземпляр коллекции. Так как `collect()` является частью контракта `Enumerable`, вы можете безопасно использовать его для получения экземпляра `Collection`.
 
+<a name="method-combine"></a>
+#### `combine()`
+
+Метод `combine` объединяет значения коллекции в качестве ключей со значениями другого массива или коллекции:
+
+    $collection = collect(['name', 'age']);
+
+    $combined = $collection->combine(['George', 29]);
+
+    $combined->all();
+
+    // ['name' => 'George', 'age' => 29]
+
 <a name="method-concat"></a>
 #### `concat()`
 
@@ -403,7 +404,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="method-contains"></a>
 #### `contains()`
 
-Вы также можете передать замыкание в `contains`, чтобы определить, существует ли в коллекции элемент, соответствующий указанному критерию истинности:
+Метод `contains` определяет, содержит ли коллекция данный элемент. Вы можете передать в `contains` функцию, чтобы определить, существует ли в коллекции элемент, соответствующий указанному критерию истинности:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -413,7 +414,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // false
 
-Как вариант, вы можете передать строку методу `contains`, чтобы определить, содержит ли коллекция указанное значение элемента:
+Вы также можете передать строку методу `contains`, чтобы определить, содержит ли коллекция указанное значение элемента:
 
     $collection = collect(['name' => 'Desk', 'price' => 100]);
 
@@ -638,7 +639,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         ['email' => 'abigail@example.com', 'position' => 'Developer'],
         ['email' => 'james@example.com', 'position' => 'Designer'],
         ['email' => 'victoria@example.com', 'position' => 'Developer'],
-    ])
+    ]);
 
     $employees->duplicates('position');
 
@@ -1306,7 +1307,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         ]
     ]);
 
-    $keyed = $collection->mapWithKeys(function ($item) {
+    $keyed = $collection->mapWithKeys(function ($item, $key) {
         return [$item['email'] => $item['name']];
     });
 
@@ -1623,6 +1624,18 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [1, 2, 3, 4]
 
+Вы можете передать целое число в метод `pop`, чтобы удалить и вернуть несколько элементов из конца коллекции:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->pop(3);
+
+    // collect([5, 4, 3])
+
+    $collection->all();
+
+    // [1, 2]    
+
 <a name="method-prepend"></a>
 #### `prepend()`
 
@@ -1743,7 +1756,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         'eur' => 1.22,
     ];
 
-    $collection->reduceWithKeys(function ($carry, $value, $key) use ($ratio) {
+    $collection->reduce(function ($carry, $value, $key) use ($ratio) {
         return $carry + ($value * $ratio[$key]);
     });
 
@@ -1864,6 +1877,18 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [2, 3, 4, 5]
 
+Вы можете передать целое число в метод `shift`, чтобы удалить и вернуть несколько элементов из начала коллекции:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->shift(3);
+
+    // collect([1, 2, 3])
+
+    $collection->all();
+
+    // [4, 5]    
+
 <a name="method-shuffle"></a>
 #### `shuffle()`
 
@@ -1875,7 +1900,36 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     $shuffled->all();
 
-    // [3, 2, 5, 1, 4] - (generated randomly)
+    // [3, 2, 5, 1, 4] - (последовательность случайная)
+
+<a name="method-sliding"></a>
+#### `sliding()` {#collection-method}
+
+Метод `sliding` возвращает новую коллекцию фрагментов (chunks), представляющих представление элементов коллекции в виде "скользящего окна":
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $chunks = $collection->sliding(2);
+
+    $chunks->toArray();
+
+    // [[1, 2], [2, 3], [3, 4], [4, 5]]
+
+Это особенно полезно в сочетании с методом [`eachSpread`](#method-eachspread):
+
+    $transactions->sliding(2)->eachSpread(function ($previous, $current) {
+        $current->total = $previous->total + $current->amount;
+    });
+
+По желанию вторым аргументом можно передать "шаг", который определяет расстояние между первым элементом каждого фрагмента:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $chunks = $collection->sliding(3, step: 2);
+
+    $chunks->toArray();
+
+    // [[1, 2, 3], [3, 4, 5]]
 
 <a name="method-skip"></a>
 #### `skip()`
@@ -1956,6 +2010,40 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
     // [5, 6]
 
 Возвращенный фрагмент по умолчанию сохранит ключи. Если вы не хотите сохранять исходные ключи, вы можете использовать метод [`values`](#method-values), чтобы переиндексировать их.
+
+<a name="method-sole"></a>
+#### `sole()` {#collection-method}
+
+Метод `sole` возвращает первый элемент в коллекции, который проходит заданный тест на истинность, но только если тест на истинность соответствует ровно одному элементу:
+
+    collect([1, 2, 3, 4])->sole(function ($value, $key) {
+        return $value === 2;
+    });
+
+    // 2
+
+Вы также можете передать пару ключ / значение в метод `sole`, который вернет первый элемент коллекции, соответствующий данной паре, но только в том случае, если совпадает ровно один элемент:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+        ['product' => 'Chair', 'price' => 100],
+    ]);
+    
+    $collection->sole('product', 'Chair');
+    
+    // ['product' => 'Chair', 'price' => 100]
+
+В качестве альтернативы вы также можете вызвать метод `sole` без аргумента, чтобы получить первый элемент в коллекции, если в ней только один элемент:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+    ]);
+
+    $collection->sole();
+    
+    // ['product' => 'Desk', 'price' => 200]
+
+Если в коллекции нет элементов, которые должны быть возвращены методом `sole`, будет брошено исключение `\Illuminate\Collections\ItemNotFoundException`. Если есть более одного элемента, который должен быть возвращен, то будет брошено исключение `\Illuminate\Collections\MultipleItemsFoundException`. 
 
 <a name="method-some"></a>
 #### `some()`
@@ -2393,7 +2481,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     $collection = collect([1 => ['a'], 2 => ['b']]);
 
-    $union = $collection->union([3 => ['c'], 1 => ['b']]);
+    $union = $collection->union([3 => ['c'], 1 => ['d']]);
 
     $union->all();
 
