@@ -1,4 +1,4 @@
-git e27f12010aa82141f57f21b5fda9004c96e4075d
+git dcb5a736f8435fee740abebd13c75c563aededf0
 
 ---
 
@@ -120,7 +120,7 @@ pecl install swoole
 Затем обновите директиву `command` в файле `docker/supervisord.conf` вашего приложения, чтобы Sail обслуживал ваше приложение, используя Octane вместо сервера разработки PHP:
 
 ```ini
-command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=8000
+command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=80
 ```
 
 Наконец, создайте свои образы Sail:
