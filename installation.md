@@ -1,4 +1,4 @@
-git 13f770acbfe97eaa2e77534144ab8d4513d04a04
+git bdb7da5e79397281762807f2b372c0818a17a313
 
 ---
 
@@ -154,7 +154,7 @@ cd example-app
 <a name="choosing-your-sail-services"></a>
 ### Выбор служб Sail
 
-При создании нового приложения Laravel через Sail вы можете использовать строковую переменную запроса `with`, чтобы выбрать, какие службы должны быть настроены в файле `docker-compose.yml` вашего нового приложения. Доступны следующие службы `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `selenium` и `mailhog`:
+При создании нового приложения Laravel через Sail вы можете использовать строковую переменную запроса `with`, чтобы выбрать, какие службы должны быть настроены в файле `docker-compose.yml` вашего нового приложения. Доступны следующие службы `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `minio`, `selenium` и `mailhog`:
 
 ```nothing
 curl -s "https://laravel.build/example-app?with=mysql,redis" | bash
@@ -279,3 +279,5 @@ Laravel может служить клиент-серверным фреймво
 Laravel также может служить серверной частью API для одностраничного JavaScript-приложения или мобильного приложения. Например, вы можете использовать Laravel в качестве серверной части API для своего [Next.js](https://nextjs.org) приложения. В этом контексте вы можете использовать Laravel для обеспечения [аутентификации](/docs/{{version}}/sanctum) и хранения / получения данных для вашего приложения, а также пользуясь преимуществами мощных служб Laravel, таких как очереди, электронная почта, уведомления и многое другое.
 
 Если вы планируете использовать Laravel именно так, то вы можете ознакомиться с нашей документацией по [маршрутизации](/docs/{{version}}/routing), пакету [Laravel Sanctum](/docs/{{version}}/sanctum) и [Eloquent ORM](/docs/{{version}}/eloquent).
+
+> {tip} Вам нужно хорошо подготовиться к созданию бэкэнда Laravel и внешнего интерфейса Next.js? Laravel Breeze предлагает [API stack](/docs/{{version}}/starter-kits#breeze-and-next), а так же [реализацию внешнего интерфейса Next.js](https://github.com/laravel/breeze-next), чтобы вы могли начать работу за считанные минуты.
