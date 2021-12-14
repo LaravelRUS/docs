@@ -1,4 +1,4 @@
-git bbe4f5210f58fddb828c4e16261c552b8db59ef5
+git b6cb7aa06450cd2780681a24d740d1dd03c856c6
 
 ---
 
@@ -78,7 +78,7 @@ Laravel Passport обеспечивает полную реализацию се
 
 > {Примечание} Если вы хотите использовать UUID в качестве значения первичного ключа модели Passport `Client` вместо автоматически увеличивающихся целых чисел, установите Passport, используя [the `uuids` option](#client-uuids).
 
-После выполнения команды `passport:install` добавьте [трейт](https://www.php.net/manual/ru/language.oop5.traits.php) `Laravel\Passport\HasApiTokens` в свою модель `App\Models\User`. Этот трейт предоставит вашей модели несколько вспомогательных методов, которые позволят вам проверить токен и области аутентифицированного пользователя:
+После выполнения команды `passport:install` добавьте [трейт](https://www.php.net/manual/ru/language.oop5.traits.php) `Laravel\Passport\HasApiTokens` в свою модель `App\Models\User`. Этот трейт предоставит вашей модели несколько вспомогательных методов, которые позволят вам проверить токен и области аутентифицированного пользователя. Если ваша модель уже использует трейт `Laravel\Sanctum\HasApiTokens`, вы можете его удалить:
 
     <?php
 
@@ -392,7 +392,7 @@ JSON API защищен посредниками `web` и `auth`; поэтому
             'state' => $state,
         ]);
 
-        return redirect('http://passport-app.com/oauth/authorize?'.$query);
+        return redirect('http://passport-app.test/oauth/authorize?'.$query);
     });
 
 > {Примечание} Помните, что маршрут `/oauth/authorize` уже определен методом `Passport::routes`. Вам не нужно вручную определять этот маршрут.
@@ -443,7 +443,7 @@ JSON API защищен посредниками `web` и `auth`; поэтому
             InvalidArgumentException::class
         );
 
-        $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+        $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
             'grant_type' => 'authorization_code',
             'client_id' => 'client-id',
             'client_secret' => 'client-secret',
@@ -487,7 +487,7 @@ Passport также включает JSON API для управления авт
 
     use Illuminate\Support\Facades\Http;
 
-    $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+    $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
         'grant_type' => 'refresh_token',
         'refresh_token' => 'the-refresh-token',
         'client_id' => 'client-id',
@@ -600,7 +600,7 @@ Passport также включает JSON API для управления авт
             'code_challenge_method' => 'S256',
         ]);
 
-        return redirect('http://passport-app.com/oauth/authorize?'.$query);
+        return redirect('http://passport-app.test/oauth/authorize?'.$query);
     });
 
 <a name="code-grant-pkce-converting-authorization-codes-to-access-tokens"></a>
@@ -623,7 +623,7 @@ Passport также включает JSON API для управления авт
             InvalidArgumentException::class
         );
 
-        $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+        $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
             'grant_type' => 'authorization_code',
             'client_id' => 'client-id',
             'redirect_uri' => 'http://third-party-app.com/callback',
@@ -653,7 +653,7 @@ Passport также включает JSON API для управления авт
 
     use Illuminate\Support\Facades\Http;
 
-    $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+    $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
         'grant_type' => 'password',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -673,7 +673,7 @@ Passport также включает JSON API для управления авт
 
     use Illuminate\Support\Facades\Http;
 
-    $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+    $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
         'grant_type' => 'password',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -780,7 +780,7 @@ Passport также включает JSON API для управления авт
             'state' => $state,
         ]);
 
-        return redirect('http://passport-app.com/oauth/authorize?'.$query);
+        return redirect('http://passport-app.test/oauth/authorize?'.$query);
     });
 
 > {Примечание} Помните, что маршрут `/oauth/authorize` уже определен методом `Passport::routes`. Вам не нужно вручную определять этот маршрут.
@@ -821,7 +821,7 @@ Passport также включает JSON API для управления авт
 
     use Illuminate\Support\Facades\Http;
 
-    $response = Http::asForm()->post('http://passport-app.com/oauth/token', [
+    $response = Http::asForm()->post('http://passport-app.test/oauth/token', [
         'grant_type' => 'client_credentials',
         'client_id' => 'client-id',
         'client_secret' => 'client-secret',
@@ -961,7 +961,7 @@ JSON API защищен посредниками `web` и `auth`; поэтому
     $response = Http::withHeaders([
         'Accept' => 'application/json',
         'Authorization' => 'Bearer '.$accessToken,
-    ])->get('https://passport-app.com/api/user');
+    ])->get('https://passport-app.test/api/user');
 
     return $response->json();
 
@@ -1025,7 +1025,7 @@ JSON API защищен посредниками `web` и `auth`; поэтому
             'scope' => 'place-orders check-status',
         ]);
 
-        return redirect('http://passport-app.com/oauth/authorize?'.$query);
+        return redirect('http://passport-app.test/oauth/authorize?'.$query);
     });
 
 <a name="when-issuing-personal-access-tokens"></a>
