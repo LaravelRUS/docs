@@ -1205,8 +1205,6 @@ where user_id = ? and (active = 1 or votes >= 100)
 <a name="inline-relationship-existence-queries"></a>
 #### Однострочные запросы наличия отношений
 
-If you would like to query for a relationship's existence with a single, simple where condition attached to the relationship query, you may find it more convenient to use the `whereRelation` and `whereMorphRelation` methods. For example, we may query for all posts that have unapproved comments:
-
 Если вы хотите запросить существование отношения с одним простым условием, вам может быть удобнее использовать методы `whereRelation` и `whereMorphRelation`. Например, мы можем запросить все посты с неодобренными комментариями:
 
     use App\Models\Post;
