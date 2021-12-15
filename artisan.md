@@ -1,4 +1,4 @@
-git 6d389bee512a629aebaf88f190d2b7ce4668fa59
+git 843484efa1bcf3141745b973eb85647a2eaecda1
 
 ---
 
@@ -304,7 +304,7 @@ Tinker использует список «разрешенных» команд
      */
     protected $signature = 'mail:send
                             {user : The ID of the user}
-                            {--queue= : Whether the job should be queued}';
+                            {--queue : Whether the job should be queued}';
 
 <a name="command-io"></a>
 ## Ввод/вывод команды
@@ -499,7 +499,7 @@ Tinker использует список «разрешенных» команд
         // ...
     }
 
-Вы можете самостоятельно зарегистрировать команды, добавив название класса команды в свойство `$commands` класса `App\Console\Kernel`. При загрузке Artisan, все команды, перечисленные в этом свойстве будут доступны в [контейнере служб](/docs/{{version}}/container) и зарегистрированы в Artisan:
+Вы можете самостоятельно зарегистрировать команды, добавив название класса команды в свойство `$commands` класса `App\Console\Kernel`. Если это свойство еще не определено в вашем ядре, вы должны определить его вручную. При загрузке Artisan, все команды, перечисленные в этом свойстве будут доступны в [контейнере служб](/docs/{{version}}/container) и зарегистрированы в Artisan:
 
     protected $commands = [
         Commands\SendEmails::class

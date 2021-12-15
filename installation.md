@@ -1,29 +1,26 @@
-git 13f770acbfe97eaa2e77534144ab8d4513d04a04
+git bdb7da5e79397281762807f2b372c0818a17a313
 
 ---
 
 # Установка
 
 - [Установка](#установка)
-  - [Встречайте Laravel](#встречайте-laravel)
-    - [Почему именно Laravel?](#почему-именно-laravel)
-      - [Прогрессивный фреймворк](#прогрессивный-фреймворк)
-      - [Масштабируемый фреймворк](#масштабируемый-фреймворк)
-      - [Фреймворк сообщества](#фреймворк-сообщества)
-  - [Ваш первый проект на Laravel](#ваш-первый-проект-на-laravel)
-    - [Начало работы в macOS](#начало-работы-в-macos)
-    - [Начало работы в Windows](#начало-работы-в-windows)
-      - [Разработка в подсистеме WSL2](#разработка-в-подсистеме-wsl2)
-    - [Начало работы в Linux](#начало-работы-в-linux)
-    - [Выбор служб Sail](#выбор-служб-sail)
-    - [Установка через Composer](#установка-через-composer)
-      - [Установщик Laravel](#установщик-laravel)
-  - [Начальная конфигурация](#начальная-конфигурация)
-    - [Конфигурация на основе окружения](#конфигурация-на-основе-окружения)
-    - [Конфигурация каталога](#конфигурация-каталога)
-  - [Следующие шаги](#следующие-шаги)
-    - [Laravel как клиент-серверный фреймворк](#laravel-как-клиент-серверный-фреймворк)
-    - [Laravel в качестве сервера API](#laravel-в-качестве-сервера-api)
+  - [Встречайте Laravel](#meet-laravel)
+    - [Почему именно Laravel?](#why-laravel)
+  - [Ваш первый проект на Laravel](#your-first-laravel-project)
+    - [Начало работы в macOS](#getting-started-on-macos)
+    - [Начало работы в Windows](#getting-started-on-windows)
+      - [Разработка в подсистеме WSL2](#getting-started-on-windows-wsl)
+    - [Начало работы в Linux](#getting-started-on-linux)
+    - [Выбор служб Sail](#choosing-your-sail-services)
+    - [Установка через Composer](#installation-via-composer)
+      - [Установщик Laravel](#the-laravel-installer)
+  - [Начальная конфигурация](#initial-configuration)
+    - [Конфигурация на основе окружения](#environment-based-configuration)
+    - [Конфигурация каталога](#directory-configuration)
+  - [Следующие шаги](#next-steps)
+    - [Laravel как клиент-серверный фреймворк](#laravel-the-fullstack-framework)
+    - [Laravel в качестве сервера API](#laravel-the-api-backend)
 
 <a name="meet-laravel"></a>
 ## Встречайте Laravel
@@ -119,7 +116,7 @@ cd example-app
 После запуска контейнеров приложения Docker, вы можете получить доступ к приложению в своем веб-браузере по адресу: http://localhost.
 
 > {tip} Чтобы продолжить изучение Laravel Sail, просмотрите его [полную документацию](/docs/{{version}}/sail).
-
+<a name="getting-started-on-windows-wsl"></a>
 #### Разработка в подсистеме WSL2
 
 Конечно, вам нужно будет иметь возможность изменять файлы приложения Laravel, которые были созданы в вашей установке WSL2. Для этого мы рекомендуем использовать редактор Microsoft [Visual Studio Code](https://code.visualstudio.com) и его собственное расширение [Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack).
@@ -154,7 +151,7 @@ cd example-app
 <a name="choosing-your-sail-services"></a>
 ### Выбор служб Sail
 
-При создании нового приложения Laravel через Sail вы можете использовать строковую переменную запроса `with`, чтобы выбрать, какие службы должны быть настроены в файле `docker-compose.yml` вашего нового приложения. Доступны следующие службы `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `selenium` и `mailhog`:
+При создании нового приложения Laravel через Sail вы можете использовать строковую переменную запроса `with`, чтобы выбрать, какие службы должны быть настроены в файле `docker-compose.yml` вашего нового приложения. Доступны следующие службы `mysql`, `pgsql`, `mariadb`, `redis`, `memcached`, `meilisearch`, `minio`, `selenium` и `mailhog`:
 
 ```nothing
 curl -s "https://laravel.build/example-app?with=mysql,redis" | bash
@@ -279,3 +276,5 @@ Laravel может служить клиент-серверным фреймво
 Laravel также может служить серверной частью API для одностраничного JavaScript-приложения или мобильного приложения. Например, вы можете использовать Laravel в качестве серверной части API для своего [Next.js](https://nextjs.org) приложения. В этом контексте вы можете использовать Laravel для обеспечения [аутентификации](/docs/{{version}}/sanctum) и хранения / получения данных для вашего приложения, а также пользуясь преимуществами мощных служб Laravel, таких как очереди, электронная почта, уведомления и многое другое.
 
 Если вы планируете использовать Laravel именно так, то вы можете ознакомиться с нашей документацией по [маршрутизации](/docs/{{version}}/routing), пакету [Laravel Sanctum](/docs/{{version}}/sanctum) и [Eloquent ORM](/docs/{{version}}/eloquent).
+
+> {tip} Вам нужно хорошо подготовиться к созданию бэкэнда Laravel и внешнего интерфейса Next.js? Laravel Breeze предлагает [API stack](/docs/{{version}}/starter-kits#breeze-and-next), а так же [реализацию внешнего интерфейса Next.js](https://github.com/laravel/breeze-next), чтобы вы могли начать работу за считанные минуты.
