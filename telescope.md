@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 87f7f06070faeed920fa58ea4827a9aabe29c7bc
 
 ---
 
@@ -23,6 +23,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
     - [Наблюдатель Event](#event-watcher)
     - [Наблюдатель Exception](#exception-watcher)
     - [Наблюдатель Gate](#gate-watcher)
+    - [Наблюдатель HTTP Client](#http-client-watcher)
     - [Наблюдатель Job](#job-watcher)
     - [Наблюдатель Log](#log-watcher)
     - [Наблюдатель Mail](#mail-watcher)
@@ -186,6 +187,7 @@ Telescope станет прекрасным помощником при лока
             return $entry->isReportableException() ||
                 $entry->isFailedJob() ||
                 $entry->isScheduledTask() ||
+                $entry->isSlowQuery() ||
                 $entry->hasMonitoredTag();
         });
     }
@@ -216,6 +218,7 @@ Telescope станет прекрасным помощником при лока
                 return $entry->isReportableException() ||
                     $entry->isFailedJob() ||
                     $entry->isScheduledTask() ||
+                    $entry->isSlowQuery() ||
                     $entry->hasMonitoredTag();
                 });
         });
@@ -316,6 +319,11 @@ Telescope позволяет искать записи по «метке». Ча
         ],
         ...
     ],
+
+<a name="http-client-watcher"></a>
+### Наблюдатель HTTP Client
+
+Наблюдатель HTTP Client записывает исходящие [запросы HTTP client ](/docs/{{version}}/http-client), сделанные вашим приложением.
 
 <a name="job-watcher"></a>
 ### Наблюдатель Job
