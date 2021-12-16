@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 9f56a40f1c6288254333a4aa30e468bf21e08078
 
 ---
 
@@ -19,6 +19,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
     - [Локальный запуск планировщика](#running-the-scheduler-locally)
 - [Результат выполнения задачи](#task-output)
 - [Хуки выполнения задачи](#task-hooks)
+- [События](#events)
 
 <a name="introduction"></a>
 ## Введение
@@ -42,15 +43,6 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
     class Kernel extends ConsoleKernel
     {
-        /**
-         * Команды Artisan вашего приложения.
-         *
-         * @var array
-         */
-        protected $commands = [
-            //
-        ];
-
         /**
          * Определить расписание выполнения команд приложения.
          *
@@ -417,3 +409,35 @@ php artisan schedule:list
 Для всех методов пингования требуется библиотека Guzzle HTTP. Guzzle обычно устанавливается во всех новых проектах Laravel по умолчанию, но вы можете вручную установить Guzzle в свой проект с помощью менеджера пакетов Composer, если он был удален:
 
     composer require guzzlehttp/guzzle
+
+<a name="events"></a>
+## События
+
+При необходимости вы можете прослушивать [события](/docs/{{version}}/events) отправленные планировщиком. Как правило, сопоставления слушателей событий определяются в классе вашего приложения `App\Providers\EventServiceProvider`:
+
+    /**
+     * The event listener mappings for the application.
+     *
+     * @var array
+     */
+    protected $listen = [
+        'Illuminate\Console\Events\ScheduledTaskStarting' => [
+            'App\Listeners\LogScheduledTaskStarting',
+        ],
+
+        'Illuminate\Console\Events\ScheduledTaskFinished' => [
+            'App\Listeners\LogScheduledTaskFinished',
+        ],
+
+        'Illuminate\Console\Events\ScheduledBackgroundTaskFinished' => [
+            'App\Listeners\LogScheduledBackgroundTaskFinished',
+        ],
+
+        'Illuminate\Console\Events\ScheduledTaskSkipped' => [
+            'App\Listeners\LogScheduledTaskSkipped',
+        ],
+
+        'Illuminate\Console\Events\ScheduledTaskFailed' => [
+            'App\Listeners\LogScheduledTaskFailed',
+        ],
+    ];
