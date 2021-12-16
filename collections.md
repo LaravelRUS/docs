@@ -1,4 +1,4 @@
-git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
+git 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
 ---
 
@@ -166,7 +166,9 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 - [`push()`](#method-push)
 - [`put()`](#method-put)
 - [`random()`](#method-random)
+- [`range`](#method-range)
 - [`reduce()`](#method-reduce)
+- [`reduceSpread`](#method-reduce-spread)
 - [`reject()`](#method-reject)
 - [`replace()`](#method-replace)
 - [`replaceRecursive()`](#method-replacerecursive)
@@ -174,12 +176,12 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 - [`search()`](#method-search)
 - [`shift()`](#method-shift)
 - [`shuffle()`](#method-shuffle)
-- [sliding](#method-sliding)
+- [`sliding`](#method-sliding)
 - [`skip()`](#method-skip)
 - [`skipUntil()`](#method-skipuntil)
 - [`skipWhile()`](#method-skipwhile)
 - [`slice()`](#method-slice)
-- [sole](#method-sole)
+- [`sole`](#method-sole)
 - [`some()`](#method-some)
 - [`sort()`](#method-sort)
 - [`sortBy()`](#method-sortby)
@@ -1705,6 +1707,18 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 
 Если в экземпляре коллекции меньше элементов, чем запрошено, метод `random` сгенерирует исключение `InvalidArgumentException`.
 
+<a name="method-range"></a>
+#### `range()`
+
+Метод `range` возвращает коллекцию, содержащую целые числа в указанном диапазоне:
+
+    $collection = collect()->range(3, 6);
+
+    $collection->all();
+
+    // [3, 4, 5, 6]
+
+
 <a name="method-reduce"></a>
 #### `reduce()`
 
@@ -1745,6 +1759,26 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
     });
 
     // 4264
+
+
+<a name="method-reduce-spread"></a>
+#### `reduceSpread()`
+
+Метод `reduceSpread` сокращает коллекцию до массива значений, передавая результаты каждой итерации в следующую итерацию. Этот метод похож на метод `reduce`, однако он может принимать несколько начальных значений:
+
+```php
+[$creditsRemaining, $batch] = Image::where('status', 'unprocessed')
+        ->get()
+        ->reduceSpread(function ($creditsRemaining, $batch, $image) {
+            if ($creditsRemaining >= $image->creditsRequired()) {
+                $batch->push($image);
+
+                $creditsRemaining -= $image->creditsRequired();
+            }
+
+            return [$creditsRemaining, $batch];
+        }, $creditsAvailable, collect());
+```
 
 <a name="method-reject"></a>
 #### `reject()`
@@ -1970,7 +2004,7 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 
     // [4]
 
-> {note} Если замыкание никогда не возвращает `true`, то метод `skipWhile` вернет пустую коллекцию.
+> {note} Если замыкание никогда не возвращает `false`, то метод `skipWhile` вернет пустую коллекцию.
 
 <a name="method-slice"></a>
 #### `slice()`
@@ -2550,6 +2584,20 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
 
     // [1, 2, 3, 5]
 
+Второе замыкание может быть передано методу `unless`. Второе замыкание будет выполнено, когда первый аргумент, переданный методу `unless` будет иметь значение `true`:
+
+    $collection = collect([1, 2, 3]);
+
+    $collection->unless(true, function ($collection) {
+        return $collection->push(4);
+    }, function ($collection) {
+        return $collection->push(5);
+    });
+
+    $collection->all();
+
+    // [1, 2, 3, 5]
+
 Противоположным методу `unless` является метод [`when`](#method-when).
 
 <a name="method-unlessempty"></a>
@@ -2618,6 +2666,20 @@ git 805e2d0f07fb4430cdca9f2842c28e7c2bbc8f59
     $collection->all();
 
     // [1, 2, 3, 4]
+
+Второе замыкание может быть передано методу `when`. Второе замыкание будет выполнено, когда первый аргумент, переданный методу `when` будет иметь значение `false`:
+
+    $collection = collect([1, 2, 3]);
+
+    $collection->when(false, function ($collection) {
+        return $collection->push(4);
+    }, function ($collection) {
+        return $collection->push(5);
+    });
+
+    $collection->all();
+
+    // [1, 2, 3, 5]
 
 Противоположным методу `when` является метод [`unless`](#method-unless).
 
