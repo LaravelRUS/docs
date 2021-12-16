@@ -1,4 +1,4 @@
-git eaeef461d4fc2ef00aee94ea6f9f504bf4748b8d
+git 46756fe0a1dc933be4eec79c3708382272bfbee6
 
 ---
 
@@ -74,6 +74,8 @@ Laravel Scout предоставляет простое решение на ос
 <a name="meilisearch"></a>
 #### MeiliSearch
 
+[MeiliSearch](https://www.meilisearch.com) это невероятно быстрая поисковая система с открытым исходным кодом. Если вы не знаете, как установить MeiliSearch на свой локальный компьютер, вы можете использовать [Laravel Sail](/docs/{{version}}/sail#meilisearch), официально поддерживаемую Laravel среду разработки Docker.
+
 При использовании драйвера MeiliSearch вам необходимо установить MeiliSearch PHP SDK через менеджер пакетов Composer:
 
     composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle
@@ -86,7 +88,9 @@ Laravel Scout предоставляет простое решение на ос
 
 Для получения дополнительной информации обратитесь к [документации MeiliSearch](https://docs.meilisearch.com/learn/getting_started/quick_start.html).
 
-> {tip} Если вы не знаете, как установить MeiliSearch на свой локальный компьютер, вы можете использовать [Laravel Sail](/docs/{{version}}/sail#meilisearch), официально поддерживаемую Laravel среду разработки Docker.
+Кроме того, вы должны убедиться, что вы установили версию `meilisearch/meilisearch-php` которая совместима с вашей двоичной версией MeiliSearch, просмотрев [документацию MeiliSearch относительно двоичной совместимости](https://github.com/meilisearch/meilisearch-php#-compatibility-with-meilisearch).
+
+> {note} При обновлении Scout в приложении, которое использует MeiliSearch, вы всегда должны [просматривать любые дополнительные критические изменения](https://github.com/meilisearch/MeiliSearch/releases) в самой службе MeiliSearch.
 
 <a name="queueing"></a>
 ### Очередь
