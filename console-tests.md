@@ -1,16 +1,43 @@
-git 534aaa9e4789f0a6f5d55bc797f6a765f131cc63
+git 8f0031b4ea65784d5786507f76fbf9843c0ea388
 
 ---
 
 # Тестирование · Тесты консольных команд
 
 - [Введение](#introduction)
+- [Ожидания успеха / неудачи](#success-failure-expectations)
 - [Ожидания ввода / вывода](#input-output-expectations)
 
 <a name="introduction"></a>
 ## Введение
 
 Помимо упрощенного HTTP-тестирования, Laravel предлагает простой API для тестирования [пользовательских консольных команд](artisan) вашего приложения.
+
+
+<a name="success-failure-expectations"></a>
+## Ожидания успеха / неудачи
+
+Для начала давайте рассмотрим, как делать утверждения относительно кода выхода команды Artisan. Для этого мы будем использовать метод `artisan` для вызова Artisan-команды из нашего теста. Затем мы будем использовать метод `assertExitCode`, чтобы подтвердить, что команда завершилась с заданным кодом выхода:
+
+    /**
+     * Test a console command.
+     *
+     * @return void
+     */
+    public function test_console_command()
+    {
+        $this->artisan('inspire')->assertExitCode(0);
+    }
+
+Вы можете использовать метод `assertNotExitCode` чтобы подтвердить, что команда не завершилась с заданным кодом выхода:
+
+    $this->artisan('inspire')->assertNotExitCode(1);
+
+Конечно, все команды терминала обычно завершаются с кодом состояния `0`, когда они успешны, и с ненулевым кодом выхода, когда они не успешны. Поэтому для удобства вы можете использовать утверждения `assertSuccessful` и `assertFailed` чтобы утверждать, что данная команда завершилась с успешным кодом выхода или нет:
+
+    $this->artisan('inspire')->assertSuccessful();
+
+    $this->artisan('inspire')->assertFailed();
 
 <a name="input-output-expectations"></a>
 ## Ожидания ввода / вывода
