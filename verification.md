@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git e40c6670934574de22db31ad6e84c4a035d65c6c
 
 ---
 
@@ -85,7 +85,6 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 Затем, нам нужно определить маршрут, который будет обрабатывать запросы, сгенерированные, когда пользователь щелкает ссылку подтверждения электронной почты, которая была отправлена ему по электронной почте. Этот маршрут должен называться `verification.verify` и ему должны быть назначены посредники `auth` и `signed`:
 
     use Illuminate\Foundation\Auth\EmailVerificationRequest;
-    use Illuminate\Http\Request;
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
         $request->fulfill();
