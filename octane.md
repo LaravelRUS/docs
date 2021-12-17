@@ -1,4 +1,4 @@
-git dcb5a736f8435fee740abebd13c75c563aededf0
+git 8c4f400e07347d4c5bd22331c43fb239cb14888c
 
 ---
 
@@ -30,7 +30,7 @@ git dcb5a736f8435fee740abebd13c75c563aededf0
 <a name="introduction"></a>
 ## Введение
 
-Laravel Octane повышает производительность вашего приложения, обслуживая с использованием мощных серверов приложений, включая [Swoole](https://swoole.co.uk) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
+Laravel Octane повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [Open Swoole](https://swoole.co.uk), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
 
 <a name="installation"></a>
 ## Установка
