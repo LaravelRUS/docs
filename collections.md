@@ -1,4 +1,4 @@
-git 0114efaa616fc2853168f9fccfc072f9d11f7f43
+git 1d6223ec05d4e00a44efdefe2c53a0eacb20d2ce
 
 ---
 
@@ -113,6 +113,7 @@ git 0114efaa616fc2853168f9fccfc072f9d11f7f43
 - [`diff()`](#method-diff)
 - [`diffAssoc()`](#method-diffassoc)
 - [`diffKeys()`](#method-diffkeys)
+- [`doesntContain`](#method-doesntcontain)
 - [`dump()`](#method-dump)
 - [`duplicates()`](#method-duplicates)
 - [`duplicatesStrict()`](#method-duplicatesstrict)
@@ -425,6 +426,8 @@ git 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
 Метод `contains` использует «гибкое» сравнение при проверке значений элементов, то есть строка с целочисленным значением будет считаться равной целому числу того же значения. Используйте метод [`containsStrict`](#method-containsstrict) для фильтрации с использованием «жесткого» сравнения.
 
+Противоположным для метода `contains`, является метод [`doesntContain`](#method-doesntcontain).
+
 <a name="method-containsstrict"></a>
 #### `containsStrict()`
 
@@ -587,6 +590,44 @@ git 0114efaa616fc2853168f9fccfc072f9d11f7f43
     $diff->all();
 
     // ['one' => 10, 'three' => 30, 'five' => 50]
+
+<a name="method-doesntcontain"></a>
+#### `doesntContain()`
+
+Метод `doesntContain` определяет, не содержит ли коллекция данный элемент. Вы можете передать замыкание методу `doesntContain`, чтобы определить, не существует ли элемента в коллекции, соответствующего заданному критерию:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->doesntContain(function ($value, $key) {
+        return $value < 5;
+    });
+
+    // false
+
+В качестве альтернативы вы можете передать строку методу `doesntContain`, чтобы определить, не содержит ли коллекция заданного значения элемента:
+
+    $collection = collect(['name' => 'Desk', 'price' => 100]);
+
+    $collection->doesntContain('Table');
+
+    // true
+
+    $collection->doesntContain('Desk');
+
+    // false
+
+Вы также можете передать пару ключ/значение методу `doesntContain`, который определит, не существует ли данная пара в коллекции:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+        ['product' => 'Chair', 'price' => 100],
+    ]);
+
+    $collection->doesntContain('product', 'Bookcase');
+
+    // true
+
+Метод `doesntContain` использует "не строгое" сравнение при проверке значений элементов, что означает, что строка с целым значением будет считаться равной целому числу того же значения.
 
 <a name="method-dump"></a>
 #### `dump()`
