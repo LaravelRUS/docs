@@ -595,11 +595,7 @@ Tinker использует список «разрешенных» команд
 <a name="signal-handling"></a>
 ## Обработка сигналов
 
-The Symfony Console component, which powers the Artisan console, allows you to indicate which process signals (if any) your command handles. For example, you may indicate that your command handles the `SIGINT` and `SIGTERM` signals.
-
 Компонент Symfony Console, на основе которого сделан Artisan, позволяет указать, какие сигналы процессов обрабатываются вашей командой. Например, Вы можете указать, что Ваша команда обрабатывает сигналы `SIGINT` и `SIGTERM`.
-
-To get started, you should implement the  interface on your Artisan command class. This interface requires you to define two methods: `getSubscribedSignals` and `handleSignal`:
 
 Чтобы воспользоваться этой фичей, имплементируйте `Symfony\Component\Console\Command\SignalableCommandInterface`. Этот интерфейс требует наличия в классе методов `getSubscribedSignals` и `handleSignal`:
 
