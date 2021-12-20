@@ -1,4 +1,4 @@
-git 645dc0e6daae16cabfc92ad400479ff50c81ad1e
+git 18568ef969abc7fac0d6e13745266bf0e3ea2fa2
 
 ---
 
@@ -159,9 +159,11 @@ docker run --rm \
     -u "$(id -u):$(id -g)" \
     -v $(pwd):/var/www/html \
     -w /var/www/html \
-    laravelsail/php80-composer:latest \
+    laravelsail/php81-composer:latest \
     composer install --ignore-platform-reqs
 ```
+
+При использовании образа `laravelsail/phpXX-composer` вы должны использовать ту же версию PHP, которую вы планируете использовать для своего приложения (`74`, `80` или `81`).
 
 <a name="executing-artisan-commands"></a>
 ### Выполнение Artisan команд
