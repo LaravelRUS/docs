@@ -1,4 +1,4 @@
-git 8ecebbe06e14dbe2fd89025a4677d426869a5319
+git 22d680c29691d3cb0ec585f43c5a0a39d404fef1
 
 ---
 
@@ -58,7 +58,9 @@ Laravel содержит множество глобальных «вспомо�
 - [Arr::sort](#method-array-sort)
 - [Arr::sortRecursive](#method-array-sort-recursive)
 - [Arr::toCssClasses](#method-array-to-css-classes)
+- [Arr::undot](#method-array-undot)
 - [Arr::where](#method-array-where)
+- [Arr::whereNotNull](#method-array-where-not-null)
 - [Arr::wrap](#method-array-wrap)
 - [data_fill](#method-data-fill)
 - [data_get](#method-data-get)
@@ -103,6 +105,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::containsAll](#method-str-contains-all)
 - [Str::endsWith](#method-ends-with)
 - [Str::finish](#method-str-finish)
+- [Str::headline](#method-str-headline)
 - [Str::is](#method-str-is)
 - [Str::isAscii](#method-str-is-ascii)
 - [Str::isUuid](#method-str-is-uuid)
@@ -111,6 +114,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::limit](#method-str-limit)
 - [Str::lower](#method-str-lower)
 - [Str::markdown](#method-str-markdown)
+- [Str::mask](#method-str-mask)
 - [Str::orderedUuid](#method-str-ordered-uuid)
 - [Str::padBoth](#method-str-padboth)
 - [Str::padLeft](#method-str-padleft)
@@ -123,6 +127,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::replaceArray](#method-str-replace-array)
 - [Str::replaceFirst](#method-str-replace-first)
 - [Str::replaceLast](#method-str-replace-last)
+- [Str::reverse](#method-str-reverse)
 - [Str::singular](#method-str-singular)
 - [Str::slug](#method-str-slug)
 - [Str::snake](#method-snake-case)
@@ -175,6 +180,7 @@ Laravel содержит множество глобальных «вспомо�
 - [lower](#method-fluent-str-lower)
 - [ltrim](#method-fluent-str-ltrim)
 - [markdown](#method-fluent-str-markdown)
+- [mask](#method-fluent-str-mask)
 - [match](#method-fluent-str-match)
 - [matchAll](#method-fluent-str-match-all)
 - [padBoth](#method-fluent-str-padboth)
@@ -800,6 +806,23 @@ Laravel содержит множество глобальных «вспомо�
 
 При помощи этого метода осуществляется [объединение css-классов в Blade](/docs/{{version}}/blade#conditionally-merge-classes), а также [в директиве](/docs/{{version}}/blade#conditional-classes) `@class`. 
 
+
+<a name="method-array-undot"></a>
+#### `Arr::undot()`
+
+Метод `Arr::undot` расширяет одномерный массив, использующий "точечную нотацию", в многомерный массив:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        'user.name' => 'Kevin Malone',
+        'user.occupation' => 'Accountant',
+    ];
+
+    $array = Arr::undot($array);
+
+    // ['user' => ['name' => 'Kevin Malone', 'occupation' => 'Accountant']]
+
 <a name="method-array-where"></a>
 #### `Arr::where()`
 
@@ -814,6 +837,19 @@ Laravel содержит множество глобальных «вспомо�
     });
 
     // [1 => '200', 3 => '400']
+
+<a name="method-array-where-not-null"></a>
+#### `Arr::whereNotNull()`
+
+Метод `Arr::whereNotNull`удаляет все значения `null` из данного массива:
+
+    use Illuminate\Support\Arr;
+
+    $array = [0, null];
+
+    $filtered = Arr::whereNotNull($array);
+
+    // [0 => 0]
 
 <a name="method-array-wrap"></a>
 #### `Arr::wrap()`
@@ -1222,6 +1258,21 @@ Laravel содержит множество глобальных «вспомо�
 
     // this/string/
 
+<a name="method-str-headline"></a>
+#### `Str::headline()`
+
+Метод `Str::headline` преобразует строки, разделенные регистром, дефисами или подчеркиванием, в строку, разделенную пробелами, с заглавной первой буквой каждого слова:
+
+    use Illuminate\Support\Str;
+
+    $headline = Str::headline('steve_jobs');
+
+    // Steve Jobs
+
+    $headline = Str::headline('EmailNotificationSent');
+
+    // Email Notification Sent
+
 <a name="method-str-is"></a>
 #### `Str::is()`
 
@@ -1335,6 +1386,23 @@ Laravel содержит множество глобальных «вспомо�
     ]);
 
     // <h1>Taylor Otwell</h1>
+
+<a name="method-str-mask"></a>
+#### `Str::mask()`
+
+Метод `Str::mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::mask('taylor@example.com', '*', 3);
+
+    // tay***************
+
+При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
+
+    $string = Str::mask('taylor@example.com', '*', -15, 3);
+
+    // tay***@example.com
 
 <a name="method-str-ordered-uuid"></a>
 #### `Str::orderedUuid()`
@@ -1516,6 +1584,17 @@ Laravel содержит множество глобальных «вспомо�
     $replaced = Str::replaceLast('the', 'a', 'the quick brown fox jumps over the lazy dog');
 
     // the quick brown fox jumps over a lazy dog
+
+<a name="method-str-reverse"></a>
+#### `Str::reverse()`
+
+Метод `Str::reverse` переворачивает данную строку:
+
+    use Illuminate\Support\Str;
+
+    $reversed = Str::reverse('Hello World');
+
+    // dlroW olleH
 
 <a name="method-str-singular"></a>
 #### `Str::singular()`
@@ -2068,6 +2147,23 @@ Str::wordCount('Hello, world!'); // 2
     ]);
 
     // <h1>Taylor Otwell</h1>
+
+<a name="method-fluent-str-mask"></a>
+#### `mask`
+
+Метод `mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('taylor@example.com')->mask('*', 3);
+
+    // tay***************
+
+При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
+
+    $string = Str::of('taylor@example.com')->mask('*', -15, 3);
+
+    // tay***@example.com
 
 <a name="method-fluent-str-match"></a>
 #### `match`
