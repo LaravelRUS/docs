@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 815905e141d268f491cdcc933d17753a1849d472
 
 ---
 
@@ -11,6 +11,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 - [Маршрутизация](#routing)
     - [Запрос ссылки для сброса пароля](#requesting-the-password-reset-link)
     - [Сброс пароля](#resetting-the-password)
+- [Удаление просроченных токенов](#deleting-expired-tokens)
 - [Настройка](#password-customization)
 
 <a name="introduction"></a>
@@ -124,7 +125,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) use ($request) {
+            function ($user, $password) {
                 $user->forceFill([
                     'password' => Hash::make($password)
                 ])->setRememberToken(Str::random(60));
@@ -135,7 +136,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
             }
         );
 
-        return $status == Password::PASSWORD_RESET
+        return $status === Password::PASSWORD_RESET
                     ? redirect()->route('login')->with('status', __($status))
                     : back()->withErrors(['email' => [__($status)]]);
     })->middleware('guest')->name('password.update');
@@ -147,6 +148,17 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 Метод `reset` возвращает ключ «status». Этот статус может быть переведен с помощью помощников [локализации](/docs/{{version}}/localization) Laravel, чтобы показать пользователю удобное сообщение о статусе его запроса.Перевод статуса сброса пароля определяется языковым файлом `resources/lang/{lang}/passwords.php` вашего приложения. Запись для каждого возможного значения ключа статуса находится в языковом файле `passwords`.
 
 Прежде чем двигаться дальше, вам может быть интересно, как Laravel знает, как получить запись пользователя из базы данных вашего приложения при вызове метода `reset` фасада `Password`. Брокер паролей Laravel использует «поставщиков пользователей» вашей системы аутентификации для получения записей из базы данных. Поставщик пользователей, используемый брокером паролей, настраивается в массиве `passwords` вашего файла конфигурации `config/auth.php`. Чтобы узнать больше о создании пользовательских поставщиков служб, обратитесь к [документации по аутентификации](authentication#adding-custom-user-providers).
+
+<a name="deleting-expired-tokens"></a>
+## Удаление просроченных токенов
+
+Токены сброса пароля с истекшим сроком действия будут по-прежнему присутствовать в вашей базе данных. Однако вы можете легко удалить эти записи, используя Artisan-команду `auth:clear-resets`:
+
+    php artisan auth:clear-resets
+
+Если вы хотите автоматизировать этот процесс, рассмотрите возможность добавления команды в [планировщик](/docs/{{version}}/scheduling) вашего приложения:
+
+    $schedule->command('auth:clear-resets')->everyFifteenMinutes();
 
 <a name="password-customization"></a>
 ## Настройка
