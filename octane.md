@@ -1,4 +1,4 @@
-git 8c4f400e07347d4c5bd22331c43fb239cb14888c
+git 8d133d048e5811367250604784e2ceba69be6ce2
 
 ---
 
@@ -127,6 +127,20 @@ command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start
 
 ```bash
 ./vendor/bin/sail build --no-cache
+```
+
+<a name="swoole-configuration"></a>
+#### Конфигурация Swoole
+
+Swoole поддерживает несколько дополнительных параметров конфигурации, которые вы можете добавить в свой файл конфигурации `octane` при необходимости. Поскольку их редко нужно изменять, эти параметры не включены в файл конфигурации по умолчанию:
+
+```php
+'swoole' => [ 
+    'options' => [
+        'log_file' => storage_path('logs/swoole_http.log'),
+        'package_max_length' => 10 * 1024 * 1024,
+    ],
+];
 ```
 
 <a name="serving-your-application"></a>
