@@ -1,4 +1,4 @@
-git 0564e04eba72e1358998969f0c4dbcab5b3dbb72
+git 9a6922ba0760e0a07ccccd02f6f77eb00fd2fedb
 
 ---
 
@@ -13,6 +13,8 @@ git 0564e04eba72e1358998969f0c4dbcab5b3dbb72
     - [Отключение маршрутов, возвращающих шаблоны](#disabling-views)
 - [Аутентификация](#authentication)
     - [Настройка аутентификации пользователя](#customizing-user-authentication)
+    - [Настройка конвейера аутентификации](#customizing-the-authentication-pipeline)
+    - [Настройка переадресации](#customizing-authentication-redirects)
 - [Двухфакторная аутентификация](#two-factor-authentication)
     - [Включение двухфакторной аутентификации](#enabling-two-factor-authentication)
     - [Использование двухфакторной аутентификации](#authenticating-with-two-factor-authentication)
@@ -193,6 +195,59 @@ public function boot()
 
 Вы можете указать охранника аутентификации, используемую Fortify, в файле конфигурации вашего приложения `fortify`. Однако, вы должны убедиться, что предоставленный охранник является реализацией `Illuminate\Contracts\Auth\StatefulGuard`. Если вы пытаетесь использовать Laravel Fortify для аутентификации SPA, то вам следует использовать стандартного охранника `web` Laravel в сочетании с [Laravel Sanctum](/docs/{{version}}/sanctum).
 
+<a name="customizing-the-authentication-pipeline"></a>
+### Настройка конвейера аутентификации
+
+Laravel Fortify аутентифицирует запросы на вход через конвейер вызываемых классов. При желании вы можете определить настраиваемый конвейер классов, через который должны передаваться запросы на вход. Каждый класс должен иметь метод `__invoke`, который получает экземпляр `Illuminate\Http\Request`и, как [посредники](/docs/{{version}}/middleware), переменную `$next`, которая вызывается, чтобы передать запрос следующему классу в конвейере.
+
+Чтобы определить свой собственный конвейер, вы можете использовать метод `Fortify::authenticateThrough`. Этот метод принимает замыкание, которое должно возвращать массив классов для передачи запроса входа в систему. Обычно этот метод следует вызывать из метода `boot` вашего класса `App\Providers\FortifyServiceProvider`.
+
+В приведенном ниже примере содержится определение конвейера по умолчанию, которое вы можете использовать в качестве отправной точки при внесении собственных изменений:
+
+```php
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
+use Laravel\Fortify\Fortify;
+use Illuminate\Http\Request;
+
+Fortify::authenticateThrough(function (Request $request) {
+    return array_filter([
+            config('fortify.limiters.login') ? null : EnsureLoginIsNotThrottled::class,
+            Features::enabled(Features::twoFactorAuthentication()) ? RedirectIfTwoFactorAuthenticatable::class : null,
+            AttemptToAuthenticate::class,
+            PrepareAuthenticatedSession::class,
+    ]);
+});
+```
+
+<a name="customizing-authentication-redirects"></a>
+### Настройка переадресации
+
+Если попытка входа в систему будет успешной, Fortify перенаправит вас на URI, настроенный с помощью параметра конфигурации `home` в файле конфигурации `fortify` вашего приложения. Если запрос на вход был запросом XHR, будет возвращен ответ HTTP 200. После выхода пользователя из приложения он будет перенаправлен на URI-адрес `/`.
+
+Если вам нужна расширенная настройка этого поведения, вы можете привязать реализации контрактов `LoginResponse` и `LogoutResponse` к [сервис-контейнеру Laravel](/docs/{{version}}/container). Обычно это должно быть сделано в методе `register` класса `App\Providers\FortifyServiceProvider`:
+
+```php
+use Laravel\Fortify\Contracts\LogoutResponse;
+
+/**
+ * Зарегистрируйте любые сервисы приложения.
+ *
+ * @return void
+ */
+public function register()
+{
+    $this->app->instance(LogoutResponse::class, new class implements LogoutResponse {
+        public function toResponse($request)
+        {
+            return redirect('/');
+        }
+    });
+}
+```
+
 <a name="two-factor-authentication"></a>
 ## Двухфакторная аутентификация
 
@@ -307,7 +362,7 @@ use Laravel\Fortify\Fortify;
 public function boot()
 {
     Fortify::registerView(function () {
-        return view('auth.register'); 
+        return view('auth.register');
     });
 
     // ...
@@ -381,7 +436,7 @@ Fortify позаботится об определении маршрута `/fo
 
 Чтобы завершить реализацию функционала сброса пароля вашего приложения, вам нужно указать Fortify, как вернуть шаблон `reset-password`.
 
-Вся логика визуализации шаблона `reset-password` Fortify может быть определена с помощью метода `resetPasswordView` класса `Laravel\Fortify\Fortify`. Обычно этот метод следует вызывать из метода `boot` класса `App\Providers\FortifyServiceProvider` вашего приложения:
+Вся логика визуализации представления Fortify может быть настроена с использованием соответствующих методов, доступных через класс `Laravel\Fortify\Fortify`. Обычно эти методы следует вызывать из метода `boot` класса `App\Providers\FortifyServiceProvider` вашего приложения:
 
 ```php
 use Laravel\Fortify\Fortify;
