@@ -1,4 +1,4 @@
-git 1d6223ec05d4e00a44efdefe2c53a0eacb20d2ce
+git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
 ---
 
@@ -2149,7 +2149,7 @@ git 1d6223ec05d4e00a44efdefe2c53a0eacb20d2ce
         ]
     */
 
-Метод `sort` принимает [флаги типа сортировки](https://www.php.net/manual/ru/function.sort.php) в качестве второго аргумента:
+Метод `sortBy` принимает [флаги типа сортировки](https://www.php.net/manual/ru/function.sort.php) в качестве второго аргумента:
 
     $collection = collect([
         ['title' => 'Item 1'],

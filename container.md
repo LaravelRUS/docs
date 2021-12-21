@@ -1,4 +1,4 @@
-git 8d63b6d581f0912d6d19edbc045ea74bb2ee47be
+git 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
 ---
 
@@ -23,6 +23,7 @@ git 8d63b6d581f0912d6d19edbc045ea74bb2ee47be
   - [Извлечение](#извлечение)
     - [Метод `make`](#метод-make)
     - [Автоматическое внедрение зависимостей](#автоматическое-внедрение-зависимостей)
+  - [Вызов и внедрение метода](#method-invocation-and-injection)
   - [События контейнера](#события-контейнера)
   - [PSR-11](#psr-11)
 
@@ -156,6 +157,18 @@ git 8d63b6d581f0912d6d19edbc045ea74bb2ee47be
     use App\Services\PodcastParser;
 
     $this->app->singleton(Transistor::class, function ($app) {
+        return new Transistor($app->make(PodcastParser::class));
+    });
+
+<a name="binding-scoped"></a>
+#### Связывание одиночек с заданной областью действия
+
+Метод `scoped` связывает в контейнере класс или интерфейс, который должен быть извлечен только один раз в течение данного жизненного цикла запроса / задания Laravel. Хотя этот метод похож на метод `singleton` похож на метод `scoped`, экземпляры, зарегистрированные с помощью метода `scoped`, будут сбрасываться всякий раз, когда приложение Laravel запускает новый «жизненный цикл», например, когда [Laravel Octane](/docs/{{version}}/octane) обрабатывает новый запрос или когда [очереди](/docs/{{version}}/queues) обрабатывают новое задание:
+
+    use App\Services\Transistor;
+    use App\Services\PodcastParser;
+
+    $this->app->scoped(Transistor::class, function ($app) {
         return new Transistor($app->make(PodcastParser::class));
     });
 
@@ -425,6 +438,48 @@ git 8d63b6d581f0912d6d19edbc045ea74bb2ee47be
             //
         }
     }
+
+
+<a name="method-invocation-and-injection"></a>
+## Вызов и внедрение метода
+
+Иногда вам может потребоваться вызвать метод для экземпляра объекта, позволяя контейнеру автоматически вводить зависимости этого метода. Например, учитывая следующий класс:
+
+    <?php
+
+    namespace App;
+
+    use App\Repositories\UserRepository;
+
+    class UserReport
+    {
+        /**
+         * Generate a new user report.
+         *
+         * @param  \App\Repositories\UserRepository  $repository
+         * @return array
+         */
+        public function generate(UserRepository $repository)
+        {
+            // ...
+        }
+    }
+
+Вы можете вызвать метод `generate` через контейнер следующим образом:
+
+    use App\UserReport;
+    use Illuminate\Support\Facades\App;
+
+    $report = App::call([new UserReport, 'generate']);
+
+Метод `call` принимает любой вызываемый PHP-код. Метод контейнера `call` может даже использоваться для вызова замыкания при автоматическом внедрении его зависимостей:
+
+    use App\Repositories\UserRepository;
+    use Illuminate\Support\Facades\App;
+
+    $result = App::call(function (UserRepository $repository) {
+        // ...
+    });
 
 <a name="container-events"></a>
 ## События контейнера

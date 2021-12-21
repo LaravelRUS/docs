@@ -1,4 +1,4 @@
-git e2b8bccb6b3d8b55c66178c9671e2f8765b95fe7
+git 9d01af87cc71567519dd08de03be8f98fe5680e1
 
 ---
 
@@ -27,6 +27,7 @@ git e2b8bccb6b3d8b55c66178c9671e2f8765b95fe7
     - [Определение класса канала](#defining-channel-classes)
 - [Трансляция событий](#broadcasting-events)
     - [Трансляция событий только остальным пользователям](#only-to-others)
+    - [Настройка подключения](#customizing-the-connection)
 - [Прием трансляций](#receiving-broadcasts)
     - [Прослушивание событий](#listening-for-events)
     - [Покидание канала](#leaving-a-channel)
@@ -35,6 +36,9 @@ git e2b8bccb6b3d8b55c66178c9671e2f8765b95fe7
     - [Авторизация каналов присутствия](#authorizing-presence-channels)
     - [Присоединение к каналам присутствия](#joining-presence-channels)
     - [Трансляция на каналы присутствия](#broadcasting-to-presence-channels)
+- [Трансляция моделей](#model-broadcasting)
+    - [Соглашение о трансляции моделей](#model-broadcasting-conventions)
+    - [Прослушивание трансляций моделей](#listening-for-model-broadcasts)
 - [Клиентские события](#client-events)
 - [Уведомления](#notifications)
 
@@ -46,6 +50,8 @@ git e2b8bccb6b3d8b55c66178c9671e2f8765b95fe7
 Например, представьте, что ваше приложение может экспортировать данные пользователя в файл CSV и отправлять этот файл ему по электронной почте. Однако создание этого CSV-файла занимает несколько минут, поэтому вы можете создать и отправить CSV-файл по почте, поместив [задание в очередь](/docs/{{version}}/queues). Когда файл CSV будет создан и отправлен пользователю, тогда мы можем использовать **широковещание** для отправки события `App\Events\UserDataExported`, которое будет получено в JavaScript нашего приложения. Как только событие будет получено, мы можем отобразить сообщение пользователю о том, что его файл CSV был отправлен ему по электронной почте без необходимости в обновлении страницы.
 
 Чтобы помочь вам в создании подобного рода функционала, Laravel упрощает «вещание» серверных [событий](/docs/{{version}}/events) Laravel через соединение WebSocket. Трансляция ваших событий Laravel позволяет вам использовать одни и те же имена событий и данные между серверным приложением Laravel и клиентским JavaScript-приложением.
+
+Основные концепции широковещательной передачи просты: клиенты подключаются к именованным каналам во внешнем интерфейсе, в то время как ваше приложение Laravel транслирует события на эти каналы во внутреннем интерфейсе. Эти события могут содержать любые дополнительные данные, которые вы хотите сделать доступными для внешнего интерфейса.
 
 <a name="supported-drivers"></a>
 #### Поддерживаемые драйверы
@@ -81,7 +87,7 @@ git e2b8bccb6b3d8b55c66178c9671e2f8765b95fe7
 
 Если вы планируете транслировать свои события с помощью [Pusher Channels](https://pusher.com/channels), то вам следует установить PHP SDK Pusher Channels с помощью менеджера пакетов Composer:
 
-    composer require pusher/pusher-php-server "^5.0"
+    composer require pusher/pusher-php-server
 
 Далее, вы должны настроить свои учетные данные Pusher Channels в конфигурационном файле `config/broadcasting.php`. Пример конфигурации Pusher Channels уже содержится в этом файле, что позволяет быстро указать параметры `key`, `secret`, и `app_id`. Как правило, эти значения должны быть установлены через [переменные окружения](/docs/{{version}}/configuration#environment-configuration) `PUSHER_APP_KEY`, `PUSHER_APP_SECRET` и `PUSHER_APP_ID`:
 
@@ -494,6 +500,31 @@ Laravel упрощает определение маршрутов для отв
         authEndpoint: '/custom/endpoint/auth'
     });
 
+<a name="customizing-the-authorization-request"></a>
+#### Настройка запроса на авторизацию
+
+Вы можете настроить, как Laravel Echo выполняет запросы авторизации, предоставив настраиваемый авторизатор при инициализации Echo:
+
+    window.Echo = new Echo({
+        // ...
+        authorizer: (channel, options) => {
+            return {
+                authorize: (socketId, callback) => {
+                    axios.post('/api/broadcasting/auth', {
+                        socket_id: socketId,
+                        channel_name: channel.name
+                    })
+                    .then(response => {
+                        callback(false, response.data);
+                    })
+                    .catch(error => {
+                        callback(true, error);
+                    });
+                }
+            };
+        },
+    })
+
 <a name="defining-authorization-callbacks"></a>
 ### Определение авторизации канала
 
@@ -616,6 +647,44 @@ Laravel упрощает определение маршрутов для отв
 
     var socketId = Echo.socketId();
 
+<a name="customizing-the-connection"></a>
+### Настройка подключения
+
+Если ваше приложение взаимодействует с несколькими широковещательными соединениями, и вы хотите транслировать событие с использованием вещателя, отличного от используемого по умолчанию, вы можете указать, на какое соединение отправлять событие, используя метод `via`:
+
+    use App\Events\OrderShipmentStatusUpdated;
+
+    broadcast(new OrderShipmentStatusUpdated($update))->via('pusher');
+
+В качестве альтернативы вы можете указать широковещательное соединение события, вызвав метод `broadcastVia` в конструкторе события. Однако перед этим вы должны убедиться, что класс событий использует трейт `InteractsWithBroadcasting`:
+    
+    <?php
+
+    namespace App\Events;
+
+    use Illuminate\Broadcasting\Channel;
+    use Illuminate\Broadcasting\InteractsWithBroadcasting;
+    use Illuminate\Broadcasting\InteractsWithSockets;
+    use Illuminate\Broadcasting\PresenceChannel;
+    use Illuminate\Broadcasting\PrivateChannel;
+    use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+    use Illuminate\Queue\SerializesModels;
+
+    class OrderShipmentStatusUpdated implements ShouldBroadcast
+    {
+        use InteractsWithBroadcasting;
+        
+        /**
+         * Create a new event instance.
+         *
+         * @return void
+         */
+        public function __construct()
+        {
+            $this->broadcastVia('pusher');
+        }
+    }
+
 <a name="receiving-broadcasts"></a>
 ## Прием трансляций
 
@@ -638,6 +707,16 @@ Echo.private(`orders.${this.order.id}`)
     .listen(...)
     .listen(...)
     .listen(...);
+```
+
+<a name="stop-listening-for-events"></a>
+#### Остановка прослушивания событий
+
+Если вы хотите прекратить прослушивание данного события не [покидая канал](#leaving-a-channel), вы можете использовать метод `stopListening`:
+
+```js
+Echo.private(`orders.${this.order.id}`)
+    .stopListening('OrderShipmentStatusUpdated')
 ```
 
 <a name="leaving-a-channel"></a>
@@ -745,6 +824,198 @@ Echo.channel('orders')
         .listen('NewMessage', (e) => {
             //
         });
+
+<a name="model-broadcasting"></a>
+## Трансляция моделей
+
+> {note} Прежде чем читать следующую документацию о трансляции моделей, мы рекомендуем вам ознакомиться с общими концепциями модельных широковещательных служб Laravel, а также с тем, как вручную создавать и прослушивать широковещательные события.
+
+Обычно транслируются события, когда [модели Eloquent](/docs/{{version}}/eloquent) создаются, обновляются или удаляются. Конечно, это легко можно сделать вручную, [определив пользовательские события для изменений состояния модели Eloquent](/docs/{{version}}/eloquent#events) и пометив эти события с помощью интерфейса `ShouldBroadcast`.
+
+Однако, если вы не используете эти события для каких-либо других целей в своем приложении, может оказаться обременительным создание классов событий с единственной целью их широковещательной передачи. Чтобы исправить это, Laravel позволяет вам указать, что модель Eloquent должна автоматически транслировать изменения своего состояния.
+
+Для начала ваша модель Eloquent должна использовать трейт `Illuminate\Database\Eloquent\BroadcastsEvents`. Кроме того, модель должна определять метод `broadcastsOn`, который будет возвращать массив каналов, по которым должны транслироваться события модели:
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Database\Eloquent\BroadcastsEvents;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Post extends Model
+{
+    use BroadcastsEvents, HasFactory;
+
+    /**
+     * Получите пользователя, которому принадлежит сообщение.
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Получите каналы, по которым должны транслироваться события модели.
+     *
+     * @param  string  $event
+     * @return \Illuminate\Broadcasting\Channel|array
+     */
+    public function broadcastOn($event)
+    {
+        return [$this, $this->user];
+    }
+}
+```
+
+После того как ваша модель включает этот трейт и определяет свои каналы вещания, она начнет автоматически транслировать события при создании, обновлении, удалении, уничтожении или восстановлении экземпляра модели.
+
+Кроме того, вы могли заметить, что метод `broadcastOn` получает строковый аргумент `$event`. Этот аргумент содержит тип события, которое произошло в модели, и будет иметь значение `created`, `updated`, `deleted`, `trashed` или `restored`. Проверяя значение этой переменной, вы можете определить, на какие каналы (если есть) модель должна транслировать конкретное событие:
+
+```php
+/**
+ * Получите каналы, по которым должны транслироваться события модели.
+ *
+ * @param  string  $event
+ * @return \Illuminate\Broadcasting\Channel|array
+ */
+public function broadcastOn($event)
+{
+    return match ($event) {
+        'deleted' => [],
+        default => [$this, $this->user],
+    };
+}
+```
+
+<a name="customizing-model-broadcasting-event-creation"></a>
+#### Настройка создания события трансляции модели
+
+Иногда вы можете захотеть настроить то, как Laravel создает базовое событие трансляции модели. Вы можете добиться этого, определив метод `newBroadcastableEvent` в вашей модели Eloquent. Этот метод должен возвращать экземпляр `Illuminate\Database\Eloquent\BroadcastableModelEventOccurred`:
+
+```php
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred
+
+/**
+ * Создайте новое транслируемое событие для модели.
+ *
+ * @param  string  $event
+ * @return \Illuminate\Database\Eloquent\BroadcastableModelEventOccurred
+ */
+protected function newBroadcastableEvent($event)
+{
+    return (new BroadcastableModelEventOccurred(
+        $this, $event
+    ))->dontBroadcastToCurrentUser();
+}
+```
+
+<a name="model-broadcasting-conventions"></a>
+### Соглашение о трансляции моделей
+
+<a name="model-broadcasting-channel-conventions"></a>
+#### Соглашения о каналах
+
+Как вы могли заметить, метод `broadcastOn` в приведенном выше примере модели не возвращал экземпляры `Channel`. Вместо этого модели Eloquent возвращались напрямую. Если экземпляр модели Eloquent возвращается методом `broadcastOn` вашей модели (или содержится в массиве, возвращаемом методом), Laravel автоматически создаст экземпляр частного канала для модели, используя имя класса модели и идентификатор первичного ключа в качестве названия канала.
+
+Итак, модель `App\Models\User` с `id` равным `1` будет преобразована в экземпляр `Illuminate\Broadcasting\PrivateChannel` с именем `App.Models.User.1`. Конечно, в дополнение к возврату экземпляров модели Eloquent из метода `broadcastOn` вашей модели, вы можете возвращать полные экземпляры `Channel` чтобы иметь полный контроль над именами каналов модели:
+
+```php
+use Illuminate\Broadcasting\PrivateChannel;
+
+/**
+ * Получите каналы, по которым должны транслироваться события модели.
+ *
+ * @param  string  $event
+ * @return \Illuminate\Broadcasting\Channel|array
+ */
+public function broadcastOn($event)
+{
+    return [new PrivateChannel('user.'.$this->id)];
+}
+```
+
+Если вы планируете явно возвращать экземпляр канала из метода `broadcastOn` вашей модели, вы можете передать экземпляр модели Eloquent в конструктор канала. При этом Laravel будет использовать описанные выше соглашения о каналах модели, чтобы преобразовать модель Eloquent в строку имени канала:
+
+```php
+return [new Channel($this->user)];
+```
+
+Если вам нужно определить имя канала модели, вы можете вызвать метод `broadcastChannel` для любого экземпляра модели. Например, этот метод возвращает строку `App.Models.User.1` для модели `App\Models\User` с `id` равным `1`:
+
+```php
+$user->broadcastChannel()
+```
+
+<a name="model-broadcasting-event-conventions"></a>
+#### Соглашение о событиях
+
+Поскольку события трансляции моделей не связаны с «фактическим» событием в каталоге `App\Events` вашего приложения, им присваиваются имя и полезная нагрузка на основе соглашений. Соглашение Laravel состоит в том, чтобы транслировать событие, используя имя класса модели (не включая пространство имен) и имя события модели, которое инициировало трансляцию.
+
+Так, например, обновление модели `App\Models\Post` будет транслировать событие в ваше клиентское приложение как `PostUpdated` со следующей полезной нагрузкой:
+
+    {
+        "model": {
+            "id": 1,
+            "title": "My first post"
+            ...
+        },
+        ...
+        "socket": "someSocketId",
+    }
+
+Удаление модели `App\Models\User` приведет к трансляции события с именем `UserDeleted`.
+
+При желании вы можете определить собственное имя трансляции и полезную нагрузку, добавив к вашей модели методы `broadcastAs` и `broadcastWith`. Эти методы получают имя происходящего события / операции модели, что позволяют вам настроить имя события и полезную нагрузку для каждой операции модели. Если `null` возвращается из метода `broadcastAs`, Laravel будет использовать соглашения об именах широковещательных событий модели, обсужденные выше:
+
+```php
+/**
+ * The model event's broadcast name.
+ *
+ * @param  string  $event
+ * @return string|null
+ */
+public function broadcastAs($event)
+{
+    return match ($event) {
+        'created' => 'post.created',
+        default => null,
+    };
+}
+
+/**
+ * Get the data to broadcast for the model.
+ *
+ * @param  string  $event
+ * @return array
+ */
+public function broadcastWith($event)
+{
+    return match ($event) {
+        'created' => ['title' => $this->title],
+        default => ['model' => $this],
+    };
+}
+```
+
+<a name="listening-for-model-broadcasts"></a>
+### Прослушивание трансляций моделей
+
+После того как вы добавили в модель трейт `BroadcastsEvents` и определили метод `broadcastOn` модели, вы готовы начать прослушивание транслируемых событий модели в своем клиентском приложении. Перед тем как начать, вы можете ознакомиться с полной документацией по [прослушиванию событий](#listening-for-events).
+
+Сначала используйте метод `private` для получения экземпляра канала, затем вызовите метод `listen` для прослушивания указанного события. Как правило, имя канала, присвоенное методу `private` должно соответствовать [соглашению о трансляции моделей](#model-broadcasting-conventions).
+
+Как только вы получили экземпляр канала, вы можете использовать метод `listen` для прослушивания определенного события. Поскольку события трансляции моделей не связаны с «фактическим» событием в каталоге вашего приложения `App\Events` directory, [имя события](#model-broadcasting-event-conventions) должно иметь префикс `.`, чтобы указать, что оно не принадлежит определенному пространству имен. Каждое событие трансляции модели имеет свойство `model`, которое содержит все транслируемые свойства модели:
+
+```js
+Echo.private(`App.Models.User.${this.user.id}`)
+    .listen('.PostUpdated', (e) => {
+        console.log(e.model);
+    });
+```
 
 <a name="client-events"></a>
 ## Клиентские события
