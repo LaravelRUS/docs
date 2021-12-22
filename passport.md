@@ -1,4 +1,4 @@
-git b6cb7aa06450cd2780681a24d740d1dd03c856c6
+git e69b326ad6ab5c42944cd6bfd39ba458d023a1e0
 
 ---
 
@@ -50,7 +50,7 @@ git b6cb7aa06450cd2780681a24d740d1dd03c856c6
 <a name="introduction"></a>
 ## Введение
 
-Laravel Passport обеспечивает полную реализацию сервера OAuth2 для вашего приложения Laravel за считанные минуты. Passport построен на основе [League OAuth2](https://github.com/thephpleague/oauth2-server), который поддерживается Энди Миллингтоном (Andy Millington) и Саймоном Хэмпом (Simon Hamp).
+[Laravel Passport](https://github.com/laravel/passport) обеспечивает полную реализацию сервера OAuth2 для вашего приложения Laravel за считанные минуты. Passport построен на основе [League OAuth2](https://github.com/thephpleague/oauth2-server), который поддерживается Энди Миллингтоном (Andy Millington) и Саймоном Хэмпом (Simon Hamp).
 
 > {Примечание} В этой документации предполагается, что вы уже знакомы с OAuth2. Если вы ничего не знаете о OAuth2, перед продолжением ознакомьтесь с общей [терминологией](https://oauth2.thephpleague.com/terminology/) и функциями OAuth2.
 
@@ -749,7 +749,7 @@ Passport также включает JSON API для управления авт
 <a name="implicit-grant-tokens"></a>
 ## Неявные токены
 
-Неявное разрешение аналогично предоставлению кода авторизации; однако токен возвращается клиенту без обмена кодом авторизации. Этот разрешение чаще всего используется для JavaScript или мобильных приложений, где учетные данные клиента не могут быть надежно сохранены. Чтобы включить разрешение, вызовите метод `enableImplicitGrant` в методе `boot` класса `App\Providers\AuthServiceProvider` вашего приложения:
+Неявное разрешение аналогично предоставлению кода авторизации; однако токен возвращается клиенту без обмена кодом авторизации. Это разрешение чаще всего используется для JavaScript или мобильных приложений, где учетные данные клиента не могут быть надежно сохранены. Чтобы включить разрешение, вызовите метод `enableImplicitGrant` в методе `boot` класса `App\Providers\AuthServiceProvider` вашего приложения:
 
     /**
      * Регистрация сервисов аутентификации и авторизации.
@@ -927,6 +927,8 @@ JSON API защищен посредниками `web` и `auth`; поэтому
     Route::get('/user', function () {
         //
     })->middleware('auth:api');
+
+> {note} Если вы используете [токены учетных данных](#client-credentials-grant-tokens), вы должны вместо этого использовать [посредник `client`](#client-credentials-grant-tokens) для защиты ваших маршрутов `auth:api`.
 
 <a name="multiple-authentication-guards"></a>
 #### Множественная защита аутентификации
