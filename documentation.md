@@ -47,7 +47,7 @@ git 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Уведомления](/docs/{{version}}/notifications)
     - [Разработка пакетов](/docs/{{version}}/packages)
     - [Очереди](/docs/{{version}}/queues)
-    - [Ограничение частоты запросов](/docs/{{version}}/rate-limiting)
+    - [Ограничение скорости](/docs/{{version}}/rate-limiting)
     - [Планировщик](/docs/{{version}}/scheduling)
 - ## Безопасность
     - [Аутентификация](/docs/{{version}}/authentication)

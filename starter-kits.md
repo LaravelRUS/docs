@@ -1,4 +1,4 @@
-git 4939aacd542a53aca1c59744aef23ac9264671e3
+git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 ---
 
@@ -21,7 +21,7 @@ git 4939aacd542a53aca1c59744aef23ac9264671e3
 <a name="laravel-breeze"></a>
 ## Laravel Breeze
 
-**Laravel Breeze** – это минимальная и простая реализация всего [функционала аутентификации](authentication) Laravel, включая вход в систему, регистрацию, сброс пароля, подтверждение адреса электронной почты и пароля. Слой «View» комплекта Laravel Breeze по умолчанию состоит из простых [шаблонов Blade](/docs/{{version}}/blade), стилизованных с помощью [Tailwind CSS](https://tailwindcss.com).
+[**Laravel Breeze**](https://github.com/laravel/breeze) – это минимальная и простая реализация всего [функционала аутентификации](authentication) Laravel, включая вход в систему, регистрацию, сброс пароля, подтверждение адреса электронной почты и пароля. Слой «View» комплекта Laravel Breeze по умолчанию состоит из простых [шаблонов Blade](/docs/{{version}}/blade), стилизованных с помощью [Tailwind CSS](https://tailwindcss.com).
 
 Breeze обеспечивает прекрасную отправную точку для создания нового приложения Laravel, а также является отличным выбором для проектов, которые планируют вывести свои шаблоны Blade на новый уровень с помощью [Laravel Livewire](https://laravel-livewire.com)
 

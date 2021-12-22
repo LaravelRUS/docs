@@ -1,4 +1,4 @@
-git 60d7fab28145b23308a2ea0efbafaefb64c0fa61
+git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 ---
 
@@ -835,7 +835,7 @@ git 60d7fab28145b23308a2ea0efbafaefb64c0fa61
 <a name="listening-for-notifications"></a>
 ### Прослушивание транслируемых уведомлений
 
-Уведомления будут транслироваться по частному каналу, в формате с использованием соглашения `{notifiable}.{id}`. Итак, если вы отправляете уведомление экземпляру `App\Models\User` с идентификатором `1`, то уведомление будет транслироваться по частному каналу `App.Models.User.1`. При использовании [Laravel Echo](/docs/{{version}}/broadcasting) вы можете легко прослушивать уведомления канала, используя метод `notification`:
+Уведомления будут транслироваться по частному каналу, в формате с использованием соглашения `{notifiable}.{id}`. Итак, если вы отправляете уведомление экземпляру `App\Models\User` с идентификатором `1`, то уведомление будет транслироваться по частному каналу `App.Models.User.1`. При использовании [Laravel Echo](/docs/{{version}}/broadcasting#client-side-installation) вы можете легко прослушивать уведомления канала, используя метод `notification`:
 
     Echo.private('App.Models.User.' + userId)
         .notification((notification) => {

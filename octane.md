@@ -1,4 +1,4 @@
-git 8d133d048e5811367250604784e2ceba69be6ce2
+git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 ---
 
@@ -30,7 +30,7 @@ git 8d133d048e5811367250604784e2ceba69be6ce2
 <a name="introduction"></a>
 ## Введение
 
-Laravel Octane повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [Open Swoole](https://swoole.co.uk), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
+[Laravel Octane](https://github.com/laravel/octane) повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [Open Swoole](https://swoole.co.uk), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
 
 <a name="installation"></a>
 ## Установка
@@ -560,4 +560,3 @@ return Octane::table('example')->get('uuid');
 ```
 
 > {Примечание} Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
-
