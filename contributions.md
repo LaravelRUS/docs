@@ -47,7 +47,7 @@ git 56b2a4268eda679404a2cd7bc37d4e700ce5f7f0
 - [Пакет Laravel Scout](https://github.com/laravel/scout)
 - [Пакет Laravel Socialite](https://github.com/laravel/socialite)
 - [Пакет Laravel Telescope](https://github.com/laravel/telescope)
-- [Исходики официального сайта Laravel](https://github.com/laravel/laravel.com-next)
+- [Исходники официального сайта Laravel](https://github.com/laravel/laravel.com-next)
 <!-- </div> -->
 
 <a name="support-questions"></a>
@@ -68,7 +68,7 @@ git 56b2a4268eda679404a2cd7bc37d4e700ce5f7f0
 <a name="core-development-discussion"></a>
 ## Обсуждение разработки ядра
 
-Вы можете предлагать новый функционал или улучшения к уже существующему поведению в репозитории фреймворка Laravel на [доске обсуждений GitHub](https://github.com/laravel/framework/discussions). Если вы предлагаете новый функционал, то пожалуйста, будьте готовы реализовать по крайней мере часть кода, который потребуется для его завершения.
+Вы можете предлагать новый функционал или улучшения к уже существующему поведению в репозитории фреймворка Laravel на [доске обсуждений GitHub](https://github.com/laravel/framework/discussions). Если вы предлагаете новый функционал, то, пожалуйста, будьте готовы реализовать по крайней мере часть кода, который потребуется для его завершения.
 
 Неформальное обсуждение ошибок, нового функционала и реализаций существующего происходит на канале `#internals` сервера [Laravel Discord](https://discordapp.com/invite/mPZNm7A). Тейлор Отвелл, сопровождающий Laravel, обычно присутствует на канале в будние дни с 8:00 до 17:00 (UTC-06:00 или Америка / Чикаго) и от случая к случаю – в остальное время.
 
