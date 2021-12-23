@@ -1,4 +1,4 @@
-git 3661bb0b61fd44cdb0d3b537df1cabf892ff99ac
+git 4ae25732b03cef878a4883eb921a48e3edec7d06
 
 ---
 
@@ -150,6 +150,9 @@ git 3661bb0b61fd44cdb0d3b537df1cabf892ff99ac
         //
     })->middleware(EnsureTokenIsValid::class);
 
+<a name="excluding-middleware"></a>
+#### Исключение посредников
+
 При назначении посредника группе маршрутов, иногда может потребоваться запретить применение посредника к одному из маршрутов в группе. Вы можете сделать это с помощью метода `withoutMiddleware`:
 
     use App\Http\Middleware\EnsureTokenIsValid;
@@ -162,6 +165,16 @@ git 3661bb0b61fd44cdb0d3b537df1cabf892ff99ac
         Route::get('/profile', function () {
             //
         })->withoutMiddleware([EnsureTokenIsValid::class]);
+    });
+
+Вы также можете исключить данный набор посредников из всей [группы маршрутов](/docs/{{version}}/routing#route-groups):
+
+    use App\Http\Middleware\EnsureTokenIsValid;
+
+    Route::withoutMiddleware([EnsureTokenIsValid::class])->group(function () {
+        Route::get('/profile', function () {
+            //
+        });
     });
 
 Метод `withoutMiddleware` удаляет только посредника маршрутизации и не применим к [глобальному посреднику](#global-middleware).
@@ -225,6 +238,7 @@ git 3661bb0b61fd44cdb0d3b537df1cabf892ff99ac
         \Illuminate\View\Middleware\ShareErrorsFromSession::class,
         \Illuminate\Contracts\Auth\Middleware\AuthenticatesRequests::class,
         \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
         \Illuminate\Session\Middleware\AuthenticateSession::class,
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
         \Illuminate\Auth\Middleware\Authorize::class,

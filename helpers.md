@@ -1,4 +1,4 @@
-git 6e28d4224af33fa04038301e2ecb36327891ff2e
+git 22d680c29691d3cb0ec585f43c5a0a39d404fef1
 
 ---
 
@@ -10,7 +10,7 @@ git 6e28d4224af33fa04038301e2ecb36327891ff2e
 <a name="introduction"></a>
 ## Введение
 
-Laravel содержит множество глобальных «вспомогательных» функций PHP. Многие из этих функций используются самим фреймворком; однако, вы можете использовать их в своих собственных приложениях, если сочтете их удобными.
+Laravel содержит множество глобальных «вспомогательных» функций. Многие из этих функций используются самим фреймворком; однако, вы можете использовать их в своих собственных приложениях, если сочтете удобными.
 
 <a name="available-methods"></a>
 ## Доступные методы
@@ -57,7 +57,10 @@ Laravel содержит множество глобальных «вспомо�
 - [Arr::shuffle](#method-array-shuffle)
 - [Arr::sort](#method-array-sort)
 - [Arr::sortRecursive](#method-array-sort-recursive)
+- [Arr::toCssClasses](#method-array-to-css-classes)
+- [Arr::undot](#method-array-undot)
 - [Arr::where](#method-array-where)
+- [Arr::whereNotNull](#method-array-where-not-null)
 - [Arr::wrap](#method-array-wrap)
 - [data_fill](#method-data-fill)
 - [data_get](#method-data-get)
@@ -102,6 +105,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::containsAll](#method-str-contains-all)
 - [Str::endsWith](#method-ends-with)
 - [Str::finish](#method-str-finish)
+- [Str::headline](#method-str-headline)
 - [Str::is](#method-str-is)
 - [Str::isAscii](#method-str-is-ascii)
 - [Str::isUuid](#method-str-is-uuid)
@@ -110,6 +114,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::limit](#method-str-limit)
 - [Str::lower](#method-str-lower)
 - [Str::markdown](#method-str-markdown)
+- [Str::mask](#method-str-mask)
 - [Str::orderedUuid](#method-str-ordered-uuid)
 - [Str::padBoth](#method-str-padboth)
 - [Str::padLeft](#method-str-padleft)
@@ -122,6 +127,7 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::replaceArray](#method-str-replace-array)
 - [Str::replaceFirst](#method-str-replace-first)
 - [Str::replaceLast](#method-str-replace-last)
+- [Str::reverse](#method-str-reverse)
 - [Str::singular](#method-str-singular)
 - [Str::slug](#method-str-slug)
 - [Str::snake](#method-snake-case)
@@ -167,12 +173,14 @@ Laravel содержит множество глобальных «вспомо�
 - [isAscii](#method-fluent-str-is-ascii)
 - [isEmpty](#method-fluent-str-is-empty)
 - [isNotEmpty](#method-fluent-str-is-not-empty)
+- [isUuid](#method-fluent-str-is-uuid)
 - [kebab](#method-fluent-str-kebab)
 - [length](#method-fluent-str-length)
 - [limit](#method-fluent-str-limit)
 - [lower](#method-fluent-str-lower)
 - [ltrim](#method-fluent-str-ltrim)
 - [markdown](#method-fluent-str-markdown)
+- [mask](#method-fluent-str-mask)
 - [match](#method-fluent-str-match)
 - [matchAll](#method-fluent-str-match-all)
 - [padBoth](#method-fluent-str-padboth)
@@ -778,6 +786,43 @@ Laravel содержит множество глобальных «вспомо�
         ]
     */
 
+<a name="method-array-to-css-classes"></a>
+#### `Arr::toCssClasses()` 
+
+Метод `Arr::toCssClasses` составляет строку классов CSS исхдя из заданных условий. Метод принимает массив классов, где ключ массива содержит класс или классы, которые вы хотите добавить, а значение является булевым выражением. Если элемент массива не имеет строкового ключа, он всегда будет включен в список отрисованных классов:
+
+    use Illuminate\Support\Arr;
+
+    $isActive = false;
+    $hasError = true;
+
+    $array = ['p-4', 'font-bold' => $isActive, 'bg-red' => $hasError];
+
+    $classes = Arr::toCssClasses($array);
+
+    /*
+        'p-4 bg-red'
+    */
+
+При помощи этого метода осуществляется [объединение css-классов в Blade](/docs/{{version}}/blade#conditionally-merge-classes), а также [в директиве](/docs/{{version}}/blade#conditional-classes) `@class`. 
+
+
+<a name="method-array-undot"></a>
+#### `Arr::undot()`
+
+Метод `Arr::undot` расширяет одномерный массив, использующий "точечную нотацию", в многомерный массив:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        'user.name' => 'Kevin Malone',
+        'user.occupation' => 'Accountant',
+    ];
+
+    $array = Arr::undot($array);
+
+    // ['user' => ['name' => 'Kevin Malone', 'occupation' => 'Accountant']]
+
 <a name="method-array-where"></a>
 #### `Arr::where()`
 
@@ -792,6 +837,19 @@ Laravel содержит множество глобальных «вспомо�
     });
 
     // [1 => '200', 3 => '400']
+
+<a name="method-array-where-not-null"></a>
+#### `Arr::whereNotNull()`
+
+Метод `Arr::whereNotNull`удаляет все значения `null` из данного массива:
+
+    use Illuminate\Support\Arr;
+
+    $array = [0, null];
+
+    $filtered = Arr::whereNotNull($array);
+
+    // [0 => 0]
 
 <a name="method-array-wrap"></a>
 #### `Arr::wrap()`
@@ -1200,6 +1258,21 @@ Laravel содержит множество глобальных «вспомо�
 
     // this/string/
 
+<a name="method-str-headline"></a>
+#### `Str::headline()`
+
+Метод `Str::headline` преобразует строки, разделенные регистром, дефисами или подчеркиванием, в строку, разделенную пробелами, с заглавной первой буквой каждого слова:
+
+    use Illuminate\Support\Str;
+
+    $headline = Str::headline('steve_jobs');
+
+    // Steve Jobs
+
+    $headline = Str::headline('EmailNotificationSent');
+
+    // Email Notification Sent
+
 <a name="method-str-is"></a>
 #### `Str::is()`
 
@@ -1313,6 +1386,23 @@ Laravel содержит множество глобальных «вспомо�
     ]);
 
     // <h1>Taylor Otwell</h1>
+
+<a name="method-str-mask"></a>
+#### `Str::mask()`
+
+Метод `Str::mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::mask('taylor@example.com', '*', 3);
+
+    // tay***************
+
+При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
+
+    $string = Str::mask('taylor@example.com', '*', -15, 3);
+
+    // tay***@example.com
 
 <a name="method-str-ordered-uuid"></a>
 #### `Str::orderedUuid()`
@@ -1495,6 +1585,17 @@ Laravel содержит множество глобальных «вспомо�
 
     // the quick brown fox jumps over a lazy dog
 
+<a name="method-str-reverse"></a>
+#### `Str::reverse()`
+
+Метод `Str::reverse` переворачивает данную строку:
+
+    use Illuminate\Support\Str;
+
+    $reversed = Str::reverse('Hello World');
+
+    // dlroW olleH
+
 <a name="method-str-singular"></a>
 #### `Str::singular()`
 
@@ -1531,6 +1632,10 @@ Laravel содержит множество глобальных «вспомо�
     $converted = Str::snake('fooBar');
 
     // foo_bar
+
+    $converted = Str::snake('fooBar', '-');
+
+    // foo-bar
 
 <a name="method-str-start"></a>
 #### `Str::start()`
@@ -1634,9 +1739,9 @@ Laravel содержит множество глобальных «вспомо�
     return (string) Str::uuid();
 
 <a name="method-str-word-count"></a>
-### `wordCount`
+#### `Str::wordCount`
 
-Метод `wordCount` возвращает число слов в строке:
+Метод `Str::wordCount` возвращает число слов в строке:
 
 ```php
 use Illuminate\Support\Str;
@@ -1944,6 +2049,21 @@ Str::wordCount('Hello, world!'); // 2
 
     // true
 
+<a name="method-fluent-str-is-uuid"></a>
+#### `isUuid` 
+
+Метод `isUuid` определяет, является ли заданная строка UUID:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::of('5ace9ab9-e9cf-4ec6-a19d-5881212a452c')->isUuid();
+
+    // true
+
+    $result = Str::of('Taylor')->isUuid();
+
+    // false    
+
 <a name="method-fluent-str-kebab"></a>
 #### `kebab`
 
@@ -2027,6 +2147,23 @@ Str::wordCount('Hello, world!'); // 2
     ]);
 
     // <h1>Taylor Otwell</h1>
+
+<a name="method-fluent-str-mask"></a>
+#### `mask`
+
+Метод `mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('taylor@example.com')->mask('*', 3);
+
+    // tay***************
+
+При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
+
+    $string = Str::of('taylor@example.com')->mask('*', -15, 3);
+
+    // tay***@example.com
 
 <a name="method-fluent-str-match"></a>
 #### `match`
@@ -2464,7 +2601,7 @@ If no matches are found, an empty collection will be returned.
     // 'Laravel'
 
 <a name="method-fluent-str-word-count"></a>
-### `wordCount`
+#### `wordCount`
 
 Метод `wordCount` возвращает число слов в строке:
 
@@ -2935,11 +3072,27 @@ Str::of('Hello, world!')->wordCount(); // 2
 <a name="method-retry"></a>
 #### `retry()`
 
-Функция `retry` пытается выполнить переданное замыкание, пока не будет достигнут указанный лимит попыток. Если замыкание не выбросит исключение, то будет возвращено его значение. Если замыкание выбросит исключение, то замыкание будет автоматически повторено. Если максимальное количество попыток превышено, будет выбрашено исключение:
+Функция `retry` пытается выполнить переданную функцию, пока не будет достигнут указанный лимит попыток. Если функция не выбросит исключение, то будет возвращено её значение. Если функция выбросит исключение, то будет автоматически повторена. Если максимальное количество попыток превышено, будет выброшено исключение:
 
     return retry(5, function () {
         // Attempt 5 times while resting 100ms in between attempts...
     }, 100);
+
+Если вы хотите вручную вычислить количество миллисекунд, которое должно пройти между попытками, вы можете передать функцию в качестве третьего аргумента функции `retry`:
+
+    return retry(5, function () {
+        // ...
+    }, function ($attempt) {
+        return $attempt * 100;
+    });
+
+Чтобы повторить попытку только при определенных условиях, вы можете передать функцию, определяющее это условие, в качестве четвертого аргумента функции `retry`:
+
+    return retry(5, function () {
+        // ...
+    }, 100, function ($exception) {
+        return $exception instanceof RetryException;
+    });
 
 <a name="method-session"></a>
 #### `session()`

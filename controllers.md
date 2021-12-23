@@ -1,4 +1,4 @@
-git 4552cee7c17f0b8fe6260f418aa7a38476ec00ca
+git 80807a5b50ac83b11e641eb73a78aa50bd208563
 
 ---
 
@@ -188,7 +188,14 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
 
 Если вы используете [привязку модели к маршруту](/docs/{{version}}/routing#route-model-binding) и хотите, чтобы методы контроллера ресурса содержали типизацию экземпляра модели, вы можете использовать параметр `--model` при создании контроллера:
 
-    php artisan make:controller PhotoController --resource --model=Photo
+    php artisan make:controller PhotoController --model=Photo --resource
+
+<a name="generating-form-requests"></a>
+#### Создание запросов формы
+
+Вы можете указать параметр `--requests` при создании контроллера ресурсов, чтобы указать Artisan на создание [классов запросов формы](/docs/{{version}}/validation#form-request-validation) для методов хранения и обновления контроллера:
+
+    php artisan make:controller PhotoController --model=Photo --resource --requests
 
 <a name="restful-partial-resource-routes"></a>
 ### Частичные ресурсные маршруты

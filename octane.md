@@ -1,4 +1,4 @@
-git e27f12010aa82141f57f21b5fda9004c96e4075d
+git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 ---
 
@@ -30,7 +30,7 @@ git e27f12010aa82141f57f21b5fda9004c96e4075d
 <a name="introduction"></a>
 ## Введение
 
-Laravel Octane повышает производительность вашего приложения, обслуживая с использованием мощных серверов приложений, включая [Swoole](https://swoole.co.uk) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
+[Laravel Octane](https://github.com/laravel/octane) повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [Open Swoole](https://swoole.co.uk), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
 
 <a name="installation"></a>
 ## Установка
@@ -120,13 +120,27 @@ pecl install swoole
 Затем обновите директиву `command` в файле `docker/supervisord.conf` вашего приложения, чтобы Sail обслуживал ваше приложение, используя Octane вместо сервера разработки PHP:
 
 ```ini
-command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=8000
+command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=80
 ```
 
 Наконец, создайте свои образы Sail:
 
 ```bash
 ./vendor/bin/sail build --no-cache
+```
+
+<a name="swoole-configuration"></a>
+#### Конфигурация Swoole
+
+Swoole поддерживает несколько дополнительных параметров конфигурации, которые вы можете добавить в свой файл конфигурации `octane` при необходимости. Поскольку их редко нужно изменять, эти параметры не включены в файл конфигурации по умолчанию:
+
+```php
+'swoole' => [ 
+    'options' => [
+        'log_file' => storage_path('logs/swoole_http.log'),
+        'package_max_length' => 10 * 1024 * 1024,
+    ],
+];
 ```
 
 <a name="serving-your-application"></a>
@@ -546,4 +560,3 @@ return Octane::table('example')->get('uuid');
 ```
 
 > {Примечание} Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
-

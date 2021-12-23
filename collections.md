@@ -1,4 +1,4 @@
-git 7aab3644f018b0f4d73bf8418d811e0b828ade91
+git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
 ---
 
@@ -18,7 +18,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="introduction"></a>
 ## Введение
 
-Класс `Illuminate\Support\Collection` обеспечивает гибкую и удобную обертку для работы с массивами данных. Например, посмотрите на следующий код. Здесь мы будем использовать помощник `collect`, чтобы создать новый экземпляр коллекции из массива, запустим функцию `strtoupper` для каждого элемента, а затем удалим все пустые элементы:
+Класс `Illuminate\Support\Collection` обеспечивает гибкую и удобную обертку для работы с массивами данных. Например, посмотрите на следующий код. Здесь мы будем использовать хелпер `collect`, чтобы создать новый экземпляр коллекции из массива, запустим функцию `strtoupper` для каждого элемента, а затем удалим все пустые элементы:
 
     $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
         return strtoupper($name);
@@ -26,7 +26,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         return empty($name);
     });
 
-Как видите, класс `Collection` позволяет объединять необходимые вам методы в цепочку для выполнения последовательного перебора и сокращения базового массива. В-основном коллекции неизменяемы, то есть каждый метод коллекции возвращает совершенно новый экземпляр `Collection`.
+Как видите, класс `Collection` позволяет объединять необходимые вам методы в цепочку для выполнения последовательного перебора и сокращения базового массива. В основном коллекции неизменяемы, то есть каждый метод коллекции возвращает совершенно новый экземпляр `Collection`.
 
 <a name="creating-collections"></a>
 ### Создание коллекций
@@ -40,7 +40,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="extending-collections"></a>
 ### Расширение коллекций
 
-Класс `Collection` являются «макропрограммируемым», что позволяет вам добавлять дополнительные методы к классу во время выполнения. Метод `macro` класса `Illuminate\Support\Collection` принимает замыкание, которое будет выполнено при вызове вашей макрокоманды. Замыкание макрокоманды может обращаться к другим методам коллекции через `$this`, как если бы это был реальный метод класса коллекции. Например, следующий код добавляет метод `toUpper` классу `Collection`:
+Класс `Collection` являются «макропрограммируемым», что позволяет вам добавлять дополнительные методы к классу во время выполнения. Метод `macro` класса `Illuminate\Support\Collection` принимает функцию, которая будет выполнена при вызове вашего макроса. Эта функция может обращаться к другим методам коллекции через `$this`, как если бы это был реальный метод класса коллекции. Например, следующий код добавляет метод `toUpper` классу `Collection`:
 
     use Illuminate\Support\Collection;
     use Illuminate\Support\Str;
@@ -57,16 +57,15 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // ['FIRST', 'SECOND']
 
-Обычно вы должны объявлять макрокоманды коллекций в методе `boot` [поставщика служб](/docs/{{version}}/providers).
+Обычно макросы коллекций объявляются в методе `boot` [сервис-провайдера](/docs/{{version}}/providers).
 
 <a name="macro-arguments"></a>
-#### Аргументы макрокоманды
+#### Макросы с аргументами
 
-При необходимости вы можете определить макрокоманды, которые принимают дополнительные аргументы:
+При необходимости вы можете определить макросы, которые принимают дополнительные аргументы:
 
     use Illuminate\Support\Collection;
     use Illuminate\Support\Facades\Lang;
-    use Illuminate\Support\Str;
 
     Collection::macro('toLocale', function ($locale) {
         return $this->map(function ($value) use ($locale) {
@@ -96,148 +95,137 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 <!-- <div id="collection-method-list" markdown="1"> -->
 
-- [Коллекции](#коллекции)
-  - [Введение](#введение)
-    - [Создание коллекций](#создание-коллекций)
-    - [Расширение коллекций](#расширение-коллекций)
-      - [Аргументы макрокоманды](#аргументы-макрокоманды)
-  - [Доступные методы](#доступные-методы)
-  - [Список методов](#список-методов)
-      - [`all()`](#all)
-      - [`average()`](#average)
-      - [`avg()`](#avg)
-      - [`chunk()`](#chunk)
-      - [`chunkWhile()`](#chunkwhile)
-      - [`collapse()`](#collapse)
-      - [`combine()`](#combine)
-      - [`collect()`](#collect)
-      - [`concat()`](#concat)
-      - [`contains()`](#contains)
-      - [`containsStrict()`](#containsstrict)
-      - [`count()`](#count)
-      - [`countBy()`](#countby)
-      - [`crossJoin()`](#crossjoin)
-      - [`dd()`](#dd)
-      - [`diff()`](#diff)
-      - [`diffAssoc()`](#diffassoc)
-      - [`diffKeys()`](#diffkeys)
-      - [`dump()`](#dump)
-      - [`duplicates()`](#duplicates)
-      - [`duplicatesStrict()`](#duplicatesstrict)
-      - [`each()`](#each)
-      - [`eachSpread()`](#eachspread)
-      - [`every()`](#every)
-      - [`except()`](#except)
-      - [`filter()`](#filter)
-      - [`first()`](#first)
-      - [`firstWhere()`](#firstwhere)
-      - [`flatMap()`](#flatmap)
-      - [`flatten()`](#flatten)
-      - [`flip()`](#flip)
-      - [`forget()`](#forget)
-      - [`forPage()`](#forpage)
-      - [`get()`](#get)
-      - [`groupBy()`](#groupby)
-      - [`has()`](#has)
-      - [`implode()`](#implode)
-      - [`intersect()`](#intersect)
-      - [`intersectByKeys()`](#intersectbykeys)
-      - [`isEmpty()`](#isempty)
-      - [`isNotEmpty()`](#isnotempty)
-      - [`join()`](#join)
-      - [`keyBy()`](#keyby)
-      - [`keys()`](#keys)
-      - [`last()`](#last)
-      - [`macro()`](#macro)
-      - [`make()`](#make)
-      - [`map()`](#map)
-      - [`mapInto()`](#mapinto)
-      - [`mapSpread()`](#mapspread)
-      - [`mapToGroups()`](#maptogroups)
-      - [`mapWithKeys()`](#mapwithkeys)
-      - [`max()`](#max)
-      - [`median()`](#median)
-      - [`merge()`](#merge)
-      - [`mergeRecursive()`](#mergerecursive)
-      - [`min()`](#min)
-      - [`mode()`](#mode)
-      - [`nth()`](#nth)
-      - [`only()`](#only)
-      - [`pad()`](#pad)
-      - [`partition()`](#partition)
-      - [`pipe()`](#pipe)
-      - [`pipeInto()`](#pipeinto)
-      - [`pluck()`](#pluck)
-      - [`pop()`](#pop)
-      - [`prepend()`](#prepend)
-      - [`pull()`](#pull)
-      - [`push()`](#push)
-      - [`put()`](#put)
-      - [`random()`](#random)
-      - [`reduce()`](#reduce)
-      - [`reject()`](#reject)
-      - [`replace()`](#replace)
-      - [`replaceRecursive()`](#replacerecursive)
-      - [`reverse()`](#reverse)
-      - [`search()`](#search)
-      - [`shift()`](#shift)
-      - [`shuffle()`](#shuffle)
-      - [`skip()`](#skip)
-      - [`skipUntil()`](#skipuntil)
-      - [`skipWhile()`](#skipwhile)
-      - [`slice()`](#slice)
-      - [`some()`](#some)
-      - [`sort()`](#sort)
-      - [`sortBy()`](#sortby)
-      - [`sortByDesc()`](#sortbydesc)
-      - [`sortDesc()`](#sortdesc)
-      - [`sortKeys()`](#sortkeys)
-      - [`sortKeysDesc()`](#sortkeysdesc)
-      - [`splice()`](#splice)
-      - [`split()`](#split)
-      - [`splitIn()`](#splitin)
-      - [`sum()`](#sum)
-      - [`take()`](#take)
-      - [`takeUntil()`](#takeuntil)
-      - [`takeWhile()`](#takewhile)
-      - [`tap()`](#tap)
-      - [`times()`](#times)
-      - [`toArray()`](#toarray)
-      - [`toJson()`](#tojson)
-      - [`transform()`](#transform)
-      - [`union()`](#union)
-      - [`unique()`](#unique)
-      - [`uniqueStrict()`](#uniquestrict)
-      - [`unless()`](#unless)
-      - [`unlessEmpty()`](#unlessempty)
-      - [`unlessNotEmpty()`](#unlessnotempty)
-      - [`unwrap()`](#unwrap)
-      - [`values()`](#values)
-      - [`when()`](#when)
-      - [`whenEmpty()`](#whenempty)
-      - [`whenNotEmpty()`](#whennotempty)
-      - [`where()`](#where)
-      - [`whereStrict()`](#wherestrict)
-      - [`whereBetween()`](#wherebetween)
-      - [`whereIn()`](#wherein)
-      - [`whereInStrict()`](#whereinstrict)
-      - [`whereInstanceOf()`](#whereinstanceof)
-      - [`whereNotBetween()`](#wherenotbetween)
-      - [`whereNotIn()`](#wherenotin)
-      - [`whereNotInStrict()`](#wherenotinstrict)
-      - [`whereNotNull()`](#wherenotnull)
-      - [`whereNull()`](#wherenull)
-      - [`wrap()`](#wrap)
-      - [`zip()`](#zip)
-  - [Сообщения высшего порядка](#сообщения-высшего-порядка)
-  - [Отложенные коллекции](#отложенные-коллекции)
-    - [Введение в отложенные коллекции](#введение-в-отложенные-коллекции)
-    - [Создание отложенных коллекций](#создание-отложенных-коллекций)
-    - [Контракт `Enumerable`](#контракт-enumerable)
-    - [Методы отложенных коллекций](#методы-отложенных-коллекций)
-      - [`takeUntilTimeout()`](#takeuntiltimeout)
-      - [`tapEach()`](#tapeach)
-      - [`remember()`](#remember)
+- [`all()`](#method-all)
+- [`average()`](#method-average)
+- [`avg()`](#method-avg)
+- [`chunk()`](#method-chunk)
+- [`chunkWhile()`](#method-chunkwhile)
+- [`collapse()`](#method-collapse)
+- [`combine()`](#method-combine)
+- [`collect()`](#method-collect)
+- [`concat()`](#method-concat)
+- [`contains()`](#method-contains)
+- [`containsStrict()`](#method-containsstrict)
+- [`count()`](#method-count)
+- [`countBy()`](#method-countby)
+- [`crossJoin()`](#method-crossjoin)
+- [`dd()`](#method-dd)
+- [`diff()`](#method-diff)
+- [`diffAssoc()`](#method-diffassoc)
+- [`diffKeys()`](#method-diffkeys)
+- [`doesntContain`](#method-doesntcontain)
+- [`dump()`](#method-dump)
+- [`duplicates()`](#method-duplicates)
+- [`duplicatesStrict()`](#method-duplicatesstrict)
+- [`each()`](#method-each)
+- [`eachSpread()`](#method-eachspread)
+- [`every()`](#method-every)
+- [`except()`](#method-except)
+- [`filter()`](#method-filter)
+- [`first()`](#method-first)
+- [`firstWhere()`](#method-firstwhere)
+- [`flatMap()`](#method-flatmap)
+- [`flatten()`](#method-flatten)
+- [`flip()`](#method-flip)
+- [`forget()`](#method-forget)
+- [`forPage()`](#method-forpage)
+- [`get()`](#method-get)
+- [`groupBy()`](#method-groupby)
+- [`has()`](#method-has)
+- [`implode()`](#method-implode)
+- [`intersect()`](#method-intersect)
+- [`intersectByKeys()`](#method-intersectbykeys)
+- [`isEmpty()`](#method-isempty)
+- [`isNotEmpty()`](#method-isnotempty)
+- [`join()`](#method-join)
+- [`keyBy()`](#method-keyby)
+- [`keys()`](#method-keys)
+- [`last()`](#method-last)
+- [`macro()`](#method-macro)
+- [`make()`](#method-make)
+- [`map()`](#method-map)
+- [`mapInto()`](#method-mapinto)
+- [`mapSpread()`](#method-mapspread)
+- [`mapToGroups()`](#method-maptogroups)
+- [`mapWithKeys()`](#method-mapwithkeys)
+- [`max()`](#method-max)
+- [`median()`](#method-median)
+- [`merge()`](#method-merge)
+- [`mergeRecursive()`](#method-mergerecursive)
+- [`min()`](#method-min)
+- [`mode()`](#method-mode)
+- [`nth()`](#method-nth)
+- [`only()`](#method-only)
+- [`pad()`](#method-pad)
+- [`partition()`](#method-partition)
+- [`pipe()`](#method-pipe)
+- [`pipeInto()`](#method-pipeinto)
+- [`pluck()`](#method-pluck)
+- [`pop()`](#method-pop)
+- [`prepend()`](#method-prepend)
+- [`pull()`](#method-pull)
+- [`push()`](#method-push)
+- [`put()`](#method-put)
+- [`random()`](#method-random)
+- [`range`](#method-range)
+- [`reduce()`](#method-reduce)
+- [`reduceSpread`](#method-reduce-spread)
+- [`reject()`](#method-reject)
+- [`replace()`](#method-replace)
+- [`replaceRecursive()`](#method-replacerecursive)
+- [`reverse()`](#method-reverse)
+- [`search()`](#method-search)
+- [`shift()`](#method-shift)
+- [`shuffle()`](#method-shuffle)
+- [`sliding`](#method-sliding)
+- [`skip()`](#method-skip)
+- [`skipUntil()`](#method-skipuntil)
+- [`skipWhile()`](#method-skipwhile)
+- [`slice()`](#method-slice)
+- [`sole`](#method-sole)
+- [`some()`](#method-some)
+- [`sort()`](#method-sort)
+- [`sortBy()`](#method-sortby)
+- [`sortByDesc()`](#method-sortbydesc)
+- [`sortDesc()`](#method-sortdesc)
+- [`sortKeys()`](#method-sortkeys)
+- [`sortKeysDesc()`](#method-sortkeysdesc)
+- [`splice()`](#method-splice)
+- [`split()`](#method-split)
+- [`splitIn()`](#method-splitin)
+- [`sum()`](#method-sum)
+- [`take()`](#method-take)
+- [`takeUntil()`](#method-takeuntil)
+- [`takeWhile()`](#method-takewhile)
+- [`tap()`](#method-tap)
+- [`times()`](#method-times)
+- [`toArray()`](#method-toarray)
+- [`toJson()`](#method-tojson)
+- [`transform()`](#method-transform)
+- [`union()`](#method-union)
+- [`unique()`](#method-unique)
+- [`uniqueStrict()`](#method-uniquestrict)
+- [`unless()`](#method-unless)
+- [`unlessEmpty()`](#method-unlessempty)
+- [`unlessNotEmpty()`](#method-unlessnotempty)
+- [`unwrap()`](#method-unwrap)
+- [`values()`](#method-values)
+- [`when()`](#method-when)
+- [`whenEmpty()`](#method-whenempty)
+- [`whenNotEmpty()`](#method-whennotempty)
+- [`where()`](#method-where)
+- [`whereStrict()`](#method-wherestrict)
+- [`whereBetween()`](#method-wherebetween)
+- [`whereIn()`](#method-wherein)
+- [`whereInStrict()`](#method-whereinstrict)
+- [`whereInstanceOf()`](#method-whereinstanceof)
+- [`whereNotBetween()`](#method-wherenotbetween)
+- [`whereNotIn()`](#method-wherenotin)
+- [`whereNotInStrict()`](#method-wherenotinstrict)
+- [`whereNotNull()`](#method-wherenotnull)
+- [`whereNull()`](#method-wherenull)
+- [`wrap()`](#method-wrap)
+- [`zip()`](#method-zip)
 
 <!-- </div> -->
 
@@ -341,19 +329,6 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-<a name="method-combine"></a>
-#### `combine()`
-
-Метод `combine` объединяет значения коллекции в качестве ключей со значениями другого массива или коллекции:
-
-    $collection = collect(['name', 'age']);
-
-    $combined = $collection->combine(['George', 29]);
-
-    $combined->all();
-
-    // ['name' => 'George', 'age' => 29]
-
 <a name="method-collect"></a>
 #### `collect()`
 
@@ -387,6 +362,19 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 > {tip} Метод `collect` особенно полезен, когда у вас есть экземпляр `Enumerable` и вам нужен «не-отложенный» экземпляр коллекции. Так как `collect()` является частью контракта `Enumerable`, вы можете безопасно использовать его для получения экземпляра `Collection`.
 
+<a name="method-combine"></a>
+#### `combine()`
+
+Метод `combine` объединяет значения коллекции в качестве ключей со значениями другого массива или коллекции:
+
+    $collection = collect(['name', 'age']);
+
+    $combined = $collection->combine(['George', 29]);
+
+    $combined->all();
+
+    // ['name' => 'George', 'age' => 29]
+
 <a name="method-concat"></a>
 #### `concat()`
 
@@ -403,7 +391,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 <a name="method-contains"></a>
 #### `contains()`
 
-Вы также можете передать замыкание в `contains`, чтобы определить, существует ли в коллекции элемент, соответствующий указанному критерию истинности:
+Метод `contains` определяет, содержит ли коллекция данный элемент. Вы можете передать в `contains` функцию, чтобы определить, существует ли в коллекции элемент, соответствующий указанному критерию истинности:
 
     $collection = collect([1, 2, 3, 4, 5]);
 
@@ -413,7 +401,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // false
 
-Как вариант, вы можете передать строку методу `contains`, чтобы определить, содержит ли коллекция указанное значение элемента:
+Вы также можете передать строку методу `contains`, чтобы определить, содержит ли коллекция указанное значение элемента:
 
     $collection = collect(['name' => 'Desk', 'price' => 100]);
 
@@ -437,6 +425,8 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
     // false
 
 Метод `contains` использует «гибкое» сравнение при проверке значений элементов, то есть строка с целочисленным значением будет считаться равной целому числу того же значения. Используйте метод [`containsStrict`](#method-containsstrict) для фильтрации с использованием «жесткого» сравнения.
+
+Противоположным для метода `contains`, является метод [`doesntContain`](#method-doesntcontain).
 
 <a name="method-containsstrict"></a>
 #### `containsStrict()`
@@ -601,6 +591,44 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // ['one' => 10, 'three' => 30, 'five' => 50]
 
+<a name="method-doesntcontain"></a>
+#### `doesntContain()`
+
+Метод `doesntContain` определяет, не содержит ли коллекция данный элемент. Вы можете передать замыкание методу `doesntContain`, чтобы определить, не существует ли элемента в коллекции, соответствующего заданному критерию:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->doesntContain(function ($value, $key) {
+        return $value < 5;
+    });
+
+    // false
+
+В качестве альтернативы вы можете передать строку методу `doesntContain`, чтобы определить, не содержит ли коллекция заданного значения элемента:
+
+    $collection = collect(['name' => 'Desk', 'price' => 100]);
+
+    $collection->doesntContain('Table');
+
+    // true
+
+    $collection->doesntContain('Desk');
+
+    // false
+
+Вы также можете передать пару ключ/значение методу `doesntContain`, который определит, не существует ли данная пара в коллекции:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+        ['product' => 'Chair', 'price' => 100],
+    ]);
+
+    $collection->doesntContain('product', 'Bookcase');
+
+    // true
+
+Метод `doesntContain` использует "не строгое" сравнение при проверке значений элементов, что означает, что строка с целым значением будет считаться равной целому числу того же значения.
+
 <a name="method-dump"></a>
 #### `dump()`
 
@@ -638,7 +666,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         ['email' => 'abigail@example.com', 'position' => 'Developer'],
         ['email' => 'james@example.com', 'position' => 'Designer'],
         ['email' => 'victoria@example.com', 'position' => 'Developer'],
-    ])
+    ]);
 
     $employees->duplicates('position');
 
@@ -1306,7 +1334,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         ]
     ]);
 
-    $keyed = $collection->mapWithKeys(function ($item) {
+    $keyed = $collection->mapWithKeys(function ($item, $key) {
         return [$item['email'] => $item['name']];
     });
 
@@ -1623,6 +1651,18 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [1, 2, 3, 4]
 
+Вы можете передать целое число в метод `pop`, чтобы удалить и вернуть несколько элементов из конца коллекции:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->pop(3);
+
+    // collect([5, 4, 3])
+
+    $collection->all();
+
+    // [1, 2]    
+
 <a name="method-prepend"></a>
 #### `prepend()`
 
@@ -1708,6 +1748,18 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 Если в экземпляре коллекции меньше элементов, чем запрошено, метод `random` сгенерирует исключение `InvalidArgumentException`.
 
+<a name="method-range"></a>
+#### `range()`
+
+Метод `range` возвращает коллекцию, содержащую целые числа в указанном диапазоне:
+
+    $collection = collect()->range(3, 6);
+
+    $collection->all();
+
+    // [3, 4, 5, 6]
+
+
 <a name="method-reduce"></a>
 #### `reduce()`
 
@@ -1743,11 +1795,31 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         'eur' => 1.22,
     ];
 
-    $collection->reduceWithKeys(function ($carry, $value, $key) use ($ratio) {
+    $collection->reduce(function ($carry, $value, $key) use ($ratio) {
         return $carry + ($value * $ratio[$key]);
     });
 
     // 4264
+
+
+<a name="method-reduce-spread"></a>
+#### `reduceSpread()`
+
+Метод `reduceSpread` сокращает коллекцию до массива значений, передавая результаты каждой итерации в следующую итерацию. Этот метод похож на метод `reduce`, однако он может принимать несколько начальных значений:
+
+```php
+[$creditsRemaining, $batch] = Image::where('status', 'unprocessed')
+        ->get()
+        ->reduceSpread(function ($creditsRemaining, $batch, $image) {
+            if ($creditsRemaining >= $image->creditsRequired()) {
+                $batch->push($image);
+
+                $creditsRemaining -= $image->creditsRequired();
+            }
+
+            return [$creditsRemaining, $batch];
+        }, $creditsAvailable, collect());
+```
 
 <a name="method-reject"></a>
 #### `reject()`
@@ -1864,6 +1936,18 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [2, 3, 4, 5]
 
+Вы можете передать целое число в метод `shift`, чтобы удалить и вернуть несколько элементов из начала коллекции:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $collection->shift(3);
+
+    // collect([1, 2, 3])
+
+    $collection->all();
+
+    // [4, 5]    
+
 <a name="method-shuffle"></a>
 #### `shuffle()`
 
@@ -1875,7 +1959,36 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     $shuffled->all();
 
-    // [3, 2, 5, 1, 4] - (generated randomly)
+    // [3, 2, 5, 1, 4] - (последовательность случайная)
+
+<a name="method-sliding"></a>
+#### `sliding()` {#collection-method}
+
+Метод `sliding` возвращает новую коллекцию фрагментов (chunks), представляющих представление элементов коллекции в виде "скользящего окна":
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $chunks = $collection->sliding(2);
+
+    $chunks->toArray();
+
+    // [[1, 2], [2, 3], [3, 4], [4, 5]]
+
+Это особенно полезно в сочетании с методом [`eachSpread`](#method-eachspread):
+
+    $transactions->sliding(2)->eachSpread(function ($previous, $current) {
+        $current->total = $previous->total + $current->amount;
+    });
+
+По желанию вторым аргументом можно передать "шаг", который определяет расстояние между первым элементом каждого фрагмента:
+
+    $collection = collect([1, 2, 3, 4, 5]);
+
+    $chunks = $collection->sliding(3, step: 2);
+
+    $chunks->toArray();
+
+    // [[1, 2, 3], [3, 4, 5]]
 
 <a name="method-skip"></a>
 #### `skip()`
@@ -1932,7 +2045,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [4]
 
-> {note} Если замыкание никогда не возвращает `true`, то метод `skipWhile` вернет пустую коллекцию.
+> {note} Если замыкание никогда не возвращает `false`, то метод `skipWhile` вернет пустую коллекцию.
 
 <a name="method-slice"></a>
 #### `slice()`
@@ -1956,6 +2069,40 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
     // [5, 6]
 
 Возвращенный фрагмент по умолчанию сохранит ключи. Если вы не хотите сохранять исходные ключи, вы можете использовать метод [`values`](#method-values), чтобы переиндексировать их.
+
+<a name="method-sole"></a>
+#### `sole()` {#collection-method}
+
+Метод `sole` возвращает первый элемент в коллекции, который проходит заданный тест на истинность, но только если тест на истинность соответствует ровно одному элементу:
+
+    collect([1, 2, 3, 4])->sole(function ($value, $key) {
+        return $value === 2;
+    });
+
+    // 2
+
+Вы также можете передать пару ключ / значение в метод `sole`, который вернет первый элемент коллекции, соответствующий данной паре, но только в том случае, если совпадает ровно один элемент:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+        ['product' => 'Chair', 'price' => 100],
+    ]);
+    
+    $collection->sole('product', 'Chair');
+    
+    // ['product' => 'Chair', 'price' => 100]
+
+В качестве альтернативы вы также можете вызвать метод `sole` без аргумента, чтобы получить первый элемент в коллекции, если в ней только один элемент:
+
+    $collection = collect([
+        ['product' => 'Desk', 'price' => 200],
+    ]);
+
+    $collection->sole();
+    
+    // ['product' => 'Desk', 'price' => 200]
+
+Если в коллекции нет элементов, которые должны быть возвращены методом `sole`, будет брошено исключение `\Illuminate\Collections\ItemNotFoundException`. Если есть более одного элемента, который должен быть возвращен, то будет брошено исключение `\Illuminate\Collections\MultipleItemsFoundException`. 
 
 <a name="method-some"></a>
 #### `some()`
@@ -2002,7 +2149,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
         ]
     */
 
-Метод `sort` принимает [флаги типа сортировки](https://www.php.net/manual/ru/function.sort.php) в качестве второго аргумента:
+Метод `sortBy` принимает [флаги типа сортировки](https://www.php.net/manual/ru/function.sort.php) в качестве второго аргумента:
 
     $collection = collect([
         ['title' => 'Item 1'],
@@ -2393,7 +2540,7 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     $collection = collect([1 => ['a'], 2 => ['b']]);
 
-    $union = $collection->union([3 => ['c'], 1 => ['b']]);
+    $union = $collection->union([3 => ['c'], 1 => ['d']]);
 
     $union->all();
 
@@ -2478,6 +2625,20 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
     // [1, 2, 3, 5]
 
+Второе замыкание может быть передано методу `unless`. Второе замыкание будет выполнено, когда первый аргумент, переданный методу `unless` будет иметь значение `true`:
+
+    $collection = collect([1, 2, 3]);
+
+    $collection->unless(true, function ($collection) {
+        return $collection->push(4);
+    }, function ($collection) {
+        return $collection->push(5);
+    });
+
+    $collection->all();
+
+    // [1, 2, 3, 5]
+
 Противоположным методу `unless` является метод [`when`](#method-when).
 
 <a name="method-unlessempty"></a>
@@ -2546,6 +2707,20 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
     $collection->all();
 
     // [1, 2, 3, 4]
+
+Второе замыкание может быть передано методу `when`. Второе замыкание будет выполнено, когда первый аргумент, переданный методу `when` будет иметь значение `false`:
+
+    $collection = collect([1, 2, 3]);
+
+    $collection->when(false, function ($collection) {
+        return $collection->push(4);
+    }, function ($collection) {
+        return $collection->push(5);
+    });
+
+    $collection->all();
+
+    // [1, 2, 3, 5]
 
 Противоположным методу `when` является метод [`unless`](#method-unless).
 
@@ -2981,148 +3156,132 @@ git 7aab3644f018b0f4d73bf8418d811e0b828ade91
 
 <!-- <div id="collection-method-list" markdown="1"> -->
 
-- [Коллекции](#коллекции)
-  - [Введение](#введение)
-    - [Создание коллекций](#создание-коллекций)
-    - [Расширение коллекций](#расширение-коллекций)
-      - [Аргументы макрокоманды](#аргументы-макрокоманды)
-  - [Доступные методы](#доступные-методы)
-  - [Список методов](#список-методов)
-      - [`all()`](#all)
-      - [`average()`](#average)
-      - [`avg()`](#avg)
-      - [`chunk()`](#chunk)
-      - [`chunkWhile()`](#chunkwhile)
-      - [`collapse()`](#collapse)
-      - [`combine()`](#combine)
-      - [`collect()`](#collect)
-      - [`concat()`](#concat)
-      - [`contains()`](#contains)
-      - [`containsStrict()`](#containsstrict)
-      - [`count()`](#count)
-      - [`countBy()`](#countby)
-      - [`crossJoin()`](#crossjoin)
-      - [`dd()`](#dd)
-      - [`diff()`](#diff)
-      - [`diffAssoc()`](#diffassoc)
-      - [`diffKeys()`](#diffkeys)
-      - [`dump()`](#dump)
-      - [`duplicates()`](#duplicates)
-      - [`duplicatesStrict()`](#duplicatesstrict)
-      - [`each()`](#each)
-      - [`eachSpread()`](#eachspread)
-      - [`every()`](#every)
-      - [`except()`](#except)
-      - [`filter()`](#filter)
-      - [`first()`](#first)
-      - [`firstWhere()`](#firstwhere)
-      - [`flatMap()`](#flatmap)
-      - [`flatten()`](#flatten)
-      - [`flip()`](#flip)
-      - [`forget()`](#forget)
-      - [`forPage()`](#forpage)
-      - [`get()`](#get)
-      - [`groupBy()`](#groupby)
-      - [`has()`](#has)
-      - [`implode()`](#implode)
-      - [`intersect()`](#intersect)
-      - [`intersectByKeys()`](#intersectbykeys)
-      - [`isEmpty()`](#isempty)
-      - [`isNotEmpty()`](#isnotempty)
-      - [`join()`](#join)
-      - [`keyBy()`](#keyby)
-      - [`keys()`](#keys)
-      - [`last()`](#last)
-      - [`macro()`](#macro)
-      - [`make()`](#make)
-      - [`map()`](#map)
-      - [`mapInto()`](#mapinto)
-      - [`mapSpread()`](#mapspread)
-      - [`mapToGroups()`](#maptogroups)
-      - [`mapWithKeys()`](#mapwithkeys)
-      - [`max()`](#max)
-      - [`median()`](#median)
-      - [`merge()`](#merge)
-      - [`mergeRecursive()`](#mergerecursive)
-      - [`min()`](#min)
-      - [`mode()`](#mode)
-      - [`nth()`](#nth)
-      - [`only()`](#only)
-      - [`pad()`](#pad)
-      - [`partition()`](#partition)
-      - [`pipe()`](#pipe)
-      - [`pipeInto()`](#pipeinto)
-      - [`pluck()`](#pluck)
-      - [`pop()`](#pop)
-      - [`prepend()`](#prepend)
-      - [`pull()`](#pull)
-      - [`push()`](#push)
-      - [`put()`](#put)
-      - [`random()`](#random)
-      - [`reduce()`](#reduce)
-      - [`reject()`](#reject)
-      - [`replace()`](#replace)
-      - [`replaceRecursive()`](#replacerecursive)
-      - [`reverse()`](#reverse)
-      - [`search()`](#search)
-      - [`shift()`](#shift)
-      - [`shuffle()`](#shuffle)
-      - [`skip()`](#skip)
-      - [`skipUntil()`](#skipuntil)
-      - [`skipWhile()`](#skipwhile)
-      - [`slice()`](#slice)
-      - [`some()`](#some)
-      - [`sort()`](#sort)
-      - [`sortBy()`](#sortby)
-      - [`sortByDesc()`](#sortbydesc)
-      - [`sortDesc()`](#sortdesc)
-      - [`sortKeys()`](#sortkeys)
-      - [`sortKeysDesc()`](#sortkeysdesc)
-      - [`splice()`](#splice)
-      - [`split()`](#split)
-      - [`splitIn()`](#splitin)
-      - [`sum()`](#sum)
-      - [`take()`](#take)
-      - [`takeUntil()`](#takeuntil)
-      - [`takeWhile()`](#takewhile)
-      - [`tap()`](#tap)
-      - [`times()`](#times)
-      - [`toArray()`](#toarray)
-      - [`toJson()`](#tojson)
-      - [`transform()`](#transform)
-      - [`union()`](#union)
-      - [`unique()`](#unique)
-      - [`uniqueStrict()`](#uniquestrict)
-      - [`unless()`](#unless)
-      - [`unlessEmpty()`](#unlessempty)
-      - [`unlessNotEmpty()`](#unlessnotempty)
-      - [`unwrap()`](#unwrap)
-      - [`values()`](#values)
-      - [`when()`](#when)
-      - [`whenEmpty()`](#whenempty)
-      - [`whenNotEmpty()`](#whennotempty)
-      - [`where()`](#where)
-      - [`whereStrict()`](#wherestrict)
-      - [`whereBetween()`](#wherebetween)
-      - [`whereIn()`](#wherein)
-      - [`whereInStrict()`](#whereinstrict)
-      - [`whereInstanceOf()`](#whereinstanceof)
-      - [`whereNotBetween()`](#wherenotbetween)
-      - [`whereNotIn()`](#wherenotin)
-      - [`whereNotInStrict()`](#wherenotinstrict)
-      - [`whereNotNull()`](#wherenotnull)
-      - [`whereNull()`](#wherenull)
-      - [`wrap()`](#wrap)
-      - [`zip()`](#zip)
-  - [Сообщения высшего порядка](#сообщения-высшего-порядка)
-  - [Отложенные коллекции](#отложенные-коллекции)
-    - [Введение в отложенные коллекции](#введение-в-отложенные-коллекции)
-    - [Создание отложенных коллекций](#создание-отложенных-коллекций)
-    - [Контракт `Enumerable`](#контракт-enumerable)
-    - [Методы отложенных коллекций](#методы-отложенных-коллекций)
-      - [`takeUntilTimeout()`](#takeuntiltimeout)
-      - [`tapEach()`](#tapeach)
-      - [`remember()`](#remember)
+- [`all()`](#method-all)
+- [`average()`](#method-average)
+- [`avg()`](#method-avg)
+- [`chunk()`](#method-chunk)
+- [`chunkWhile()`](#method-chunkwhile)
+- [`collapse()`](#method-collapse)
+- [`combine()`](#method-combine)
+- [`collect()`](#method-collect)
+- [`concat()`](#method-concat)
+- [`contains()`](#method-contains)
+- [`containsStrict()`](#method-containsstrict)
+- [`count()`](#method-count)
+- [`countBy()`](#method-countby)
+- [`crossJoin()`](#method-crossjoin)
+- [`dd()`](#method-dd)
+- [`diff()`](#method-diff)
+- [`diffAssoc()`](#method-diffassoc)
+- [`diffKeys()`](#method-diffkeys)
+- [`dump()`](#method-dump)
+- [`duplicates()`](#method-duplicates)
+- [`duplicatesStrict()`](#method-duplicatesstrict)
+- [`each()`](#method-each)
+- [`eachSpread()`](#method-eachspread)
+- [`every()`](#method-every)
+- [`except()`](#method-except)
+- [`filter()`](#method-filter)
+- [`first()`](#method-first)
+- [`firstWhere()`](#method-firstwhere)
+- [`flatMap()`](#method-flatmap)
+- [`flatten()`](#method-flatten)
+- [`flip()`](#method-flip)
+- [`forget()`](#method-forget)
+- [`forPage()`](#method-forpage)
+- [`get()`](#method-get)
+- [`groupBy()`](#method-groupby)
+- [`has()`](#method-has)
+- [`implode()`](#method-implode)
+- [`intersect()`](#method-intersect)
+- [`intersectByKeys()`](#method-intersectbykeys)
+- [`isEmpty()`](#method-isempty)
+- [`isNotEmpty()`](#method-isnotempty)
+- [`join()`](#method-join)
+- [`keyBy()`](#method-keyby)
+- [`keys()`](#method-keys)
+- [`last()`](#method-last)
+- [`macro()`](#method-macro)
+- [`make()`](#method-make)
+- [`map()`](#method-map)
+- [`mapInto()`](#method-mapinto)
+- [`mapSpread()`](#method-mapspread)
+- [`mapToGroups()`](#method-maptogroups)
+- [`mapWithKeys()`](#method-mapwithkeys)
+- [`max()`](#method-max)
+- [`median()`](#method-median)
+- [`merge()`](#method-merge)
+- [`mergeRecursive()`](#method-mergerecursive)
+- [`min()`](#method-min)
+- [`mode()`](#method-mode)
+- [`nth()`](#method-nth)
+- [`only()`](#method-only)
+- [`pad()`](#method-pad)
+- [`partition()`](#method-partition)
+- [`pipe()`](#method-pipe)
+- [`pipeInto()`](#method-pipeinto)
+- [`pluck()`](#method-pluck)
+- [`pop()`](#method-pop)
+- [`prepend()`](#method-prepend)
+- [`pull()`](#method-pull)
+- [`push()`](#method-push)
+- [`put()`](#method-put)
+- [`random()`](#method-random)
+- [`reduce()`](#method-reduce)
+- [`reject()`](#method-reject)
+- [`replace()`](#method-replace)
+- [`replaceRecursive()`](#method-replacerecursive)
+- [`reverse()`](#method-reverse)
+- [`search()`](#method-search)
+- [`shift()`](#method-shift)
+- [`shuffle()`](#method-shuffle)
+- [`skip()`](#method-skip)
+- [`skipUntil()`](#method-skipuntil)
+- [`skipWhile()`](#method-skipwhile)
+- [`slice()`](#method-slice)
+- [`some()`](#method-some)
+- [`sort()`](#method-sort)
+- [`sortBy()`](#method-sortby)
+- [`sortByDesc()`](#method-sortbydesc)
+- [`sortDesc()`](#method-sortdesc)
+- [`sortKeys()`](#method-sortkeys)
+- [`sortKeysDesc()`](#method-sortkeysdesc)
+- [`splice()`](#method-splice)
+- [`split()`](#method-split)
+- [`splitIn()`](#method-splitin)
+- [`sum()`](#method-sum)
+- [`take()`](#method-take)
+- [`takeUntil()`](#method-takeuntil)
+- [`takeWhile()`](#method-takewhile)
+- [`tap()`](#method-tap)
+- [`times()`](#method-times)
+- [`toArray()`](#method-toarray)
+- [`toJson()`](#method-tojson)
+- [`transform()`](#method-transform)
+- [`union()`](#method-union)
+- [`unique()`](#method-unique)
+- [`uniqueStrict()`](#method-uniquestrict)
+- [`unless()`](#method-unless)
+- [`unlessEmpty()`](#method-unlessempty)
+- [`unlessNotEmpty()`](#method-unlessnotempty)
+- [`unwrap()`](#method-unwrap)
+- [`values()`](#method-values)
+- [`when()`](#method-when)
+- [`whenEmpty()`](#method-whenempty)
+- [`whenNotEmpty()`](#method-whennotempty)
+- [`where()`](#method-where)
+- [`whereStrict()`](#method-wherestrict)
+- [`whereBetween()`](#method-wherebetween)
+- [`whereIn()`](#method-wherein)
+- [`whereInStrict()`](#method-whereinstrict)
+- [`whereInstanceOf()`](#method-whereinstanceof)
+- [`whereNotBetween()`](#method-wherenotbetween)
+- [`whereNotIn()`](#method-wherenotin)
+- [`whereNotInStrict()`](#method-wherenotinstrict)
+- [`whereNotNull()`](#method-wherenotnull)
+- [`whereNull()`](#method-wherenull)
+- [`wrap()`](#method-wrap)
+- [`zip()`](#method-zip)
 
 <!-- </div> -->
 

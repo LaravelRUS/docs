@@ -1,4 +1,4 @@
-git f06768c7ed4e18d6d3413804fff937b43a1ea85b
+git 86964eb6ea30d7693e6b13de717ef0cf21b09d91
 
 ---
 
@@ -93,7 +93,7 @@ git f06768c7ed4e18d6d3413804fff937b43a1ea85b
 
 Перед использованием драйвера кэша [DynamoDB](https://aws.amazon.com/dynamodb) необходимо создать таблицу DynamoDB для хранения всех кэшированных данных. Название таблицы должно совпадать с `stores.dynamodb.table` в конфигурационном файле `cache` вашего приложения. Обычно это `cache`.
 
-Эта таблица также должна иметь строковый ключ раздела с именем, соответствующим значению элемента конфигурации `stores.dynamodb.key` в конфигурационном файле `cache`. По умолчанию это `key`.
+Эта таблица также должна иметь строковый ключ раздела с именем, соответствующим значению элемента конфигурации `stores.dynamodb.attributes.key` в конфигурационном файле `cache`. По умолчанию это `key`.
 
 <a name="cache-usage"></a>
 ## Управление кешем приложения
@@ -369,7 +369,7 @@ git f06768c7ed4e18d6d3413804fff937b43a1ea85b
 
     $lock = Cache::lock('processing', 120);
 
-    if ($result = $lock->get()) {
+    if ($lock->get()) {
         ProcessPodcast::dispatch($podcast, $lock->owner());
     }
 

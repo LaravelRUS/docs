@@ -1,4 +1,4 @@
-git 9be0bd5d16f221423350cce6e3ff6d47b58f7546
+git 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
 
 ---
 
@@ -47,6 +47,7 @@ git 9be0bd5d16f221423350cce6e3ff6d47b58f7546
     - [Уведомления](/docs/{{version}}/notifications)
     - [Разработка пакетов](/docs/{{version}}/packages)
     - [Очереди](/docs/{{version}}/queues)
+    - [Ограничение скорости](/docs/{{version}}/rate-limiting)
     - [Планировщик](/docs/{{version}}/scheduling)
 - ## Безопасность
     - [Аутентификация](/docs/{{version}}/authentication)
@@ -86,6 +87,7 @@ git 9be0bd5d16f221423350cce6e3ff6d47b58f7546
     - [Homestead](/docs/{{version}}/homestead)
     - [Horizon](/docs/{{version}}/horizon)
     - [Jetstream](https://jetstream.laravel.com)
+    - [Octane](/docs/{{version}}/octane)
     - [Passport](/docs/{{version}}/passport)
     - [Sail](/docs/{{version}}/sail)
     - [Sanctum](/docs/{{version}}/sanctum)

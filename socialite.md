@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 882c775698f28e3148786c07fa0b8f9393308e13
 
 ---
 
@@ -6,12 +6,13 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
 - [Введение](#introduction)
 - [Установка](#installation)
-    - [Обновление пакета Socialite](#upgrading-socialite)
+- [Обновление пакета Socialite](#upgrading-socialite)
 - [Конфигурирование](#configuration)
 - [Аутентификация](#authentication)
     - [Маршрутизация](#routing)
-    - [Необязательные параметры](#optional-parameters)
+    - [Аутентификация и хранение](#authentication-and-storage)
     - [Права доступа](#access-scopes)
+    - [Необязательные параметры](#optional-parameters)
 - [Получение сведений о пользователе](#retrieving-user-details)
 
 <a name="introduction"></a>
@@ -29,7 +30,7 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
     composer require laravel/socialite
 
 <a name="upgrading-socialite"></a>
-### Обновление пакета Socialite
+## Обновление пакета Socialite
 
 При обновлении Socialite важно внимательно изучить [руководство по обновлению](https://github.com/laravel/socialite/blob/master/UPGRADE).
 
@@ -68,18 +69,41 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
 Метод `redirect` фасада `Socialite`, отвечает за перенаправление пользователя к провайдеру OAuth, в то время как метод `user` обрабатывает входящий запрос и получает информацию о пользователе от провайдера после его аутентификации.
 
-<a name="optional-parameters"></a>
-### Необязательные параметры
+<a name="authentication-and-storage"></a>
+### Аутентификация и хранение
 
-Некоторые провайдеры OAuth поддерживают необязательные параметры в запросе перенаправления. Чтобы включить в запрос любые необязательные параметры, вызовите метод `with` с ассоциативным массивом:
+После того как пользователь был получен от поставщика OAuth, вы можете определить, существует ли пользователь в базе данных вашего приложения и [аутентифицировать пользователя](/docs/{{version}}/authentication#authenticate-a-user-instance). Если пользователь не существует в базе данных вашего приложения, вы обычно создаете новую запись в своей базе данных:
 
+    use App\Models\User;
+    use Illuminate\Support\Facades\Auth;
     use Laravel\Socialite\Facades\Socialite;
 
-    return Socialite::driver('google')
-        ->with(['hd' => 'example.com'])
-        ->redirect();
+    Route::get('/auth/callback', function () {
+        $githubUser = Socialite::driver('github')->user();
 
-> {note} При использовании метода `with` будьте осторожны, чтобы не передавать какие-либо зарезервированные ключевые слова, такие как `state` или `response_type`.
+        $user = User::where('github_id', $githubUser->id)->first();
+
+        if ($user) {
+            $user->update([
+                'github_token' => $githubUser->token,
+                'github_refresh_token' => $githubUser->refreshToken,
+            ]);
+        } else {
+            $user = User::create([
+                'name' => $githubUser->name,
+                'email' => $githubUser->email,
+                'github_id' => $githubUser->id,
+                'github_token' => $githubUser->token,
+                'github_refresh_token' => $githubUser->refreshToken,
+            ]);
+        }
+
+        Auth::login($user);
+
+        return redirect('/dashboard');
+    });
+
+> {tip} Для получения дополнительной информации о том, какая информация о пользователях доступна от конкретных поставщиков OAuth, обратитесь к документации по [получению сведений о пользователе](#retrieving-user-details).
 
 <a name="access-scopes"></a>
 ### Права доступа
@@ -98,10 +122,25 @@ git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
         ->setScopes(['read:user', 'public_repo'])
         ->redirect();
 
+<a name="optional-parameters"></a>
+### Необязательные параметры
+
+Некоторые провайдеры OAuth поддерживают необязательные параметры в запросе перенаправления. Чтобы включить в запрос любые необязательные параметры, вызовите метод `with` с ассоциативным массивом:
+
+    use Laravel\Socialite\Facades\Socialite;
+
+    return Socialite::driver('google')
+        ->with(['hd' => 'example.com'])
+        ->redirect();
+
+> {note} При использовании метода `with` будьте осторожны, чтобы не передавать какие-либо зарезервированные ключевые слова, такие как `state` или `response_type`.
+
 <a name="retrieving-user-details"></a>
 ## Получение сведений о пользователе
 
-После того, как пользователь будет перенаправлен обратно на ваш маршрут `callback` аутентификации, вы можете получить данные пользователя, используя метод `user` пакета Socialite. Объект пользователя, возвращаемый методом `user`, содержит множество свойств и методов, которые вы можете использовать для сохранения информации о пользователе в вашей собственной базе данных. Различные свойства и методы могут быть доступны в зависимости от версии провайдера OAuth, с которым вы выполняете аутентификацию, OAuth 1.0 или OAuth 2.0:
+После того как пользователь будет перенаправлен обратно на ваш маршрут `callback` аутентификации, вы можете получить данные пользователя, используя метод `user` пакета Socialite. Объект пользователя, возвращаемый методом `user`, содержит множество свойств и методов, которые вы можете использовать для сохранения информации о пользователе в вашей собственной базе данных. Различные свойства и методы могут быть доступны в зависимости от версии провайдера OAuth, с которым вы выполняете аутентификацию, OAuth 1.0 или OAuth 2.0:
+
+    use Laravel\Socialite\Facades\Socialite;
 
     Route::get('/auth/callback', function () {
         $user = Socialite::driver('github')->user();
