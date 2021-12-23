@@ -1,4 +1,4 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git 3bc3e997685c7d2b1d514f52cd1935fbc44b6332
 
 ---
 
@@ -177,6 +177,9 @@ Laravel предлагает полезные методы для имитаци
 
             // Утверждаем, что задание не было отправлено ...
             Bus::assertNotDispatched(AnotherJob::class);
+
+            // Утверждаем, что задание не отправлялось...
+            Bus::assertNothingDispatched();
         }
     }
 
@@ -213,7 +216,7 @@ Laravel предлагает полезные методы для имитаци
 <a name="job-batches"></a>
 ### Пакетная обработка заданий
 
-Метод `assertBatched` фасада `Bus` используется для подтверждения того, что [пакет заданий](/docs/{{version}}/queues#job-batches) был отправлен. Замыкание, переданное методу `assertBatched`, получает экземпляр `Illuminate\Bus\PendingBatch`, который может использоваться для инспектирования заданий в пакете:
+Метод `assertBatched` фасада `Bus` используется для подтверждения того, что [пакет заданий](/docs/{{version}}/queues#job-batching) был отправлен. Замыкание, переданное методу `assertBatched`, получает экземпляр `Illuminate\Bus\PendingBatch`, который может использоваться для инспектирования заданий в пакете:
 
     use Illuminate\Bus\PendingBatch;
     use Illuminate\Support\Facades\Bus;
@@ -274,7 +277,7 @@ Laravel предлагает полезные методы для имитаци
 
     Event::assertListening(
         OrderShipped::class,
-        [SendShipmentNotification::class, 'handle']
+        SendShipmentNotification::class
     );
 
 > {note} После вызова `Event::fake()` никакие слушатели событий выполняться не будут. Итак, если в ваших тестах используются фабрики моделей, которые полагаются на события, такие как создание UUID во время события `creating` модели, вы должны вызвать `Event::fake()` **после** использования ваших фабрик.
@@ -389,7 +392,7 @@ Laravel предлагает полезные методы для имитаци
 
     Mail::assertNothingQueued();
 
-Вы можете передать замыкание в методы `assertSent` или `assertNotSent`, чтобы утверждать, что было отправлено почтовое сообщение, которое проходит данный «тест истинности». Если было отправлено хотя бы одно почтовое сообщение, которое проходит заданный тест на истинность, то и утверждение будет считаться успешным:
+Вы можете передать замыкание в методы `assertSent`,` assertNotSent`, `assertQueued` или` assertNotQueued`, чтобы утверждать, что было отправлено почтовое сообщение, которое проходит данный «тест истинности». Если было отправлено хотя бы одно почтовое сообщение, которое проходит заданный тест на истинность, то и утверждение будет считаться успешным:
 
     Mail::assertSent(function (OrderShipped $mail) use ($order) {
         return $mail->order->id === $order->id;
@@ -401,6 +404,14 @@ Laravel предлагает полезные методы для имитаци
         return $mail->hasTo($user->email) &&
                $mail->hasCc('...') &&
                $mail->hasBcc('...');
+    });
+
+Вы могли заметить, что есть два метода подтверждения того, что письмо не было отправлено: `assertNotSent` и `assertNotQueued`. Иногда вы можете заявить, что почта не была отправлена **или** поставлена в очередь. Для этого вы можете использовать методы `assertNothingOutgoing` и `assertNotOutgoing`:
+
+    Mail::assertNothingOutgoing();
+
+    Mail::assertNotOutgoing(function (OrderShipped $mail) use ($order) {
+        return $mail->order->id === $order->id;
     });
 
 <a name="notification-fake"></a>
