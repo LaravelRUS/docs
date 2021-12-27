@@ -51,6 +51,7 @@ git 2a3033817f13af34d1a725bc45afba9d3fd481fb
 
     server {
         listen 80;
+        listen [::]:80;
         server_name example.com;
         root /srv/example.com/public;
 
