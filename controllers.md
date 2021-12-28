@@ -22,7 +22,7 @@ git 80807a5b50ac83b11e641eb73a78aa50bd208563
 <a name="introduction"></a>
 ## Введение
 
-Вместо того, чтобы определять всю логику обработки запросов как замыкания в файлах маршрутов, вы можете организовать это поведение с помощью классов «контроллеров». Контроллеры могут сгруппировать связанную логику обработки запросов в один класс. Например, класс `UserController` может обрабатывать все входящие запросы, относящиеся к пользователям, включая отображение, создание, обновление и удаление пользователей. По умолчанию контроллеры хранятся в каталоге `app/Http/Controllers`.
+Вместо того чтобы определять всю логику обработки запросов как замыкания в файлах маршрутов, вы можете организовать это поведение с помощью классов «контроллеров». Контроллеры могут сгруппировать связанную логику обработки запросов в один класс. Например, класс `UserController` может обрабатывать все входящие запросы, относящиеся к пользователям, включая отображение, создание, обновление и удаление пользователей. По умолчанию контроллеры хранятся в каталоге `app/Http/Controllers`.
 
 <a name="writing-controllers"></a>
 ## Написание контроллеров
@@ -159,15 +159,15 @@ git 80807a5b50ac83b11e641eb73a78aa50bd208563
 <a name="actions-handled-by-resource-controller"></a>
 #### Действия, выполняемые ресурсными контроллерами
 
-Метод      | URI                    | Действие       | Имя маршрута
-----------|------------------------|--------------|---------------------
-GET       | `/photos`              | index        | photos.index
-GET       | `/photos/create`       | create       | photos.create
-POST      | `/photos`              | store        | photos.store
-GET       | `/photos/{photo}`      | show         | photos.show
-GET       | `/photos/{photo}/edit` | edit         | photos.edit
-PUT/PATCH | `/photos/{photo}`      | update       | photos.update
-DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
+| Метод     | URI                    | Действие | Имя маршрута   |
+|-----------|------------------------|----------|----------------|
+| GET       | `/photos`              | index    | photos.index   |
+| GET       | `/photos/create`       | create   | photos.create  |
+| POST      | `/photos`              | store    | photos.store   |
+| GET       | `/photos/{photo}`      | show     | photos.show    |
+| GET       | `/photos/{photo}/edit` | edit     | photos.edit    |
+| PUT/PATCH | `/photos/{photo}`      | update   | photos.update  |
+| DELETE    | `/photos/{photo}`      | destroy  | photos.destroy |
 
 <a name="customizing-missing-model-behavior"></a>
 #### Настройка поведения при отсутствии модели
@@ -264,15 +264,15 @@ DELETE    | `/photos/{photo}`      | destroy      | photos.destroy
 
 Это объявление маршрута будет определять следующие маршруты:
 
-Метод      | URI                               | Действие       | Имя маршрута
-----------|-----------------------------------|--------------|---------------------
-GET       | `/photos/{photo}/comments`        | index        | photos.comments.index
-GET       | `/photos/{photo}/comments/create` | create       | photos.comments.create
-POST      | `/photos/{photo}/comments`        | store        | photos.comments.store
-GET       | `/comments/{comment}`             | show         | comments.show
-GET       | `/comments/{comment}/edit`        | edit         | comments.edit
-PUT/PATCH | `/comments/{comment}`             | update       | comments.update
-DELETE    | `/comments/{comment}`             | destroy      | comments.destroy
+| Метод     | URI                               | Действие | Имя маршрута           |
+|-----------|-----------------------------------|----------|------------------------|
+| GET       | `/photos/{photo}/comments`        | index    | photos.comments.index  |
+| GET       | `/photos/{photo}/comments/create` | create   | photos.comments.create |
+| POST      | `/photos/{photo}/comments`        | store    | photos.comments.store  |
+| GET       | `/comments/{comment}`             | show     | comments.show          |
+| GET       | `/comments/{comment}/edit`        | edit     | comments.edit          |
+| PUT/PATCH | `/comments/{comment}`             | update   | comments.update        |
+| DELETE    | `/comments/{comment}`             | destroy  | comments.destroy       |
 
 <a name="restful-naming-resource-routes"></a>
 ### Именование ресурсных маршрутов
@@ -337,7 +337,7 @@ DELETE    | `/comments/{comment}`             | destroy      | comments.destroy
         // ...
     }
 
-После того, как глаголы были скорректированы, регистрация маршрута ресурса, например, `Route::resource('fotos', PhotoController::class)`, создаст следующие URI:
+После того как глаголы были скорректированы, регистрация маршрута ресурса, например, `Route::resource('fotos', PhotoController::class)`, создаст следующие URI:
 
     /fotos/crear
 
