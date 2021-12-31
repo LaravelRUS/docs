@@ -1,4 +1,4 @@
-git 4ae25732b03cef878a4883eb921a48e3edec7d06
+git 7ed72664e8064432de56f59b80dec6eca3186a66
 
 ---
 
@@ -230,7 +230,7 @@ git 4ae25732b03cef878a4883eb921a48e3edec7d06
      *
      * Заставит неглобальных посредников всегда быть в заданном порядке.
      *
-     * @var array
+     * @var string[]
      */
     protected $middlewarePriority = [
         \Illuminate\Cookie\Middleware\EncryptCookies::class,
