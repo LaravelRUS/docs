@@ -41,7 +41,7 @@ git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 [Laravel Telescope](https://github.com/laravel/telescope) станет прекрасным помощником при локальной разработке приложения Laravel. Telescope дает представление о запросах, поступающих в ваше приложение, исключениях, записях журнала, запросах базы данных, поставленных в очередь заданиях, почте, уведомлениях, операциях кэша, запланированных задачах, дампах переменных и о многом другом.
 
-<img src="./img/telescope-example.png">
+<img src="https://laravel.com/img/docs/telescope-example.png" width="100%" alt="Telescope example">
 
 <a name="installation"></a>
 ## Установка
