@@ -27,7 +27,7 @@ git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 При использовании Horizon вся ваша конфигурация обработчика очереди хранится в одном простом файле конфигурации. Определив конфигурацию воркеров (worker) приложения в файле с контролем версий, вы можете легко масштабировать или изменять воркеры очереди приложения при развертывании.
 
-<img src="https://laravel.com/img/docs/horizon-example.png" alt="horizon-example.png">
+<img src="https://laravel.com/img/docs/horizon-example.png" alt="horizon-example.png" width="100%">
 
 <a name="installation"></a>
 ## Установка
