@@ -166,7 +166,7 @@ php artisan schedule:list
 | `->thursdays();`                         | – четвергом                                                |
 | `->fridays();`                           | – пятницей                                                 |
 | `->saturdays();`                         | – субботой                                                 |
-| `->days(array\                           | mixed);`                                                   |  – определенными днями
+| `->days(array\mixed);`                   | – определенными днями
 | `->between($startTime, $endTime);`       | – временными интервалами начала и окончания                |
 | `->unlessBetween($startTime, $endTime);` | – через исключение временных интервалов начала и окончания |
 | `->when(Closure);`                       | – на основе истинности результата выполненного замыкания   |
