@@ -1,4 +1,4 @@
-git bdb7da5e79397281762807f2b372c0818a17a313
+git bdc1629ce5b121d6d0e65f7d4c154cba70bb5ff0
 
 ---
 
@@ -126,7 +126,7 @@ cd example-app
 <a name="getting-started-on-linux"></a>
 ### Начало работы в Linux
 
-Если вы разрабатываете в Linux и [Docker Desktop](https://www.docker.com/products/docker-desktop) уже установлен, то вы можете использовать простую команду терминала для создания нового проекта Laravel. Например, чтобы создать новое приложение Laravel в каталоге с именем `example-app`, вы можете запустить следующую команду в своем терминале:
+Если вы разрабатываете в Linux и [Docker Compose](https://docs.docker.com/compose/install/) уже установлен, то вы можете использовать простую команду терминала для создания нового проекта Laravel. Например, чтобы создать новое приложение Laravel в каталоге с именем `example-app`, вы можете запустить следующую команду в своем терминале:
 
 ```nothing
 curl -s https://laravel.build/example-app | bash
@@ -164,7 +164,7 @@ curl -s "https://laravel.build/example-app?with=mysql,redis" | bash
 
 Если на вашем компьютере уже установлены PHP и Composer, то вы можете создать новый проект Laravel напрямую с помощью Composer. После того как приложение было создано, вы можете запустить локальный сервер разработки Laravel с помощью команды `serve` Artisan CLI:
 
-    composer create-project laravel/laravel example-app
+    composer create-project laravel/laravel:^8.0 example-app
 
     cd example-app
 
