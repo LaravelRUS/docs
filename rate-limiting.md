@@ -1,4 +1,4 @@
-git 6bc580908dfe05fc9cba1dabdb42868d1bf633a3
+git 34eb006893f9e86010025689656aa8cba0096687
 
 ---
 
@@ -34,7 +34,7 @@ Laravel включает простую в использовании абстр
 Метод `attempt` возвращает `false` если для обратного вызова не осталось доступных попыток; в противном случае метод `attempt` вернет результат обратного вызова или `true`. Первым аргументом, принимаемым методом `attempt` является «ключ» ограничителя скорости, который может быть любой строкой по вашему выбору, представляющей действие с ограничением скорости:
 
     use Illuminate\Support\Facades\RateLimiter;
-    
+
     $executed = RateLimiter::attempt(
         'send-message:'.$user->id,
         $perMinute = 5,
@@ -42,7 +42,7 @@ Laravel включает простую в использовании абстр
             // Send message...
         }
     );
-    
+
     if (! $executed) {
       return 'Too many messages sent!';
     }
@@ -53,7 +53,7 @@ Laravel включает простую в использовании абстр
 Если вы хотите вручную взаимодействовать с ограничителем скорости, доступно множество других методов. Например, вы можете вызвать метод `tooManyAttempts`, чтобы определить, не превысил ли заданный ключ ограничителя скорости максимальное количество разрешенных попыток в минуту:
 
     use Illuminate\Support\Facades\RateLimiter;
-    
+
     if (RateLimiter::tooManyAttempts('send-message:'.$user->id, $perMinute = 5)) {
         return 'Too many attempts!';
     }
@@ -61,7 +61,7 @@ Laravel включает простую в использовании абстр
 В качестве альтернативы вы можете использовать метод `remaining` для получения количества попыток, оставшихся для данного ключа. Если для данного ключа остались повторные попытки, вы можете вызвать метод `hit`, чтобы увеличить общее количество попыток:
 
     use Illuminate\Support\Facades\RateLimiter;
-    
+
     if (RateLimiter::remaining('send-message:'.$user->id, $perMinute = 5)) {
         RateLimiter::hit('send-message:'.$user->id);
 
