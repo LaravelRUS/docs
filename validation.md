@@ -798,6 +798,7 @@ Laravel также содержит глобального помощника `o
 - [In Array](#rule-in-array)
 - [Integer](#rule-integer)
 - [IP Address](#rule-ip)
+- [MAC Address](#rule-mac)
 - [JSON](#rule-json)
 - [Less Than](#rule-lt)
 - [Less Than Or Equal](#rule-lte)
@@ -1055,11 +1056,13 @@ public function boot()
 В приведенном выше примере будут применяться проверки `RFCValidation` и `DNSCheckValidation`. Вот полный список стилей проверки, которые вы можете применить:
 
 <!-- <div class="content-list" markdown="1"> -->
+
 - `rfc`: `RFCValidation`
 - `strict`: `NoRFCWarningsValidation`
 - `dns`: `DNSCheckValidation`
 - `spoof`: `SpoofCheckValidation`
 - `filter`: `FilterEmailValidation`
+
 <!-- </div> -->
 
 Валидатор `filter`, который использует функцию `filter_var` PHP, поставляется с Laravel и применялся по умолчанию до Laravel версии 5.8.
@@ -1229,6 +1232,11 @@ public function boot()
 #### ipv6
 
 Проверяемое поле должно быть адресом IPv6.
+
+<a name="rule-mac"></a>
+#### mac_address
+
+Проверяемое поле должно быть MAC-адресом.
 
 <a name="rule-json"></a>
 #### json
@@ -1605,11 +1613,11 @@ public function boot()
         ],
     ];
 
-    $validator->sometimes('channels.*.address', 'email', function($input, $item) {
+    $validator->sometimes('channels.*.address', 'email', function ($input, $item) {
         return $item->type === 'email';
     });
 
-    $validator->sometimes('channels.*.address', 'url', function($input, $item) {
+    $validator->sometimes('channels.*.address', 'url', function ($input, $item) {
         return $item->type !== 'email';
     });
 
@@ -1758,6 +1766,15 @@ public function boot()
 Затем, когда вы хотите применить правила по умолчанию к конкретному паролю, проходящему проверку, вы можете вызвать метод `defaults` без аргументов:
 
     'password' => ['required', Password::defaults()],
+
+Иногда вы можете захотеть добавить дополнительные правила проверки к правилам проверки пароля по умолчанию. Для этого вы можете использовать метод `rules`:
+   use App\Rules\ZxcvbnRule;
+
+    Password::defaults(function () {
+        $rule = Password::min(8)->rules([new ZxcvbnRule]);
+
+        // ...
+    });
 
 <a name="custom-validation-rules"></a>
 ## Пользовательские правила валидации
