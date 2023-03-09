@@ -1,4 +1,4 @@
-git 9f56a40f1c6288254333a4aa30e468bf21e08078
+git c24b35e43f354f8a20311fb7b7f75fa3b77cdc17
 
 ---
 
@@ -166,7 +166,7 @@ php artisan schedule:list
 | `->thursdays();`                         | – четвергом                                                |
 | `->fridays();`                           | – пятницей                                                 |
 | `->saturdays();`                         | – субботой                                                 |
-| `->days(array\mixed);`                   | – определенными днями
+| `->days(array\|mixed);`                  | – определенными днями
 | `->between($startTime, $endTime);`       | – временными интервалами начала и окончания                |
 | `->unlessBetween($startTime, $endTime);` | – через исключение временных интервалов начала и окончания |
 | `->when(Closure);`                       | – на основе истинности результата выполненного замыкания   |
