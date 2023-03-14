@@ -1,4 +1,4 @@
-git f2b887f3ad40b423f40f584f9753e454c520d327
+git f45e1188b562f064d48f19e5965bc446adc8c987
 
 ---
 
@@ -166,7 +166,7 @@ composer require predis/predis
         // Остальная часть конфигурации Redis ...
     ],
 
-Помимо основных параметров конфигурации сервера `host`, `port`, `database`, и `password`, phpredis поддерживает дополнительные параметры подключения: `name`, `persistent`, `prefix`, `read_timeout`, `retry_interval`, `timeout`, и `context`. Чтобы использовать эти дополнительные параметры конфигурации, добавьте их в конфигурацию сервера Redis в конфигурационном файле `config/database.php` вашего приложения:
+Помимо основных параметров конфигурации сервера `scheme`, `host`, `port`, `database`, и `password`, phpredis поддерживает дополнительные параметры подключения: `name`, `persistent`, `persistent_id`, `prefix`, `read_timeout`, `retry_interval`, `timeout`, и `context`. Чтобы использовать эти дополнительные параметры конфигурации, добавьте их в конфигурацию сервера Redis в конфигурационном файле `config/database.php` вашего приложения:
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
@@ -179,6 +179,29 @@ composer require predis/predis
             // 'stream' => ['verify_peer' => false],
         ],
     ],
+
+<a name="phpredis-serialization"></a>
+#### phpredis Сериализация и сжатие
+
+Расширение phpredis также можно настроить для использования различных алгоритмов сериализации и сжатия. Эти алгоритмы можно настроить с помощью массива `options` вашей конфигурации Redis:
+
+    use Redis;
+
+    'redis' => [
+
+        'client' => env('REDIS_CLIENT', 'phpredis'),
+
+        'options' => [
+            'serializer' => Redis::SERIALIZER_MSGPACK,
+            'compression' => Redis::COMPRESSION_LZ4,
+        ],
+
+        // Rest of Redis configuration...
+    ],
+
+В настоящее время поддерживаются следующие алгоритмы сериализации: `Redis::SERIALIZER_NONE` (default), `Redis::SERIALIZER_PHP`, `Redis::SERIALIZER_JSON`, `Redis::SERIALIZER_IGBINARY`, и `Redis::SERIALIZER_MSGPACK`.
+
+Поддерживаемые алгоритмы сжатия: `Redis::COMPRESSION_NONE` (default), `Redis::COMPRESSION_LZF`, `Redis::COMPRESSION_ZSTD`, и `Redis::COMPRESSION_LZ4`.
 
 <a name="interacting-with-redis"></a>
 ## Взаимодействие с Redis
