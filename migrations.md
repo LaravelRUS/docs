@@ -1,4 +1,4 @@
-git f66ffc4138e168c4c6dbd526603ab11b1c3f6d6a
+git d35acdeace1152f3559b81c5ae02c18e80197a52
 
 ---
 
@@ -337,6 +337,7 @@ Laravel будет использовать имя миграции, чтобы 
 </style> -->
 
 <!-- <div id="collection-method-list" markdown="1"> -->
+
 - [bigIncrements](#column-method-bigIncrements)
 - [bigInteger](#column-method-bigInteger)
 - [binary](#column-method-binary)
@@ -401,6 +402,7 @@ Laravel будет использовать имя миграции, чтобы 
 - [uuidMorphs](#column-method-uuidMorphs)
 - [uuid](#column-method-uuid)
 - [year](#column-method-year)
+
 <!-- </div> -->
 
 <a name="column-method-bigIncrements"></a>
