@@ -1,4 +1,4 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
+git 00db2a2351121c9d634c6ff164c5aff40a7be8d8
 
 ---
 
@@ -24,6 +24,7 @@ git 2cf67bcaacfec590098cefb45af824b74671cfa0
 - [Предпросмотр писем](#previewing-emails)
 - [Контейнер CLI](#sail-container-cli)
 - [Версии PHP](#sail-php-versions)
+- [Версии Node](#sail-node-versions)
 - [Предоставление доступа к сайту](#sharing-your-site)
 - [Отладка с Xdebug](#debugging-with-xdebug)
   - [Отладка Artisan-команд](#xdebug-cli-usage)
@@ -185,6 +186,12 @@ sail node --version
 sail npm run prod
 ```
 
+Если вы хотите, вы можете использовать Yarn вместо NPM:
+
+```nothing
+sail yarn
+```
+
 <a name="interacting-with-sail-databases"></a>
 ## Взаимодействие с базами данных
 
@@ -332,6 +339,23 @@ context: ./vendor/laravel/sail/runtimes/7.4
 
 ```yaml
 image: sail-8.1/app
+```
+После обновления файла `docker-compose.yml` вашего приложения вы должны обновить образы контейнеров:
+
+    sail build --no-cache
+
+    sail up
+
+<a name="sail-node-versions"></a>
+## Версии Node
+
+Sail по умолчанию устанавливает Node 16. Чтобы изменить версию Node, установленную при создании образов, вы можете обновить `build.args` в файле `docker-compose.yml` в определении сервиса `laravel.test` вашего приложения:
+
+```yaml
+build:
+    args:
+        WWWGROUP: '${WWWGROUP}'
+        NODE_VERSION: '14'
 ```
 
 После обновления файла `docker-compose.yml` вашего приложения вы должны обновить образы контейнеров:
