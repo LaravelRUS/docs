@@ -1,4 +1,4 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
+git d35acdeace1152f3559b81c5ae02c18e80197a52
 
 ---
 
@@ -819,8 +819,16 @@ Dusk содержит различные методы для взаимодей�
 
 Если вам нужно сделать утверждения после перезагрузки страницы, используйте метод `waitForReload`:
 
-    $browser->click('.some-action')
-            ->waitForReload()
+    use Laravel\Dusk\Browser;
+
+    $browser->waitForReload(function (Browser $browser) {
+        $browser->press('Submit');
+    })
+    ->assertSee('Success!');
+
+Поскольку необходимость дождаться перезагрузки страницы обычно возникает после нажатия кнопки, вы можете использовать метод `clickAndWaitForReload` для удобства:
+
+    $browser->clickAndWaitForReload('.selector')
             ->assertSee('something');
 
 <a name="waiting-on-javascript-expressions"></a>
@@ -879,6 +887,7 @@ Dusk содержит множество утверждений, которые 
 </style> -->
 
 <!-- <div class="collection-method-list" markdown="1"> -->
+
 - [assertTitle](#assert-title)
 - [assertTitleContains](#assert-title-contains)
 - [assertUrlIs](#assert-url-is)
@@ -952,6 +961,7 @@ Dusk содержит множество утверждений, которые 
 - [assertVueIsNot](#assert-vue-is-not)
 - [assertVueContains](#assert-vue-contains)
 - [assertVueDoesNotContain](#assert-vue-does-not-contain)
+
 <!-- </div> -->
 
 <a name="assert-title"></a>
