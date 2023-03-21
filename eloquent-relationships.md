@@ -1,4 +1,4 @@
-git 5c75585e4f6d8dccbaaf4c136e4338a4faf8e0fe
+git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 ---
 
@@ -49,6 +49,7 @@ git 5c75585e4f6d8dccbaaf4c136e4338a4faf8e0fe
 Таблицы базы данных часто связаны друг с другом. Например, пост в блоге может содержать много комментариев или заказ может быть связан с пользователем, который его разместил. Eloquent упрощает управление этими отношениями и работу с ними, а также поддерживает множество общих отношений:
 
 <!-- <div class="content-list" markdown="1"> -->
+
 - [Один к одному](#one-to-one)
 - [Один ко многим](#one-to-many)
 - [Многие ко многим](#many-to-many)
@@ -57,6 +58,7 @@ git 5c75585e4f6d8dccbaaf4c136e4338a4faf8e0fe
 - [Один к одному (полиморфное)](#one-to-one-polymorphic-relations)
 - [Один ко многим (полиморфное)](#one-to-many-polymorphic-relations)
 - [Многие ко многим (полиморфное)](#many-to-many-polymorphic-relations)
+
 <!-- </div> -->
 
 <a name="defining-relationships"></a>
