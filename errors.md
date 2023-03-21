@@ -1,4 +1,4 @@
-git b1b94b48f6779b37c412740a1806e6c1f4023a31
+git 0f19f3d770b961aee8576b24deb394a0b9a2f7ad
 
 ---
 
@@ -11,6 +11,7 @@ git b1b94b48f6779b37c412740a1806e6c1f4023a31
     - [Игнорирование исключений по типу](#ignoring-exceptions-by-type)
     - [Отображение исключений](#rendering-exceptions)
     - [Отчетные и отображаемые исключения](#renderable-exceptions)
+    - [Сопоставление исключений по типу](#mapping-exceptions-by-type)
 - [HTTP-исключения](#http-exceptions)
     - [Пользовательские страницы ошибок HTTP](#custom-http-error-pages)
 
@@ -247,6 +248,33 @@ git b1b94b48f6779b37c412740a1806e6c1f4023a31
     }
 
 > {tip} Вы можете указать любые требуемые зависимости метода `report`, и они будут автоматически внедрены в метод [контейнером служб](/docs/{{version}}/container) Laravel.
+
+<a name="mapping-exceptions-by-type"></a>
+### Сопоставление исключений по типу
+
+Иногда сторонние библиотеки, используемые вашим приложением, могут генерировать исключения, которые вы хотите сделать доступными для [рендеринга](#renderable-exceptions), но не можете этого сделать, потому что у вас нет контроля над определениями сторонних исключений.
+
+К счастью, Laravel позволяет вам удобно сопоставлять эти исключения с другими типами исключений, которыми вы управляете в своем приложении. Для этого вызовите метод `map` из метода `register` вашего обработчика исключений :
+
+    use League\Flysystem\Exception;
+    use App\Exceptions\FilesystemException;
+
+    /**
+     * Register the exception handling callbacks for the application.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->map(Exception::class, FilesystemException::class);
+    }
+
+Если вы хотите больше контролировать создание целевого исключения, вы можете передать методу `map` замыкание:
+
+    use League\Flysystem\Exception;
+    use App\Exceptions\FilesystemException;
+
+    $this->map(fn (Exception $e) => new FilesystemException($e));
 
 <a name="http-exceptions"></a>
 ## HTTP-исключения
