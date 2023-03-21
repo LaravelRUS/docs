@@ -1,4 +1,4 @@
-git d1674f0d4a67b59a7b90501a76b532663ad19b7b
+git 34eb006893f9e86010025689656aa8cba0096687
 
 ---
 
@@ -304,7 +304,7 @@ Laravel также содержит несколько хелперов для �
          */
         public function test_asserting_an_exact_json_match()
         {
-            $response = $this->json('POST', '/user', ['name' => 'Sally']);
+            $response = $this->postJson('/user', ['name' => 'Sally']);
 
             $response
                 ->assertStatus(201)
@@ -334,7 +334,7 @@ Laravel также содержит несколько хелперов для �
          */
         public function test_asserting_a_json_paths_value()
         {
-            $response = $this->json('POST', '/user', ['name' => 'Sally']);
+            $response = $this->postJson('/user', ['name' => 'Sally']);
 
             $response
                 ->assertStatus(201)
@@ -356,7 +356,7 @@ Laravel предлагает способ последовательного т�
      */
     public function test_fluent_json()
     {
-        $response = $this->json('GET', '/users/1');
+        $response = $this->getJson('/users/1');
 
         $response
             ->assertJson(fn (AssertableJson $json) =>
@@ -634,12 +634,14 @@ Laravel также позволяет отображать шаблоны без
 - [assertJsonPath](#assert-json-path)
 - [assertJsonStructure](#assert-json-structure)
 - [assertJsonValidationErrors](#assert-json-validation-errors)
+- [assertJsonValidationErrorFor](#assert-json-validation-error-for)
 - [assertLocation](#assert-location)
 - [assertNoContent](#assert-no-content)
 - [assertNotFound](#assert-not-found)
 - [assertOk](#assert-ok)
 - [assertPlainCookie](#assert-plain-cookie)
 - [assertRedirect](#assert-redirect)
+- [assertRedirectContains](#assert-redirect-contains)
 - [assertRedirectToSignedRoute](#assert-redirect-to-signed-route)
 - [assertSee](#assert-see)
 - [assertSeeInOrder](#assert-see-in-order)
@@ -653,6 +655,7 @@ Laravel также позволяет отображать шаблоны без
 - [assertSessionHasNoErrors](#assert-session-has-no-errors)
 - [assertSessionDoesntHaveErrors](#assert-session-doesnt-have-errors)
 - [assertSessionMissing](#assert-session-missing)
+- [assertSimilarJson](#assert-similar-json)
 - [assertStatus](#assert-status)
 - [assertSuccessful](#assert-successful)
 - [assertUnauthorized](#assert-unauthorized)
@@ -892,9 +895,16 @@ Laravel также позволяет отображать шаблоны без
 
 Утверждает, что ответ содержит переданные ошибки валидации JSON для переданных ключей. Этот метод следует использовать при утверждении ответов, в которых ошибки валидации возвращаются как структура JSON, а не кратковременно передаются в сессию:
 
-    $response->assertJsonValidationErrors(array $data);
+    $response->assertJsonValidationErrors(array $data, $responseKey = 'errors');
 
 > {tip} Более общий метод [assertInvalid](#assert-invalid) может использоваться для подтверждения того, что в ответе есть ошибки проверки, возвращенные как JSON **или** что ошибки были записаны в хранилище сеанса.
+
+<a name="assert-json-validation-error-for"></a>
+#### assertJsonValidationErrorFor
+
+Утверждает, что в ответе есть какие-либо ошибки проверки JSON для данного ключа:
+
+    $response->assertJsonValidationErrorFor(string $key, $responseKey = 'errors');
 
 <a name="assert-location"></a>
 #### assertLocation
@@ -937,6 +947,13 @@ Laravel также позволяет отображать шаблоны без
 Утверждает, что ответ является перенаправлением на указанный URI:
 
     $response->assertRedirect($uri);
+
+<a name="assert-redirect-contains"></a>
+#### assertRedirectContains
+
+Утверждает, перенаправляет ли ответ на URI, который содержит данную строку:
+
+    $response->assertRedirectContains($string);
 
 <a name="assert-redirect-to-signed-route"></a>
 #### assertRedirectToSignedRoute
