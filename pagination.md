@@ -1,4 +1,4 @@
-git ca513c76839f845a1b4a9b2407e8d1962ddb677b
+git 88bfe8ab0c3ff6aae9b5c8b106facfccdb4c8b83
 
 ---
 
@@ -25,6 +25,20 @@ git ca513c76839f845a1b4a9b2407e8d1962ddb677b
 В других фреймворках постраничная навигация может быть очень болезненной. Мы надеемся, что подход Laravel к разбиению на страницы станет глотком свежего воздуха. Пагинатор Laravel интегрирован с [построителем запросов](/docs/{{version}}/queries) и [Eloquent ORM](/docs/{{version}}/eloquent) и обеспечивает удобную, простую в использовании разбивку на страницы записей базы данных с нулевой конфигурацией.
 
 По умолчанию HTML, генерируемый пагинатором, совместим с [фреймворком Tailwind CSS](https://tailwindcss.com/); однако, также доступна поддержка разбивки на страницы с использованием Bootstrap.
+
+<a name="tailwind-jit"></a>
+#### Tailwind JIT
+
+Если вы используете стандартные представления Laravel для разбивки на страницы Tailwind и механизм JIT Tailwind, вы должны убедиться, что ключ `content` файла `tailwind.config.js` вашего приложения ссылаются на представления разбиения на страницы Laravel, чтобы их классы Tailwind не удалялись:
+
+```js
+content: [
+    './resources/**/*.blade.php',
+    './resources/**/*.js',
+    './resources/**/*.vue',
+    './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+],
+```
 
 <a name="basic-usage"></a>
 ## Основы использования
