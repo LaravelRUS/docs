@@ -1,4 +1,4 @@
-git e6d609c2fd9b697376c24eb9cb9d5dec22543119
+git a7ce258a129b989edcdbe867b743cdd80d78633e
 
 ---
 
@@ -96,13 +96,13 @@ Laravel обеспечивает мощную абстракцию файлов�
 
     'ftp' => [
         'driver' => 'ftp',
-        'host' => 'ftp.example.com',
-        'username' => 'your-username',
-        'password' => 'your-password',
+        'host' => env('FTP_HOST'),
+        'username' => env('FTP_USERNAME'),
+        'password' => env('FTP_PASSWORD'),
 
         // Optional FTP Settings...
-        // 'port' => 21,
-        // 'root' => '',
+        // 'port' => env('FTP_PORT', 21),
+        // 'root' => env('FTP_ROOT'),
         // 'passive' => true,
         // 'ssl' => true,
         // 'timeout' => 30,
@@ -115,17 +115,19 @@ Laravel обеспечивает мощную абстракцию файлов�
 
     'sftp' => [
         'driver' => 'sftp',
-        'host' => 'example.com',
-        'username' => 'your-username',
-        'password' => 'your-password',
+        'host' => env('SFTP_HOST'),
 
-        // Settings for SSH key based authentication...
-        'privateKey' => '/path/to/privateKey',
-        'password' => 'encryption-password',
+        // Settings for basic authentication...
+        'username' => env('SFTP_USERNAME'),
+        'password' => env('SFTP_PASSWORD'),
+
+        // Settings for SSH key based authentication with encryption password...
+        'privateKey' => env('SFTP_PRIVATE_KEY'),
+        'password' => env('SFTP_PASSWORD'),
 
         // Optional SFTP Settings...
-        // 'port' => 22,
-        // 'root' => '',
+        // 'port' => env('SFTP_PORT', 22),
+        // 'root' => env('SFTP_ROOT'),
         // 'timeout' => 30,
     ],
 
@@ -246,6 +248,35 @@ $disk->put('image.jpg', $content);
             'ResponseContentDisposition' => 'attachment; filename=file2.jpg',
         ]
     );
+
+Если вам нужно настроить способ создания временных URL-адресов для определенного диска хранилища, вы можете использовать метод `buildTemporaryUrlsUsing`. Например, это может быть полезно, если у вас есть контроллер, позволяющий загружать файлы, хранящиеся на диске, который обычно не поддерживает временные URL-адреса. Обычно этот метод следует вызывать из `boot` метода сервис-провайдера:
+
+    <?php
+
+    namespace App\Providers;
+
+    use Illuminate\Support\Facades\Storage;
+    use Illuminate\Support\Facades\URL;
+    use Illuminate\Support\ServiceProvider;
+
+    class AppServiceProvider extends ServiceProvider
+    {
+        /**
+         * Bootstrap any application services.
+         *
+         * @return void
+         */
+        public function boot()
+        {
+            Storage::disk('local')->buildTemporaryUrlsUsing(function ($path, $expiration, $options) {
+                return URL::temporarySignedRoute(
+                    'files.download',
+                    $expiration,
+                    array_merge($options, ['path' => $path])
+                );
+            });
+        }
+    }
 
 <a name="url-host-customization"></a>
 #### Настройка хоста URL
@@ -452,11 +483,11 @@ $disk->put('image.jpg', $content);
         'root' => storage_path('app'),
         'permissions' => [
             'file' => [
-                'public' => 0664,
+                'public' => 0644,
                 'private' => 0600,
             ],
             'dir' => [
-                'public' => 0775,
+                'public' => 0755,
                 'private' => 0700,
             ],
         ],
