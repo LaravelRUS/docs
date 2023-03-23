@@ -1,4 +1,4 @@
-git 22d680c29691d3cb0ec585f43c5a0a39d404fef1
+git ff7f2bf9e463e6f4027d6c6218107f319effead9
 
 ---
 
@@ -136,7 +136,9 @@ Laravel содержит множество глобальных «вспомо�
 - [Str::studly](#method-studly-case)
 - [Str::substr](#method-str-substr)
 - [Str::substrCount](#method-str-substrcount)
+- [Str::substrReplace](#method-str-substrreplace)
 - [Str::title](#method-title-case)
+- [Str::toHtmlString](#method-str-to-html-string)
 - [Str::ucfirst](#method-str-ucfirst)
 - [Str::upper](#method-str-upper)
 - [Str::uuid](#method-str-uuid)
@@ -161,6 +163,7 @@ Laravel содержит множество глобальных «вспомо�
 - [basename](#method-fluent-str-basename)
 - [before](#method-fluent-str-before)
 - [beforeLast](#method-fluent-str-before-last)
+- [between](#method-fluent-str-between)
 - [camel](#method-fluent-str-camel)
 - [contains](#method-fluent-str-contains)
 - [containsAll](#method-fluent-str-contains-all)
@@ -196,6 +199,7 @@ Laravel содержит множество глобальных «вспомо�
 - [replaceLast](#method-fluent-str-replace-last)
 - [replaceMatches](#method-fluent-str-replace-matches)
 - [rtrim](#method-fluent-str-rtrim)
+- [scan](#method-fluent-str-scan)
 - [singular](#method-fluent-str-singular)
 - [slug](#method-fluent-str-slug)
 - [snake](#method-fluent-str-snake)
@@ -204,6 +208,7 @@ Laravel содержит множество глобальных «вспомо�
 - [startsWith](#method-fluent-str-starts-with)
 - [studly](#method-fluent-str-studly)
 - [substr](#method-fluent-str-substr)
+- [substrReplace](#method-fluent-str-substrreplace)
 - [tap](#method-fluent-str-tap)
 - [test](#method-fluent-str-test)
 - [title](#method-fluent-str-title)
@@ -211,7 +216,18 @@ Laravel содержит множество глобальных «вспомо�
 - [ucfirst](#method-fluent-str-ucfirst)
 - [upper](#method-fluent-str-upper)
 - [when](#method-fluent-str-when)
+- [whenContains](#method-fluent-str-when-contains)
+- [whenContainsAll](#method-fluent-str-when-contains-all)
 - [whenEmpty](#method-fluent-str-when-empty)
+- [whenNotEmpty](#method-fluent-str-when-not-empty)
+- [whenStartsWith](#method-fluent-str-when-starts-with)
+- [whenEndsWith](#method-fluent-str-when-ends-with)
+- [whenExactly](#method-fluent-str-when-exactly)
+- [whenIs](#method-fluent-str-when-is)
+- [whenIsAscii](#method-fluent-str-when-is-ascii)
+- [whenIsUuid](#method-fluent-str-when-is-uuid)
+- [whenTest](#method-fluent-str-when-test)
+- [wordCount](#method-fluent-str-word-count)
 - [words](#method-fluent-str-words)
 
 <!-- </div> -->
@@ -1696,6 +1712,19 @@ Laravel содержит множество глобальных «вспомо�
 
     // 2
 
+<a name="method-str-substrreplace"></a>
+#### `Str::substrReplace()` {.collection-method}
+
+Метод `Str::substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав `0` четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::substrReplace('1300', ':', 2); 
+    // 13:
+    
+    $result = Str::substrReplace('1300', ':', 2, 0); 
+    // 13:00
+
 <a name="method-title-case"></a>
 #### `Str::title()`
 
@@ -1706,6 +1735,15 @@ Laravel содержит множество глобальных «вспомо�
     $converted = Str::title('a nice title uses the correct case');
 
     // A Nice Title Uses The Correct Case
+
+<a name="method-str-to-html-string"></a>
+#### `Str::toHtmlString()` {.collection-method}
+
+Метод `Str::toHtmlString` преобразует экземпляр строки в экземпляр Illuminate\Support\HtmlString, который может отображаться в шаблонах Blade:
+
+    use Illuminate\Support\Str;
+
+    $htmlString = Str::of('Nuno Maduro')->toHtmlString();
 
 <a name="method-str-ucfirst"></a>
 #### `Str::ucfirst()`
@@ -1867,6 +1905,17 @@ Str::wordCount('Hello, world!'); // 2
     $slice = Str::of('This is my name')->beforeLast('is');
 
     // 'This '
+
+<a name="method-fluent-str-between"></a>
+#### `between` {.collection-method}
+
+Метод `between` возвращает часть строки между двумя значениями:
+
+    use Illuminate\Support\Str;
+
+    $converted = Str::of('This is my name')->between('This', 'name');
+
+    // ' is my '
 
 <a name="method-fluent-str-camel"></a>
 #### `camel`
@@ -2312,7 +2361,7 @@ If no matches are found, an empty collection will be returned.
 
     // Arkansas is beautiful!
 
-Вы можете передать `false` в качестве второго аргумента для игнорирования регистра удаляемых подстрок.
+Вы можете передать `false` в качестве второго аргумента для игнорирования регистра удаляемых строк.
 
 <a name="method-fluent-str-replace"></a>
 #### `replace`
@@ -2395,6 +2444,17 @@ If no matches are found, an empty collection will be returned.
     $string = Str::of('/Laravel/')->rtrim('/');
 
     // '/Laravel'
+
+<a name="method-fluent-str-scan"></a>
+#### `scan` {.collection-method}
+
+Метод `scan` анализирует входные данные из строки в коллекцию в соответствии с форматом, поддерживаемым [`sscanf` функцией PHP](https://www.php.net/manual/ru/function.sscanf.php):
+
+    use Illuminate\Support\Str;
+
+    $collection = Str::of('filename.jpg')->scan('%[^.].%s');
+
+    // collect(['filename', 'jpg'])
 
 <a name="method-fluent-str-singular"></a>
 #### `singular`
@@ -2496,6 +2556,21 @@ If no matches are found, an empty collection will be returned.
 
     // Frame
 
+<a name="method-fluent-str-substrreplace"></a>
+#### `substrReplace` {.collection-method}
+
+Метод `substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав 0 четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('1300')->substrReplace(':', 2);
+
+    // 13:
+
+    $string = Str::of('The Framework')->substrReplace(' Laravel', 3, 0);
+
+    // The Laravel Framework
+
 <a name="method-fluent-str-tap"></a>
 #### `tap`
 
@@ -2587,6 +2662,49 @@ If no matches are found, an empty collection will be returned.
 
 При необходимости вы можете передать другое замыкание в качестве третьего параметра методу `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
 
+<a name="method-fluent-str-when-contains"></a>
+#### `whenContains` {.collection-method}
+
+Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('tony stark')
+                ->whenContains('tony', function ($string) {
+                    return $string->title();
+                });
+
+    // 'Tony Stark'
+
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если строка не содержит заданного значения.
+
+Вы также можете передать массив значений, чтобы определить, содержит ли данная строка какие-либо значения в массиве:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('tony stark')
+                ->whenContains(['tony', 'hulk'], function ($string) {
+                    return $string->title();
+                });
+
+    // Tony Stark
+
+<a name="method-fluent-str-when-contains-all"></a>
+#### `whenContainsAll` {.collection-method}
+
+Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('tony stark')
+                    ->whenContainsAll(['tony', 'stark'], function ($string) {
+                        return $string->title();
+                    });
+
+    // 'Tony Stark'
+
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
+
 <a name="method-fluent-str-when-empty"></a>
 #### `whenEmpty`
 
@@ -2599,6 +2717,110 @@ If no matches are found, an empty collection will be returned.
     });
 
     // 'Laravel'
+
+<a name="method-fluent-str-when-not-empty"></a>
+#### `whenNotEmpty` {.collection-method}
+
+Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр класса `Stringable`:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('Framework')->whenNotEmpty(function ($string) {
+        return $string->prepend('Laravel ');
+    });
+
+    // 'Laravel Framework'
+
+<a name="method-fluent-str-when-starts-with"></a>
+#### `whenStartsWith` {.collection-method}
+
+Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Замыкание получит свободный экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('disney world')->whenStartsWith('disney', function ($string) {
+        return $string->title();
+    });
+
+    // 'Disney World'
+
+<a name="method-fluent-str-when-ends-with"></a>
+#### `whenEndsWith` {.collection-method}
+
+Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Замыкание получит свободный экземпляр строки:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('disney world')->whenEndsWith('world', function ($string) {
+        return $string->title();
+    });
+
+    // 'Disney World'
+
+<a name="method-fluent-str-when-exactly"></a>
+#### `whenExactly` {.collection-method}
+
+Метод `whenExactly` вызывает данное замыкание, если строка точно соответствует заданной строке. Закрытие получит свободный экземпляр строки:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('laravel')->whenExactly('laravel', function ($string) {
+        return $string->title();
+    });
+
+    // 'Laravel'
+
+<a name="method-fluent-str-when-is"></a>
+#### `whenIs` {.collection-method}
+
+Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:	
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('foo/bar')->whenIs('foo/*', function ($string) {
+        return $string->append('/baz');
+    });
+
+    // 'foo/bar/baz'
+
+<a name="method-fluent-str-when-is-ascii"></a>
+#### `whenIsAscii` {.collection-method}
+
+Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('foo/bar')->whenIsAscii('laravel', function ($string) {
+        return $string->title();
+    });
+
+    // 'Laravel'
+
+<a name="method-fluent-str-when-is-uuid"></a>
+#### `whenIsUuid` {.collection-method}
+
+Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('foo/bar')->whenIsUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de', function ($string) {
+        return $string->substr(0, 8);
+    });
+
+    // 'a0a2a2d2'
+
+<a name="method-fluent-str-when-test"></a>
+#### `whenTest` {.collection-method}
+
+Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
+
+    use Illuminate\Support\Str;
+
+    $string = Str::of('laravel framework')->whenTest('/laravel/', function ($string) {
+        return $string->title();
+    });
+
+    // 'Laravel Framework'
 
 <a name="method-fluent-str-word-count"></a>
 #### `wordCount`
@@ -3229,7 +3451,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 Функция `with` возвращает переданное значение. Если вы передадите замыкание в функцию в качестве второго аргумента, то замыкание будет выполнено и будет возвращен результат его выполнения:
 
     $callback = function ($value) {
-        return (is_numeric($value)) ? $value * 2 : 0;
+        return is_numeric($value) ? $value * 2 : 0;
     };
 
     $result = with(5, $callback);
