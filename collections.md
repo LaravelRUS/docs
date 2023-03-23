@@ -1,4 +1,4 @@
-git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
+git 470922e766798ba65da7dd5d2181351524cbcd69
 
 ---
 
@@ -160,6 +160,7 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 - [`partition()`](#method-partition)
 - [`pipe()`](#method-pipe)
 - [`pipeInto()`](#method-pipeinto)
+- [`pipeThrough()`](#method-pipethrough)
 - [`pluck()`](#method-pluck)
 - [`pop()`](#method-pop)
 - [`prepend()`](#method-prepend)
@@ -190,6 +191,7 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 - [`sortDesc()`](#method-sortdesc)
 - [`sortKeys()`](#method-sortkeys)
 - [`sortKeysDesc()`](#method-sortkeysdesc)
+- [`sortKeysUsing()`](#method-sortkeysusing)
 - [`splice()`](#method-splice)
 - [`split()`](#method-split)
 - [`splitIn()`](#method-splitin)
@@ -202,6 +204,7 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 - [`toArray()`](#method-toarray)
 - [`toJson()`](#method-tojson)
 - [`transform()`](#method-transform)
+- [`undot()`](#method-undot)
 - [`union()`](#method-union)
 - [`unique()`](#method-unique)
 - [`uniqueStrict()`](#method-uniquestrict)
@@ -1580,6 +1583,24 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
     // [1, 2, 3]
 
+<a name="method-pipethrough"></a>
+#### `pipeThrough()` {.collection-method}
+
+Метод `pipeThrough` передает коллекцию заданному массиву замыканий и возвращает результат выполненных замыканий:
+
+    $collection = collect([1, 2, 3]);
+
+    $result = $collection->pipeThrough([
+        function ($collection) {
+            return $collection->merge([4, 5]);
+        },
+        function ($collection) {
+            return $collection->sum();
+        },
+    ]);
+
+    // 15
+
 <a name="method-pluck"></a>
 #### `pluck()`
 
@@ -1661,7 +1682,7 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
     $collection->all();
 
-    // [1, 2]    
+    // [1, 2]
 
 <a name="method-prepend"></a>
 #### `prepend()`
@@ -1946,7 +1967,7 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
     $collection->all();
 
-    // [4, 5]    
+    // [4, 5]
 
 <a name="method-shuffle"></a>
 #### `shuffle()`
@@ -2087,9 +2108,9 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
         ['product' => 'Desk', 'price' => 200],
         ['product' => 'Chair', 'price' => 100],
     ]);
-    
+
     $collection->sole('product', 'Chair');
-    
+
     // ['product' => 'Chair', 'price' => 100]
 
 В качестве альтернативы вы также можете вызвать метод `sole` без аргумента, чтобы получить первый элемент в коллекции, если в ней только один элемент:
@@ -2099,10 +2120,10 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
     ]);
 
     $collection->sole();
-    
+
     // ['product' => 'Desk', 'price' => 200]
 
-Если в коллекции нет элементов, которые должны быть возвращены методом `sole`, будет брошено исключение `\Illuminate\Collections\ItemNotFoundException`. Если есть более одного элемента, который должен быть возвращен, то будет брошено исключение `\Illuminate\Collections\MultipleItemsFoundException`. 
+Если в коллекции нет элементов, которые должны быть возвращены методом `sole`, будет брошено исключение `\Illuminate\Collections\ItemNotFoundException`. Если есть более одного элемента, который должен быть возвращен, то будет брошено исключение `\Illuminate\Collections\MultipleItemsFoundException`.
 
 <a name="method-some"></a>
 #### `some()`
@@ -2288,6 +2309,31 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 #### `sortKeysDesc()`
 
 Этот метод имеет ту же сигнатуру, что и метод [`sortKeys`](#method-sortkeys), но отсортирует коллекцию в обратном порядке.
+
+<a name="method-sortkeysusing"></a>
+#### `sortKeysUsing()` {.collection-method}
+
+Метод `sortKeysUsing` сортирует коллекцию по ключам базового ассоциативного массива с помощью обратного вызова:
+
+    $collection = collect([
+        'ID' => 22345,
+        'first' => 'John',
+        'last' => 'Doe',
+    ]);
+
+    $sorted = $collection->sortKeysUsing('strnatcasecmp');
+
+    $sorted->all();
+
+    /*
+        [
+            'first' => 'John',
+            'ID' => 22345,
+            'last' => 'Doe',
+        ]
+    */
+
+Обратный вызов должен быть функцией сравнения, которая возвращает целое число, меньшее, равное или большее нуля. Для получения дополнительной информации обратитесь к документации по PHP [`uksort`](https://www.php.net/manual/ru/function.uksort.php#refsect1-function.uksort-parameters), которая представляет собой функцию PHP, используемую внутри метода `sortKeysUsing`.
 
 <a name="method-splice"></a>
 #### `splice()`
@@ -2533,7 +2579,42 @@ git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
 > {note} В отличие от большинства других методов коллекции, `transform` модифицирует коллекцию. Если вы хотите вместо этого создать новую коллекцию, используйте метод [`map`](#method-map).
 
-<a name="method-union"></a>
+<a name="method-undot"></a>
+#### `undot()` {.collection-method}
+
+Метод `undot` расширяет одномерную коллекцию, использующую «точечную» нотацию, в многомерную коллекцию:
+
+    $person = collect([
+        'name.first_name' => 'Marie',
+        'name.last_name' => 'Valentine',
+        'address.line_1' => '2992 Eagle Drive',
+        'address.line_2' => '',
+        'address.suburb' => 'Detroit',
+        'address.state' => 'MI',
+        'address.postcode' => '48219'
+    ])
+
+    $person = $person->undot();
+
+    $person->toArray();
+
+    /*
+        [
+            "name" => [
+                "first_name" => "Marie",
+                "last_name" => "Valentine",
+            ],
+            "address" => [
+                "line_1" => "2992 Eagle Drive",
+                "line_2" => "",
+                "suburb" => "Detroit",
+                "state" => "MI",
+                "postcode" => "48219",
+            ],
+        ]
+    */
+
+<a name="method-union"></a><a name="method-union"></a>
 #### `union()`
 
 Метод `union` добавляет переданный массив в коллекцию. Если переданный массив содержит ключи, которые уже находятся в исходной коллекции, предпочтительнее будут значения исходной коллекции:
