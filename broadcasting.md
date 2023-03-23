@@ -1,4 +1,4 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
+git 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
 
 ---
 
@@ -56,7 +56,7 @@ git 2cf67bcaacfec590098cefb45af824b74671cfa0
 <a name="supported-drivers"></a>
 #### Поддерживаемые драйверы
 
-По умолчанию Laravel содержит два серверных драйвера трансляции на выбор: [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.io). Однако пакеты сообщества, например, [laravel-websockets](https://beyondco.de/docs/laravel-websockets/getting-started/introduction), предлагают дополнительные драйверы трансляции без использования платных провайдеров.
+По умолчанию Laravel содержит два серверных драйвера трансляции на выбор: [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.io). Однако пакеты сообщества, например, [laravel-websockets](https://beyondco.de/docs/laravel-websockets/getting-started/introduction) и [soketi](https://docs.soketi.app/), предлагают дополнительные драйверы трансляции без использования платных провайдеров.
 
 > {tip} Прежде чем ближе ознакомиться с трансляцией событий, убедитесь, что вы прочитали документацию Laravel о [событиях и слушателях](/docs/{{version}}/events).
 
@@ -104,10 +104,10 @@ git 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 И, наконец, вы готовы установить и настроить [Laravel Echo](#client-side-installation), который будет получать транслируемые события на клиентской стороне.
 
-<!-- <a name="pusher-compatible-laravel-websockets"></a>
-#### Pusher Compatible Laravel Websockets
+<a name="pusher-compatible-open-source-alternatives"></a>
+#### Альтернативы Pusher с открытым кодом
 
-The [laravel-websockets](https://github.com/beyondcode/laravel-websockets) package is a pure PHP, Pusher compatible WebSocket package for Laravel. This package allows you to leverage the full power of Laravel broadcasting without a commercial WebSocket provider. For more information on installing and using this package, please consult its [official documentation](https://beyondco.de/docs/laravel-websockets). -->
+Пакеты [laravel-websockets](https://github.com/beyondcode/laravel-websockets) и [soketi](https://docs.soketi.app/) предоставляют совместимые с Pusher серверы WebSocket для Laravel. Эти пакеты позволяют вам использовать всю мощь вещания Laravel без использования коммерческого провайдера WebSocket. Для получения дополнительной информации об установке и использовании этих пакетов обратитесь к нашей документации по [альтернативам с открытым исходным кодом](https://beyondco.de/docs/laravel-websockets).
 
 <a name="ably"></a>
 ### Ably
@@ -129,7 +129,15 @@ The [laravel-websockets](https://github.com/beyondcode/laravel-websockets) packa
 <a name="open-source-alternatives"></a>
 ### Альтернативы с открытым исходным кодом
 
+<a name="open-source-alternatives-php"></a>
+#### PHP
+
 Пакет [laravel-websockets](https://github.com/beyondcode/laravel-websockets) – это пакет для Laravel на «чистом» PHP, совместимый с Pusher. Этот пакет позволяет вам использовать всю мощь трансляции Laravel без использования платных провайдеров WebSocket. Для получения дополнительной информации об установке и использовании этого пакета обратитесь к его [официальной документации](https://beyondco.de/docs/laravel-websockets).
+
+<a name="open-source-alternatives-node"></a>
+#### Node
+
+[Soketi](https://github.com/soketi/soketi) — это основанный на Node, совместимый с Pusher сервер WebSocket для Laravel. Под капотом Soketi используется µWebSockets.js для максимальной масштабируемости и скорости. Этот пакет позволяет вам использовать всю мощь вещания Laravel без коммерческого провайдера WebSocket. Для получения дополнительной информации об установке и использовании этого пакета обратитесь к его [официальной документации](https://docs.soketi.app/).
 
 <a name="client-side-installation"></a>
 ## Установка на стороне клиента
@@ -226,7 +234,7 @@ window.Echo = new Echo({
 
 События транслируются по «каналам», которые могут быть публичными или частными. Любой посетитель вашего приложения может подписаться на публичный канал без какой-либо аутентификации или авторизации; однако, чтобы подписаться на частный канал, пользователь должен быть аутентифицирован и авторизован для прослушивания событий на этом канале.
 
-<!-- > {tip} If you would like to use an open source, PHP driven alternative to Pusher, check out the [laravel-websockets](https://github.com/beyondcode/laravel-websockets) package. -->
+{tip} Если вы хотите изучить альтернативы Pusher с открытым исходным кодом, ознакомьтесь с [альтернативами с открытым исходным кодом](#open-source-alternatives).
 
 <a name="using-example-application"></a>
 ### Пример использования
@@ -281,7 +289,7 @@ window.Echo = new Echo({
 <a name="example-application-authorizing-channels"></a>
 #### Авторизация каналов
 
-Помните, что пользователи должны иметь разрешение на прослушивание частных каналов. Мы можем определить наши правила авторизации каналов в файле `routes/channels.php` нашего приложения. В этом примере нам нужно убедиться, что любой пользователь, пытающийся прослушивать частный канал `order.1`, на самом деле является создателем заказа:
+Помните, что пользователи должны иметь разрешение на прослушивание частных каналов. Мы можем определить наши правила авторизации каналов в файле `routes/channels.php` нашего приложения. В этом примере нам нужно убедиться, что любой пользователь, пытающийся прослушивать частный канал `orders.1`, на самом деле является создателем заказа:
 
     use App\Models\Order;
 
@@ -423,6 +431,18 @@ Echo.private(`orders.${orderId}`)
      * @var string
      */
     public $queue = 'default';
+
+В качестве альтернативы вы можете настроить имя очереди, определив в методе `broadcastQueue` вашего события:
+
+    /**
+     * The name of the queue on which to place the broadcasting job.
+     *
+     * @return string
+     */
+    public function broadcastQueue()
+    {
+        return 'default';
+    }
 
 Если вы хотите транслировать свое событие с помощью очереди `sync` вместо драйвера очереди по умолчанию, то вы можете реализовать интерфейс `ShouldBroadcastNow` вместо `ShouldBroadcast`:
 
@@ -657,7 +677,7 @@ Laravel упрощает определение маршрутов для отв
     broadcast(new OrderShipmentStatusUpdated($update))->via('pusher');
 
 В качестве альтернативы вы можете указать широковещательное соединение события, вызвав метод `broadcastVia` в конструкторе события. Однако перед этим вы должны убедиться, что класс событий использует трейт `InteractsWithBroadcasting`:
-    
+
     <?php
 
     namespace App\Events;
@@ -673,7 +693,7 @@ Laravel упрощает определение маршрутов для отв
     class OrderShipmentStatusUpdated implements ShouldBroadcast
     {
         use InteractsWithBroadcasting;
-        
+
         /**
          * Create a new event instance.
          *
