@@ -1,4 +1,4 @@
-git 470922e766798ba65da7dd5d2181351524cbcd69
+git 4d505faae3a3dcbd4b2931ccae62f905161bedf5
 
 ---
 
@@ -160,6 +160,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`partition()`](#method-partition)
 - [`pipe()`](#method-pipe)
 - [`pipeInto()`](#method-pipeinto)
+- [`pipeThrough()`](#method-pipethrough)
 - [`pluck()`](#method-pluck)
 - [`pop()`](#method-pop)
 - [`prepend()`](#method-prepend)
@@ -190,6 +191,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`sortDesc()`](#method-sortdesc)
 - [`sortKeys()`](#method-sortkeys)
 - [`sortKeysDesc()`](#method-sortkeysdesc)
+- [`sortKeysUsing()`](#method-sortkeysusing)
 - [`splice()`](#method-splice)
 - [`split()`](#method-split)
 - [`splitIn()`](#method-splitin)
@@ -2612,7 +2614,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
         ]
     */
 
-<a name="method-union"></a>
+<a name="method-union"></a><a name="method-union"></a>
 #### `union()`
 
 Метод `union` добавляет переданный массив в коллекцию. Если переданный массив содержит ключи, которые уже находятся в исходной коллекции, предпочтительнее будут значения исходной коллекции:
@@ -3299,7 +3301,6 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`partition()`](#method-partition)
 - [`pipe()`](#method-pipe)
 - [`pipeInto()`](#method-pipeinto)
-- [`pipeThrough()`](#method-pipethrough)
 - [`pluck()`](#method-pluck)
 - [`pop()`](#method-pop)
 - [`prepend()`](#method-prepend)
@@ -3326,7 +3327,6 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`sortDesc()`](#method-sortdesc)
 - [`sortKeys()`](#method-sortkeys)
 - [`sortKeysDesc()`](#method-sortkeysdesc)
-- [`sortKeysUsing()`](#method-sortkeysusing)
 - [`splice()`](#method-splice)
 - [`split()`](#method-split)
 - [`splitIn()`](#method-splitin)
