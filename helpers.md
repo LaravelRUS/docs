@@ -2665,7 +2665,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-contains"></a>
 #### `whenContains` {.collection-method}
 
-Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Закрытие получит свободный экземпляр строки:
+Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2676,7 +2676,7 @@ If no matches are found, an empty collection will be returned.
 
     // 'Tony Stark'
 
-При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это закрытие будет выполнено, если строка не содержит заданного значения.
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если строка не содержит заданного значения.
 
 Вы также можете передать массив значений, чтобы определить, содержит ли данная строка какие-либо значения в массиве:
 
@@ -2692,7 +2692,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-contains-all"></a>
 #### `whenContainsAll` {.collection-method}
 
-Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Закрытие получит свободный экземпляр строки:
+Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2703,7 +2703,7 @@ If no matches are found, an empty collection will be returned.
 
     // 'Tony Stark'
 
-При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это закрытие будет выполнено, если параметр условия оценивается как `false`.
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
 
 <a name="method-fluent-str-when-empty"></a>
 #### `whenEmpty`
@@ -2721,7 +2721,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-not-empty"></a>
 #### `whenNotEmpty` {.collection-method}
 
-Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен свободный экземпляр строки:
+Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр класса `Stringable`:
 
     use Illuminate\Support\Str;
 
@@ -2734,7 +2734,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-starts-with"></a>
 #### `whenStartsWith` {.collection-method}
 
-Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Закрытие получит свободный экземпляр строки:
+Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Замыкание получит свободный экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2747,7 +2747,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-ends-with"></a>
 #### `whenEndsWith` {.collection-method}
 
-Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Закрытие получит свободный экземпляр строки:
+Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Замыкание получит свободный экземпляр строки:
 
     use Illuminate\Support\Str;
 
@@ -2773,7 +2773,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-is"></a>
 #### `whenIs` {.collection-method}
 
-Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Закрытие получит свободный экземпляр строки:	
+Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:	
 
     use Illuminate\Support\Str;
 
@@ -2786,7 +2786,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-is-ascii"></a>
 #### `whenIsAscii` {.collection-method}
 
-Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Закрытие получит свободный экземпляр строки:
+Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2799,7 +2799,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-is-uuid"></a>
 #### `whenIsUuid` {.collection-method}
 
-Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Закрытие получит свободный экземпляр строки:
+Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2812,7 +2812,7 @@ If no matches are found, an empty collection will be returned.
 <a name="method-fluent-str-when-test"></a>
 #### `whenTest` {.collection-method}
 
-Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Закрытие получит свободный экземпляр строки:
+Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
