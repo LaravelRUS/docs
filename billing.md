@@ -505,7 +505,7 @@ cardButton.addEventListener('click', async (e) => {
 });
 ```
 
-Если верификация карты прошла успешно, вы можете передать `paymentMethod.id` вашему приложению Laravel и обработайте [одноразовую оплату] (#simple-charge).
+Если верификация карты прошла успешно, вы можете передать `paymentMethod.id` вашему приложению Laravel и обработать [одноразовую оплату](#simple-charge).
 
 <a name="retrieving-payment-methods"></a>
 ### Получение способов оплаты
