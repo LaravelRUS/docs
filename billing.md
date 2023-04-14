@@ -810,9 +810,9 @@ cardButton.addEventListener('click', async (e) => {
 > {note} Когда подписка находится в состоянии `incomplete`, она не может быть изменена до тех пор, пока платеж не будет подтвержден. Следовательно, методы `swap` и `updateQuantity` выдадут исключение, когда подписка находится в состоянии `incomplete`.
 
 <a name="subscription-scopes"></a>
-#### Области действия подписки
+#### Диапазоны подписки
 
-Большинство состояний подписки также доступны в виде областей запросов, так что вы можете легко запрашивать в своей базе данных подписки, находящиеся в заданном состоянии:
+Большинство состояний подписки также доступны в виде диапазона запросов, так что вы можете легко запрашивать в своей базе данных подписки, находящиеся в заданном состоянии:
 
     // Get all active subscriptions...
     $subscriptions = Subscription::query()->active()->get();
@@ -820,7 +820,7 @@ cardButton.addEventListener('click', async (e) => {
     // Get all of the canceled subscriptions for a user...
     $subscriptions = $user->subscriptions()->canceled()->get();
 
-Полный список доступных областей доступен ниже:
+Полный список доступных диапазонов доступен ниже:
 
     Subscription::query()->active();
     Subscription::query()->canceled();
