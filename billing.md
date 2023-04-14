@@ -793,7 +793,7 @@ cardButton.addEventListener('click', async (e) => {
 </a>
 ```
 
-Если вы хотите, чтобы подписка по-прежнему считалась активной, когда она находится в состоянии `past_due`, вы можете использовать метод `keepPastDueSubscriptionsActive`, предоставляемый Cashier. Как правило, этот метод должен вызываться в методе `register` вашего `App\Providers\AppServiceProvider':
+Если вы хотите, чтобы подписка по-прежнему считалась активной, когда она находится в состоянии `past_due`, вы можете использовать метод `keepPastDueSubscriptionsActive`, предоставляемый Cashier. Как правило, этот метод должен вызываться в методе `register` вашего `App\Providers\AppServiceProvider`:
 
     use Laravel\Cashier\Cashier;
 
