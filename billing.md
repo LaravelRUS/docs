@@ -41,7 +41,7 @@ git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     - [Дата привязки подписки](#subscription-anchor-date)
     - [Отмена подписки](#cancelling-subscriptions)
     - [Возобновление подписок](#resuming-subscriptions)
-- [Пробные подписки](#subscription-trials)
+- [Пробные периоды](#subscription-trials)
     - [С предварительным способом оплаты](#with-payment-method-up-front)
     - [Без предварительного способа оплаты](#without-payment-method-up-front)
     - [Расширенные пробники](#extending-trials)
@@ -1226,7 +1226,7 @@ Cashier также предлагает методы `isNotTaxExempt`, `isTaxExe
 Если клиент отменяет подписку, а затем возобновляет ее до того, как срок действия подписки полностью истечет, счет клиенту не будет выставлен немедленно. Вместо этого их подписка будет повторно активирована, и им будет выставлен счет в первоначальном платежном цикле.
 
 <a name="subscription-trials"></a>
-## Пробные подписки
+## Пробные периоды
 
 <a name="with-payment-method-up-front"></a>
 ### С предварительным способом оплаты
