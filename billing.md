@@ -33,7 +33,7 @@ git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 - [Подписки](#subscriptions)
     - [Создание подписок](#creating-subscriptions)
     - [Проверка статуса подписки](#checking-subscription-status)
-    - [Изменение планов](#changing-prices)
+    - [Изменение цен](#changing-prices)
     - [Количество подписки](#subscription-quantity)
     - [Многоценовые подписки](#multiprice-subscriptions)
     - [Дозированный расчет](#metered-billing)
