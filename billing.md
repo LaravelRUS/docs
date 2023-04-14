@@ -572,7 +572,7 @@ cardButton.addEventListener('click', async (e) => {
 <a name="deleting-payment-methods"></a>
 ### Удаление способа оплаты
 
-Чтобы удалить способ оплаты, вы можете вызвать метод `delete` в экземпляре "Laravel\Cashier\PaymentMethod", который вы хотите удалить:
+Чтобы удалить способ оплаты, вы можете вызвать метод `delete` в экземпляре `Laravel\Cashier\PaymentMethod`, который вы хотите удалить:
 
     $paymentMethod->delete();
 
