@@ -42,7 +42,7 @@ git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     - [Отмена подписки](#cancelling-subscriptions)
     - [Возобновление подписок](#resuming-subscriptions)
 - [Пробные периоды](#subscription-trials)
-    - [С предварительным способом оплаты](#with-payment-method-up-front)
+    - [С указанием способа оплаты](#with-payment-method-up-front)
     - [Без предварительного способа оплаты](#without-payment-method-up-front)
     - [Продление пробного периода](#extending-trials)
 - [Обработка Stripe веб-хуков](#handling-stripe-webhooks)
@@ -1229,7 +1229,7 @@ Cashier также предлагает методы `isNotTaxExempt`, `isTaxExe
 ## Пробные периоды
 
 <a name="with-payment-method-up-front"></a>
-### С предварительным способом оплаты
+### С указанием способа оплаты
 
 Если вы хотите предложить своим клиентам пробные периоды, предварительно собирая информацию о способе оплаты, вам следует использовать метод `trialDays` при создании своих подписок:
 
