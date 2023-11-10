@@ -1,23 +1,8 @@
-git 88bfe8ab0c3ff6aae9b5c8b106facfccdb4c8b83
-
+---
+git: 88bfe8ab0c3ff6aae9b5c8b106facfccdb4c8b83
 ---
 
 # База данных · Постраничная навигация
-
-- [Введение](#introduction)
-- [Основы использования](#basic-usage)
-    - [Разбиение результатов построителя запросов](#paginating-query-builder-results)
-    - [Разбиение результатов Eloquent](#paginating-eloquent-results)
-    - [Cursor-пагинация](#cursor-pagination)
-    - [Самостоятельное создание пагинатора](#manually-creating-a-paginator)
-    - [Настройка URL-адресов постраничной навигации](#customizing-pagination-urls)
-- [Отображение результатов постраничной навигации](#displaying-pagination-results)
-    - [Регулирование количества отображаемых ссылок](#adjusting-the-pagination-link-window)
-    - [Преобразование результатов в JSON](#converting-results-to-json)
-- [Настройка вида пагинации](#customizing-the-pagination-view)
-    - [Использование Bootstrap](#using-bootstrap)
-- [Методы экземпляра Paginator и LengthAwarePaginator](#paginator-instance-methods)
-- [Методы экземпляра Cursor Paginator](#cursor-paginator-instance-methods)
 
 <a name="introduction"></a>
 ## Введение

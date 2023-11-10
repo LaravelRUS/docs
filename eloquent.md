@@ -1,44 +1,8 @@
-git c4484e8211c714734a8b600c06a5de7328782065
-
+---
+git: c4484e8211c714734a8b600c06a5de7328782065
 ---
 
 # Eloquent · Начало работы
-
-- [Введение](#introduction)
-- [Генерация классов модели](#generating-model-classes)
-- [Соглашения по именованию моделей Eloquent](#eloquent-model-conventions)
-    - [Именование таблиц](#table-names)
-    - [Первичные ключи](#primary-keys)
-    - [Временные метки](#timestamps)
-    - [Соединения с БД](#database-connections)
-    - [Значения атрибутов по умолчанию](#default-attribute-values)
-- [Получение моделей](#retrieving-models)
-    - [Коллекции](#collections)
-    - [Разбиение результатов](#chunking-results)
-    - [Отложенная потоковая передача результатов](#streaming-results-lazily)
-    - [Курсоры](#cursors)
-    - [Расширенные подзапросы](#advanced-subqueries)
-- [Извлечение отдельных моделей](#retrieving-single-models)
-    - [Получение или создание моделей](#retrieving-or-creating-models)
-    - [Извлечение Агрегатов](#retrieving-aggregates)
-- [Вставка и обновление моделей](#inserting-and-updating-models)
-    - [Вставка](#inserts)
-    - [Обновление](#updates)
-    - [Массовое присвоение](#mass-assignment)
-    - [Обновления-вставки](#upserts)
-- [Удаление моделей](#deleting-models)
-    - [Программное удаление](#soft-deleting)
-    - [Запросы для моделей, использующих программное удаление](#querying-soft-deleted-models)
-- [Периодическое удаление (pruning) старых записей](#pruning-models)    
-- [Репликация (тиражирование) моделей](#replicating-models)
-- [Диапазоны запроса](#query-scopes)
-    - [Глобальные диапазоны](#global-scopes)
-    - [Локальные диапазоны](#local-scopes)
-- [Сравнение моделей](#comparing-models)
-- [События](#events)
-    - [Использование замыканий](#events-using-closures)
-    - [Наблюдатели](#observers)
-    - [Подавление событий](#muting-events)
 
 <a name="introduction"></a>
 ## Введение

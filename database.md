@@ -1,17 +1,9 @@
-git 94e138a27795139f8bf7de31dc3c64bcdf936bc3
-
+---
+git: 94e138a27795139f8bf7de31dc3c64bcdf936bc3
 ---
 
 # База данных · Начало работы
 
-- [Введение](#introduction)
-    - [Конфигурирование](#configuration)
-    - [Соединения для чтения и записи](#read-and-write-connections)
-- [Выполнение SQL-запросов](#running-queries)
-    - [Использование нескольких соединений к базе данных](#using-multiple-database-connections)
-    - [Прослушивание событий запроса](#listening-for-query-events)
-- [Транзакции базы данных](#database-transactions)
-- [Подключение к базе данных с помощью интерфейса командной строки](#connecting-to-the-database-cli)
 
 <a name="introduction"></a>
 ## Введение

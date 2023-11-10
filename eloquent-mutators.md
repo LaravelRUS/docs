@@ -1,25 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Eloquent · Мутаторы и типизация
-
-- [Введение](#introduction)
-- [Аксессоры и мутаторы](#accessors-and-mutators)
-    - [Определение аксессора](#defining-an-accessor)
-    - [Определение мутатора](#defining-a-mutator)
-- [Приведение атрибутов к типам](#attribute-casting)
-    - [Преобразование в массив и JSON](#array-and-json-casting)
-    - [Типизация даты](#date-casting)
-    - [Типизация "Enum"](#enum-casting)
-    - [Типизация "Encrypted"](#encrypted-casting)
-    - [Типизация во время запроса](#query-time-casting)
-- [Пользовательская типизация](#custom-casts)
-    - [Типизация объект-значение](#value-object-casting)
-    - [Сериализация в массив и JSON](#array-json-serialization)
-    - [Входящая типизация](#inbound-casting)
-    - [Параметры типизации](#cast-parameters)
-    - [Интерфейс `Castable`](#castables)
 
 <a name="introduction"></a>
 ## Введение

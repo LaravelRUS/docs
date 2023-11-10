@@ -1,32 +1,9 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Компиляция JS и CSS (Mix)
 
-- [Введение](#introduction)
-- [Установка и настройка](#installation)
-    - [Установка Node](#installing-node)
-    - [Установка Laravel Mix](#installing-laravel-mix)
-- [Запуск Mix](#running-mix)
-    - [Наблюдение за изменениями исходников](#watching-assets-for-changes)
-- [Работа с таблицами стилей](#working-with-stylesheets)
-  - [Tailwind CSS](#tailwindcss)
-  - [PostCSS](#postcss)
-  - [Sass](#sass)
-  - [Обработка URL](#url-processing)
-  - [Source maps CSS](#css-source-maps)
-    - [Сопоставление стилей исходников](#style-of-source-mapping)
-- [Работа с JavaScript](#working-with-scripts)
-  - [Vue](#vue)
-  - [React](#react)
-  - [Извлечение сторонних библиотек](#vendor-extraction)
-  - [Пользовательская конфигурация Webpack](#custom-webpack-configuration)
-- [Версионирование / очистка кеша](#versioning-and-cache-busting)
-    - [Корректировка базовых URL-адресов с помощью Mix](#custom-mix-base-urls)
-- [Обновление контента с помощью Browsersync](#browsersync-reloading)
-- [Переменные окружения](#environment-variables)
-- [Уведомления](#notifications)
 
 <a name="introduction"></a>
 ## Введение

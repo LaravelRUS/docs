@@ -1,31 +1,8 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Laravel Octane
-
-- [Введение](#introduction)
-- [Установка](#installation)
-- [Требования к серверу](#server-prerequisites)
-    - [RoadRunner](#roadrunner)
-    - [Swoole](#swoole)
-- [Запуск приложения](#serving-your-application)
-    - [Запуск с HTTPS](#serving-your-application-via-https)
-    - [Запуск с Nginx](#serving-your-application-via-nginx)
-    - [Наблюдение за изменениями файлов](#watching-for-file-changes)
-    - [Указание количества Worker](#specifying-the-worker-count)
-    - [Указание максимального количества запросов](#specifying-the-max-request-count)
-    - [Перезагрузка Workers](#reloading-the-workers)
-    - [Остановка сервера](#stopping-the-server)
-- [Внедрение зависимости и Octane](#dependency-injection-and-octane)
-    - [Контейнер для внедрений](#container-injection)
-    - [Запрос на внедрение](#request-injection)
-    - [Настройка репозитория внедрения](#configuration-repository-injection)
-- [Управление утечкой памяти](#managing-memory-leaks)
-- [Параллельные задачи](#concurrent-tasks)
-- [Ticks & Intervals](#ticks-and-intervals)
-- [Кеш Octane](#the-octane-cache)
-- [Таблицы](#tables)
 
 <a name="introduction"></a>
 ## Введение

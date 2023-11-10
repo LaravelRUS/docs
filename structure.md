@@ -1,35 +1,9 @@
-git 311a648538475de7e04c24bfa922e3c12288154a
-
+---
+git: 311a648538475de7e04c24bfa922e3c12288154a
 ---
 
 # Структура каталогов
 
-- [Введение](#introduction)
-- [Корневой каталог](#the-root-directory)
-    - [Каталог `app`](#the-root-app-directory)
-    - [Каталог `bootstrap`](#the-bootstrap-directory)
-    - [Каталог `config`](#the-config-directory)
-    - [Каталог `database`](#the-database-directory)
-    - [Каталог `public`](#the-public-directory)
-    - [Каталог `resources`](#the-resources-directory)
-    - [Каталог `routes`](#the-routes-directory)
-    - [Каталог `storage`](#the-storage-directory)
-    - [Каталог `tests`](#the-tests-directory)
-    - [Каталог `vendor`](#the-vendor-directory)
-- [Каталог пространства `App`](#the-app-directory)
-    - [Каталог пространства `Broadcasting`](#the-broadcasting-directory)
-    - [Каталог пространства `Console`](#the-console-directory)
-    - [Каталог пространства `Events`](#the-events-directory)
-    - [Каталог пространства `Exceptions`](#the-exceptions-directory)
-    - [Каталог пространства `Http`](#the-http-directory)
-    - [Каталог пространства `Jobs`](#the-jobs-directory)
-    - [Каталог пространства `Listeners`](#the-listeners-directory)
-    - [Каталог пространства `Mail`](#the-mail-directory)
-    - [Каталог пространства `Models`](#the-models-directory)
-    - [Каталог пространства `Notifications`](#the-notifications-directory)
-    - [Каталог пространства `Policies`](#the-policies-directory)
-    - [Каталог пространства `Providers`](#the-providers-directory)
-    - [Каталог пространства `Rules`](#the-rules-directory)
 
 <a name="introduction"></a>
 ## Введение

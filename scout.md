@@ -1,33 +1,8 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Laravel Scout
-
-- [Введение](#introduction)
-- [Установка](#installation)
-    - [Требования к драйверам](#driver-prerequisites)
-    - [Очередь](#queueing)
-- [Настройка](#configuration)
-    - [Настройка индексов моделей](#configuring-model-indexes)
-    - [Настройка поисковых данных](#configuring-searchable-data)
-    - [Настройка идентификатора модели](#configuring-the-model-id)
-    - [Идентификация пользователей](#identifying-users)
-- [Локальная разработка](#local-development)
-- [Индексирование](#indexing)
-    - [Пакетный импорт](#batch-import)
-    - [Добавление записей](#adding-records)
-    - [Обновление записей](#updating-records)
-    - [Удаление записей](#removing-records)
-    - [Приостановка индексации](#pausing-indexing)
-    - [Экземпляры моделей с условным поиском](#conditionally-searchable-model-instances)
-- [Поиск](#searching)
-    - [Условия Where](#where-clauses)
-    - [Постраничная разбивка данных (Pagination)](#pagination)
-    - [Псевдоудаление](#soft-deleting)
-    - [Настройка поискового движка](#customizing-engine-searches)
-- [Разработка поискового движка](#custom-engines)
-- [Собственные методы поиска](#builder-macros)
 
 <a name="introduction"></a>
 ## Введение

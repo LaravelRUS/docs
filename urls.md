@@ -1,17 +1,8 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Генерация URL-адресов
-
-- [Введение](#introduction)
-- [Основы](#the-basics)
-    - [Создание URL](#generating-urls)
-    - [Доступ к текущему URL](#accessing-the-current-url)
-- [URL для именованных маршрутов](#urls-for-named-routes)
-    - [Подписанные URL](#signed-urls)
-- [URL для действий контроллера](#urls-for-controller-actions)
-- [Значения по умолчанию](#default-values)
 
 <a name="introduction"></a>
 ## Введение

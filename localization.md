@@ -1,18 +1,9 @@
-git 534aaa9e4789f0a6f5d55bc797f6a765f131cc63
-
+---
+git: 534aaa9e4789f0a6f5d55bc797f6a765f131cc63
 ---
 
 # Локализация интерфейса
 
-- [Введение](#introduction)
-    - [Конфигурирование языка по умолчанию](#configuring-the-locale)
-- [Определение строк перевода](#defining-translation-strings)
-    - [Использование коротких ключей](#using-short-keys)
-    - [Использование строк перевода в качестве ключей](#using-translation-strings-as-keys)
-- [Получение строк перевода](#retrieving-translation-strings)
-    - [Замена параметров в строках перевода](#replacing-parameters-in-translation-strings)
-    - [Плюрализация](#pluralization)
-- [Переопределение языковых файлов пакета](#overriding-package-language-files)
 
 <a name="introduction"></a>
 ## Введение

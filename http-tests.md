@@ -1,24 +1,9 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Тестирование · Тесты HTTP
 
-- [Введение](#introduction)
-- [Выполнение запросов](#making-requests)
-    - [Настройка заголовков запросов](#customizing-request-headers)
-    - [Cookies](#cookies)
-    - [Сессия / Аутентификация](#session-and-authentication)
-    - [Отладка ответов](#debugging-responses)
-    - [Обработка исключений](#exception-handling)
-- [Тестирование JSON API](#testing-json-apis)
-    - [Последовательное тестирование JSON](#fluent-json-testing)
-- [Тестирование загрузки файлов](#testing-file-uploads)
-- [Тестирование шаблонной системы](#testing-views)
-    - [Отрисовка Blade и компоненты](#rendering-blade-and-components)
-- [Доступные утверждения](#available-assertions)
-    - [Утверждения ответов](#response-assertions)
-    - [Утверждения аутентификации](#authentication-assertions)
 
 <a name="introduction"></a>
 ## Введение

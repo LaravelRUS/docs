@@ -1,30 +1,8 @@
-git 9c575f87fa5b8f88c8f28def6bd3c7ef2a338108
-
+---
+git: 9c575f87fa5b8f88c8f28def6bd3c7ef2a338108
 ---
 
 # Консоль Artisan
-
-- [Введение](#introduction)
-    - [Tinker (REPL)](#tinker)
-- [Написание команд](#writing-commands)
-    - [Генерация команд](#generating-commands)
-    - [Структура команды](#command-structure)
-    - [Анонимные команды](#closure-commands)
-- [Определение вводимых данных](#defining-input-expectations)
-    - [Аргументы](#arguments)
-    - [Параметры](#options)
-    - [Массивы данных](#input-arrays)
-    - [Описания вводимых данных](#input-descriptions)
-- [Ввод/вывод команды](#command-io)
-    - [Получение входных данных](#retrieving-input)
-    - [Запрос для ввода данных](#prompting-for-input)
-    - [Вывод данных](#writing-output)
-- [Регистрация команд](#registering-commands)
-- [Программное выполнение команд](#programmatically-executing-commands)
-    - [Вызов команд из других команд](#calling-commands-from-other-commands)
-- [Обработка сигналов](#signal-handling)
-- [Настройка заготовок команд (stubs)](#stub-customization)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

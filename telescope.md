@@ -1,40 +1,9 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
-
+---
+git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 ---
 
 # Пакет Laravel Telescope
 
-- [Введение](#introduction)
-- [Установка](#installation)
-    - [Только локальная установка](#local-only-installation)
-    - [Конфигурирование](#configuration)
-    - [Очистка накопленных данных](#data-pruning)
-    - [Авторизация в панели управления](#dashboard-authorization)
-- [Обновление пакета Telescope](#upgrading-telescope)
-- [Фильтрация](#filtering)
-    - [Фильтрация записей](#filtering-entries)
-    - [Фильтрация пакетов](#filtering-batches)
-- [Добавление меток](#tagging)
-- [Доступные наблюдатели](#available-watchers)
-    - [Наблюдатель Batch](#batch-watcher)
-    - [Наблюдатель Cache](#cache-watcher)
-    - [Наблюдатель Command](#command-watcher)
-    - [Наблюдатель Dump](#dump-watcher)
-    - [Наблюдатель Event](#event-watcher)
-    - [Наблюдатель Exception](#exception-watcher)
-    - [Наблюдатель Gate](#gate-watcher)
-    - [Наблюдатель HTTP Client](#http-client-watcher)
-    - [Наблюдатель Job](#job-watcher)
-    - [Наблюдатель Log](#log-watcher)
-    - [Наблюдатель Mail](#mail-watcher)
-    - [Наблюдатель Model](#model-watcher)
-    - [Наблюдатель Notification](#notification-watcher)
-    - [Наблюдатель Query](#query-watcher)
-    - [Наблюдатель Redis](#redis-watcher)
-    - [Наблюдатель Request](#request-watcher)
-    - [Наблюдатель Schedule](#schedule-watcher)
-    - [Наблюдатель View](#view-watcher)
-- [Отображение аватара пользователя](#displaying-user-avatars)
 
 <a name="introduction"></a>
 ## Введение

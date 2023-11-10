@@ -1,29 +1,8 @@
-git 6357172dc49acd8a2600b8d153f125ee743dfdb9
-
+---
+git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
 ---
 
 # HTTP-запросы
-
-- [Введение](#introduction)
-- [Взаимодействие с запросом](#interacting-with-the-request)
-    - [Доступ к запросу](#accessing-the-request)
-    - [Путь и метод запроса](#request-path-and-method)
-    - [Заголовки запроса](#request-headers)
-    - [IP-адрес запроса](#request-ip-address)
-    - [Согласование содержимого](#content-negotiation)
-    - [Запросы стандарта PSR-7](#psr7-requests)
-- [Данные полей ввода](#input)
-    - [Получение данных полей ввода](#retrieving-input)
-    - [Определение наличия требуемых данных](#determining-if-input-is-present)
-    - [Объединение дополнительных входных данных](#merging-additional-input)
-    - [Данные прошлого запроса](#old-input)
-    - [Файлы Cookies](#cookies)
-    - [Обрезание и нормализация значений полей ввода](#input-trimming-and-normalization)
-- [Файлы](#files)
-    - [Получение загруженных файлов](#retrieving-uploaded-files)
-    - [Сохранение загруженных файлов](#storing-uploaded-files)
-- [Конфигурирование доверенных прокси](#configuring-trusted-proxies)
-- [Конфигурирование доверенных хостов](#configuring-trusted-hosts)
 
 <a name="introduction"></a>
 ## Введение

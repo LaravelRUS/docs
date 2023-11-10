@@ -1,46 +1,8 @@
-git 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
-
+---
+git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
 ---
 
 # Трансляция (broadcast) событий
-
-- [Введение](#introduction)
-- [Установка на стороне сервера](#server-side-installation)
-    - [Конфигурирование](#configuration)
-    - [Pusher Channels](#pusher-channels)
-    - [Ably](#ably)
-    - [Альтернативы с открытым исходным кодом](#open-source-alternatives)
-- [Установка на стороне клиента](#client-side-installation)
-    - [Pusher Channels](#client-pusher-channels)
-    - [Ably](#client-ably)
-- [Обзор концепции](#concept-overview)
-    - [Пример использования](#using-example-application)
-- [Определение транслируемых событий](#defining-broadcast-events)
-    - [Имя транслируемого события](#broadcast-name)
-    - [Данные трансляции](#broadcast-data)
-    - [Очередь трансляции](#broadcast-queue)
-    - [Условия трансляции](#broadcast-conditions)
-    - [Трансляция и транзакции базы данных](#broadcasting-and-database-transactions)
-- [Авторизация каналов](#authorizing-channels)
-    - [Определение маршрутов авторизации](#defining-authorization-routes)
-    - [Определение авторизации канала](#defining-authorization-callbacks)
-    - [Определение класса канала](#defining-channel-classes)
-- [Трансляция событий](#broadcasting-events)
-    - [Трансляция событий только остальным пользователям](#only-to-others)
-    - [Настройка подключения](#customizing-the-connection)
-- [Прием трансляций](#receiving-broadcasts)
-    - [Прослушивание событий](#listening-for-events)
-    - [Покидание канала](#leaving-a-channel)
-    - [Пространства имён](#namespaces)
-- [Каналы присутствия](#presence-channels)
-    - [Авторизация каналов присутствия](#authorizing-presence-channels)
-    - [Присоединение к каналам присутствия](#joining-presence-channels)
-    - [Трансляция на каналы присутствия](#broadcasting-to-presence-channels)
-- [Трансляция моделей](#model-broadcasting)
-    - [Соглашение о трансляции моделей](#model-broadcasting-conventions)
-    - [Прослушивание трансляций моделей](#listening-for-model-broadcasts)
-- [Клиентские события](#client-events)
-- [Уведомления](#notifications)
 
 <a name="introduction"></a>
 ## Введение

@@ -1,14 +1,8 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Ограничение скорости
-
-- [Введение](#introduction)
-    - [Конфигурация кеша](#cache-configuration)
-- [Базовое использование](#basic-usage)
-    - [Ручное увеличение числа попыток](#manually-incrementing-attempts)
-    - [Очистка счетчика попыток](#clearing-attempts)
 
 <a name="introduction"></a>
 ## Введение

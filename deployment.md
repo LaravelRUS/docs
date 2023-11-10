@@ -1,20 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Развертывание
-
-- [Введение](#introduction)
-- [Требования к серверу](#server-requirements)
-- [Конфигурация сервера](#server-configuration)
-    - [Nginx](#nginx)
-- [Оптимизация](#optimization)
-    - [Оптимизация автозагрузчика](#autoloader-optimization)
-    - [Оптимизация загрузки конфигурации](#optimizing-configuration-loading)
-    - [Оптимизация загрузки маршрута](#optimizing-route-loading)
-    - [Оптимизация загрузки шаблонов](#optimizing-view-loading)
-- [Режим отладки](#debug-mode)
-- [Развертывание с помощью Forge / Vapor](#deploying-with-forge-or-vapor)
 
 <a name="introduction"></a>
 ## Введение

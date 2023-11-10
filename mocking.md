@@ -1,25 +1,9 @@
-git efc061a4c23f5e9f7f9bdca886c45db1c4a23b51
-
+---
+git: efc061a4c23f5e9f7f9bdca886c45db1c4a23b51
 ---
 
 # Тестирование · Имитация
 
-- [Введение](#introduction)
-- [Подставные объекты](#mocking-objects)
-- [Имитация фасадов](#mocking-facades)
-    - [Шпионы фасадов](#facade-spies)
-- [Фальсификация Bus](#bus-fake)
-    - [Цепочка заданий](#bus-job-chains)
-    - [Пакетная обработка заданий](#job-batches)
-- [Фальсификация Event](#event-fake)
-    - [Ограниченная фальсификация событий](#scoped-event-fakes)
-- [Фальсификация HTTP](#http-fake)
-- [Фальсификация Mail](#mail-fake)
-- [Фальсификация Notification](#notification-fake)
-- [Фальсификация Queue](#queue-fake)
-    - [Цепочка заданий](#job-chains)
-- [Фальсификация Storage](#storage-fake)
-- [Взаимодействие со временем](#interacting-with-time)
 
 <a name="introduction"></a>
 ## Введение

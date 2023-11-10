@@ -1,33 +1,9 @@
-git 107f4bc901540cc7199e3fa055a73ad854324866
-
+---
+git: 107f4bc901540cc7199e3fa055a73ad854324866
 ---
 
 # Отправка электронной почты
 
-- [Введение](#introduction)
-    - [Конфигурирование](#configuration)
-    - [Предварительная подготовка драйверов](#driver-prerequisites)
-    - [Конфигурация аварийного переключения](#failover-configuration)
-- [Генерация отправлений](#generating-mailables)
-- [Написание отправлений](#writing-mailables)
-    - [Конфигурирование отправителя](#configuring-the-sender)
-    - [Конфигурирование шаблона](#configuring-the-view)
-    - [Данные шаблона](#view-data)
-    - [Вложения](#attachments)
-    - [Встраиваемые вложения](#inline-attachments)
-    - [Настройка сообщения SwiftMailer](#customizing-the-swiftmailer-message)
-- [Отправления с разметкой Markdown](#markdown-mailables)
-    - [Генерация отправлений с разметкой Markdown](#generating-markdown-mailables)
-    - [Написание сообщений с разметкой Markdown](#writing-markdown-messages)
-    - [Изменение компонентов](#customizing-the-components)
-- [Отправка почты](#sending-mail)
-    - [Очередь почты](#queueing-mail)
-- [Отображение отправлений](#rendering-mailables)
-    - [Предварительный просмотр отправлений в браузере](#previewing-mailables-in-the-browser)
-- [Локализация отправлений](#localizing-mailables)
-- [Тестирование отправлений](#testing-mailables)
-- [Почта и локальная разработка](#mail-and-local-development)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

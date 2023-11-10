@@ -1,14 +1,9 @@
-git 20512e525670be13f3a1607a9939db2c5ce65f96
-
+---
+git: 20512e525670be13f3a1607a9939db2c5ce65f96
 ---
 
 # База данных · Наполнение фиктивными данными
 
-- [Введение](#introduction)
-- [Написание наполнителей](#writing-seeders)
-    - [Использование фабрик моделей](#using-model-factories)
-    - [Вызов дополнительных наполнителей](#calling-additional-seeders)
-- [Запуск наполнителей](#running-seeders)
 
 <a name="introduction"></a>
 ## Введение

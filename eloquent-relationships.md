@@ -1,47 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Eloquent · Отношения
-
-- [Введение](#introduction)
-- [Определение отношений](#defining-relationships)
-    - [Один к одному](#one-to-one)
-    - [Один ко многим](#one-to-many)
-    - [Определение обратной связи Один ко многим](#one-to-many-inverse)
-    - [Один из многих](#has-one-of-many)
-    - [Один через отношение](#has-one-through)
-    - [Многие через отношение](#has-many-through)
-- [Отношения Многие ко многим](#many-to-many)
-    - [Получение столбцов сводной таблицы](#retrieving-intermediate-table-columns)
-    - [Фильтрация запросов по столбцам сводной таблицы](#filtering-queries-via-intermediate-table-columns)
-    - [Определение пользовательских моделей сводных таблиц](#defining-custom-intermediate-table-models)
-- [Полиморфные отношения](#polymorphic-relationships)
-    - [Один к одному (полиморфное)](#one-to-one-polymorphic-relations)
-    - [Один ко многим (полиморфное)](#one-to-many-polymorphic-relations)
-    - [Один из многих](#one-of-many-polymorphic-relations)
-    - [Многие ко многим (полиморфное)](#many-to-many-polymorphic-relations)
-    - [Именование полиморфных типов](#custom-polymorphic-types)
-- [Динамические отношения](#dynamic-relationships)
-- [Запросы отношений](#querying-relations)
-    - [Методы отношений против динамических свойств](#relationship-methods-vs-dynamic-properties)
-    - [Запрос наличия отношений](#querying-relationship-existence)
-    - [Запрос отсутствия отношений](#querying-relationship-absence)
-    - [Запрос полиморфных отношений Morph To](#querying-morph-to-relationships)
-- [Агрегирование связанных моделей](#aggregating-related-models)
-    - [Подсчет связанных моделей](#counting-related-models)
-    - [Другие агрегатные функции](#other-aggregate-functions)
-    - [Подсчет связанных моделей отношений Morph To](#counting-related-models-on-morph-to-relationships)
-- [Жадная загрузка (eager loading)](#eager-loading)
-    - [Ограничение жадной загрузки](#constraining-eager-loads)
-    - [Жадная пост-загрузка](#lazy-eager-loading)
-    - [Предотвращение ленивой загрузки](#preventing-lazy-loading)
-- [Вставка и обновление связанных моделей](#inserting-and-updating-related-models)
-    - [Метод Save](#the-save-method)
-    - [Метод Create](#the-create-method)
-    - [Обновление отношений Один К](#updating-belongs-to-relationships)
-    - [Обновление отношений Многие ко многим](#updating-many-to-many-relationships)
-- [Затрагивание временных меток родителя](#touching-parent-timestamps)
 
 <a name="introduction"></a>
 ## Введение

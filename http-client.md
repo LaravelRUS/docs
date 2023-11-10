@@ -1,24 +1,8 @@
-git b24772f4ccf22b955c298d86766eab88eee7528c
-
+---
+git: b24772f4ccf22b955c298d86766eab88eee7528c
 ---
 
 # HTTP-клиент
-
-- [Введение](#introduction)
-- [Выполнение запросов](#making-requests)
-    - [Данные запроса](#request-data)
-    - [Заголовки](#headers)
-    - [Аутентификация](#authentication)
-    - [Время ожидания](#timeout)
-    - [Повторные попытки](#retries)
-    - [Обработка ошибок](#error-handling)
-    - [Параметры Guzzle](#guzzle-options)
-- [Параллельные запросы](#concurrent-requests)
-- [Макросы](#macros)
-- [Тестирование](#testing)
-    - [Фиктивные ответы](#faking-responses)
-    - [Инспектирование запросов](#inspecting-requests)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

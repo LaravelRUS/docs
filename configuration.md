@@ -1,18 +1,9 @@
-git 9bb78f08a26b86b5d43153d23fe0d663befbec7e
-
+---
+git: 9bb78f08a26b86b5d43153d23fe0d663befbec7e
 ---
 
 # Конфигурирование
 
-- [Введение](#introduction)
-- [Конфигурация окружения](#environment-configuration)
-    - [Типы переменных окружения](#environment-variable-types)
-    - [Получение конфигурации окружения](#retrieving-environment-configuration)
-    - [Определение текущего окружения](#determining-the-current-environment)
-- [Доступ к значениям конфигурации](#accessing-configuration-values)
-- [Кеширование конфигурации](#configuration-caching)
-- [Режим отладки](#debug-mode)
-- [Режим обслуживания](#maintenance-mode)
 
 <a name="introduction"></a>
 ## Введение

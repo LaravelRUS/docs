@@ -1,34 +1,9 @@
-git d9222ed567c15002e1b5c0a41f7d3de9184e1678
-
+---
+git: d9222ed567c15002e1b5c0a41f7d3de9184e1678
 ---
 
 # Маршрутизация
 
-- [Основы маршрутизации](#basic-routing)
-    - [Маршруты перенаправлений](#redirect-routes)
-    - [Маршруты представлений](#view-routes)
-- [Параметры маршрута](#route-parameters)
-    - [Обязательные параметры](#required-parameters)
-    - [Необязательные параметры](#parameters-optional-parameters)
-    - [Ограничения регулярного выражения](#parameters-regular-expression-constraints)
-- [Именованные маршруты](#named-routes)
-- [Группы маршрутов](#route-groups)
-    - [Посредники](#route-group-middleware)
-    - [Контроллеры](#route-group-controllers)
-    - [Маршрутизация поддоменов](#route-group-subdomain-routing)
-    - [Префиксы URI сгруппированных маршрутов](#route-group-prefixes)
-    - [Префиксы имен сгруппированных маршрутов](#route-group-name-prefixes)
-- [Привязка модели к маршруту](#route-model-binding)
-    - [Неявная привязка](#implicit-binding)
-    - [Явная привязка](#explicit-binding)
-- [Резервные маршруты](#fallback-routes)
-- [Ограничение частоты запросов](#rate-limiting)
-    - [Определение ограничителей частоты запросов](#defining-rate-limiters)
-    - [Привязка ограничителей частоты запросов к маршрутам](#attaching-rate-limiters-to-routes)
-- [Подмена методов формы](#form-method-spoofing)
-- [Доступ к текущему маршруту](#accessing-the-current-route)
-- [Совместное использование ресурсов между источниками (CORS)](#cors)
-- [Кеширование маршрутов](#route-caching)
 
 <a name="basic-routing"></a>
 ## Основы маршрутизации

@@ -1,33 +1,8 @@
-git f92e92a194de4f321ed2c8477be68dcea0ec393a
-
+---
+git: f92e92a194de4f321ed2c8477be68dcea0ec393a
 ---
 
 # Пакет Laravel Fortify
-
-- [Введение](#introduction)
-    - [Что такое Fortify?](#what-is-fortify)
-    - [Когда я должен использовать Fortify?](#when-should-i-use-fortify)
-- [Установка](#installation)
-    - [Поставщик службы Fortify](#the-fortify-service-provider)
-    - [Функционал Fortify](#fortify-features)
-    - [Отключение маршрутов, возвращающих шаблоны](#disabling-views)
-- [Аутентификация](#authentication)
-    - [Настройка аутентификации пользователя](#customizing-user-authentication)
-    - [Настройка конвейера аутентификации](#customizing-the-authentication-pipeline)
-    - [Настройка переадресации](#customizing-authentication-redirects)
-- [Двухфакторная аутентификация](#two-factor-authentication)
-    - [Включение двухфакторной аутентификации](#enabling-two-factor-authentication)
-    - [Использование двухфакторной аутентификации](#authenticating-with-two-factor-authentication)
-    - [Отключение двухфакторной аутентификации](#disabling-two-factor-authentication)
-- [Регистрация](#registration)
-    - [Настройка регистрации](#customizing-registration)
-- [Сброс пароля](#password-reset)
-    - [Запрос ссылки для сброса пароля](#requesting-a-password-reset-link)
-    - [Отображение страницы сброса пароля](#resetting-the-password)
-    - [Настройка сброса пароля](#customizing-password-resets)
-- [Подтверждение адреса электронной почты](#email-verification)
-    - [Защита маршрутов](#protecting-routes)
-- [Подтверждение пароля](#password-confirmation)
 
 <a name="introduction"></a>
 ## Введение

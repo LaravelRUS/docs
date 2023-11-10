@@ -1,25 +1,9 @@
-git c24b35e43f354f8a20311fb7b7f75fa3b77cdc17
-
+---
+git: c24b35e43f354f8a20311fb7b7f75fa3b77cdc17
 ---
 
 # Планирование задач
 
-- [Введение](#introduction)
-- [Определение расписаний](#defining-schedules)
-    - [Планирование команд Artisan](#scheduling-artisan-commands)
-    - [Планирование отправки заданий в очереди](#scheduling-queued-jobs)
-    - [Планирование команд операционной системы](#scheduling-shell-commands)
-    - [Параметры периодичности расписания](#schedule-frequency-options)
-    - [Часовые пояса](#timezones)
-    - [Предотвращение дублирования задач](#preventing-task-overlaps)
-    - [Выполнение задач на одном сервере](#running-tasks-on-one-server)
-    - [Фоновые задачи](#background-tasks)
-    - [Режим технического обслуживания](#maintenance-mode)
-- [Запуск планировщика](#running-the-scheduler)
-    - [Локальный запуск планировщика](#running-the-scheduler-locally)
-- [Результат выполнения задачи](#task-output)
-- [Хуки выполнения задачи](#task-hooks)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

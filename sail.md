@@ -1,35 +1,9 @@
-git 00db2a2351121c9d634c6ff164c5aff40a7be8d8
-
+---
+git: 00db2a2351121c9d634c6ff164c5aff40a7be8d8
 ---
 
 # Laravel Sail
 
-- [Введение](#introduction)
-- [Установка и настройка](#installation)
-    - [Установка Sail в существующее приложение](#installing-sail-into-existing-applications)
-    - [Настройка Bash псевдонимов](#configuring-a-bash-alias)
-- [Запуск и остановка Sail](#starting-and-stopping-sail)
-- [Выполнение команд](#executing-sail-commands)
-    - [Выполнение PHP команд](#executing-php-commands)
-    - [Выполнение Composer команд](#executing-composer-commands)
-    - [Выполнение Artisan команд](#executing-artisan-commands)
-    - [Выполнение Node/NPM команд](#executing-node-npm-commands)
-- [Взаимодействие с базами данных](#interacting-with-sail-databases)
-    - [MySQL](#mysql)
-    - [Redis](#redis)
-    - [MeiliSearch](#meilisearch)
-- [Файловое хранилище](#file-storage)
-- [Тестирование](#running-tests)
-    - [Laravel Dusk](#laravel-dusk)
-- [Предпросмотр писем](#previewing-emails)
-- [Контейнер CLI](#sail-container-cli)
-- [Версии PHP](#sail-php-versions)
-- [Версии Node](#sail-node-versions)
-- [Предоставление доступа к сайту](#sharing-your-site)
-- [Отладка с Xdebug](#debugging-with-xdebug)
-  - [Отладка Artisan-команд](#xdebug-cli-usage)
-  - [Отладка в браузере](#xdebug-browser-usage)
-- [Настройка](#sail-customization)
 
 <a name="introduction"></a>
 ## Введение

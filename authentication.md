@@ -1,36 +1,8 @@
-git 9ae79ac7e1f9f55edd89ee3ca0e2b7024c9e4cfb
-
+---
+git: 9ae79ac7e1f9f55edd89ee3ca0e2b7024c9e4cfb
 ---
 
 # Аутентификация
-
-- [Введение](#introduction)
-    - [Стартовые комплекты](#starter-kits)
-    - [Рекомендации по базе данных](#introduction-database-considerations)
-    - [Обзор экосистемы](#ecosystem-overview)
-- [Быстрый запуск аутентификации](#authentication-quickstart)
-    - [Установка стартовых комплектов](#install-a-starter-kit)
-    - [Получение аутентифицированного пользователя](#retrieving-the-authenticated-user)
-    - [Защита маршрутов](#protecting-routes)
-    - [Частота попыток входа в приложение](#login-throttling)
-- [Самостоятельная реализация аутентификации пользователей](#authenticating-users)
-    - [Запоминание пользователей](#remembering-users)
-    - [Другие методы аутентификации](#other-authentication-methods)
-- [Basic HTTP-аутентификация](#http-basic-authentication)
-    - [Basic HTTP-аутентификация без сохранения состояния](#stateless-http-basic-authentication)
-- [Выход из приложения](#logging-out)
-    - [Аннулирование сессий на других устройствах](#invalidating-sessions-on-other-devices)
-- [Подтверждение пароля](#password-confirmation)
-    - [Конфигурация подтверждения пароля](#password-confirmation-configuration)
-    - [Маршрутизация подтверждения пароля](#password-confirmation-routing)
-    - [Защита маршрутов](#password-confirmation-protecting-routes)
-- [Добавление своих охранников аутентификации](#adding-custom-guards)
-    - [Анонимные охранники аутентификации на базе HTTP-запросов](#closure-request-guards)
-- [Добавление своих провайдеров пользователей](#adding-custom-user-providers)
-    - [Контракт `UserProvider`](#the-user-provider-contract)
-    - [Контракт `Authenticatable`](#the-authenticatable-contract)
-- [Аутентификация через социальные сети](#socialite)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

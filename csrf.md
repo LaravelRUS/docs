@@ -1,14 +1,9 @@
-git 1ca38aade2baea9b663c3524846f6f5b7d1e27bf
-
+---
+git: 1ca38aade2baea9b663c3524846f6f5b7d1e27bf
 ---
 
 # Предотвращение атак CSRF
 
-- [Введение](#csrf-introduction)
-- [Предотвращение запросов CSRF](#preventing-csrf-requests)
-    - [Исключение URI из защиты от CSRF](#csrf-excluding-uris)
-- [Токен X-CSRF](#csrf-x-csrf-token)
-- [Токен X-XSRF](#csrf-x-xsrf-token)
 
 <a name="csrf-introduction"></a>
 ## Введение

@@ -1,14 +1,9 @@
-git 5c1c29be353a06c6e7065c04ec90ab816bb2a7c9
-
+---
+git: 5c1c29be353a06c6e7065c04ec90ab816bb2a7c9
 ---
 
 # Тестирование · Начало работы
 
-- [Введение](#introduction)
-- [Окружение](#environment)
-- [Создание тестов](#creating-tests)
-- [Запуск тестов](#running-tests)
-    - [Параллельное выполнение тестов](#running-tests-in-parallel)
 
 <a name="introduction"></a>
 ## Введение

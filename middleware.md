@@ -1,18 +1,9 @@
-git 7ed72664e8064432de56f59b80dec6eca3186a66
-
+---
+git: 7ed72664e8064432de56f59b80dec6eca3186a66
 ---
 
 # Посредники (middleware)
 
-- [Введение](#introduction)
-- [Определение посредника](#defining-middleware)
-- [Регистрация посредника](#registering-middleware)
-    - [Глобальный стек HTTP-посредников](#global-middleware)
-    - [Назначение посредников маршрутам](#assigning-middleware-to-routes)
-    - [Группы посредников](#middleware-groups)
-    - [Сортировка посредников](#sorting-middleware)
-- [Параметры посредника](#middleware-parameters)
-- [Завершающий посредник](#terminable-middleware)
 
 <a name="introduction"></a>
 ## Введение

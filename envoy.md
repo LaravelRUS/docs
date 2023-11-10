@@ -1,25 +1,8 @@
-git 9b744ef2a5e47ac201b3a06831d64513f6bf69c9
-
+---
+git: 9b744ef2a5e47ac201b3a06831d64513f6bf69c9
 ---
 
 # Пакет Laravel Envoy
-
-- [Введение](#introduction)
-- [Установка](#installation)
-- [Написание задач](#writing-tasks)
-    - [Определение задач](#defining-tasks)
-    - [Множество серверов](#multiple-servers)
-    - [Предстартовая подготовка](#setup)
-    - [Переменные](#variables)
-    - [Истории](#stories)
-    - [Хуки](#completion-hooks)
-- [Выполнение задач](#running-tasks)
-    - [Подтверждение выполнения задачи](#confirming-task-execution)
-- [Уведомления](#notifications)
-    - [Slack](#slack)
-    - [Discord](#discord)
-    - [Telegram](#telegram)
-    - [Microsoft Teams](#microsoft-teams)
 
 <a name="introduction"></a>
 ## Введение

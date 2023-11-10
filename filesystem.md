@@ -1,28 +1,8 @@
-git a7ce258a129b989edcdbe867b743cdd80d78633e
-
+---
+git: a7ce258a129b989edcdbe867b743cdd80d78633e
 ---
 
 # Файловое хранилище
-
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-    - [Локальный драйвер](#the-local-driver)
-    - [Публичный диск](#the-public-disk)
-    - [Предварительная подготовка драйверов](#driver-prerequisites)
-    - [Файловые системы, совместимые с Amazon S3](#amazon-s3-compatible-filesystems)
-    - [Кеширование](#caching)
-- [Доступ к экземплярам дисков](#obtaining-disk-instances) 
-    - [Диски по запросу](#on-demand-disks)
-- [Получение файлов](#retrieving-files)
-    - [Скачивание файлов](#downloading-files)
-    - [URL-адреса файлов](#file-urls)
-    - [Метаданные файла](#file-metadata)
-- [Хранение файлов](#storing-files)
-    - [Загрузка файлов](#file-uploads)
-    - [Видимость файла](#file-visibility)
-- [Удаление файлов](#deleting-files)
-- [Каталоги](#directories)
-- [Пользовательские файловые системы](#custom-filesystems)
 
 <a name="introduction"></a>
 ## Введение

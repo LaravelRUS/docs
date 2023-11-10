@@ -1,55 +1,9 @@
-git f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
-
+---
+git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 ---
 
 # Уведомления
 
-- [Введение](#introduction)
-- [Генерация уведомлений](#generating-notifications)
-- [Отправка уведомлений](#sending-notifications)
-    - [Использование трейта `Notifiable`](#using-the-notifiable-trait)
-    - [Использование фасада `Notification`](#using-the-notification-facade)
-    - [Определение каналов доставки](#specifying-delivery-channels)
-    - [Очереди уведомлений](#queueing-notifications)
-    - [Уведомления по запросу](#on-demand-notifications)
-- [Почтовые уведомления](#mail-notifications)
-    - [Формирование почтовых сообщений](#formatting-mail-messages)
-    - [Изменение отправителя](#customizing-the-sender)
-    - [Изменение получателя](#customizing-the-recipient)
-    - [Изменение темы сообщения](#customizing-the-subject)
-    - [Изменение почтового драйвера](#customizing-the-mailer)
-    - [Изменение почтовых шаблонов](#customizing-the-templates)
-    - [Почтовые вложения](#mail-attachments)
-    - [Использование почтовых отправлений](#using-mailables)
-    - [Предварительный просмотр почтовых уведомлений](#previewing-mail-notifications)
-- [Почтовые уведомления с разметкой Markdown](#markdown-mail-notifications)
-    - [Генерация сообщения](#generating-the-message)
-    - [Написание сообщения](#writing-the-message)
-    - [Изменение компонентов](#customizing-the-components)
-- [Уведомления через канал `database`](#database-notifications)
-    - [Предварительная подготовка канала `database`](#database-prerequisites)
-    - [Формирование уведомлений канала `database`](#formatting-database-notifications)
-    - [Доступ к уведомлениям](#accessing-the-notifications)
-    - [Отметка прочитанных уведомлений](#marking-notifications-as-read)
-- [Трансляция уведомлений](#broadcast-notifications)
-    - [Предварительная подготовка канала `broadcast`](#broadcast-prerequisites)
-    - [Формирование транслируемых уведомлений](#formatting-broadcast-notifications)
-    - [Прослушивание транслируемых уведомлений](#listening-for-notifications)
-- [Уведомления через SMS](#sms-notifications)
-    - [Предварительная подготовка канала SMS](#sms-prerequisites)
-    - [Формирование уведомлений через SMS](#formatting-sms-notifications)
-    - [Использование шорткодов при формировании SMS-уведомлений](#formatting-shortcode-notifications)
-    - [Изменение номера отправителя](#customizing-the-from-number)
-    - [Добавление ссылки на клиента](#adding-a-client-reference)
-    - [Маршрутизация SMS-уведомлений](#routing-sms-notifications)
-- [Уведомления через Slack](#slack-notifications)
-    - [Предварительная подготовка канала Slack](#slack-prerequisites)
-    - [Формирование уведомления через Slack](#formatting-slack-notifications)
-    - [Вложения Slack-уведомлений](#slack-attachments)
-    - [Маршрутизация Slack-уведомлений](#routing-slack-notifications)
-- [Локализация уведомлений](#localizing-notifications)
-- [События уведомления](#notification-events)
-- [Пользовательские каналы уведомлений](#custom-channels)
 
 <a name="introduction"></a>
 ## Введение

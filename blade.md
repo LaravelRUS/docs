@@ -1,45 +1,8 @@
-git f915263c18328b07e827d382b871f78ef486050b
-
+---
+git: f915263c18328b07e827d382b871f78ef486050b
 ---
 
 # Шаблонизатор Blade
-
-- [Введение](#introduction)
-- [Отображение данных](#displaying-data)
-    - [Преобразование в HTML-сущности](#html-entity-encoding)
-    - [Blade и JavaScript фреймворки](#blade-and-javascript-frameworks)
-- [Директивы Blade](#blade-directives)
-    - [Операторы If](#if-statements)
-    - [Операторы Switch](#switch-statements)
-    - [Циклы](#loops)
-    - [Переменная Loop](#the-loop-variable)
-    - [Css-классы по условию](#conditional-classes)
-    - [Подключение дочерних шаблонов](#including-subviews)
-    - [Директива `@once`](#the-once-directive)
-    - ["Сырой" PHP](#raw-php)
-    - [Комментарии](#comments)
-- [Компоненты](#components)
-    - [Отрисовка компонентов](#rendering-components)
-    - [Передача данных компонентам](#passing-data-to-components)
-    - [Атрибуты компонента](#component-attributes)
-    - [Зарезервированные ключевые слова](#reserved-keywords)
-    - [Слоты](#slots)
-    - [Встроенные шаблоны компонентов](#inline-component-views)
-    - [Анонимные компоненты](#anonymous-components)
-    - [Динамические компоненты](#dynamic-components)
-    - [Самостоятельная регистрация компонентов](#manually-registering-components)
-- [Создание макетов](#building-layouts)
-    - [Макеты с использованием компонентов](#layouts-using-components)
-    - [Макеты с использованием наследования шаблонов](#layouts-using-template-inheritance)
-- [Формы](#forms)
-    - [Поле CSRF](#csrf-field)
-    - [Поле Method](#method-field)
-    - [Ошибки валидации](#validation-errors)
-- [Стеки](#stacks)
-- [Внедрение служб](#service-injection)
-- [Расширение Blade](#extending-blade)
-    - [Пользовательские обработчики вывода](#custom-echo-handlers)
-    - [Пользовательские операторы If](#custom-if-statements)
 
 <a name="introduction"></a>
 ## Введение

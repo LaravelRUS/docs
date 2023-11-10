@@ -1,22 +1,9 @@
-git c719d3b7d11697c0003efd8853d27ca56c01d3c6
-
+---
+git: c719d3b7d11697c0003efd8853d27ca56c01d3c6
 ---
 
 # Логирование
 
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-    - [Доступные драйверы канала](#available-channel-drivers)
-    - [Предварительная подготовка канала](#channel-prerequisites)
-    - [Логирование предупреждений об устаревании](#logging-deprecation-warnings)
-- [Построение стека журналов](#building-log-stacks)
-- [Запись сообщений журнала](#writing-log-messages)
-    - [Контекстная информация](#contextual-information)
-    - [Запись в определенные каналы](#writing-to-specific-channels)
-- [Настройка канала Monolog](#monolog-channel-customization)
-    - [Настройка Monolog для каналов](#customizing-monolog-for-channels)
-    - [Создание обработчика каналов Monolog](#creating-monolog-handler-channels)
-    - [Создание каналов через фабрики](#creating-custom-channels-via-factories)
 
 <a name="introduction"></a>
 ## Введение

@@ -1,18 +1,8 @@
-git 90d6599e62e47b3da7eeec67d4053732415f187a
-
+---
+git: 90d6599e62e47b3da7eeec67d4053732415f187a
 ---
 
 # Сброс пароля
-
-- [Введение](#introduction)
-    - [Подготовка модели](#model-preparation)
-    - [Подготовка базы данных](#database-preparation)
-    - [Конфигурирование доверенных хостов](#configuring-trusted-hosts)
-- [Маршрутизация](#routing)
-    - [Запрос ссылки для сброса пароля](#requesting-the-password-reset-link)
-    - [Сброс пароля](#resetting-the-password)
-- [Удаление просроченных токенов](#deleting-expired-tokens)
-- [Настройка](#password-customization)
 
 <a name="introduction"></a>
 ## Введение

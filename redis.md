@@ -1,18 +1,8 @@
-git f45e1188b562f064d48f19e5965bc446adc8c987
-
+---
+git: f45e1188b562f064d48f19e5965bc446adc8c987
 ---
 
 # База данных · Использование Redis
-
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-    - [Кластеры](#clusters)
-    - [Predis](#predis)
-    - [phpredis](#phpredis)
-- [Взаимодействие с Redis](#interacting-with-redis)
-    - [Транзакции](#transactions)
-    - [Конвейерное выполнение команд](#pipelining-commands)
-- [Публикация / подписка](#pubsub)
 
 <a name="introduction"></a>
 ## Введение

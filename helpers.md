@@ -1,11 +1,8 @@
-git ff7f2bf9e463e6f4027d6c6218107f319effead9
-
+---
+git: ff7f2bf9e463e6f4027d6c6218107f319effead9
 ---
 
 # Глобальные помощники (helpers)
-
-- [Введение](#introduction)
-- [Доступные методы](#available-methods)
 
 <a name="introduction"></a>
 ## Введение
