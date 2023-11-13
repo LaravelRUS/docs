@@ -1,9 +1,8 @@
 ---
-git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
+git: 67937302eeadf6d1c8a37126933bb51d3681a81f
 ---
 
 # Eloquent · Коллекции
-
 
 <a name="introduction"></a>
 ## Введение
@@ -22,9 +21,9 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
 Однако, как упоминалось ранее, коллекции намного мощнее массивов и предоставляют множество методов типа `map` / `reduce`, которые могут быть связаны с помощью интуитивно понятного интерфейса. Например, мы можем удалить все неактивные модели, а затем собрать имена оставшихся пользователей:
 
-    $names = User::all()->reject(function ($user) {
+    $names = User::all()->reject(function (User $user) {
         return $user->active === false;
-    })->map(function ($user) {
+    })->map(function (User $user) {
         return $user->name;
     });
 
@@ -42,17 +41,20 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
 <!-- <style>
     #collection-method-list > p {
-        column-count: 1; -moz-column-count: 1; -webkit-column-count: 1;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
+        columns: 14.4em 1; -moz-columns: 14.4em 1; -webkit-columns: 14.4em 1;
     }
 
-    #collection-method-list a {
+    .collection-method-list a {
         display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 </style> -->
 
 <!-- <div id="collection-method-list" markdown="1"> -->
 
+- [append](#method-append)
 - [contains](#method-contains)
 - [diff](#method-diff)
 - [except](#method-except)
@@ -65,10 +67,21 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 - [makeVisible](#method-makeVisible)
 - [makeHidden](#method-makeHidden)
 - [only](#method-only)
+- [setVisible](#method-setVisible)
+- [setHidden](#method-setHidden)
 - [toQuery](#method-toquery)
 - [unique](#method-unique)
 
 <!-- </div> -->
+
+<a name="method-append"></a>
+#### `append($attributes)`
+
+Метод `append` может быть использован для указания, что атрибут должен быть [добавлен](/docs/{{version}}/eloquent-serialization#appending-values-to-json) к каждой модели в коллекции. Этот метод принимает массив атрибутов или один атрибут:
+
+    $users->append('team');
+
+    $users->append(['team', 'is_admin']);
 
 <a name="method-contains"></a>
 #### `contains($key, $operator = null, $value = null)`
@@ -131,6 +144,8 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
     $users->load('comments.author');
 
+    $users->load(['comments', 'posts' => fn ($query) => $query->where('active', 1)]);
+
 <a name="method-loadMissing"></a>
 #### `loadMissing($relations)`
 
@@ -139,6 +154,8 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
     $users->loadMissing(['comments', 'posts']);
 
     $users->loadMissing('comments.author');
+
+    $users->loadMissing(['comments', 'posts' => fn ($query) => $query->where('active', 1)]);
 
 <a name="method-modelKeys"></a>
 #### `modelKeys()`
@@ -170,6 +187,20 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
     $users = $users->only([1, 2, 3]);
 
+<a name="method-setVisible"></a>
+#### `setVisible($attributes)`
+
+Метод `setVisible` [временно переопределяет](/docs/{{version}}/eloquent-serialization#temporarily-modifying-attribute-visibility) видимые атрибуты для каждой модели в коллекции:
+
+    $users = $users->setVisible(['id', 'name']);
+
+<a name="method-setHidden"></a>
+#### `setHidden($attributes)`
+
+Метод `setHidden` [временно переопределяет](/docs/{{version}}/eloquent-serialization#temporarily-modifying-attribute-visibility) скрытые атрибуты для каждой модели в коллекции:
+
+    $users = $users->setHidden(['email', 'password', 'remember_token']);
+
 <a name="method-toquery"></a>
 #### `toQuery()`
 
@@ -200,6 +231,7 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
     namespace App\Models;
 
     use App\Support\UserCollection;
+    use Illuminate\Database\Eloquent\Collection;
     use Illuminate\Database\Eloquent\Model;
 
     class User extends Model
@@ -207,10 +239,10 @@ git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
         /**
          * Создать новый экземпляр коллекции Eloquent.
          *
-         * @param  array  $models
-         * @return \Illuminate\Database\Eloquent\Collection
+         * @param  array<int, \Illuminate\Database\Eloquent\Model>  $models
+         * @return \Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model>
          */
-        public function newCollection(array $models = [])
+        public function newCollection(array $models = []): Collection
         {
             return new UserCollection($models);
         }
