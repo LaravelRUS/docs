@@ -1,5 +1,5 @@
 ---
-git: 2a0615c0b2833c9a6c80052c6896071fa525d0fc
+git: 0f8a126e2be5693b10e97c3ffac98b0aea4915e8
 ---
 
 # HTTP переадресация
@@ -34,6 +34,12 @@ git: 2a0615c0b2833c9a6c80052c6896071fa525d0fc
 
     return redirect()->route('profile', ['id' => 1]);
 
+Для удобства Laravel также предлагает глобальную функцию `to_route`:
+
+```php
+return to_route('profile', ['id' => 1]);
+```
+
 <a name="populating-parameters-via-eloquent-models"></a>
 #### Передача параметров через модели Eloquent
 
@@ -47,10 +53,8 @@ git: 2a0615c0b2833c9a6c80052c6896071fa525d0fc
 
     /**
      * Получить значение ключа маршрута модели.
-     *
-     * @return mixed
      */
-    public function getRouteKey()
+    public function getRouteKey(): mixed
     {
         return $this->slug;
     }

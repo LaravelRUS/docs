@@ -1,5 +1,5 @@
 ---
-git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git: 0cdfdb87fd17efd1d1f3e507673b97b3cbe0d43e
 ---
 
 # Хеширование
@@ -16,8 +16,6 @@ Bcrypt – отличный выбор для хеширования парол�
 
 Драйвер хеширования по умолчанию для вашего приложения настраивается в файле конфигурации `config/hashing.php`. В настоящее время существует несколько поддерживаемых драйверов: [Bcrypt](https://en.wikipedia.org/wiki/Bcrypt) и [Argon2](https://en.wikipedia.org/wiki/Argon2) (вариации Argon2i и Argon2id).
 
-> {note} Для драйвера Argon2i требуется PHP 7.2.0 или выше, а для драйвера Argon2id требуется PHP 7.3.0 или выше.
-
 <a name="basic-usage"></a>
 ## Основы использования
 
@@ -30,7 +28,7 @@ Bcrypt – отличный выбор для хеширования парол�
 
     namespace App\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Hash;
 
@@ -38,17 +36,16 @@ Bcrypt – отличный выбор для хеширования парол�
     {
         /**
          * Обновить пароль пользователя.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function update(Request $request)
+        public function update(Request $request): RedirectResponse
         {
             // Проверить длину нового пароля ...
 
             $request->user()->fill([
                 'password' => Hash::make($request->newPassword)
             ])->save();
+
+            return redirect('/profile');
         }
     }
 
@@ -72,7 +69,8 @@ Bcrypt – отличный выбор для хеширования парол�
         'threads' => 2,
     ]);
 
-> {tip} Дополнительную информацию об этих параметрах можно найти в [официальной документации PHP](https://www.php.net/manual/ru/function.password-hash.php).
+> **Note**  
+> Дополнительную информацию об этих параметрах можно найти в [официальной документации PHP](https://www.php.net/manual/ru/function.password-hash.php).
 
 <a name="verifying-that-a-password-matches-a-hash"></a>
 ### Проверка совпадения пароля с хешем

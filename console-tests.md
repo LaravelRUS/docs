@@ -1,5 +1,5 @@
 ---
-git: 8f0031b4ea65784d5786507f76fbf9843c0ea388
+git: 9d18a6436009502d2f3fd0a21853db9c2d22bb1c
 ---
 
 # Тестирование · Тесты консольных команд
@@ -15,16 +15,15 @@ git: 8f0031b4ea65784d5786507f76fbf9843c0ea388
 
 Для начала давайте рассмотрим, как делать утверждения относительно кода выхода команды Artisan. Для этого мы будем использовать метод `artisan` для вызова Artisan-команды из нашего теста. Затем мы будем использовать метод `assertExitCode`, чтобы подтвердить, что команда завершилась с заданным кодом выхода:
 
-    /**
-     * Test a console command.
-     *
-     * @return void
-     */
-    public function test_console_command()
-    {
-        $this->artisan('inspire')->assertExitCode(0);
-    }
-
+```php
+/**
+ * Test a console command.
+ */
+public function test_console_command(): void
+{
+    $this->artisan('inspire')->assertExitCode(0);
+}
+```
 Вы можете использовать метод `assertNotExitCode` чтобы подтвердить, что команда не завершилась с заданным кодом выхода:
 
     $this->artisan('inspire')->assertNotExitCode(1);
@@ -52,23 +51,24 @@ Laravel позволяет вам легко «имитировать» ввод
         $this->line('Your name is '.$name.' and you prefer '.$language.'.');
     });
 
-Вы можете протестировать эту команду с помощью следующего теста, который использует методы `expectsQuestion`,` expectsOutput`, `doesntExpectOutput` и `assertExitCode`:
+Вы можете протестировать эту команду с помощью следующего теста, который использует методы `expectsQuestion`,` expectsOutput`, `doesntExpectOutput`, `expectsOutputToContain`, `doesntExpectOutputToContain`, и `assertExitCode`:
 
-    /**
-     * Тестирование консольной команды.
-     *
-     * @return void
-     */
-    public function test_console_command()
-    {
-        $this->artisan('question')
-             ->expectsQuestion('What is your name?', 'Taylor Otwell')
-             ->expectsQuestion('Which language do you prefer?', 'PHP')
-             ->expectsOutput('Your name is Taylor Otwell and you prefer PHP.')
-             ->doesntExpectOutput('Your name is Taylor Otwell and you prefer Ruby.')
-             ->assertExitCode(0);
-    }
-
+```php
+/**
+ * Тестирование консольной команды.
+ */
+public function test_console_command(): void
+{
+    $this->artisan('question')
+         ->expectsQuestion('What is your name?', 'Taylor Otwell')
+         ->expectsQuestion('Which language do you prefer?', 'PHP')
+         ->expectsOutput('Your name is Taylor Otwell and you prefer PHP.')
+         ->doesntExpectOutput('Your name is Taylor Otwell and you prefer Ruby.')
+         ->expectsOutputToContain('Taylor Otwell')
+         ->doesntExpectOutputToContain('you prefer Ruby')
+         ->assertExitCode(0);
+}
+```
 <a name="confirmation-expectations"></a>
 #### Ожидания подтверждения
 
@@ -91,3 +91,21 @@ Laravel позволяет вам легко «имитировать» ввод
             [1, 'taylor@example.com'],
             [2, 'abigail@example.com'],
         ]);
+
+## События консоли
+
+По умолчанию события `Illuminate\Console\Events\CommandStarting` и `Illuminate\Console\Events\CommandFinished` не генерируются при запуске тестов вашего приложения. Однако вы можете включить эти события для данного класса тестов, добавив трейт `Illuminate\Foundation\Testing\WithConsoleEvents` в класс:
+
+    <?php
+
+    namespace Tests\Feature;
+
+    use Illuminate\Foundation\Testing\WithConsoleEvents;
+    use Tests\TestCase;
+
+    class ConsoleEventTest extends TestCase
+    {
+        use WithConsoleEvents;
+
+        // ...
+    }

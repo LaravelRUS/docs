@@ -1,5 +1,5 @@
 ---
-git: 452b5680b3a434f6736003dd3e7011d270c08fe0
+git: 9e9676d793507867362261934ab815749b900753
 ---
 
 # Сервис-провайдеры
@@ -16,7 +16,8 @@ git: 452b5680b3a434f6736003dd3e7011d270c08fe0
 
 В этой документации вы узнаете, как писать собственные сервис-провайдеры и регистрировать их в приложении Laravel.
 
-> {tip} Если вы хотите узнать больше о том, как Laravel обрабатывает запросы и работает изнутри, ознакомьтесь с нашей документацией по [жизненному циклу запроса](/docs/{{version}}/lifecycle) Laravel.
+> **Note**  
+> Если вы хотите узнать больше о том, как Laravel обрабатывает запросы и работает изнутри, ознакомьтесь с нашей документацией по [жизненному циклу запроса](/docs/{{version}}/lifecycle) Laravel.
 
 <a name="writing-service-providers"></a>
 ## Написание сервис-провайдеров
@@ -25,7 +26,9 @@ git: 452b5680b3a434f6736003dd3e7011d270c08fe0
 
 Чтобы сгенерировать новый сервис-провайдер, используйте команду `make:provider` [Artisan](artisan):
 
-    php artisan make:provider RiakServiceProvider
+```shell
+php artisan make:provider RiakServiceProvider
+```
 
 <a name="the-register-method"></a>
 ### Метод `register`
@@ -34,27 +37,28 @@ git: 452b5680b3a434f6736003dd3e7011d270c08fe0
 
 Давайте взглянем на рядовой сервис-провайдер приложения. В любом из методов сервис-провайдера у вас всегда есть доступ к свойству `$app`, которое обеспечивает доступ к контейнеру служб:
 
-    <?php
+```php
+<?php
 
-    namespace App\Providers;
+namespace App\Providers;
 
-    use App\Services\Riak\Connection;
-    use Illuminate\Support\ServiceProvider;
+use App\Services\Riak\Connection;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\ServiceProvider;
 
-    class RiakServiceProvider extends ServiceProvider
+class RiakServiceProvider extends ServiceProvider
+{
+    /**
+     * Регистрация любых служб приложения.
+     */
+    public function register(): void
     {
-        /**
-         * Регистрация любых служб приложения.
-         *
-         * @return void
-         */
-        public function register()
-        {
-            $this->app->singleton(Connection::class, function ($app) {
-                return new Connection(config('riak'));
-            });
-        }
+        $this->app->singleton(Connection::class, function (Application $app) {
+            return new Connection(config('riak'));
+        });
     }
+}
+```
 
 Этот сервис-провайдер определяет только метод `register` и использует этот метод для указания, какая именно реализация `App\Services\Riak\Connection` будет применена в нашем приложении - при помощи контейнера служб. Если вы еще не знакомы с контейнером служб Laravel, ознакомьтесь с [его документацией](/docs/{{version}}/container).
 
@@ -112,13 +116,11 @@ git: 452b5680b3a434f6736003dd3e7011d270c08fe0
     {
         /**
          * Загрузка любых служб приложения.
-         *
-         * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             View::composer('view', function () {
-                //
+                // ...
             });
         }
     }
@@ -132,29 +134,26 @@ git: 452b5680b3a434f6736003dd3e7011d270c08fe0
 
     /**
      * Загрузка любых служб приложения.
-     *
-     * @param  \Illuminate\Contracts\Routing\ResponseFactory  $response
-     * @return void
      */
-    public function boot(ResponseFactory $response)
+    public function boot(ResponseFactory $response): void
     {
-        $response->macro('serialized', function ($value) {
-            //
+        $response->macro('serialized', function (mixed $value) {
+            // ...
         });
     }
 
 <a name="registering-providers"></a>
 ## Регистрация сервис-провайдеров
 
-Все сервис-провайдеры регистрируются в файле конфигурации `config/app.php`. Этот файл содержит массив `providers`, в котором можно перечислить имена классов. По умолчанию в этом массиве перечислены основные сервис-провайдеры Laravel. Эти поставщики загружают основные компоненты Laravel, такие, как почтовая подсистема, очереди, кеш и другие.
+Все сервис-провайдеры регистрируются в файле конфигурации `config/app.php`. Этот файл содержит массив `providers`, в котором можно перечислить имена классов. По умолчанию, в этом массиве зарегистрирован набор базовых поставщиков сервисов Laravel. Эти поставщики загружают основные компоненты Laravel, такие, как почтовая подсистема, очереди, кеш и другие.
 
 Чтобы зарегистрировать сервис-провайдер, добавьте его в массив:
 
-    'providers' => [
+    'providers' => ServiceProvider::defaultProviders()->merge([
         // Другие сервис-провайдеры
 
         App\Providers\ComposerServiceProvider::class,
-    ],
+    ])->toArray(),
 
 <a name="deferred-providers"></a>
 ## Отложенные сервис-провайдеры
@@ -170,6 +169,7 @@ Laravel составляет и сохраняет список всех слу�
     namespace App\Providers;
 
     use App\Services\Riak\Connection;
+    use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Contracts\Support\DeferrableProvider;
     use Illuminate\Support\ServiceProvider;
 
@@ -177,12 +177,10 @@ Laravel составляет и сохраняет список всех слу�
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
-            $this->app->singleton(Connection::class, function ($app) {
+            $this->app->singleton(Connection::class, function (Application $app) {
                 return new Connection($app['config']['riak']);
             });
         }
@@ -190,9 +188,9 @@ Laravel составляет и сохраняет список всех слу�
         /**
          * Получить службы, предоставляемые поставщиком.
          *
-         * @return array
+         * @return array<int, string>
          */
-        public function provides()
+        public function provides(): array
         {
             return [Connection::class];
         }

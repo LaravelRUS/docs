@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: 8ad45286f5a5f37a18c0bb010efd2b659c0ddc5c
 ---
 
 # Сессия HTTP
@@ -29,7 +29,8 @@ Laravel предлагает множество различных типов х
 
 <!-- </div> -->
 
-> {tip} Драйвер `array` в основном используется во время [тестирования](/docs/{{version}}/testing) и предотвращает сохранение данных, находящихся в сессии.
+> **Note**  
+> Драйвер `array` в основном используется во время [тестирования](/docs/{{version}}/testing) и предотвращает сохранение данных, находящихся в сессии.
 
 <a name="driver-prerequisites"></a>
 ### Предварительная подготовка драйверов
@@ -39,7 +40,10 @@ Laravel предлагает множество различных типов х
 
 При использовании драйвера `database` сессии, вам нужно будет создать таблицу, содержащую записи сессии. Пример объявления `Schema` для таблицы ниже:
 
-    Schema::create('sessions', function ($table) {
+    use Illuminate\Database\Schema\Blueprint;
+    use Illuminate\Support\Facades\Schema;
+
+    Schema::create('sessions', function (Blueprint $table) {
         $table->string('id')->primary();
         $table->foreignId('user_id')->nullable()->index();
         $table->string('ip_address', 45)->nullable();
@@ -50,16 +54,19 @@ Laravel предлагает множество различных типов х
 
 Вы можете использовать команду `session:table` Artisan для генерации этой миграции. Чтобы узнать больше о миграции баз данных, вы можете ознакомиться с полной [документацией по миграции](/docs/{{version}}/migrations):
 
-    php artisan session:table
+```shell
+php artisan session:table
 
-    php artisan migrate
+php artisan migrate
+```
 
 <a name="redis"></a>
 #### Redis
 
 Перед использованием Redis с Laravel вам нужно будет либо установить расширение PHP PhpRedis через PECL, либо установить пакет `predis/predis` (~ 1.0) через Composer. Для получения дополнительной информации о настройке Redis обратитесь к [документации Redis](/docs/{{version}}/redis#configuration) Laravel.
 
-> {tip} В параметре `connection` конфигурационного файла `config/session.php` указывается, какое соединение Redis используется сессией.
+> **Note**  
+> В параметре `connection` конфигурационного файла `config/session.php` указывается, какое соединение Redis используется сессией.
 
 <a name="interacting-with-the-session"></a>
 ## Взаимодействие с сессией
@@ -73,23 +80,23 @@ Laravel предлагает множество различных типов х
 
     namespace App\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
     use Illuminate\Http\Request;
+    use Illuminate\View\View;
 
     class UserController extends Controller
     {
         /**
          * Показать профиль конкретного пользователя.
-         *
-         * @param  Request  $request
-         * @param  int  $id
-         * @return Response
          */
-        public function show(Request $request, $id)
+        public function show(Request $request, string $id): View
         {
             $value = $request->session()->get('key');
 
             //
+
+            $user = $this->users->find($id);
+
+            return view('user.profile', ['user' => $user]);
         }
     }
 
@@ -117,7 +124,8 @@ Laravel предлагает множество различных типов х
         session(['key' => 'value']);
     });
 
-> {tip} Существует небольшая практическая разница между использованием сессии через экземпляр HTTP-запроса и использованием глобального помощника `session`. Оба метода [тестируемые](/docs/{{version}}/testing) с помощью метода `assertSessionHas`, который доступен во всех ваших тестах.
+> **Note**  
+> Существует небольшая практическая разница между использованием сессии через экземпляр HTTP-запроса и использованием глобального помощника `session`. Оба метода [тестируемые](/docs/{{version}}/testing) с помощью метода `assertSessionHas`, который доступен во всех ваших тестах.
 
 <a name="retrieving-all-session-data"></a>
 #### Получение всех данных сессии
@@ -132,19 +140,19 @@ Laravel предлагает множество различных типов х
 Чтобы определить, присутствует ли элемент в сессии, вы можете использовать метод `has`. Метод `has` возвращает `true`, если элемент присутствует, и не равен `null`:
 
     if ($request->session()->has('users')) {
-        //
+        // ...
     }
 
 Чтобы определить, присутствует ли элемент в сессии, даже если его значение равно `null`, то вы можете использовать метод `exists`:
 
     if ($request->session()->exists('users')) {
-        //
+        // ...
     }
 
 Чтобы определить, отсутствует ли элемент в сессии, вы можете использовать метод `missing`. Метод `missing` возвращает `true`, если элемент имеет значение `null` или если элемент отсутствует:
 
     if ($request->session()->missing('users')) {
-        //
+        // ...
     }
 
 <a name="storing-data"></a>
@@ -231,18 +239,19 @@ Laravel автоматически пересоздает идентификат
 <a name="session-blocking"></a>
 ## Блокировка сессии
 
-> {note} Чтобы использовать блокировку сессии, ваше приложение должно использовать драйвер кеша, поддерживающий [атомарные блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время этими драйверами кеширования являются `memcached`, `dynamodb`, `redis` и `database`. Кроме того, вы не можете использовать драйвер сессии `cookie`.
+> **Warning**  
+> Чтобы использовать блокировку сессии, ваше приложение должно использовать драйвер кеша, поддерживающий [атомарные блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время этими драйверами кеширования являются `memcached`, `dynamodb`, `redis` и `database`. Кроме того, вы не можете использовать драйвер сессии `cookie`.
 
 По умолчанию Laravel позволяет выполнять запросы, использующие оду и ту же сессию, одновременно. Так, например, если вы используете HTTP-библиотеку JavaScript для выполнения двух HTTP-запросов к вашему приложению, то они будут выполняться одновременно. Для многих приложений это не проблема; однако потеря данных сессии может произойти в небольшом подмножестве приложений, выполняющих одновременные запросы к двум различным конечным точкам приложения, которые записывают данные в сессию.
 
 Чтобы смягчить это, Laravel предлагает функциональность, которая позволяет ограничивать количество одновременных запросов для текущей сессии. Для начала вы можете просто привязать метод `block` к определению вашего маршрута. В этом примере входящий запрос к конечной точке `/profile` получит блокировку сессии. Пока эта блокировка удерживается, любые входящие запросы к конечным точкам `/profile` или `/order` с одним и тем же идентификатором сессии будут ждать завершения выполнения первого запроса, прежде чем они будут выполнены:
 
     Route::post('/profile', function () {
-        //
+        // ...
     })->block($lockSeconds = 10, $waitSeconds = 10)
 
     Route::post('/order', function () {
-        //
+        // ...
     })->block($lockSeconds = 10, $waitSeconds = 10)
 
 Метод `block` принимает два необязательных аргумента. Первый аргумент, принимаемый методом `block` – это максимальное количество секунд, в течение которых блокировка сессии должна удерживаться, прежде чем она будет снята. Конечно, если выполнение запроса завершится до этого времени, блокировка будет снята раньше.
@@ -252,7 +261,7 @@ Laravel автоматически пересоздает идентификат
 Если ни один из этих аргументов не передан, то блокировка будет получена максимум на `10` секунд, а запросы будут ждать максимум `10` секунд при попытке получить блокировку:
 
     Route::post('/profile', function () {
-        //
+        // ...
     })->block()
 
 <a name="adding-custom-session-drivers"></a>
@@ -277,7 +286,8 @@ Laravel автоматически пересоздает идентификат
         public function gc($lifetime) {}
     }
 
-> {tip} Laravel не содержит каталога для хранения ваших расширений. Вы можете разместить их где угодно. В этом примере мы создали каталог `Extensions` для размещения `MongoSessionHandler`.
+> **Note**  
+> Laravel не содержит каталога для хранения ваших расширений. Вы можете разместить их где угодно. В этом примере мы создали каталог `Extensions` для размещения `MongoSessionHandler`.
 
 Поскольку цель этих методов не совсем понятна, давайте быстро рассмотрим, что делает каждый из этих методов:
 
@@ -302,6 +312,7 @@ Laravel автоматически пересоздает идентификат
     namespace App\Providers;
 
     use App\Extensions\MongoSessionHandler;
+    use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Support\Facades\Session;
     use Illuminate\Support\ServiceProvider;
 
@@ -309,22 +320,18 @@ Laravel автоматически пересоздает идентификат
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
-            //
+            // ...
         }
 
         /**
          * Загрузка любых служб приложения.
-         *
-         * @return void
          */
-        public function boot()
+        public function boot(): void
         {
-            Session::extend('mongo', function ($app) {
+            Session::extend('mongo', function (Application $app) {
                 // Return an implementation of SessionHandlerInterface...
                 return new MongoSessionHandler;
             });

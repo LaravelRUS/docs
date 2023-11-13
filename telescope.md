@@ -1,5 +1,5 @@
 ---
-git: 2cf67bcaacfec590098cefb45af824b74671cfa0
+git: 2e062ca334aacff39590afca7de003ba18e6537a
 ---
 
 # Пакет Laravel Telescope
@@ -17,13 +17,17 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 Для начала установите Telescope с помощью менеджера пакетов Composer в свой проект:
 
-    composer require laravel/telescope
+```shell
+composer require laravel/telescope
+```
 
 После установки Telescope опубликуйте его ресурсы с помощью команды `telescope:install` Artisan. После установки Telescope вы также должны запустить команду `migrate`, чтобы создать таблицы, необходимые для хранения данных Telescope:
 
-    php artisan telescope:install
+```shell
+php artisan telescope:install
 
-    php artisan migrate
+php artisan migrate
+```
 
 <a name="migration-customization"></a>
 #### Настройка миграции
@@ -35,20 +39,20 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 Если вы планируете использовать Telescope только для локальной разработки, то вы можете установить Telescope с параметром `--dev`:
 
-    composer require laravel/telescope --dev
+```shell
+composer require laravel/telescope --dev
 
-    php artisan telescope:install
+php artisan telescope:install
 
-    php artisan migrate
+php artisan migrate
+```
 
 После запуска `telescope:install` вы должны удалить регистрацию поставщика `TelescopeServiceProvider` из файла конфигурации `config/app.php` вашего приложения. Вместо этого самостоятельно зарегистрируйте поставщика службы Telescope в методе `register` вашего класса `App\Providers\AppServiceProvider`. Прежде чем зарегистрировать поставщика, убедитесь, что текущее окружение является локальным:
 
     /**
      * Регистрация любых служб приложения.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
@@ -58,13 +62,15 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 Наконец, вы также должны предотвратить [авто-обнаружение](/docs/{{version}}/packages#package-discovery) пакета Telescope, добавив в файл `composer.json` следующее:
 
-    "extra": {
-        "laravel": {
-            "dont-discover": [
-                "laravel/telescope"
-            ]
-        }
-    },
+```json
+"extra": {
+    "laravel": {
+        "dont-discover": [
+            "laravel/telescope"
+        ]
+    }
+},
+```
 
 <a name="configuration"></a>
 ### Конфигурирование
@@ -91,23 +97,24 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 Доступ к панели управления Telescope можно получить по маршруту `/telescope`. По умолчанию вы сможете получить доступ к этой панели мониторинга только в окружении `local`. В вашем файле `app/Providers/TelescopeServiceProvider.php` есть определение [шлюза авторизации](authorization#gates). Этот шлюз авторизации контролирует доступ к Telescope в **нелокальном** окружении. Вы можете изменить этот шлюз, чтобы ограничить доступ к вашей установке Telescope, если это необходимо:
 
+    use App\Models\User;
+
     /**
      * Регистрация шлюза Telescope.
      *
      * Этот шлюз определяют, кто может получить доступ к Telescope в нелокальном окружении.
-     *
-     * @return void
      */
-    protected function gate()
+    protected function gate(): void
     {
-        Gate::define('viewTelescope', function ($user) {
+        Gate::define('viewTelescope', function (User $user) {
             return in_array($user->email, [
                 'taylor@laravel.com',
             ]);
         });
     }
 
-> {note} Убедитесь, что вы изменили значение переменной `APP_ENV` на `production` в эксплуатационном окружении. В противном случае доступ к Telescope будет публичным.
+> **Warning**  
+> Убедитесь, что вы изменили значение переменной `APP_ENV` на `production` в эксплуатационном окружении. В противном случае доступ к Telescope будет публичным.
 
 <a name="upgrading-telescope"></a>
 ## Обновление пакета Telescope
@@ -116,17 +123,21 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
 Кроме того, при обновлении до любой новой версии Telescope вы должны повторно опубликовать ресурсы Telescope:
 
-    php artisan telescope:publish
+```shell
+php artisan telescope:publish
+```
 
-Чтобы поддерживать актуальность ресурсов и избежать проблем в будущих обновлениях, вы можете добавить команду `telescope:publish` в сценарий `post-update-cmd` файла `composer.json` вашего приложения:
+Чтобы поддерживать актуальность ресурсов и избежать проблем в будущих обновлениях, вы можете добавить команду `vendor:publish --tag=laravel-assets` в сценарий `post-update-cmd` файла `composer.json` вашего приложения:
 
-    {
-        "scripts": {
-            "post-update-cmd": [
-                "@php artisan telescope:publish --ansi"
-            ]
-        }
+```json
+{
+    "scripts": {
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ]
     }
+}
+```
 
 <a name="filtering"></a>
 ## Фильтрация
@@ -141,10 +152,8 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
     /**
      * Регистрация любых служб приложения.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->hideSensitiveRequestDetails();
 
@@ -171,10 +180,8 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 
     /**
      * Регистрация любых служб приложения.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->hideSensitiveRequestDetails();
 
@@ -183,7 +190,7 @@ git: 2cf67bcaacfec590098cefb45af824b74671cfa0
                 return true;
             }
 
-            return $entries->contains(function ($entry) {
+            return $entries->contains(function (IncomingEntry $entry) {
                 return $entry->isReportableException() ||
                     $entry->isFailedJob() ||
                     $entry->isScheduledTask() ||
@@ -203,10 +210,8 @@ Telescope позволяет искать записи по «метке». Ча
 
     /**
      * Регистрация любых служб приложения.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->hideSensitiveRequestDetails();
 
@@ -259,6 +264,17 @@ Telescope позволяет искать записи по «метке». Ча
             'ignore' => ['key:generate'],
         ],
         ...
+    ],
+
+По умолчанию Telescope будет записывать только журналы на уровне `error` и выше. Однако вы можете изменить параметр `level` в файле конфигурации вашего приложения `config/telescope.php`, чтобы изменить это поведение:
+
+    'watchers' => [
+        Watchers\LogWatcher::class => [
+            'enabled' => env('TELESCOPE_LOG_WATCHER', true),
+            'level' => 'debug',
+        ],
+
+        // ...
     ],
 
 <a name="dump-watcher"></a>
@@ -389,14 +405,12 @@ Telescope позволяет искать записи по «метке». Ча
 
     /**
      * Регистрация любых служб приложения.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         // ...
 
-        Telescope::avatar(function ($id, $email) {
+        Telescope::avatar(function (string $id, string $email) {
             return '/avatars/'.User::find($id)->avatar_path;
         });
     }
