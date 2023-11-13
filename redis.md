@@ -1,5 +1,5 @@
 ---
-git: f45e1188b562f064d48f19e5965bc446adc8c987
+git: dbb3411ad44095dcc7d6250973d084d7f6b9814c
 ---
 
 # База данных · Использование Redis
@@ -13,7 +13,7 @@ git: f45e1188b562f064d48f19e5965bc446adc8c987
 
 Если вы не можете установить расширение phpredis, то установите пакет `predis/predis` через Composer. Predis – это клиент Redis, полностью написанный на PHP и не требующий дополнительных расширений:
 
-```bash
+```shell
 composer require predis/predis
 ```
 
@@ -28,14 +28,14 @@ composer require predis/predis
 
         'default' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
         ],
 
         'cache' => [
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_CACHE_DB', 1),
         ],
@@ -70,7 +70,7 @@ composer require predis/predis
         'default' => [
             'scheme' => 'tls',
             'host' => env('REDIS_HOST', '127.0.0.1'),
-            'password' => env('REDIS_PASSWORD', null),
+            'password' => env('REDIS_PASSWORD'),
             'port' => env('REDIS_PORT', 6379),
             'database' => env('REDIS_DB', 0),
         ],
@@ -90,7 +90,7 @@ composer require predis/predis
             'default' => [
                 [
                     'host' => env('REDIS_HOST', 'localhost'),
-                    'password' => env('REDIS_PASSWORD', null),
+                    'password' => env('REDIS_PASSWORD'),
                     'port' => env('REDIS_PORT', 6379),
                     'database' => 0,
                 ],
@@ -133,7 +133,7 @@ composer require predis/predis
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
-        'password' => env('REDIS_PASSWORD', null),
+        'password' => env('REDIS_PASSWORD'),
         'port' => env('REDIS_PORT', 6379),
         'database' => 0,
         'read_write_timeout' => 60,
@@ -142,7 +142,13 @@ composer require predis/predis
 <a name="the-redis-facade-alias"></a>
 #### Псевдоним фасада Redis
 
-Конфигурационный файл `config/app.php` содержит массив `aliases`, определяющий все псевдонимы классов, которые будут зарегистрированы фреймворком Laravel. Для удобства для каждого [фасада](/docs/{{version}}/facades) Laravel имеется запись псевдонима; однако псевдоним Redis отключен, поскольку он конфликтует с именем класса Redis расширения `phpredis`. Если вы используете клиент Predis и хотите использовать этот псевдоним, то вы можете раскомментировать псевдоним в конфигурационном файле `config/app.php` вашего приложения.
+Конфигурационный файл `config/app.php` в Laravel содержит массив `aliases`, который определяет все псевдонимы классов, которые будут зарегистрированы фреймворком. По умолчанию в него не включается псевдоним `Redis`, чтобы избежать конфликта с именем класса `Redis`, предоставляемым расширением phpredis. Если вы используете клиент Predis и хотите добавить псевдоним `Redis`, вы можете добавить его в массив `aliases` в конфигурационном файле `config/app.php` вашего приложения:
+
+```php
+'aliases' => Facade::defaultAliases()->merge([
+    'Redis' => Illuminate\Support\Facades\Redis::class,
+])->toArray(),
+```
 
 <a name="phpredis"></a>
 ### phpredis
@@ -160,7 +166,7 @@ composer require predis/predis
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
-        'password' => env('REDIS_PASSWORD', null),
+        'password' => env('REDIS_PASSWORD'),
         'port' => env('REDIS_PORT', 6379),
         'database' => 0,
         'read_timeout' => 60,
@@ -174,8 +180,6 @@ composer require predis/predis
 #### phpredis Сериализация и сжатие
 
 Расширение phpredis также можно настроить для использования различных алгоритмов сериализации и сжатия. Эти алгоритмы можно настроить с помощью массива `options` вашей конфигурации Redis:
-
-    use Redis;
 
     'redis' => [
 
@@ -204,16 +208,14 @@ composer require predis/predis
 
     use App\Http\Controllers\Controller;
     use Illuminate\Support\Facades\Redis;
+    use Illuminate\View\View;
 
     class UserController extends Controller
     {
         /**
          * Показать профиль конкретного пользователя.
-         *
-         * @param  int  $id
-         * @return \Illuminate\Http\Response
          */
-        public function show($id)
+        public function show(string $id): View
         {
             return view('user.profile', [
                 'user' => Redis::get('user:profile:'.$id)
@@ -249,14 +251,16 @@ composer require predis/predis
 
 Метод `transaction` фасада `Redis` обеспечивает удобную обертку для собственных команд `MULTI` и `EXEC` Redis. Метод `transaction` принимает замыкание как единственный аргумент. Это замыкание получит экземпляр подключения Redis и может использовать любые необходимые вам команды, отправляемые на сервер Redis. Все команды Redis в рамках замыкания будут выполняться в одной атомарной транзакции:
 
-    use Illuminate\Support\Facades\Redis;
+    use Redis;
+    use Illuminate\Support\Facades;
 
-    Redis::transaction(function ($redis) {
+    Facades\Redis::transaction(function (Redis $redis) {
         $redis->incr('user_visits', 1);
         $redis->incr('total_visits', 1);
     });
 
-> {note} При определении транзакции Redis вы не можете получать какие-либо значения из соединения Redis. Помните, ваша транзакция выполняется как одна атомарная операция, и эта операция не выполнится, пока не завершится выполнение всех команд замыкания.
+> **Warning**  
+> При определении транзакции Redis вы не можете получать какие-либо значения из соединения Redis. Помните, ваша транзакция выполняется как одна атомарная операция, и эта операция не выполнится, пока не завершится выполнение всех команд замыкания.
 
 #### Скрипты Lua
 
@@ -276,16 +280,18 @@ composer require predis/predis
         return counter
     LUA, 2, 'first-counter', 'second-counter');
 
-> {note} Пожалуйста, обратитесь к [документации Redis](https://redis.io/commands/eval) для получения дополнительных сведений о сценариях Redis.
+> **Warning**  
+> Пожалуйста, обратитесь к [документации Redis](https://redis.io/commands/eval) для получения дополнительных сведений о сценариях Redis.
 
 <a name="pipelining-commands"></a>
 ### Конвейерное выполнение команд
 
 По желанию можно выполнить десятки команд Redis. Вместо того чтобы совершать сетевое обращение к вашему серверу Redis для каждой команды, вы можете использовать метод `pipeline`. Метод `pipeline` принимает один аргумент: замыкание, которое получает экземпляр Redis. Вы можете передать все свои команды этому экземпляру Redis, и все они будут отправлены на сервер Redis одновременно, чтобы уменьшить количество сетевых обращений к серверу. Команды по-прежнему будут выполняться в том порядке, в котором они были отправлены:
 
-    use Illuminate\Support\Facades\Redis;
+    use Redis;
+    use Illuminate\Support\Facades;
 
-    Redis::pipeline(function ($pipe) {
+    Facades\Redis::pipeline(function (Redis $pipe) {
         for ($i = 0; $i < 1000; $i++) {
             $pipe->set("key:$i", $i);
         }
@@ -323,12 +329,10 @@ Laravel предлагает удобный интерфейс для коман
 
         /**
          * Выполнить консольную команду.
-         *
-         * @return mixed
          */
-        public function handle()
+        public function handle(): void
         {
-            Redis::subscribe(['test-channel'], function ($message) {
+            Redis::subscribe(['test-channel'], function (string $message) {
                 echo $message;
             });
         }
@@ -351,10 +355,10 @@ Laravel предлагает удобный интерфейс для коман
 
 Допускается использование метасимвола подстановки `*` при использовании метода `psubscribe`, что позволит вам перехватывать все сообщения на нескольких каналах. Имя канала будет передано вторым аргументом в указанное замыкание:
 
-    Redis::psubscribe(['*'], function ($message, $channel) {
+    Redis::psubscribe(['*'], function (string $message, string $channel) {
         echo $message;
     });
 
-    Redis::psubscribe(['users.*'], function ($message, $channel) {
+    Redis::psubscribe(['users.*'], function (string $message, string $channel) {
         echo $message;
     });
