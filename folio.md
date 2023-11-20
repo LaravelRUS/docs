@@ -1,30 +1,15 @@
 ---
-git: 2a643174d2f46952bd3cd7975029c49cd505f049
+git: 11b3a4a2cb9abc2b115977cbada4307628a56f39
 ---
 
 # Laravel Folio
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-    - [Page Paths / URIs](#page-paths-uris)
-    - [Subdomain Routing](#subdomain-routing)
-- [Creating Routes](#creating-routes)
-    - [Nested Routes](#nested-routes)
-    - [Index Routes](#index-routes)
-- [Route Parameters](#route-parameters)
-- [Route Model Binding](#route-model-binding)
-    - [Soft Deleted Models](#soft-deleted-models)
-- [Render Hooks](#render-hooks)
-- [Named Routes](#named-routes)
-- [Middleware](#middleware)
-- [Route Caching](#route-caching)
-
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-[Laravel Folio](https://github.com/laravel/folio) is a powerful page based router designed to simplify routing in Laravel applications. With Laravel Folio, generating a route becomes as effortless as creating a Blade template within your application's `resources/views/pages` directory.
+[Laravel Folio](https://github.com/laravel/folio) - это мощный роутер на основе страниц, разработанный для упрощения маршрутизации в приложениях Laravel. С помощью Laravel Folio создание маршрута становится таким же простым, как создание шаблона Blade в директории `resources/views/pages` вашего приложения.
 
-For example, to create a page that is accessible at the `/greeting` URL, just create a `greeting.blade.php` file in your application's `resources/views/pages` directory:
+Например, чтобы создать страницу, которая будет доступна по URL `/greeting`, просто создайте файл `greeting.blade.php` в директории `resources/views/pages` вашего приложения:
 
 ```php
 <div>
@@ -33,28 +18,28 @@ For example, to create a page that is accessible at the `/greeting` URL, just cr
 ```
 
 <a name="installation"></a>
-## Installation
+## Установка
 
-To get started, install Folio into your project using the Composer package manager:
+Для начала установите Folio в ваш проект, используя менеджер пакетов Composer:
 
 ```bash
 composer require laravel/folio
 ```
 
-After installing Folio, you may execute the `folio:install` Artisan command, which will install Folio's service provider into your application. This service provider registers the directory where Folio will search for routes / pages:
+После установки Folio, вы можете выполнить команду Artisan `folio:install`, которая установит провайдера службы Folio в вашем приложении. Этот провайдер регистрирует директорию, в которой Folio будет искать маршруты / страницы:
 
 ```bash
 php artisan folio:install
 ```
 
 <a name="page-paths-uris"></a>
-### Page Paths / URIs
+### Пути страниц / URI
 
-By default, Folio serves pages from your application's `resources/views/pages` directory, but you may customize these directories in your Folio service provider's `boot` method.
+По умолчанию Folio обслуживает страницы из директории `resources/views/pages` вашего приложения, но вы можете настроить эти директории в методе `boot` провайдера службы Folio.
 
-For example, sometimes it may be convenient to specify multiple Folio paths in the same Laravel application. You may wish to have a separate directory of Folio pages for your application's "admin" area, while using another directory for the rest of your application's pages.
+Например, иногда удобно указать несколько путей Folio в одном и том же приложении Laravel. Вы можете хотеть иметь отдельную директорию для страниц Folio для раздела "администратор", а также использовать другую директорию для остальных страниц вашего приложения.
 
-You may accomplish this using the `Folio::path` and `Folio::uri` methods. The `path` method registers a directory that Folio will scan for pages when routing incoming HTTP requests, while the `uri` method specifies the "base URI" for that directory of pages:
+Вы можете сделать это с помощью методов `Folio::path` и `Folio::uri`. Метод `path` регистрирует директорию, которую Folio будет сканировать для поиска страниц при маршрутизации входящих HTTP-запросов, а метод `uri` указывает "базовый URI" для этой директории страниц:
 
 ```php
 use Laravel\Folio\Folio;
@@ -74,9 +59,9 @@ Folio::path(resource_path('views/pages/admin'))
 ```
 
 <a name="subdomain-routing"></a>
-### Subdomain Routing
+### Маршрутизация по поддоменам
 
-You may also route to pages based on the incoming request's subdomain. For example, you may wish to route requests from `admin.example.com` to a different page directory than the rest of your Folio pages. You may accomplish this by invoking the `domain` method after invoking the `Folio::path` method:
+Вы также можете маршрутизировать страницы на основе поддомена входящего запроса. Например, вы можете хотеть маршрутизировать запросы от `admin.example.com` в другую директорию страниц Folio, чем остальные страницы Folio вашего приложения. Для этого используйте метод `domain` после метода `Folio::path`:
 
 ```php
 use Laravel\Folio\Folio;
@@ -85,7 +70,7 @@ Folio::domain('admin.example.com')
     ->path(resource_path('views/pages/admin'));
 ```
 
-The `domain` method also allows you to capture parts of the domain or subdomain as parameters. These parameters will be injected into your page template:
+Метод `domain` также позволяет захватывать части домена или поддомена как параметры. Эти параметры будут вставлены в ваш шаблон страницы:
 
 ```php
 use Laravel\Folio\Folio;
@@ -95,22 +80,24 @@ Folio::domain('{account}.example.com')
 ```
 
 <a name="creating-routes"></a>
-## Creating Routes
+## Создание маршрутов
 
-You may create a Folio route by placing a Blade template in any of your Folio mounted directories. By default, Folio mounts the `resources/views/pages` directory, but you may customize these directories in your Folio service provider's `boot` method.
+Вы можете создать маршрут Folio, разместив шаблон Blade в любой из директорий, зарегистрированных для Folio. По умолчанию Folio регистрирует директорию `resources/views/pages`, но вы можете настроить эти директории в методе `boot` провайдера службы Folio.
 
-Once a Blade template has been placed in a Folio mounted directory, you may immediately access it via your browser. For example, a page placed in `pages/schedule.blade.php` may be accessed in your browser at `http://example.com/schedule`.
+После размещения шаблона Blade в зарегистрированной для Folio директории, вы можете немедленно получить к нему доступ через браузер. Например, страница, размещенная в `pages/schedule.blade.php`, может быть доступна в вашем браузере по адресу `http://example.com/schedule`.
 
-To quickly view a list of all of your Folio pages / routes, you may invoke the `folio:list` Artisan command:
+Чтобы быстро просмотреть список всех
+
+ваших страниц / маршрутов Folio, вы можете выполнить команду Artisan `folio:list`:
 
 ```bash
 php artisan folio:list
 ```
 
 <a name="nested-routes"></a>
-### Nested Routes
+### Вложенные маршруты
 
-You may create a nested route by creating one or more directories within one of Folio's directories. For instance, to create a page that is accessible via `/user/profile`, create a `profile.blade.php` template within the `pages/user` directory:
+Вы можете создать вложенный маршрут, создав одну или несколько директорий внутри одной из директорий Folio. Например, чтобы создать страницу, которая будет доступна по `/user/profile`, создайте шаблон `profile.blade.php` в директории `pages/user`:
 
 ```bash
 php artisan make:folio user/profile
@@ -119,9 +106,9 @@ php artisan make:folio user/profile
 ```
 
 <a name="index-routes"></a>
-### Index Routes
+### Маршруты индекса
 
-Sometimes, you may wish to make a given page the "index" of a directory. By placing an `index.blade.php` template within a Folio directory, any requests to the root of that directory will be routed to that page:
+Иногда вы можете хотеть сделать определенную страницу "индексом" для директории. Поместив шаблон `index.blade.php` в директорию Folio, все запросы к корню этой директории будут направлены на эту страницу:
 
 ```bash
 php artisan make:folio index
@@ -131,10 +118,10 @@ php artisan make:folio users/index
 # pages/users/index.blade.php → /users
 ```
 
-<a name="route-parameters"></a>
-## Route Parameters
+<a name="#route-parameters"></a>
+## Параметры маршрута
 
-Often, you will need to have segments of the incoming request's URL injected into your page so that you can interact with them. For example, you may need to access the "ID" of the user whose profile is being displayed. To accomplish this, you may encapsulate a segment of the page's filename in square brackets:
+Часто вам нужно будет внедрить сегменты URL входящего запроса в вашу страницу, чтобы вы могли взаимодействовать с ними. Например, вам может потребоваться получить доступ к "ID" пользователя, чей профиль отображается. Для этого вы можете заключить сегмент имени файла страницы в квадратные скобки:
 
 ```bash
 php artisan make:folio "users/[id]"
@@ -142,15 +129,15 @@ php artisan make:folio "users/[id]"
 # pages/users/[id].blade.php → /users/1
 ```
 
-Captured segments can be accessed as variables within your Blade template:
+Захваченные сегменты можно получить как переменные внутри вашего шаблона Blade:
 
 ```html
 <div>
-    User {{ $id }}
+    Пользователь {{ $id }}
 </div>
 ```
 
-To capture multiple segments, you can prefix the encapsulated segment with three dots `...`:
+Для захвата нескольких сегментов вы можете использовать префикс `...` перед заключенным в скобки сегментом:
 
 ```bash
 php artisan make:folio "users/[...ids]"
@@ -158,20 +145,20 @@ php artisan make:folio "users/[...ids]"
 # pages/users/[...ids].blade.php → /users/1/2/3
 ```
 
-When capturing multiple segments, the captured segments will be injected into the page as an array:
+При захвате нескольких сегментов захваченные сегменты будут вставлены в страницу как массив:
 
 ```html
 <ul>
     @foreach ($ids as $id)
-        <li>User {{ $id }}</li>
+        <li>Пользователь {{ $id }}</li>
     @endforeach
 </ul>
 ```
 
-<a name="route-model-binding"></a>
-## Route Model Binding
+<a name="#route-model-binding"></a>
+## Привязка модели к маршруту
 
-If a wildcard segment of your page template's filename corresponds one of your application's Eloquent models, Folio will automatically take advantage of Laravel's route model binding capabilities and attempt to inject the resolved model instance into your page:
+Если подстановочный сегмент имени файла вашего шаблона страницы соответствует одной из моделей Eloquent вашего приложения, Folio автоматически использует возможности привязки модели Laravel и попытается вставить экземпляр разрешенной модели в вашу страницу:
 
 ```bash
 php artisan make:folio "users/[User]"
@@ -179,23 +166,23 @@ php artisan make:folio "users/[User]"
 # pages/users/[User].blade.php → /users/1
 ```
 
-Captured models can be accessed as variables within your Blade template. The model's variable name will be converted to "camel case":
+Захваченные модели можно получить как переменные внутри вашего шаблона Blade. Имя переменной модели будет преобразовано в "camel case":
 
 ```html
 <div>
-    User {{ $user->id }}
+    Пользователь {{ $user->id }}
 </div>
 ```
 
-#### Customizing The Key
+#### Настройка ключа
 
-Sometimes you may wish to resolve bound Eloquent models using a column other than `id`. To do so, you may specify the column in the page's filename. For example, a page with the filename `[Post:slug].blade.php` will attempt to resolve the bound model via the `slug` column instead of the `id` column.
+Иногда вы можете хотеть разрешать связанные модели Eloquent, используя столбец, отличный от `id`. Для этого вы можете указать столбец в имени файла страницы. Например, страница с именем `[Post:slug].blade.php` будет пытаться разрешить привязанную модель через столбец `slug`, а не столбец `id`.
 
-On Windows, you should use `-` to separate the model name from the key: `[Post-slug].blade.php`.
+На Windows вы должны использовать `-` для разделения имени модели и ключа: `[Post-slug].blade.php`.
 
-#### Model Location
+#### Местоположение модели
 
-By default, Folio will search for your model within your application's `app/Models` directory. However, if needed, you may specify the fully-qualified model class name in your template's filename:
+По умолчанию Folio будет искать вашу модель в директории `app/Models` вашего приложения. Однако, при необходимости, вы можете указать полное имя класса модели в имени файла вашего шаблона:
 
 ```bash
 php artisan make:folio "users/[.App.Models.User]"
@@ -204,9 +191,9 @@ php artisan make:folio "users/[.App.Models.User]"
 ```
 
 <a name="soft-deleted-models"></a>
-### Soft Deleted Models
+### Модели с мягким удалением
 
-By default, models that have been soft deleted are not retrieved when resolving implicit model bindings. However, if you wish, you can instruct Folio to retrieve soft deleted models by invoking the `withTrashed` function within the page's template:
+По умолчанию модели, которые были удалены с помощью мягкого удаления, не извлекаются при разрешении неявных привязок моделей. Однако, если вы хотите, вы можете указать Folio извлекать удаленные модели с помощью функции `withTrashed` в шаблоне вашей страницы:
 
 ```php
 <?php
@@ -218,16 +205,16 @@ withTrashed();
 ?>
 
 <div>
-    User {{ $user->id }}
+    Пользователь {{ $user->id }}
 </div>
 ```
 
 <a name="render-hooks"></a>
-## Render Hooks
+## Обработчики отображения
 
-By default, Folio will return the content of the page's Blade template as the response to the incoming request. However, you may customize the response by invoking the `render` function within the page's template.
+По умолчанию Folio возвращает содержимое шаблона Blade страницы как ответ на входящий запрос. Однако вы можете настроить ответ, вызвав функцию `render` внутри шаблона страницы.
 
-The `render` function accepts a closure which will receive the `View` instance being rendered by Folio, allowing you to add additional data to the view or customize the entire response. In addition to receiving the `View` instance, any additional route parameters or model bindings will also be provided to the `render` closure:
+Функция `render` принимает замыкание, которое будет получать экземпляр `View`, который рендерится Folio, что позволяет вам добавлять дополнительные данные в представление или настраивать весь ответ. Помимо экземпляра `View`, в замыкание `render` также будут переданы дополнительные параметры маршрута или связывания модели:
 
 ```php
 <?php
@@ -251,14 +238,14 @@ render(function (View $view, Post $post) {
 </div>
 
 <div>
-    This author has also taken {{ count($photos) }} photos.
+    Этот автор также сделал {{ count($photos) }} фотографий.
 </div>
 ```
 
 <a name="named-routes"></a>
-## Named Routes
+## Именованные маршруты
 
-You may specify a name for a given page's route using the `name` function:
+Вы можете задать имя маршруту для определенной страницы, используя функцию `name`:
 
 ```php
 <?php
@@ -268,24 +255,24 @@ use function Laravel\Folio\name;
 name('users.index');
 ```
 
-Just like Laravel's named routes, you may use the `route` function to generate URLs to Folio pages that have been assigned a name:
+Как и в случае с именованными маршрутами Laravel, вы можете использовать функцию `route` для создания URL-адресов для страниц Folio, которым было присвоено имя:
 
 ```php
 <a href="{{ route('users.index') }}">
-    All Users
+    Все пользователи
 </a>
 ```
 
-If the page has parameters, you may simply pass their values to the `route` function:
+Если у страницы есть параметры, вы можете просто передать их значения функции `route`:
 
 ```php
 route('users.show', ['user' => $user]);
 ```
 
 <a name="middleware"></a>
-## Middleware
+## Промежуточное ПО (Middleware)
 
-You can apply middleware to a specific page by invoking the `middleware` function within the page's template:
+Вы можете применить промежуточное ПО к определенной странице, вызвав функцию `middleware` внутри шаблона страницы:
 
 ```php
 <?php
@@ -297,13 +284,13 @@ middleware(['auth', 'verified']);
 ?>
 
 <div>
-    Dashboard
+    Панель управления
 </div>
 ```
 
-Or, to assign middleware to a group of pages, you may chain the `middleware` method after invoking the `Folio::path` method.
+Или, чтобы применить промежуточное ПО к группе страниц, вы можете цеплять метод `middleware` после вызова метода `Folio::path`.
 
-To specify which pages the middleware should be applied to, the array of middleware may be keyed using the corresponding URL patterns of the pages they should be applied to. The `*` character may be utilized as a wildcard character:
+Чтобы указать, к каким страницам следует применить промежуточное ПО, массив промежуточного ПО может быть разделен с использованием соответствующих шаблонов URL-адресов страниц, к которым оно должно быть применено. Символ `*` может быть использован как символ подстановки:
 
 ```php
 use Laravel\Folio\Folio;
@@ -318,7 +305,7 @@ Folio::path(resource_path('views/pages'))->middleware([
 ]);
 ```
 
-You may include closures in the array of middleware to define inline, anonymous middleware:
+Вы можете включить замыкания в массив промежуточного ПО, чтобы определить анонимное промежуточное ПО:
 
 ```php
 use Closure;
@@ -340,6 +327,6 @@ Folio::path(resource_path('views/pages'))->middleware([
 ```
 
 <a name="route-caching"></a>
-## Route Caching
+## Кэширование маршрутов
 
-When using Folio, you should always take advantage of [Laravel's route caching capabilities](/docs/{{version}}/routing#route-caching). Folio listens for the `route:cache` Artisan command to ensure that Folio page definitions and route names are properly cached for maximum performance.
+При использовании Folio вы всегда должны использовать [возможности кэширования маршрутов Laravel](/docs/{{version}}/routing#route-caching). Folio прослушивает команду Artisan `route:cache`, чтобы убедиться, что определения страниц Folio и имена маршрутов должны быть правильно закэшированы для максимальной производительности.
