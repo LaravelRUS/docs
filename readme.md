@@ -1,21 +1,12 @@
 # Перевод документации Laravel
 
-Этот репозиторий содержит русскоязычный перевод документации фреймворка Laravel.
+Этот репозиторий содержит русскоязычный перевод документации фреймворка Laravel. 
+Он не создает веб-сайт laravel.su/docs только содержит только контент для него.
+
 Каждая ветка соответствует определенной версии фреймворка, таким образом, для внесения изменений в документацию,
 относящуюся к Laravel 10.x, следует перейти в ветку `10.x`.
 
 > Если вы только знакомитесь, то удобнее будет читать материалы на сайте [laravel.su](https://laravel.su/docs).
-
-> **Предупреждение о проблеме TODO:**
-```
-The document /8.x/billing.md is missing a Git hash
-The document /8.x/cashier-paddle.md is missing a Git hash
-The document /8.x/collections.md is missing a Git hash
-The document /8.x/contributions.md is missing a Git hash
-The document /8.x/valet.md is missing a Git hash
-The document /5.4/apis.md is missing a Git hash
-The document /4.2/README.md is missing a Git hash
-```
 
 **Проверка актуальности документации:**
 
