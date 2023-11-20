@@ -1,5 +1,5 @@
 ---
-git: d35acdeace1152f3559b81c5ae02c18e80197a52
+git: ea932bb6145789c7a414ddb2f3fff61f716a00bb
 ---
 
 # База данных · Миграции
