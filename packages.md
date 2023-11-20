@@ -24,16 +24,18 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
 Параметр `providers` конфигурационного файла `config/app.php` определяет список поставщиков служб, загружаемых Laravel. Когда кто-то устанавливает ваш пакет, то вы обычно хотите, чтобы ваш поставщик службы был включен в этот список. Вместо того чтобы требовать от пользователей ручного добавления вашего поставщика в этот список, вы можете определить его в разделе `extra` файла `composer.json` вашего пакета. Помимо поставщиков, вы также можете указать любые [фасады](/docs/{{version}}/facades), которые вы хотите зарегистрировать:
 
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Barryvdh\\Debugbar\\ServiceProvider"
-            ],
-            "aliases": {
-                "Debugbar": "Barryvdh\\Debugbar\\Facade"
-            }
+```json
+"extra": {
+    "laravel": {
+        "providers": [
+            "Barryvdh\\Debugbar\\ServiceProvider"
+        ],
+        "aliases": {
+            "Debugbar": "Barryvdh\\Debugbar\\Facade"
         }
-    },
+    }
+},
+```
 
 После того как ваш пакет будет настроен для обнаружения, Laravel автоматически зарегистрирует поставщиков и фасады пакета при его установке, создав удобство установки для пользователей вашего пакета.
 
@@ -42,28 +44,32 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
 Если вы являетесь пользователем пакета и хотите отключить обнаружение какого-то конкретного пакета, то вы можете указать его название в разделе `extra` файла `composer.json` вашего приложения:
 
-    "extra": {
-        "laravel": {
-            "dont-discover": [
-                "barryvdh/laravel-debugbar"
-            ]
-        }
-    },
+```json
+"extra": {
+    "laravel": {
+        "dont-discover": [
+            "barryvdh/laravel-debugbar"
+        ]
+    }
+},
+```
 
 Вы можете отключить обнаружение для всех пакетов, используя метасимвол `*` внутри директивы `dont-discover` вашего приложения:
 
-    "extra": {
-        "laravel": {
-            "dont-discover": [
-                "*"
-            ]
-        }
-    },
+```json
+"extra": {
+    "laravel": {
+        "dont-discover": [
+            "*"
+        ]
+    }
+},
+```
 
 <a name="service-providers"></a>
 ## Поставщики служб
 
-[Поставщики служб](/docs/{{version}}/providers) – это точка соприкосновения между вашим пакетом и Laravel. Поставщик службы отвечает за связывание объектов в [контейнере служб](/docs/{{version}}/container) и информирует Laravel куда загружать ресурсы пакета, такие как шаблоны, файлы конфигурации и локализации.
+[Поставщики служб](/docs/{{version}}/providers) – это точка соприкосновения между вашим пакетом и Laravel. Поставщик службы отвечает за связывание объектов в [контейнере служб](/docs/{{version}}/container) и информирует Laravel куда загружать ресурсы пакета, такие как шаблоны, файлы конфигурации и языковых файлов.
 
 Поставщик службы расширяет класс `Illuminate\Support\ServiceProvider` и содержит два метода: `register` и `boot`. Базовый класс `ServiceProvider` находится в пакете `illuminate/support` Composer, который вы должны добавить в зависимости вашего собственного пакета. Чтобы узнать больше о структуре и назначении поставщиков служб, ознакомьтесь с [их документацией](/docs/{{version}}/providers).
 
@@ -77,10 +83,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../config/courier.php' => config_path('courier.php'),
@@ -91,7 +95,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     $value = config('courier.option');
 
-> {note} Вы не должны определять замыкания в своих конфигурационных файлах. Они не могут быть корректно сериализованы, когда пользователи выполняют команду `config:cache` Artisan.
+> **Warning**  
+> Вы не должны определять замыкания в своих конфигурационных файлах. Они не могут быть корректно сериализованы, когда пользователи выполняют команду `config:cache` Artisan.
 
 <a name="default-package-configuration"></a>
 #### Конфигурация пакета по умолчанию
@@ -102,17 +107,16 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Регистрация любых служб пакета.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__.'/../config/courier.php', 'courier'
         );
     }
 
-> {note} Этот метод объединяет только первый уровень массива конфигурации. Если ваши пользователи частично определяют многомерный массив конфигурации, то отсутствующие параметры не будут объединены.
+> **Warning**  
+> Этот метод объединяет только первый уровень массива конфигурации. Если ваши пользователи частично определяют многомерный массив конфигурации, то отсутствующие параметры не будут объединены.
 
 <a name="routes"></a>
 ### Маршруты
@@ -121,10 +125,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
     }
@@ -136,10 +138,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
@@ -147,16 +147,14 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 Как только миграции вашего пакета будут зарегистрированы, они будут автоматически запускаться при выполнении команды `php artisan migrate`. Вам не нужно экспортировать их в каталог приложения `database/migrations`.
 
 <a name="translations"></a>
-### Переводы
+### Языковые файлы (Переводы)
 
-Если ваш пакет содержит [файлы перевода](/docs/{{version}}/localization), то вы можете использовать метод `loadTranslationsFrom`, чтобы сообщить Laravel, как их загрузить. Например, если ваш пакет называется `courier`, то вы должны добавить следующее в метод `boot` вашего поставщика:
+Если ваш пакет содержит [языковые файлы](/docs/{{version}}/localization), то вы можете использовать метод `loadTranslationsFrom`, чтобы сообщить Laravel, как их загрузить. Например, если ваш пакет называется `courier`, то вы должны добавить следующее в метод `boot` вашего поставщика:
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'courier');
     }
@@ -165,19 +163,17 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     echo trans('courier::messages.welcome');
 
-<a name="publishing-translations"></a>
-#### Публикация переводов
+<a name="publishing-language-files"></a>
+#### Публикация языковых файлов
 
-Если вы хотите опубликовать переводы вашего пакета в каталоге `resources/lang/vendor` приложения, то вы можете использовать метод `publishes` поставщика службы. Метод `publishes` принимает массив путей пакета и желаемых мест их публикации. Например, чтобы опубликовать файлы перевода пакета `courier`, вы можете сделать следующее:
+Если вы хотите опубликовать языковые файлы вашего пакета в каталоге `resources/lang/vendor` приложения, то вы можете использовать метод `publishes` поставщика службы. Метод `publishes` принимает массив путей пакета и желаемых мест их публикации. Например, чтобы опубликовать файлы перевода пакета `courier`, вы можете сделать следующее:
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'courier');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'courier');
 
         $this->publishes([
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/courier'),
@@ -193,10 +189,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'courier');
     }
@@ -221,10 +215,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'courier');
 
@@ -238,36 +230,85 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 <a name="view-components"></a>
 ### Компоненты шаблонов
 
+
+Если вы создаете пакет, который использует Blade-компоненты или размещает их в нестандартных каталогах, вам потребуется вручную зарегистрировать класс вашего компонента и его псевдоним HTML-тега, чтобы Laravel знал, где найти компонент. Обычно вы регистрируете ваши компоненты в методе `boot` сервис-провайдера вашего пакета:
+
+
 Если ваш пакет содержит [компоненты шаблонов](/docs/{{version}}/blade#components), то вы можете использовать метод `loadViewComponentsAs`, чтобы сообщить Laravel, как их загрузить. Метод `loadViewComponentsAs` принимает два аргумента: префикс тега компонентов и массив имен классов компонентов. Например, если префикс вашего пакета `courier` и у вас есть компоненты `Alert` и `Button`, то вы должны добавить следующее в метод `boot` вашего поставщика:
 
-    use Courier\Components\Alert;
-    use Courier\Components\Button;
+    use Illuminate\Support\Facades\Blade;
+    use VendorPackage\View\Components\AlertComponent;
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $this->loadViewComponentsAs('courier', [
-            Alert::class,
-            Button::class,
-        ]);
+        Blade::component('package-alert', AlertComponent::class);
     }
 
-После того как ваши компоненты шаблонов зарегистрированы в поставщике, вы можете ссылаться на них в своих шаблонах следующим образом:
+
+После того как ваш компонент был зарегистрирован, его можно отобразить, используя его псевдоним тега:
 
     <x-courier-alert />
 
     <x-courier-button />
+
+
+<a name="autoloading-package-components"></a>
+#### Автозагрузка компонентов
+
+В качестве альтернативы, вы можете использовать метод `componentNamespace` для автоматической загрузки классов компонентов по соглашению. Например, пакет `Nightshade` может иметь компоненты `Calendar` и `ColorPicker`, которые находятся в пространстве имен `Nightshade\Views\Components`:
+
+```php
+use Illuminate\Support\Facades\Blade;
+
+/**
+ * Инициализируйте сервисы вашего пакета.
+ */
+public function boot(): void
+{
+    Blade::componentNamespace('Nightshade\\Views\\Components', 'nightshade');
+}
+```
+
+Это позволит использовать компоненты пакета с помощью синтаксиса `package-name::` их вендорного пространства имен:
+
+```html
+<x-nightshade::calendar />
+<x-nightshade::color-picker />
+```
+
+Blade автоматически определит класс, связанный с этим компонентом, используя паскаль-кейс название компонента. Поддерживается также использование подкаталогов с помощью "точечной" нотации.
+
 
 <a name="anonymous-components"></a>
 #### Анонимные компоненты
 
 Если ваш пакет содержит анонимные компоненты, то они должны быть помещены в каталог `components` каталога «views» вашего пакета (как указано в `loadViewsFrom`). Затем вы можете отобразить их, добавив к имени компонента префикс пространства имен шаблонов пакета:
 
-    <x-courier::alert />
+
+```blade
+<x-courier::alert />
+```
+
+<a name="about-artisan-command"></a>
+#### Информация о пакете в Artisan
+
+Встроенная в Laravel команда Artisan "about" предоставляет краткое описание окружения и конфигурации приложения. Пакеты могут добавлять дополнительную информацию в вывод этой команды с помощью класса `AboutCommand`. Обычно такая информация может быть добавлена из метода `boot` сервис-провайдера вашего пакета:
+
+    use Illuminate\Foundation\Console\AboutCommand;
+
+    /**
+     * Инициализируйте сервисы вашего пакета.
+     */
+    public function boot(): void
+    {
+        AboutCommand::add('Мой Пакет', fn () => ['Версия' => '1.0.0']);
+    }
+
+Это позволит вашему пакету добавить информацию о версии и другие данные к выводу команды "about". В данном примере, "Мой Пакет" будет отображаться в списке пакетов, и его версия будет указана как "1.0.0".
+
 
 <a name="commands"></a>
 ## Команды
@@ -279,10 +320,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
@@ -299,10 +338,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../public' => public_path('vendor/courier'),
@@ -311,7 +348,9 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
 Теперь, когда пользователи вашего пакета выполнят команду `vendor:publish`, ваши ресурсы будут скопированы в указанное место публикации. Поскольку пользователям обычно требуется перезаписывать ресурсы каждый раз при обновлении пакета, вы можете использовать флаг `--force`:
 
-    php artisan vendor:publish --tag=public --force
+```shell
+php artisan vendor:publish --tag=public --force
+```
 
 <a name="publishing-file-groups"></a>
 ## Публикация групп файлов
@@ -320,10 +359,8 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
     /**
      * Загрузка любых служб пакета.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishes([
             __DIR__.'/../config/package.php' => config_path('package.php')
@@ -336,4 +373,6 @@ git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 
 Теперь ваши пользователи могут публиковать эти группы отдельно, ссылаясь на их теги при выполнении команды `vendor:publish`:
 
-    php artisan vendor:publish --tag=courier-config
+```shell
+php artisan vendor:publish --tag=courier-config
+```
