@@ -1,5 +1,5 @@
 ---
-git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
+git: 1d271881a6d72589db2f782bdb1af20bc50a9005
 ---
 
 - ## Пролог
@@ -10,6 +10,7 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Установка](/docs/{{version}}/installation)
     - [Конфигурация](/docs/{{version}}/configuration)
     - [Структура каталогов](/docs/{{version}}/structure)
+    - [Frontend](/docs/{{version}}/frontend)
     - [Стартовые наборы](/docs/{{version}}/starter-kits)
     - [Развертывание](/docs/{{version}}/deployment)
 - ## Архитектурные концепции
@@ -26,6 +27,7 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [HTTP-ответы](/docs/{{version}}/responses)
     - [Представления](/docs/{{version}}/views)
     - [Шаблоны Blade](/docs/{{version}}/blade)
+    - [Сборка ресурсов](/docs/{{version}}/vite)
     - [Генерация URL](/docs/{{version}}/urls)
     - [Сессии](/docs/{{version}}/session)
     - [Валидация](/docs/{{version}}/validation)
@@ -36,7 +38,6 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Широковещание](/docs/{{version}}/broadcasting)
     - [Кэширование](/docs/{{version}}/cache)
     - [Коллекции](/docs/{{version}}/collections)
-    - [Компиляция JS и CSS](/docs/{{version}}/mix)
     - [Контракты](/docs/{{version}}/contracts)
     - [События](/docs/{{version}}/events)
     - [Файловое хранилище](/docs/{{version}}/filesystem)
@@ -46,8 +47,10 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Почта](/docs/{{version}}/mail)
     - [Уведомления](/docs/{{version}}/notifications)
     - [Разработка пакетов](/docs/{{version}}/packages)
+    - [Процессы](/docs/{{version}}/processes)
     - [Очереди](/docs/{{version}}/queues)
     - [Ограничение скорости](/docs/{{version}}/rate-limiting)
+    - [Строки](/docs/{{version}}/strings)
     - [Планировщик](/docs/{{version}}/scheduling)
 - ## Безопасность
     - [Аутентификация](/docs/{{version}}/authentication)
@@ -70,6 +73,7 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Мутаторы / Типизация](/docs/{{version}}/eloquent-mutators)
     - [API Ресурсы](/docs/{{version}}/eloquent-resources)
     - [Сериализация](/docs/{{version}}/eloquent-serialization)
+    - [Фабрики](/docs/{{version}}/eloquent-factories)
 - ## Тестирование
     - [Начало работы](/docs/{{version}}/testing)
     - [HTTP Тесты](/docs/{{version}}/http-tests)
@@ -84,15 +88,21 @@ git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
     - [Dusk](/docs/{{version}}/dusk)
     - [Envoy](/docs/{{version}}/envoy)
     - [Fortify](/docs/{{version}}/fortify)
+    - [Folio](/docs/{{version}}/folio)
     - [Homestead](/docs/{{version}}/homestead)
     - [Horizon](/docs/{{version}}/horizon)
     - [Jetstream](https://jetstream.laravel.com)
+    - [Mix](/docs/{{version}}/mix)
     - [Octane](/docs/{{version}}/octane)
     - [Passport](/docs/{{version}}/passport)
+    - [Pennant](/docs/{{version}}/pennant)
+    - [Pint](/docs/{{version}}/pint)
+    - [Precognition](/docs/{{version}}/precognition)
+    - [Prompts](/docs/{{version}}/prompts)
     - [Sail](/docs/{{version}}/sail)
     - [Sanctum](/docs/{{version}}/sanctum)
     - [Scout](/docs/{{version}}/scout)
     - [Socialite](/docs/{{version}}/socialite)
     - [Telescope](/docs/{{version}}/telescope)
     - [Valet](/docs/{{version}}/valet)
-    - [API Документация](https://laravel.com/api/8.x)
+    - [API Документация](https://laravel.com/api/10.x)
