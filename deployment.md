@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: 1536cbf53edec0667607e77c870c1493a793f601
 ---
 
 # Развертывание
@@ -16,16 +16,22 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 <!-- <div class="content-list" markdown="1"> -->
 
-- PHP >= 7.3
-- Расширение PHP BCMath
+- PHP >= 8.1
 - Расширение PHP Ctype
+- Расширение PHP cURL
+- Расширение PHP DOM
 - Расширение PHP Fileinfo
-- Расширение PHP JSON
+- Расширение PHP Filter
+- Расширение PHP Hash
 - Расширение PHP Mbstring
 - Расширение PHP OpenSSL
+- Расширение PHP PCRE
 - Расширение PHP PDO
+- Расширение PHP Session
 - Расширение PHP Tokenizer
 - Расширение PHP XML
+
+
 
 <!-- </div> -->
 
@@ -39,38 +45,40 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Убедитесь, что, как и в конфигурации ниже, ваш веб-сервер направляет все запросы в файл `public/index.php` вашего приложения. Вы никогда не должны пытаться переместить файл `index.php` в корень вашего проекта, поскольку обслуживание приложения из корня проекта откроет доступ ко многим конфиденциальным файлам конфигурации из общедоступной сети Интернет:
 
-    server {
-        listen 80;
-        listen [::]:80;
-        server_name example.com;
-        root /srv/example.com/public;
+```nginx
+server {
+    listen 80;
+    listen [::]:80;
+    server_name example.com;
+    root /srv/example.com/public;
 
-        add_header X-Frame-Options "SAMEORIGIN";
-        add_header X-Content-Type-Options "nosniff";
+    add_header X-Frame-Options "SAMEORIGIN";
+    add_header X-Content-Type-Options "nosniff";
 
-        index index.php;
+    index index.php;
 
-        charset utf-8;
+    charset utf-8;
 
-        location / {
-            try_files $uri $uri/ /index.php?$query_string;
-        }
-
-        location = /favicon.ico { access_log off; log_not_found off; }
-        location = /robots.txt  { access_log off; log_not_found off; }
-
-        error_page 404 /index.php;
-
-        location ~ \.php$ {
-            fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
-            fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
-            include fastcgi_params;
-        }
-
-        location ~ /\.(?!well-known).* {
-            deny all;
-        }
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
     }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    error_page 404 /index.php;
+
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}
+```
 
 <a name="optimization"></a>
 ## Оптимизация
@@ -80,12 +88,15 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 При развертывании в эксплуатационном окружении, убедитесь, что вы оптимизировали файл автозагрузчика классов Composer, чтобы он мог быстро найти нужный файл для загрузки конкретного класса:
 
-    composer install --optimize-autoloader --no-dev
+```shell
+composer install --optimize-autoloader --no-dev
+```
 
-> {tip} Помимо оптимизации автозагрузчика, вы всегда должны обязательно включать файл `composer.lock` в репозиторий системы управления версиями вашего проекта. Зависимости вашего проекта могут быть установлены намного быстрее, если присутствует файл `composer.lock`.
+> **Note**  
+> Помимо оптимизации автозагрузчика, вы всегда должны обязательно включать файл `composer.lock` в репозиторий системы управления версиями вашего проекта. Зависимости вашего проекта могут быть установлены намного быстрее, если присутствует файл `composer.lock`.
 
 <a name="optimizing-configuration-loading"></a>
-### Оптимизация загрузки конфигурации
+### Кеширование конфигурации
 
 При развертывании вашего приложения в эксплуатационном окружении, вы должны убедиться, что вы выполнили команду `config:cache` Artisan в процессе развертывания:
 
@@ -93,23 +104,38 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Эта команда объединит все файлы конфигурации Laravel в один кешированный файл, что значительно сократит количество обращений, которые фреймворк должен совершить к файловой системе при загрузке значений вашей конфигурации.
 
-> {note} Если вы выполняете команду `config:cache` в процессе развертывания, вы должны быть уверены, что вызываете функцию `env` только из ваших файлов конфигурации. После кеширования конфигурации файл `.env` не будет загружаться, и все вызовы функции `env` для переменных файла `.env` вернут `null`.
+> **Warning**  
+> Если вы выполняете команду `config:cache` в процессе развертывания, вы должны быть уверены, что вызываете функцию `env` только из ваших файлов конфигурации. После кеширования конфигурации файл `.env` не будет загружаться, и все вызовы функции `env` для переменных файла `.env` вернут `null`.
+
+<a name="caching-events"></a>
+### Кеширование событий
+
+Если ваше приложение использует [поиск событий](/docs/{{version}}/events#event-discovery), вам следует кешировать отображение событий на слушателей вашего приложения во время процесса развертывания. Это можно сделать, вызвав команду `event:cache` Artisan во время развертывания:
+
+```shell
+php artisan event:cache
+```
+
 
 <a name="optimizing-route-loading"></a>
 ### Оптимизация загрузки маршрута
 
 Если вы создаете большое приложение с множеством маршрутов, вам следует убедиться, что вы выполнили команду `route:cache` Artisan в процессе развертывания:
 
-    php artisan route:cache
+```shell
+php artisan route:cache
+```
 
 Эта команда сокращает регистрации всех маршрутов до одного вызова метода в кешированном файле, повышая производительность при регистрации сотен маршрутов.
 
 <a name="optimizing-view-loading"></a>
-### Оптимизация загрузки шаблонов
+### Кеширование представлений
 
 При развертывании вашего приложения в эксплуатационном окружении, вы должны убедиться, что вы выполнили команду `view:cache` Artisan в процессе развертывания:
 
-    php artisan view:cache
+```shell
+php artisan view:cache
+```
 
 Эта команда предварительно скомпилирует все ваши шаблоны Blade, чтобы они не компилировались во время запроса, повышая производительность каждого запроса, возвращающего шаблоном.
 
@@ -118,7 +144,8 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Параметр отладки в файле конфигурации `config/app.php` определяет, сколько информации об ошибке фактически отображается пользователю. По умолчанию для этого параметра задано значение переменной среды `APP_DEBUG`, которая хранится в вашем файле `.env`.
 
-**В вашем эксплуатационном окружении это значение всегда должно быть `false`. Если значение для переменной `APP_DEBUG` установлено как `true`, то вы рискуете раскрыть конфиденциальные значения конфигурации конечным пользователям вашего приложения.**
+> **Warning**
+> **В вашем эксплуатационном окружении это значение всегда должно быть `false`. Если значение для переменной `APP_DEBUG` установлено как `true`, то вы рискуете раскрыть конфиденциальные значения конфигурации конечным пользователям вашего приложения.**
 
 <a name="deploying-with-forge-or-vapor"></a>
 ## Развертывание с помощью Forge / Vapor
@@ -129,6 +156,9 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 Если вы не совсем готовы управлять конфигурацией своего собственного сервера или вам неудобно настраивать все различные службы, необходимые для запуска надежного приложения Laravel, то [Laravel Forge](https://forge.laravel.com) – замечательная альтернатива.
 
 Laravel Forge может создавать серверы на различных поставщиках инфраструктуры, таких как DigitalOcean, Linode, AWS и других. Кроме того, Forge устанавливает и управляет всеми инструментами, необходимыми для создания надежных приложений Laravel, таких как Nginx, MySQL, Redis, Memcached, Beanstalk и других.
+
+> **Note**
+> Хотите полное руководство по развертыванию с использованием Laravel Forge? Проверьте [Laravel Bootcamp](https://bootcamp.laravel.com/deploying) и [видео-серию Forge на Laracasts](https://laracasts.com/series/learn-laravel-forge-2022-edition).
 
 <a name="laravel-vapor"></a>
 #### Laravel Vapor
