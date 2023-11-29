@@ -1,5 +1,5 @@
 ---
-git: fa38597c7d27bf505b912772e848272d44cc3adf
+git: 9b546921226e9a9adacb74b802262291c19a93fe
 ---
 
 # HTML-шаблоны
@@ -8,7 +8,9 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
 <a name="introduction"></a>
 ## Введение
 
-Конечно, нецелесообразно возвращать целые строки HTML-документов непосредственно из ваших маршрутов и контроллеров. К счастью, шаблоны предоставляют удобный способ разместить весь наш HTML в отдельных файлах. Шаблоны отделяют логику контроллера / приложения от логики представления и хранятся в каталоге `resources/views`. Простой шаблон может выглядеть примерно так:
+Конечно, не практично возвращать целые строки HTML напрямую из ваших маршрутов и контроллеров. К счастью, в Laravel есть представления (views), которые предоставляют удобный способ размещения всего HTML в отдельных файлах.
+
+Представления (views) разделяют вашу логику контроллера или приложения от логики представления и хранятся в каталоге `resources/views`. При использовании Laravel обычно шаблоны представлений написаны с использованием [языка шаблонизации Blade](/docs/{{version}}/blade). Простое представление может выглядеть примерно так:
 
 ```html
 <!-- Шаблон сохранен в `resources/views/greeting.blade.php` -->
@@ -26,12 +28,26 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
         return view('greeting', ['name' => 'James']);
     });
 
-> {tip} Ищете дополнительную информацию о том, как писать шаблоны Blade? Ознакомьтесь с полной [документацией по Blade](/docs/{{version}}/blade), чтобы начать работу.
+> **Note**  
+> Ищете дополнительную информацию о том, как писать шаблоны Blade? Ознакомьтесь с полной [документацией по Blade](/docs/{{version}}/blade), чтобы начать работу.
+
+<a name="writing-views-in-react-or-vue"></a>
+### Шаблоны React / Vue
+
+Вместо написания фронтенд-шаблонов на PHP с использованием Blade многие разработчики предпочитают писать свои шаблоны с использованием React или Vue. Laravel делает это легким благодаря [Inertia](https://inertiajs.com/), библиотеке, которая упрощает связь вашего фронтенда на React или Vue с вашим бэкендом Laravel, избегая типичных сложностей, связанных с созданием SPA (Single Page Application).
+
+Наши стартовые наборы Breeze и Jetstream [starter kits](/docs/{{version}}/starter-kits) предоставляют отличную отправную точку для вашего следующего приложения Laravel, работающего на Inertia. Кроме того, [Laravel Bootcamp](https://bootcamp.laravel.com) предоставляет полное демонстрационное руководство по созданию приложения Laravel, работающего на Inertia, включая примеры с использованием Vue и React.
 
 <a name="creating-and-rendering-views"></a>
 ## Создание и отрисовка шаблонов
 
-Вы можете создать шаблон, поместив файл с расширением `.blade.php` в каталог `resources/views` вашего приложения. Расширение `.blade.php` сообщает фреймворку, что файл содержит [шаблон Blade](/docs/{{version}}/blade). Шаблоны Blade содержат HTML, а также директивы Blade, которые позволяют легко выводить значения, создавать операторы «если», выполнять итерацию данных и многое другое.
+Вы можете создать представление, разместив файл с расширением `.blade.php` в каталоге `resources/views` вашего приложения, либо с помощью команды Artisan `make:view`:
+
+```shell
+php artisan make:view greeting
+```
+
+Расширение `.blade.php` информирует фреймворк о том, что файл является [шаблоном Blade](/docs/{{version}}/blade). Blade-шаблоны содержат HTML, а также директивы Blade, которые позволяют вам легко выводить значения, создавать условные операторы "if", выполнять итерации по данным и многое другое.
 
 После того как вы создали шаблон, вы можете вернуть его из маршрута или контроллера вашего приложения, используя глобальный помощник `view`:
 
@@ -54,7 +70,8 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
 
     return view('admin.profile', $data);
 
-> {note} Имена каталогов шаблонов не должны содержать символа `.`.
+> **Warning**  
+> Имена каталогов шаблонов не должны содержать символа `.`.
 
 <a name="creating-the-first-available-view"></a>
 ### Использование первого доступного шаблона
@@ -73,7 +90,7 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
     use Illuminate\Support\Facades\View;
 
     if (View::exists('emails.customer')) {
-        //
+        // ...
     }
 
 <a name="passing-data-to-views"></a>
@@ -106,20 +123,16 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
             //
         }
 
         /**
          * Загрузка любых служб приложения.
-         *
-         * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             View::share('key', 'value');
         }
@@ -139,39 +152,40 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
     namespace App\Providers;
 
     use App\View\Composers\ProfileComposer;
-    use Illuminate\Support\Facades\View;
+    use Illuminate\Support\Facades;
     use Illuminate\Support\ServiceProvider;
 
     class ViewServiceProvider extends ServiceProvider
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
-            //
+            // ...
         }
 
         /**
          * Загрузка любых служб приложения.
-         *
-         * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             // Использование компоновщиков на основе классов ...
-            View::composer('profile', ProfileComposer::class);
+            Facades\View::composer('profile', ProfileComposer::class);
 
             // Использование анонимных компоновщиков ...
-            View::composer('dashboard', function ($view) {
-                //
+            Facades\View::composer('welcome', function (View $view) {
+                // ...
+            });
+
+            Facades\View::composer('dashboard', function (View $view) {
+                // ...
             });
         }
     }
 
-> {note} Помните, что если вы создаете нового поставщика служб, который будет содержать регистрации вашего компоновщика, вам нужно будет добавить поставщика служб в массив `providers` в файле конфигурации `config/app.php`.
+> **Warning**  
+> Помните, что если вы создаете нового поставщика служб, который будет содержать регистрации вашего компоновщика, вам нужно будет добавить поставщика служб в массив `providers` в файле конфигурации `config/app.php`.
 
 Теперь, когда мы зарегистрировали компоновщик, метод `compose` класса `App\View\Composers\ProfileComposer` будет выполняться каждый раз, когда отрисовывается шаблон профиля. Давайте посмотрим на пример класса компоновщика:
 
@@ -185,31 +199,16 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
     class ProfileComposer
     {
         /**
-         * Реализация репозитория User.
-         *
-         * @var \App\Repositories\UserRepository
-         */
-        protected $users;
-
-        /**
          * Создать нового компоновщика профиля.
-         *
-         * @param  \App\Repositories\UserRepository  $users
-         * @return void
          */
-        public function __construct(UserRepository $users)
-        {
-            // Зависимости автоматически внедрятся контейнером служб ...
-            $this->users = $users;
-        }
+        public function __construct(
+            protected UserRepository $users,
+        ) {}
 
         /**
          * Привязать данные к шаблону.
-         *
-         * @param  \Illuminate\View\View  $view
-         * @return void
          */
-        public function compose(View $view)
+        public function compose(View $view): void
         {
             $view->with('count', $this->users->count());
         }
@@ -223,6 +222,7 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
 Вы можете связать компоновщика с несколькими шаблонами одновременно, передав массив шаблонов в качестве первого аргумента методу `composer`:
 
     use App\Views\Composers\MultiComposer;
+    use Illuminate\Support\Facades\View;
 
     View::composer(
         ['profile', 'dashboard'],
@@ -231,8 +231,11 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
 
 Допускается использование метасимвола подстановки `*`, что позволит вам прикрепить компоновщик ко всем шаблонам:
 
-    View::composer('*', function ($view) {
-        //
+    use Illuminate\Support\Facades;
+    use Illuminate\View\View;
+
+    Facades\View::composer('*', function (View $view) {
+        // ...
     });
 
 <a name="view-creators"></a>
@@ -252,8 +255,12 @@ git: fa38597c7d27bf505b912772e848272d44cc3adf
 
 Компиляция шаблонов во время запроса отрицательно влияет на производительность, поэтому Laravel содержит команду Artisan `view:cache` для предварительной компиляции всех шаблонов, используемых вашим приложением. Для повышения производительности вы можете выполнить эту команду как часть процесса развертывания:
 
-    php artisan view:cache
+```shell
+php artisan view:cache
+```
 
 Вы можете использовать команду `view:clear` для очистки кеша шаблонов:
 
-    php artisan view:clear
+```shell
+php artisan view:clear
+```
