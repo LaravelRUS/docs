@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: f71679293e68531933fb0acdb4673e649321d1c2
 ---
 
 # Очереди
@@ -13,7 +13,8 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Параметры конфигурации очереди Laravel хранятся в файле конфигурации вашего приложения `config/queue.php`. В этом файле вы найдете конфигурации подключения для каждого из драйверов очереди фреймворка: база данных, [Amazon SQS](https://aws.amazon.com/sqs/), [Redis](https://redis.io) и [Beanstalkd](https://beanstalkd.github.io/), а также синхронный драйвер для немедленного выполнения задания (используется во время локальной разработки). Также имеется драйвер очереди `null`, который просто выбрасывает задания из очереди, не исполняя их.
 
-> {tip} Laravel также предлагает Horizon, красивую панель управления и систему конфигурации для ваших очередей с поддержкой Redis. Дополнительную информацию можно найти в полной [документации Horizon](/docs/{{version}}/horizon).
+> **Note**  
+> Laravel now offers Horizon, a beautiful dashboard and configuration system for your Redis powered queues. Check out the full [Horizon documentation](/docs/{{version}}/horizon) for more information.
 
 <a name="connections-vs-queues"></a>
 ### Соединения и очереди
@@ -32,7 +33,9 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Некоторым приложениям может не понадобиться помещать задания в несколько очередей, вместо этого предпочитая иметь одну простую очередь. Однако отправка заданий в несколько очередей может быть особенно полезна для приложений, определяющих приоритеты или сегментацию процесса обработки заданий, поскольку обработчик очереди Laravel позволяет вам указать, какие очереди он должен обрабатывать по приоритету. Например, если вы помещаете задания в очередь `high`, то вы можете запустить обработчик, который даст им более высокий приоритет обработки:
 
-    php artisan queue:work --queue=high,default
+```shell
+php artisan queue:work --queue=high,default
+```
 
 <a name="driver-prerequisites"></a>
 ### Предварительная подготовка драйверов
@@ -42,9 +45,11 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Чтобы использовать драйвер очереди `database`, вам понадобится таблица базы данных для хранения заданий. Чтобы сгенерировать миграцию, которая создает эту таблицу, запустите команду `queue:table` Artisan. После того как миграция будет создана, вы можете выполнить ее миграцию с помощью команды `migrate`:
 
-    php artisan queue:table
+```shell
+php artisan queue:table
 
-    php artisan migrate
+php artisan migrate
+```
 
 Наконец, не забудьте указать вашему приложению использовать драйвер `database`, обновив переменную `QUEUE_CONNECTION` в файле `.env` вашего приложения:
 
@@ -55,9 +60,12 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Чтобы использовать драйвер очереди `redis`, вы должны настроить соединение с базой данных Redis в файле конфигурации `config/database.php`.
 
+> **Warning**  
+> Возможности Redis `serializer` и `compression` не поддерживаются драйвером очереди `redis`.
+
 **Кластер Redis**
 
-Если ваше соединение с очередью Redis использует кластер Redis, то имена ваших очередей должны содержать [ключевой хеш-тег](https://redis.io/topics/cluster-spec#keys-hash-tags). Это необходимо для того, чтобы все ключи Redis для указанной очереди были поставлены в один и тот же хеш-слот:
+Если ваше соединение с очередью Redis использует кластер Redis, то имена ваших очередей должны содержать [ключевой хеш-тег](https://redis.io/docs/reference/cluster-spec/#hash-tags). Это необходимо для того, чтобы все ключи Redis для указанной очереди были поставлены в один и тот же хеш-слот:
 
     'redis' => [
         'driver' => 'redis',
@@ -80,7 +88,8 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
         'block_for' => 5,
     ],
 
-> {note} Установка для `block_for` значения `0` заставит обработчиков очереди блокироваться на неопределенный срок, пока задание не станет доступным. Это также предотвратит обработку таких сигналов, как `SIGTERM`, до тех пор, пока не будет обработано следующее задание.
+> **Warning**  
+> Установка для `block_for` значения `0` заставит обработчиков очереди блокироваться на неопределенный срок, пока задание не станет доступным. Это также предотвратит обработку таких сигналов, как `SIGTERM`, до тех пор, пока не будет обработано следующее задание.
 
 <a name="other-driver-prerequisites"></a>
 #### Дополнительные зависимости драйверов
@@ -103,11 +112,14 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 Чтобы сгенерировать новое задание, используйте команду `make:job` [Artisan](/docs/{{version}}/artisan). Эта команда поместит новый класс задания в каталог `app/Jobs` вашего приложения. Если этот каталог не существует в вашем приложении, то Laravel предварительно создаст его:
 
-    php artisan make:job ProcessPodcast
+```shell
+php artisan make:job ProcessPodcast
+```
 
 Сгенерированный класс будет реализовывать интерфейс `Illuminate\Contracts\Queue\ShouldQueue`, указывая Laravel, что задание должно быть поставлено в очередь для асинхронного выполнения.
 
-> {tip} Заготовки (stub) заданий можно настроить с помощью [публикации заготовок](/docs/{{version}}/artisan#stub-customization).
+> **Note**  
+> Заготовки (stub) заданий можно настроить с помощью [публикации заготовок](/docs/{{version}}/artisan#stub-customization).
 
 <a name="class-structure"></a>
 ### Структура класса задания
@@ -130,31 +142,14 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     {
         use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-        /**
-         * Экземпляр подкаста.
-         *
-         * @var \App\Models\Podcast
-         */
-        protected $podcast;
-
-        /**
-         * Создать новый экземпляр задания.
-         *
-         * @param  App\Models\Podcast  $podcast
-         * @return void
-         */
-        public function __construct(Podcast $podcast)
-        {
-            $this->podcast = $podcast;
-        }
+         public function __construct(
+            public Podcast $podcast,
+        ) {}
 
         /**
          * Выполнить задание.
-         *
-         * @param  App\Services\AudioProcessor  $processor
-         * @return void
          */
-        public function handle(AudioProcessor $processor)
+        public function handle(AudioProcessor $processor): void
         {
             // Обработка загруженного подкаста ...
         }
@@ -173,35 +168,50 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     use App\Jobs\ProcessPodcast;
     use App\Services\AudioProcessor;
-
-    $this->app->bindMethod([ProcessPodcast::class, 'handle'], function ($job, $app) {
+    use Illuminate\Contracts\Foundation\Application;
+    
+    $this->app->bindMethod([ProcessPodcast::class, 'handle'], function (ProcessPodcast $job, Application $app) {
         return $job->handle($app->make(AudioProcessor::class));
     });
 
-> {note} Бинарные данные, например, необработанное содержимое изображения, должны быть переданы через функцию `base64_encode` перед передачей заданию. В противном случае задание может неправильно сериализоваться в JSON при отправке в очередь.
+> **Warning**  
+> Бинарные данные, например, необработанное содержимое изображения, должны быть переданы через функцию `base64_encode` перед передачей заданию. В противном случае задание может неправильно сериализоваться в JSON при отправке в очередь.
 
 <a name="handling-relationships"></a>
 #### Очередь отношений
 
-Поскольку загруженные отношения также сериализуются, сериализованная строка задания иногда может стать довольно большой. Чтобы предотвратить сериализацию отношений, вы можете вызвать метод `withoutRelations` модели при указании значения свойства. Этот метод вернет экземпляр модели без загруженных отношений:
+Поскольку все загруженные отношения модели Eloquent также сериализуются при постановке задания в очередь, сериализованная строка задания иногда может стать довольно объемной. Более того, когда задача десериализуется, и отношения модели повторно извлекаются из базы данных, они будут извлечены в полном объеме. Любые предыдущие ограничения отношений, которые были применены до того, как модель была сериализована в процессе постановки задания в очередь, не будут применены, когда задача будет десериализована. Поэтому, если вам необходимо работать с подмножеством определенного отношения, вам следует повторно наложить ограничение на это отношение внутри вашей задачи в очереди.
+
+Или, чтобы предотвратить сериализацию отношений, вы можете вызвать метод модели `withoutRelations` при установке значения свойства в задание. Этот метод вернет экземпляр модели без загруженных связей:
 
     /**
      * Создать новый экземпляр задания.
-     *
-     * @param  \App\Models\Podcast  $podcast
-     * @return void
      */
     public function __construct(Podcast $podcast)
     {
         $this->podcast = $podcast->withoutRelations();
     }
 
-Кроме того, при десериализации задания и повторном извлечении отношений модели из базы данных они будут извлечены полностью. Любые предыдущие ограничения отношений, которые применялись до сериализации модели в процессе постановки заданий в очередь, не будут применяться при десериализации задания. Поэтому, если вы хотите работать с подмножеством данного отношения, вам следует повторно ограничить это отношение в рамках задания, поставленного в очередь.
+Если вы используете свойства конструктора PHP и хотите указать, что модель Eloquent не должна сериализовать свои отношения, вы можете использовать атрибут `withoutRelations`:
+
+    use Illuminate\Queue\Attributes\WithoutRelations;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(
+        #[WithoutRelations]
+        public Podcast $podcast
+    ) {
+    }
+
+Если задание получает коллекцию или массив моделей Eloquent вместо одной модели, отношения между моделями в этой коллекции не будут восстановлены при десериализации и выполнении задания. Это необходимо для предотвращения чрезмерного использования ресурсов в заданиях, связанных с большим количеством моделей.
 
 <a name="unique-jobs"></a>
 ### Уникальные задания
 
-> {note} Для уникальных заданий требуется драйвер кеша, поддерживающий [блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время драйверы кеширования `memcached`, `redis`, `dynamodb`, `database`, `file`, and `array` поддерживают атомарные блокировки. Кроме того, уникальность заданий не учитывается при пакетной обработке.
+> **Warning**  
+> Для уникальных заданий требуется драйвер кеша, поддерживающий [блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время драйверы кеширования `memcached`, `redis`, `dynamodb`, `database`, `file`, and `array` поддерживают атомарные блокировки. Кроме того, уникальность заданий не учитывается при пакетной обработке.
 
 Иногда требуется убедиться, что только один экземпляр определенного задания находится в очереди в любой момент времени. Вы можете сделать это, реализовав интерфейс `ShouldBeUnique` в своем классе задания. Этот интерфейс не требует от вас определения каких-либо дополнительных методов в вашем классе:
 
@@ -221,7 +231,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUnique;
 
@@ -242,17 +252,17 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
         public $uniqueFor = 3600;
 
         /**
-         * Уникальный идентификатор задания.
-         *
-         * @return string
          */
-        public function uniqueId()
+        public function uniqueId(): string
         {
             return $this->product->id;
         }
     }
 
 В приведенном выше примере задание `UpdateSearchIndex` уникально по идентификатору продукта. Таким образом, любые новые отправленные задания с тем же идентификатором продукта будут игнорироваться, пока существующее задание не завершит обработку. Кроме того, если существующее задание не будет обработано в течение одного часа, уникальная блокировка будет снята, и в очередь может быть отправлено другое задание с таким же уникальным ключом.
+
+> **Warning**  
+> Если ваше приложение отправляет задания с нескольких веб-серверов или контейнеров, вам следует убедиться, что все ваши серверы взаимодействуют с одним и тем же сервером центрального кэша, чтобы Laravel мог точно определить, является ли задание уникальным.
 
 <a name="keeping-jobs-unique-until-processing-begins"></a>
 #### Сохранение уникальности задания только до начала обработки
@@ -261,7 +271,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 
@@ -275,6 +285,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
 За кулисами, когда отправляется задание `ShouldBeUnique`, Laravel пытается получить [блокировку](/docs/{{version}}/cache#atomic-locks) с ключом `uniqueId`. Если блокировка не получена, задание не отправляется. Эта блокировка снимается, когда задание завершает обработку или терпит неудачу во всех повторных попытках. По умолчанию Laravel будет использовать драйвер кеша, назначенный по умолчанию, для получения этой блокировки. Однако, если вы хотите использовать другой драйвер для получения блокировки, вы можете определить метод `uniqueVia`, возвращающий драйвер кеша, который следует использовать:
 
+    use Illuminate\Contracts\Cache\Repository;
     use Illuminate\Support\Facades\Cache;
 
     class UpdateSearchIndex implements ShouldQueue, ShouldBeUnique
@@ -283,16 +294,30 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
         /**
          * Получить драйвер кеша для блокировки уникального задания.
-         *
-         * @return \Illuminate\Contracts\Cache\Repository
          */
-        public function uniqueVia()
+        public function uniqueVia(): Repository
         {
             return Cache::driver('redis');
         }
     }
 
-> {tip} Если вам нужно ограничить только параллельную обработку задания, используйте вместо этого посредник [`WithoutOverlapping`](#preventing-job-overlaps).
+> **Note**  
+> Если вам нужно ограничить только параллельную обработку задания, используйте вместо этого посредник [`WithoutOverlapping`](#preventing-job-overlaps).
+
+<a name="encrypted-jobs"></a>
+### Шифрование заданий
+
+Laravel позволяет вам обеспечить конфиденциальность и целостность данных задания с помощью [шифрования](/docs/{{version}}/encryption). Для начала просто добавьте интерфейс `ShouldBeEncrypted` в класс задания. Как только этот интерфейс будет добавлен в класс, Laravel автоматически зашифрует ваше задание, прежде чем поместить его в очередь:
+
+    <?php
+
+    use Illuminate\Contracts\Queue\ShouldBeEncrypted;
+    use Illuminate\Contracts\Queue\ShouldQueue;
+
+    class UpdateSearchIndex implements ShouldQueue, ShouldBeEncrypted
+    {
+        // ...
+    }
 
 <a name="job-middleware"></a>
 ## Посредник (middleware) задания
@@ -303,10 +328,8 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     /**
      * Выполнить задание.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         Redis::throttle('key')->block(0)->allow(1)->every(5)->then(function () {
             info('Lock obtained...');
@@ -327,6 +350,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     namespace App\Jobs\Middleware;
 
+    use Closure;
     use Illuminate\Support\Facades\Redis;
 
     class RateLimited
@@ -334,11 +358,9 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
         /**
          * Обработать задание в очереди.
          *
-         * @param  mixed  $job
-         * @param  callable  $next
-         * @return mixed
+         * @param  \Closure(object): void  $next
          */
-        public function handle($job, $next)
+         public function handle(object $job, Closure $next): void
         {
             Redis::throttle('key')
                     ->block(0)->allow(1)->every(5)
@@ -363,14 +385,15 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [new RateLimited];
     }
-
-> {tip} Посредник заданий также может быть назначен слушателям событий, почтовым отправлениям или уведомлениям - если они выполняются через очередь.
+    > 
+> **Note**  
+> Посредник заданий также может быть назначен слушателям событий, почтовым отправлениям или уведомлениям - если они выполняются через очередь.
 
 <a name="rate-limiting"></a>
 ### Ограничение частоты
@@ -387,9 +410,9 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        RateLimiter::for('backups', function ($job) {
+        RateLimiter::for('backups', function (object $job) {
             return $job->user->vipCustomer()
                         ? Limit::none()
                         : Limit::perHour(1)->by($job->user->id);
@@ -407,9 +430,9 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [new RateLimited('backups')];
     }
@@ -421,14 +444,15 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
     /**
      * Get the middleware the job should pass through.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new RateLimited('backups'))->dontRelease()];
     }
 
-> {tip} Если вы используете Redis, то вы можете использовать посредника `Illuminate\Queue\Middleware\RateLimitedWithRedis`, который лучше настроен для Redis и более эффективен, чем базовый посредник с ограничением частоты.
+> **Note**  
+> Если вы используете Redis, то вы можете использовать посредника `Illuminate\Queue\Middleware\RateLimitedWithRedis`, который лучше настроен для Redis и более эффективен, чем базовый посредник с ограничением частоты.
 
 <a name="preventing-job-overlaps"></a>
 ### Предотвращение дублирования задания
@@ -442,21 +466,21 @@ Laravel включает посредника `Illuminate\Queue\Middleware\Witho
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [new WithoutOverlapping($this->user->id)];
     }
 
-Любые перекрывающиеся задания будут возвращены в очередь. Можно также указать время в секундах, которое должно пройти до повторной попытки возвращенного задания:
+Любые перекрывающиеся задания одного и того же типа будут возвращены в очередь. Можно также указать время в секундах, которое должно пройти до повторной попытки возвращенного задания:
 
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new WithoutOverlapping($this->order->id))->releaseAfter(60)];
     }
@@ -466,9 +490,9 @@ Laravel включает посредника `Illuminate\Queue\Middleware\Witho
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new WithoutOverlapping($this->order->id))->dontRelease()];
     }
@@ -478,14 +502,50 @@ Laravel включает посредника `Illuminate\Queue\Middleware\Witho
     /**
      * Get the middleware the job should pass through.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new WithoutOverlapping($this->order->id))->expireAfter(180)];
     }
 
-> {note} Для посредника `WithoutOverlapping` требуется драйвер кеша, который поддерживает [блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время драйверы кеша `memcached`, `redis`, `dynamodb`, `database`, `file`, и `array` поддерживают атомарные блокировки.
+> **Warning**
+> Для посредника `WithoutOverlapping` требуется драйвер кеша, который поддерживает [блокировки](/docs/{{version}}/cache#atomic-locks). В настоящее время драйверы кеша `memcached`, `redis`, `dynamodb`, `database`, `file`, и `array` поддерживают атомарные блокировки.
+
+<a name="sharing-lock-keys"></a>
+#### Sharing Lock Keys Across Job Classes
+
+По умолчанию middleware `WithoutOverlapping` предотвращает перекрытие только заданий одного и того же класса. Таким образом, хотя два разных класса могут использовать один и тот же ключ блокировки, их перекрытие не будет предотвращено. Однако вы можете поручить Laravel применять ключ ко всем классам заданий, используя метод `shared`:
+
+```php
+use Illuminate\Queue\Middleware\WithoutOverlapping;
+
+class ProviderIsDown
+{
+    // ...
+
+
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping("status:{$this->provider}"))->shared(),
+        ];
+    }
+}
+
+class ProviderIsUp
+{
+    // ...
+
+
+    public function middleware(): array
+    {
+        return [
+            (new WithoutOverlapping("status:{$this->provider}"))->shared(),
+        ];
+    }
+}
+```
 
 <a name="throttling-exceptions"></a>
 ### Ограничение частоты генерации исключений
@@ -493,25 +553,24 @@ Laravel включает посредника `Illuminate\Queue\Middleware\Witho
 Laravel содержит посредника `Illuminate\Queue\Middleware\ThrottlesExceptions`, который позволяет вам регулировать вызываемые исключения. Как только задание вызывает переданное количество исключений, все дальнейшие попытки выполнить задание откладываются до истечения заданного интервала времени. Этот посредник особенно полезен для заданий, которые взаимодействуют с нестабильно работающими сторонними службами.
 
 Например, представим себе задание в очереди, взаимодействующее со сторонним API, который начинает выбрасывать исключения. Чтобы ограничить исключения, вы можете вернуть посредника `ThrottlesExceptions` из метода `middleware` вашего задания. Как правило, этот посредник должен быть связан с заданием, которое реализует [попытки, основанные на времени](#time-based-attempts):
-
+    
+    use DateTime;
     use Illuminate\Queue\Middleware\ThrottlesExceptions;
 
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [new ThrottlesExceptions(10, 5)];
     }
 
     /**
      * Задать временной предел попыток выполнить задания.
-     *
-     * @return \DateTime
      */
-    public function retryUntil()
+    public function retryUntil(): DateTime
     {
         return now()->addMinutes(5);
     }
@@ -525,9 +584,9 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new ThrottlesExceptions(10, 5))->backoff(5)];
     }
@@ -539,14 +598,15 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     /**
      * Получить посредника, через которого должно пройти задание.
      *
-     * @return array
+     * @return array<int, object>
      */
-    public function middleware()
+    public function middleware(): array
     {
         return [(new ThrottlesExceptions(10, 10))->by('key')];
     }
 
-> {tip} Если вы используете Redis в качестве драйвера кеша вашего приложения, то вы можете использовать класс `Illuminate\Queue\Middleware\ThrottlesExceptionsWithRedis`. Этот класс более эффективен при управлении ограничениями исключений с помощью Redis.
+> **Note**
+> Если вы используете Redis в качестве драйвера кеша вашего приложения, то вы можете использовать класс `Illuminate\Queue\Middleware\ThrottlesExceptionsWithRedis`. Этот класс более эффективен при управлении ограничениями исключений с помощью Redis.
 
 <a name="dispatching-jobs"></a>
 ## Отправка заданий
@@ -560,23 +620,23 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     use App\Http\Controllers\Controller;
     use App\Jobs\ProcessPodcast;
     use App\Models\Podcast;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
 
     class PodcastController extends Controller
     {
         /**
          * Сохранить новый подкаст.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
-            $podcast = Podcast::create(...);
+            $podcast = Podcast::create(/* ... */);
 
             // ...
 
             ProcessPodcast::dispatch($podcast);
+            
+            return redirect('/podcasts');
         }
     }
 
@@ -585,6 +645,8 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     ProcessPodcast::dispatchIf($accountActive, $podcast);
 
     ProcessPodcast::dispatchUnless($accountSuspended, $podcast);
+
+В новых приложениях Laravel драйвер `sync` является драйвером очереди по-умолчанию. Этот драйвер выполняет задания синхронно во время запроса, что часто бывает удобно при локальной разработке. Если вы действительно хотите поставить задания в очередь для фоновой обработки, вы можете указать другой драйвер очереди в файле конфигурации вашего приложения `config/queue.php`.
 
 <a name="delayed-dispatching"></a>
 ### Отложенная отправка
@@ -598,33 +660,34 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     use App\Http\Controllers\Controller;
     use App\Jobs\ProcessPodcast;
     use App\Models\Podcast;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
 
     class PodcastController extends Controller
     {
         /**
          * Сохранить новый подкаст.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
-            $podcast = Podcast::create(...);
+            $podcast = Podcast::create(/* ... */);
 
             // ...
 
             ProcessPodcast::dispatch($podcast)
                         ->delay(now()->addMinutes(10));
+
+            return redirect('/podcasts');
         }
     }
 
-> {note} У сервиса очередей Amazon SQS максимальное время задержки составляет 15 минут.
+> **Warning**  
+> У сервиса очередей Amazon SQS максимальное время задержки составляет 15 минут.
 
 <a name="dispatching-after-the-response-is-sent-to-browser"></a>
 #### Отправка задания после отправки ответа в браузер
 
-В качестве альтернативы, метод `dispatchAfterResponse` задерживает отправку задания до тех пор, пока HTTP-ответ не будет отправлен в браузер пользователя. Это по прежнему позволит пользователю получить ответ от приложения, даже если задание в очереди все еще выполняется. Обычно это следует использовать только для заданий, которые занимают около секунды, например, для отправки электронного письма. Поскольку они обрабатываются в рамках текущего HTTP-запроса, отправляемые таким образом задания не требуют запуска обработчика очереди для их обработки:
+В качестве альтернативы, метод `dispatchAfterResponse` задерживает отправку задания до тех пор, пока HTTP-ответ не будет отправлен в браузер пользователя, если ваш веб-сервер использует FastCGI. Это по прежнему позволит пользователю получить ответ от приложения, даже если задание в очереди все еще выполняется. Обычно это следует использовать только для заданий, которые занимают около секунды, например, для отправки электронного письма. Поскольку они обрабатываются в рамках текущего HTTP-запроса, отправляемые таким образом задания не требуют запуска обработчика очереди для их обработки:
 
     use App\Jobs\SendNotification;
 
@@ -651,30 +714,30 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     use App\Http\Controllers\Controller;
     use App\Jobs\ProcessPodcast;
     use App\Models\Podcast;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
 
     class PodcastController extends Controller
     {
         /**
          * Сохранить новый подкаст.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
-            $podcast = Podcast::create(...);
+            $podcast = Podcast::create(/* ... */);
 
             // Создание подкаста ...
 
             ProcessPodcast::dispatchSync($podcast);
+            
+            return redirect('/podcasts');
         }
     }
 
 <a name="jobs-and-database-transactions"></a>
 ### Задания и транзакции базы данных
 
-При отправке задания в то время, как открыта транзакция в базе данных, возможно, что задание будет обработано до фиксации транзакции. Когда это происходит, любые обновления, внесенные вами в модели или записи базы данных во время транзакции базы данных, могут еще не быть отражены в базе данных. Кроме того, любые модели или записи базы данных, созданные в рамках транзакции, могут даже не существовать в базе данных.
+Хотя отправлять задания в рамках транзакций базы данных вполне нормально, вам следует уделить особое внимание тому, чтобы ваше задание действительно могло выполняться успешно. При отправке задания в то время, как открыта транзакция в базе данных, возможно, что задание будет обработано до фиксации родительской транзакции. Когда это происходит, любые обновления, внесенные вами в модели или записи базы данных во время транзакции базы данных, могут еще не быть отражены в базе данных. Кроме того, любые модели или записи базы данных, созданные в рамках транзакции, могут даже не существовать в базе данных.
 
 К счастью, Laravel содержит несколько методов решения этой проблемы. Во-первых, вы можете задать параметр соединения `after_commit` в массиве конфигурации соединения к очереди:
 
@@ -684,11 +747,12 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
         'after_commit' => true,
     ],
 
-Когда параметр `after_commit` имеет значение `true`, вы можете отправлять задания в транзакциях базы данных; однако, Laravel будет ждать, пока все открытые транзакции базы данных будут завершены, прежде чем фактически отправить задание. Если в настоящее время нет открытых транзакций, задание будет отправлено немедленно.
+Когда параметр `after_commit` имеет значение `true`, вы можете отправлять задания в транзакциях базы данных; однако, Laravel будет ждать, пока все открытые родительские транзакции базы данных будут завершены, прежде чем фактически отправить задание. Если в настоящее время нет открытых транзакций, задание будет отправлено немедленно.
 
 При откате транзакции из-за исключения, возникшего во время транзакции, отправленные во время этой транзакции задания будут отброшены.
 
-> {tip} Установка параметру конфигурации `after_commit` значения `true` также вызовет отправку всех поставленных в очередь слушателей событий, почтовых отправлений, уведомлений и широковещательных событий после того, как все открытые транзакции базы данных были зафиксированы.
+> **Note**  
+> Установка параметру конфигурации `after_commit` значения `true` также вызовет отправку всех поставленных в очередь слушателей событий, почтовых отправлений, уведомлений и широковещательных событий после того, как все открытые транзакции базы данных были зафиксированы.
 
 <a name="specifying-commit-dispatch-behavior-inline"></a>
 #### Непосредственное указание поведения отправки при фиксации транзакций БД
@@ -725,11 +789,12 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
         new ProcessPodcast,
         new OptimizePodcast,
         function () {
-            Podcast::update(...);
+            Podcast::update(/* ... */);
         },
     ])->dispatch();
 
-> {note} Удаление заданий с помощью метода `$this->delete()` внутри задания не остановит обработку связанных заданий. Цепочка прекратит выполнение только в случае сбоя задания в цепочке.
+> **Warning**  
+> Удаление заданий с помощью метода `$this->delete()` внутри задания не остановит обработку связанных заданий. Цепочка прекратит выполнение только в случае сбоя задания в цепочке.
 
 <a name="chain-connection-queue"></a>
 #### Соединения и очередь цепочки заданий
@@ -758,6 +823,9 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
         // Задание в цепочке не выполнено ...
     })->dispatch();
 
+**Warning**
+> Поскольку функции-замыкания сериализуются и выполняются позже в очереди Laravel, вам не следует использовать $this в замыканиях.
+
 <a name="customizing-the-queue-and-connection"></a>
 ### Настройка соединения и очереди
 
@@ -773,23 +841,23 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     use App\Http\Controllers\Controller;
     use App\Jobs\ProcessPodcast;
     use App\Models\Podcast;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
 
     class PodcastController extends Controller
     {
         /**
          * Сохранить новый подкаст.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
-            $podcast = Podcast::create(...);
+            $podcast = Podcast::create(/* ... */);
 
             // Создание подкаста ...
 
             ProcessPodcast::dispatch($podcast)->onQueue('processing');
+
+            return redirect('/podcasts');
         }
     }
 
@@ -811,8 +879,6 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 
         /**
          * Создать новый экземпляр задания.
-         *
-         * @return void
          */
         public function __construct()
         {
@@ -832,23 +898,23 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     use App\Http\Controllers\Controller;
     use App\Jobs\ProcessPodcast;
     use App\Models\Podcast;
+    use Illuminate\Http\RedirectResponse;
     use Illuminate\Http\Request;
 
     class PodcastController extends Controller
     {
         /**
          * Сохранить новый подкаст.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
-            $podcast = Podcast::create(...);
+            $podcast = Podcast::create(/* ... */);
 
             // Создание подкаста ...
 
             ProcessPodcast::dispatch($podcast)->onConnection('sqs');
+
+            return redirect('/podcasts');
         }
     }
 
@@ -876,8 +942,6 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 
         /**
          * Создать новый экземпляр задания.
-         *
-         * @return void
          */
         public function __construct()
         {
@@ -893,11 +957,13 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 
 Если в одном из ваших заданий в очереди обнаруживается ошибка, то вы, вероятно, не хотите, чтобы оно продолжало повторять попытки бесконечно. Laravel предлагает различные способы указать, сколько раз и как долго задание может быть повторно выполняться.
 
-Один из подходов к указанию максимального количества попыток выполнения задания – это использование переключателя `--tries` в командной строке Artisan. Это будет применяться ко всем заданиям обработчика, если только обрабатываемое задание не указывает более конкретное количество попыток его выполнения:
+Один из подходов к указанию максимального количества попыток выполнения задания – это использование переключателя `--tries` в командной строке Artisan. Это будет применяться ко всем заданиям обработчика, если только в обрабатываемом задание не указано количество попыток его выполнения:
 
-    php artisan queue:work --tries=3
+```shell
+php artisan queue:work --tries=3
+```
 
-Если задание превышает максимальное количество попыток, то оно будет считаться «неудачным». Для получения дополнительной информации об обработке невыполненных заданий обратитесь к [документации по разбору неудачных заданий](#dealing-with-failed-jobs).
+Если задание превышает максимальное количество попыток, то оно будет считаться «неудачным». Для получения дополнительной информации об обработке невыполненных заданий обратитесь к [документации по разбору неудачных заданий](#dealing-with-failed-jobs). Если указано `--tries=0` в команде `queue:work`, задание будет повторяться бесконечно.
 
 Вы можете применить более детальный подход, указав максимальное количество попыток выполнения задания для самого класса задания. Если для задания указано максимальное количество попыток, оно будет иметь приоритет над значением `--tries`, указанным в командной строке:
 
@@ -919,18 +985,21 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 #### Попытки, основанные на времени
 
 В качестве альтернативы определению количества попыток выполнения задания до того, как оно завершится ошибкой, вы можете определить время, когда прекратить попытки выполнения задания. Это позволяет выполнять задание любое количество раз в течение заданного периода времени. Чтобы определить время, через которое больше не следует пытаться выполнить задание, добавьте метод `retryUntil` в свой класс задания. Этот метод должен возвращать экземпляр `DateTime`:
-
+    
+    use DateTime;
+    
     /**
      * Задать временной предел попыток выполнить задания.
      *
      * @return \DateTime
      */
-    public function retryUntil()
+    public function retryUntil(): DateTime
     {
         return now()->addMinutes(10);
     }
 
-> {tip} Вы также можете определить свойство `$tries` или метод `retryUntil` в ваших [слушателях событий](/docs/{{version}}/events#queued-event-listeners).
+> **Note**  
+> Вы также можете определить свойство `$tries` или метод `retryUntil` в ваших [слушателях событий](/docs/{{version}}/events#queued-event-listeners).
 
 <a name="max-exceptions"></a>
 #### Максимальное количество исключений
@@ -961,10 +1030,8 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 
         /**
          * Выполнить задание.
-         *
-         * @return void
          */
-        public function handle()
+        public function handle(): void
         {
             Redis::throttle('key')->allow(10)->every(60)->then(function () {
                 // Блокировка получена, обрабатываем подкаст ...
@@ -980,13 +1047,13 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
 <a name="timeout"></a>
 #### Таймаут
 
-> {note} Расширение PHP `pcntl` должно быть установлено для указания тайм-аутов задания.
-
-Часто вы приблизительно знаете, сколько времени займет выполнение заданий в очереди. По этой причине Laravel позволяет вам указать значение «таймаута». Если задание обрабатывается дольше, чем количество секунд, указанное значением таймаута, обработчик завершится с ошибкой. Обычно обработчик перезапускается автоматически [менеджером процессов, настроенным на вашем сервере](#supervisor-configuration).
+Часто вы приблизительно знаете, сколько времени займет выполнение заданий в очереди. По этой причине Laravel позволяет вам указать значение «таймаута». По умолчанию значение таймаута составляет 60 секунд. Если задание обрабатывается дольше, чем количество секунд, указанное в значении тайм-аута, рабочий процесс, обрабатывающий задание, завершит работу с ошибкой. Обычно worker перезапускается автоматически [менеджером процессов, настроенным на вашем сервере](#supervisor-configuration).
 
 Максимальное количество секунд, в течение которых могут выполняться задания, можно указать с помощью переключателя `--timeout` в командной строке Artisan:
 
-    php artisan queue:work --timeout=30
+```shell
+php artisan queue:work --timeout=30
+```
 
 Если задание превышает максимальное количество попыток из-за постоянного тайм-аута, оно будет помечено как «неудачное».
 
@@ -1007,6 +1074,9 @@ Laravel содержит посредника `Illuminate\Queue\Middleware\Throt
     }
 
 Иногда процессы блокировки ввода-вывода, такие, как сокеты или исходящие HTTP-соединения, могут не учитывать указанный вами таймаут. Следовательно, при использовании этих функций вы всегда должны пытаться указать таймаут, используя их API. Например, при использовании Guzzle вы всегда должны указывать значение таймаута соединения и запроса.
+
+> **Warning**
+> Для указания тайм-аутов заданий необходимо установить PHP-расширение `pcntl`. Кроме того, значение тайм-аута в задании всегда должно быть меньше значения ["retry after"](#job-expiration). В противном случае задание может быть повторено до того, как оно фактически завершится или истечет время ожидания.
 
 <a name="failing-on-timeout"></a>
 #### Неудача заданий по таймауту
@@ -1034,20 +1104,20 @@ public $failOnTimeout = true;
 
     /**
      * Выполнить задание.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // ...
 
         $this->release();
     }
 
-По умолчанию метод `release` помещает задание обратно в очередь для немедленной обработки. Однако, передав целое число методу `release`, вы можете указать очереди не делать задание доступным для обработки, пока не истечет заданное количество секунд:
+По умолчанию метод `release` помещает задание обратно в очередь для немедленной обработки. Однако вы можете указать очереди не делать задание доступным для обработки до тех пор, пока не истечет заданное количество секунд, передав целое число или экземпляр даты в методе `release`:
 
     $this->release(10);
 
+    $this->release(now()->addSeconds(10));
+     
 <a name="manually-failing-a-job"></a>
 #### Пометка задания неудачным
 
@@ -1055,30 +1125,33 @@ public $failOnTimeout = true;
 
     /**
      * Выполнить задание.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // ...
 
         $this->fail();
     }
 
-Если вы хотите пометить свою работу как неудавшуюся из-за обнаруженного исключения, то вы можете передать исключение методу `fail`:
+Если вы хотите пометить свою работу как неудавшуюся из-за обнаруженного исключения, то вы можете передать исключение методу `fail`. Или, для удобства, вы можете передать строковое сообщение об ошибке, которое будет преобразовано для вас в исключение:
 
     $this->fail($exception);
 
-> {tip} Для получения дополнительной информации об обработке невыполненных заданий обратитесь к [документации по разбору неудачных заданий](#dealing-with-failed-jobs).
+    $this->fail('Something went wrong.');
+    
+> **Note**
+> Для получения дополнительной информации об обработке невыполненных заданий обратитесь к [документации по разбору неудачных заданий](#dealing-with-failed-jobs).
 
 <a name="job-batching"></a>
 ## Пакетная обработка заданий
 
 Функционал пакетной обработки заданий Laravel позволяет вам легко выполнить пакет заданий, по завершению которого дополнительно совершить определенные действия. Перед тем, как начать, вы должны создать миграцию базы данных, чтобы построить таблицу, содержащую метаинформацию о ваших пакетах заданий, такую как процент их завершения. Эта миграция может быть сгенерирована с помощью команды `queue:batches-table` Artisan:
 
-    php artisan queue:batches-table
+```shell
+php artisan queue:batches-table
 
-    php artisan migrate
+php artisan migrate
+```
 
 <a name="defining-batchable-jobs"></a>
 ### Определение пакета заданий
@@ -1105,7 +1178,7 @@ public $failOnTimeout = true;
          *
          * @return void
          */
-        public function handle()
+        public function handle(): void
         {
             if ($this->batch()->cancelled()) {
                 // Определяем, был ли пакет отменен ...
@@ -1145,7 +1218,8 @@ public $failOnTimeout = true;
 
 Идентификатор пакета, к которому можно получить доступ через свойство `$batch->id`, можно использовать для [запроса к командной шине Laravel](#inspecting-batches) для получения информации о пакете после того, как он был отправлен.
 
-> {note} Поскольку пакетные обратные вызовы сериализуются и выполняются позднее в очереди Laravel, вы не должны использовать переменную `$this` в обратных вызовах.
+> **Warning**  
+> Поскольку пакетные обратные вызовы сериализуются и выполняются позднее в очереди Laravel, вы не должны использовать переменную `$this` в обратных вызовах.
 
 <a name="naming-batches"></a>
 #### Именованные пакеты заданий
@@ -1169,8 +1243,8 @@ public $failOnTimeout = true;
         // Все задания успешно завершены ...
     })->onConnection('redis')->onQueue('imports')->dispatch();
 
-<a name="chains-within-batches"></a>
-#### Цепочки заданий внутри пакета
+<a name="chains-and-batches"></a>
+#### Цепочки заданий (Chains) и Пакеты (Batches)
 
 Вы можете определить набор [связанных заданий](#job-chaining) в пакете, поместив связанные задания в массив. Например, мы можем выполнить две цепочки заданий параллельно и выполнить замыкание, когда обе цепочки заданий завершат обработку:
 
@@ -1192,6 +1266,25 @@ public $failOnTimeout = true;
         // ...
     })->dispatch();
 
+И наоборот, вы можете запускать пакеты заданий внутри [цепочки](#job-chaining), определяя пакеты внутри цепочки. Например, вы можете сначала запустить пакет заданий для выпуска нескольких подкастов, а затем пакет заданий для отправки уведомлений о выпуске:
+
+    use App\Jobs\FlushPodcastCache;
+    use App\Jobs\ReleasePodcast;
+    use App\Jobs\SendPodcastReleaseNotification;
+    use Illuminate\Support\Facades\Bus;
+
+    Bus::chain([
+        new FlushPodcastCache,
+        Bus::batch([
+            new ReleasePodcast(1),
+            new ReleasePodcast(2),
+        ]),
+        Bus::batch([
+            new SendPodcastReleaseNotification(1),
+            new SendPodcastReleaseNotification(2),
+        ]),
+    ])->dispatch();
+
 <a name="adding-jobs-to-batches"></a>
 ### Добавление заданий в пакет заданий
 
@@ -1212,10 +1305,8 @@ public $failOnTimeout = true;
 
     /**
      * Выполнить задание.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->batch()->cancelled()) {
             return;
@@ -1226,7 +1317,8 @@ public $failOnTimeout = true;
         }));
     }
 
-> {note} Вы можете добавлять задания в пакет только из задания, которое принадлежит к тому же пакету.
+> **Warning**
+> Вы можете добавлять задания в пакет только из задания, которое принадлежит к тому же пакету.
 
 <a name="inspecting-batches"></a>
 ### Инспектирование пакета
@@ -1284,10 +1376,8 @@ public $failOnTimeout = true;
 
     /**
      * Выполнить задание.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         if ($this->user->exceedsImportLimit()) {
             return $this->batch()->cancel();
@@ -1298,20 +1388,16 @@ public $failOnTimeout = true;
         }
     }
 
-Как вы могли заметить в предыдущих примерах, пакетные задания обычно должны проверять, не был ли пакет отменен, в начале их метода `handle`:
-
+Как вы, возможно, заметили в предыдущих примерах, пакетные задания обычно должны определить, был ли соответствующий пакет отменен, прежде чем продолжить выполнение. Однако для удобства вместо этого вы можете назначить заданию `SkipIfBatchCancelled` [middleware](#job-middleware). Как следует из названия, это middleware будет инструктировать Laravel не обрабатывать задание, если соответствующий пакет был отменен:
+    
+    use Illuminate\Queue\Middleware\SkipIfBatchCancelled;
+    
     /**
-     * Выполнить задание.
-     *
-     * @return void
+     * Get the middleware the job should pass through.
      */
-    public function handle()
+    public function handle(): array
     {
-        if ($this->batch()->cancelled()) {
-            return;
-        }
-
-        // Продолжаем обработку ...
+        return [new SkipIfBatchCancelled];
     }
 
 <a name="batch-failures"></a>
@@ -1335,7 +1421,7 @@ public $failOnTimeout = true;
 
 Для удобства Artisan содержит команду `queue:retry-batch`, которая позволяет вам легко повторить все неудачные задания для указанного пакета. Команда `queue:retry-batch` принимает UUID пакета, чьи неудачные задания следует повторить:
 
-```bash
+```shell
 php artisan queue:retry-batch 32dbc76c-4f82-4749-b610-a639fe0099b5
 ```
 
@@ -1353,6 +1439,10 @@ php artisan queue:retry-batch 32dbc76c-4f82-4749-b610-a639fe0099b5
 Иногда в таблице `jobs_batches` могут накапливаться записи пакетов, которые так и не были успешно завершены, например, пакеты, в которых задание не удалось выполнить, и это задание так и не было успешно перезапущено. Вы можете поручить команде `queue:prune-batches` очистить эти незавершенные пакетные записи, используя опцию `unfinished`:
 
     $schedule->command('queue:prune-batches --hours=48 --unfinished=72')->daily();
+
+Аналогично, ваша таблица `jobs_batches` может также накапливать записи об отмененных пакетах. Вы можете указать команде `queue:prune-batches` удалить эти отмененные пакетные записи, используя флаг `cancelled`:
+
+    $schedule->command('queue:prune-batches --hours=48 --cancelled=72')->daily();
 
 <a name="queueing-closures"></a>
 ## Анонимные очереди
@@ -1375,6 +1465,9 @@ php artisan queue:retry-batch 32dbc76c-4f82-4749-b610-a639fe0099b5
         // Это задание завершилось неудачно ...
     });
 
+> **Warning**  
+> Поскольку функции-замыкания в`catch` сериализуются и выполняются очередью Laravel позднее, вам не следует использовать `$this` в обратных вызовах `catch`.
+
 <a name="running-the-queue-worker"></a>
 ## Запуск обработчика очереди
 
@@ -1383,15 +1476,26 @@ php artisan queue:retry-batch 32dbc76c-4f82-4749-b610-a639fe0099b5
 
 Laravel включает команду Artisan, которая запускает обработчика очереди и обрабатывает новые задания по мере их помещения в очередь. Вы можете запустить обработчик с помощью команды `queue:work` Artisan. Обратите внимание, что после запуска команды `queue:work` она будет продолжать работать, пока не будет остановлена вручную или пока вы не закроете терминал (консоль):
 
-    php artisan queue:work
+```shell
+php artisan queue:work
+```
 
-> {tip} Чтобы процесс `queue:work` постоянно работал в фоновом режиме, вы должны использовать диспетчер процессов, такой как [Supervisor](#supervisor-configuration), чтобы гарантировать, что обработчик очереди не перестанет работать.
+> **Note**  
+> Чтобы процесс `queue:work` работал постоянно в фоновом режиме, вам следует использовать диспетчер процессов, такой как [Supervisor](#supervisor-configuration), чтобы гарантировать, что worker очереди не перестанет работать.
+
+Вы можете включить флаг `-v` при вызове команды `queue:work`, если хотите, чтобы идентификаторы обработанных заданий были включены в output команды:
+
+```shell
+php artisan queue:work -v
+```
 
 Помните, что обработчики очереди – это долгоживущие процессы, которые хранят состояние загруженного приложения в памяти. В результате они не заметят изменений в вашей кодовой базе после их запуска. Итак, во время процесса развертывания обязательно [перезапустите своих обработчиков очереди](#queue-workers-and-deployment). Кроме того, помните, что любое статическое состояние, созданное или измененное вашим приложением, не будет автоматически пробрасываться между заданиями.
 
 Как вариант, вы можете запустить команду `queue:listen`. При использовании команды `queue:listen` вам не нужно вручную перезапускать обработчик, если вы хотите перезагрузить обновленный код или сбросить состояние приложения; однако эта команда значительно менее эффективна, чем команда `queue:work`:
 
-    php artisan queue:listen
+```shell
+php artisan queue:listen
+```
 
 <a name="running-multiple-queue-workers"></a>
 #### Запуск нескольких обработчиков очереди
@@ -1403,44 +1507,58 @@ Laravel включает команду Artisan, которая запускае
 
 Вы также можете указать, какое соединение очереди должен использовать обработчик. Имя соединения, переданное команде `work`, должно соответствовать одному из соединений, определенных в конфигурационном файле `config/queue.php`:
 
-    php artisan queue:work redis
+```shell
+php artisan queue:work redis
+```
 
 По умолчанию команда `queue:work` обрабатывает задания только для очереди по умолчанию на данном соединении. Однако, вы можете дополнительно указать, какие очереди необходимо обрабатывать для указанного соединения. Например, если все ваши электронные письма обрабатываются в очереди `emails` соединения `redis`, то вы можете использовать команду, чтобы запустить обработчик только для этой очереди:
 
-    php artisan queue:work redis --queue=emails
+```shell
+php artisan queue:work redis --queue=emails
+```
 
 <a name="processing-a-specified-number-of-jobs"></a>
 #### Обработка указанного количества заданий
 
 Переключатель `--once` обработчика используется для указания обработать только одно задание из очереди:
 
-    php artisan queue:work --once
+```shell
+php artisan queue:work --once
+```
 
 Параметр `--max-jobs` обработчика проинструктирует его обработать заданное количество заданий, а затем выйти. Этот параметр может быть полезен в сочетании с [Supervisor](#supervisor-configuration), чтобы ваши рабочие процессы автоматически перезапускались после обработки заданного количества заданий, освобождая любую занятую ими память:
 
-    php artisan queue:work --max-jobs=1000
+```shell
+php artisan queue:work --max-jobs=1000
+```
 
 <a name="processing-all-queued-jobs-then-exiting"></a>
 #### Обработка всех заданий в очереди с последующим выходом
 
 Переключатель `--stop-when-empty` обработчика может использоваться, чтобы дать ему указание обработать все задания и затем корректно завершить работу. Этот параметр может быть полезен при обработке очередей Laravel в контейнере Docker, если вы хотите выключить контейнер после того, как очередь пуста:
 
-    php artisan queue:work --stop-when-empty
+```shell
+php artisan queue:work --stop-when-empty
+```
 
 <a name="processing-jobs-for-a-given-number-of-seconds"></a>
 #### Обработка заданий за заданное количество секунд
 
 Параметр `--max-time` обработчика может использоваться, чтобы дать ему указание обрабатывать задания в течение заданного количества секунд, а затем выйти. Этот параметр может быть полезен в сочетании с [Supervisor](#supervisor-configuration), чтобы ваши рабочие процессы автоматически перезапускались после обработки заданий в течение заданного времени, освобождая любую занятую ими память:
 
-    // Обрабатываем задания в течение одного часа, а затем выходим ...
-    php artisan queue:work --max-time=3600
+```shell
+# Process jobs for one hour and then exit...
+php artisan queue:work --max-time=3600
+```
 
 <a name="worker-sleep-duration"></a>
 #### Продолжительность задержки выполнения обработчика
 
-Когда задания доступны в очереди, обработчик будет продолжать обрабатывать задания без задержки между ними. Однако опция `sleep` определяет, сколько секунд обработчик будет «спать», если нет новых доступных заданий. Во время задержки выполнения обработчик не будет обрабатывать никаких новых заданий – задания будут обработаны после того, как обработчик снова проснется.
+Когда задания доступны в очереди, обработчик будет продолжать обрабатывать задания без задержки между ними. Однако опция `sleep` определяет, сколько секунд обработчик будет «спать», если нет новых доступных заданий. Конечно, во время задержки выполнения обработчик не будет обрабатывать никаких новых заданий – задания будут обработаны после того, как обработчик снова проснется:
 
-    php artisan queue:work --sleep=3
+```shell
+php artisan queue:work --sleep=3
+```
 
 <a name="resource-considerations"></a>
 #### Соображения относительно ресурсов
@@ -1456,7 +1574,9 @@ Laravel включает команду Artisan, которая запускае
 
 Чтобы запустить обработчика, который проверяет, что все задания очереди `high` обработаны, прежде чем переходить к любым заданиям в очереди `low`, передайте разделенный запятыми список имен очередей команде `work`:
 
-    php artisan queue:work --queue=high,low
+```shell
+php artisan queue:work --queue=high,low
+```
 
 <a name="queue-workers-and-deployment"></a>
 ### Обработчики очереди и развертывание
@@ -1467,7 +1587,8 @@ Laravel включает команду Artisan, которая запускае
 
 Эта команда проинструктирует всех обработчиков очереди корректно выйти после завершения обработки своего текущего задания, чтобы существующие задания не были потеряны. Поскольку обработчики очереди выйдут при выполнении команды `queue:restart`, вы должны запустить диспетчер процессов, такой как [Supervisor](#supervisor-configuration), для автоматического перезапуска обработчиков очереди.
 
-> {tip} Очередь использует [кеш](/docs/{{version}}/cache) для хранения сигналов перезапуска, поэтому перед использованием этой функции необходимо убедиться, что драйвер кеша правильно настроен для приложения.
+> **Note**  
+> Очередь использует [кеш](/docs/{{version}}/cache) для хранения сигналов перезапуска, поэтому перед использованием этой функции необходимо убедиться, что драйвер кеша правильно настроен для приложения.
 
 <a name="job-expirations-and-timeouts"></a>
 ### Истечение срока и тайм-ауты задания
@@ -1477,20 +1598,22 @@ Laravel включает команду Artisan, которая запускае
 
 В вашем файле конфигурации `config/queue.php` каждое соединение с очередью определяет параметр `retry_after`. Этот параметр указывает, сколько секунд соединение очереди должно ждать перед повторной попыткой выполнения задания, которое обрабатывается. Например, если значение `retry_after` установлено на `90`, задание будет возвращено в очередь, если оно обрабатывалось в течение 90 секунд, но не было высвобождено или удалено. Как правило, вы должны установить значение `retry_after` на максимальное количество секунд, которое может потребоваться вашим заданиям для завершения обработки.
 
-> {note} Единственное соединение очереди, которое не содержит значения `retry_after` – это Amazon SQS. SQS будет повторять выполнение задания в соответствии с [таймаутом видимости по умолчанию](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AboutVT.html), управляемый консолью AWS.
+> **Warning**
+> Единственное соединение очереди, которое не содержит значения `retry_after` – это Amazon SQS. SQS будет повторять выполнение задания в соответствии с [таймаутом видимости по умолчанию](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/AboutVT.html), управляемый консолью AWS.
 
 <a name="worker-timeouts"></a>
 #### Тайм-ауты обработчиков
 
-Команда `queue:work` Artisan также содержит параметр `--timeout`. Если задание обрабатывается дольше, чем количество секунд, указанное значением тайм-аута, Обработчик, выполняющий задание, завершится с ошибкой. Обычно обработчик перезапускается автоматически [диспетчером, настроенным на вашем сервере](#supervisor-configuration):
+Команда `queue:work` Artisan также содержит параметр `--timeout`. По умолчанию значение `--timeout` составляет 60 секунд. Если задание обрабатывается дольше, чем количество секунд, указанное значением тайм-аута, Обработчик, выполняющий задание, завершится с ошибкой. Обычно обработчик перезапускается автоматически [диспетчером, настроенным на вашем сервере](#supervisor-configuration):
 
-```bash
+```shell
 php artisan queue:work --timeout=60
 ```
 
 Параметр конфигурации `retry_after` и параметр `--timeout` Artisan отличаются, но работают вместе, чтобы гарантировать, что задания не будут потеряны и что задания будут успешно обработаны только один раз.
 
-> {note} Значение `--timeout` всегда должно быть как минимум на несколько секунд короче, чем ваше значение конфигурации `retry_after`. Это гарантирует, что обрабатывающий замороженное задание обработчик, всегда завершает работу перед повторной попыткой выполнения задания. Если параметр `--timeout` выше значения конфигурации `retry_after`, то ваши задания могут быть обработаны дважды.
+> **Warning**
+> Значение `--timeout` всегда должно быть как минимум на несколько секунд короче, чем ваше значение конфигурации `retry_after`. Это гарантирует, что обрабатывающий замороженное задание обработчик, всегда завершает работу перед повторной попыткой выполнения задания. Если параметр `--timeout` выше значения конфигурации `retry_after`, то ваши задания могут быть обработаны дважды.
 
 <a name="supervisor-configuration"></a>
 ## Конфигурация Supervisor
@@ -1504,9 +1627,12 @@ php artisan queue:work --timeout=60
 
 Supervisor – это диспетчер процессов для операционной системы Linux, который автоматически перезапускает ваши процессы `queue:work` в случае их сбоя. Чтобы установить Supervisor в Ubuntu, вы можете использовать следующую команду:
 
-    sudo apt-get install supervisor
+```shell
+sudo apt-get install supervisor
+```
 
-> {tip} Если настройка Supervisor и управление им самостоятельно кажется ошеломляющим, рассмотрите возможность использования [Laravel Forge](https://forge.laravel.com), который автоматически установит и настроит Supervisor для ваших проектов Laravel.
+> **Note**
+> Если настройка Supervisor и управление им самостоятельно кажется ошеломляющим, рассмотрите возможность использования [Laravel Forge](https://forge.laravel.com), который автоматически установит и настроит Supervisor для ваших проектов Laravel.
 
 <a name="configuring-supervisor"></a>
 #### Настройка Supervisor
@@ -1530,19 +1656,20 @@ stopwaitsecs=3600
 
 В этом примере директива `numprocs` инструктирует Supervisor запустить восемь процессов `queue:work` и отслеживать их все, автоматически перезапуская их в случае сбоя. Вы должны изменить директиву `command` конфигурации, чтобы отразить желаемое соединение с очередью и параметры обработчика.
 
-> {note} Вы должны убедиться, что значение `stopwaitsecs` больше, чем количество секунд, затраченных на выполнение вашего самого продолжительного задания. В противном случае Supervisor может убить задание до того, как оно завершит обработку.
+> **Warning**
+> Вы должны убедиться, что значение `stopwaitsecs` больше, чем количество секунд, затраченных на выполнение вашего самого продолжительного задания. В противном случае Supervisor может убить задание до того, как оно завершит обработку.
 
 <a name="starting-supervisor"></a>
 #### Запуск Supervisor
 
 После создания файла конфигурации вы можете обновить конфигурацию Supervisor и запустить процессы, используя следующие команды:
 
-```bash
+```shell
 sudo supervisorctl reread
 
 sudo supervisorctl update
 
-sudo supervisorctl start laravel-worker:*
+sudo supervisorctl start "laravel-worker:*"
 ```
 
 Для получения дополнительной информации о Supervisor обратитесь к [документации Supervisor](http://supervisord.org/index.html).
@@ -1550,19 +1677,25 @@ sudo supervisorctl start laravel-worker:*
 <a name="dealing-with-failed-jobs"></a>
 ## Разбор неудачных заданий
 
-Иногда ваши задания в очереди терпят неудачу. Не волнуйтесь, не всегда все идет по плану! Laravel включает удобный способ [указать максимальное количество попыток выполнения задания](#max-job-attempts-and-timeout). После того как задание превысит это количество попыток, оно будет вставлено в таблицу базы данных `failed_jobs`. Конечно, нам нужно будет создать эту таблицу, если она еще не существует. Чтобы создать миграцию для таблицы `failed_jobs`, вы можете использовать команду `queue:failed-table`:
+Иногда ваши задания в очереди терпят неудачу. Не волнуйтесь, не всегда все идет по плану! Laravel включает удобный способ [указать максимальное количество попыток выполнения задания](#max-job-attempts-and-timeout). После того, как асинхронное задание превысит это количество попыток, оно будет вставлено в таблицу базы данных `failed_jobs`. [Синхронно отправленные задания](/docs/{{version}}/queues#synchronous-dispatching), которые потерпели неудачу, не сохраняются в этой таблице, и их исключения немедленно обрабатываются приложением.
 
-    php artisan queue:failed-table
+```shell
+php artisan queue:failed-table
 
-    php artisan migrate
+php artisan migrate
+```
 
 При запуске [обработчика очереди](#running-the-queue-worker) вы можете указать максимальное количество попыток выполнения задания, используя переключатель `--tries` команды `queue:work`. Если вы не укажете значение для параметра `--tries`, задания будут выполняться только один раз или столько раз, сколько указано в свойстве класса задания `$tries`:
 
-    php artisan queue:work redis --tries=3
+```shell
+php artisan queue:work redis --tries=3
+```
 
 Используя параметр `--backoff`, вы можете указать, сколько секунд Laravel должен ждать перед повторной попыткой выполнения задания, для которого возникло исключение. По умолчанию задание сразу же возвращается в очередь, чтобы его можно было повторить:
 
-    php artisan queue:work redis --tries=3 --backoff=3
+```shell
+php artisan queue:work redis --tries=3 --backoff=3
+```
 
 Если вы хотите настроить, сколько секунд Laravel должен ждать перед повторной попыткой выполнения каждого из заданий, для которого возникло исключение, вы можете сделать это, определив свойство `$backoff` в своем классе задания:
 
@@ -1577,22 +1710,20 @@ sudo supervisorctl start laravel-worker:*
 
     /**
     * Рассчитать количество секунд ожидания перед повторной попыткой выполнения задания.
-    *
-    * @return int
     */
-    public function backoff()
+    public function backoff(): int
     {
         return 3;
     }
 
-Вы можете легко настроить «экспоненциальную» отсрочку, возвращая массив значений отсрочки из метода `backoff`. В этом примере задержка повторной попытки выполнения будет составлять 1 секунду для первой попытки, 5 секунд для второй попытки и 10 секунд для третьей попытки:
+Вы можете легко настроить «экспоненциальную» отсрочку, возвращая массив значений отсрочки из метода `backoff`. В этом примере задержка повторной попытки выполнения будет составлять 1 секунду для первой попытки, 5 секунд для второй попытки и 10 секунд для третьей попытки, и 10 секунд для каждой последующей повторной попытки, если осталось еще попыток:
 
     /**
     * Рассчитать количество секунд ожидания перед повторной попыткой выполнения задания.
     *
-    * @return array
+    * @return array<int, int>
     */
-    public function backoff()
+    public function backoff(): array
     {
         return [1, 5, 10];
     }
@@ -1619,80 +1750,79 @@ sudo supervisorctl start laravel-worker:*
         use InteractsWithQueue, Queueable, SerializesModels;
 
         /**
-         * Экземпляр подкаста.
-         *
-         * @var \App\Podcast
-         */
-        protected $podcast;
-
-        /**
          * Создать новый экземпляр задания.
-         *
-         * @param  \App\Models\Podcast  $podcast
-         * @return void
          */
-        public function __construct(Podcast $podcast)
-        {
-            $this->podcast = $podcast;
-        }
+        public function __construct(
+            public Podcast $podcast,
+        ) {}
 
         /**
          * Выполнить задание.
-         *
-         * @param  \App\Services\AudioProcessor  $processor
-         * @return void
          */
-        public function handle(AudioProcessor $processor)
+        public function handle(AudioProcessor $processor): void
         {
             // Process uploaded podcast...
         }
 
         /**
          * Обработать провал задания.
-         *
-         * @param  \Throwable  $exception
-         * @return void
          */
-        public function failed(Throwable $exception)
+        public function failed(Throwable $exception): void
         {
             // Отправляем пользователю уведомление об ошибке и т.д.
         }
     }
 
-> {note} Перед вызовом метода `failed` создается новый экземпляр задания. Поэтому все изменения свойств класса, которые могли произойти в методе `handle`, будут потеряны. 
+> **Warning** 
+> Перед вызовом метода `failed` создается новый экземпляр задания. Поэтому все изменения свойств класса, которые могли произойти в методе `handle`, будут потеряны. 
 
 <a name="retrying-failed-jobs"></a>
 ### Повторная попытка выполнения неудачных заданий
 
 Чтобы просмотреть все неудачные задания, которые были вставлены в вашу таблицу базы данных `failed_jobs`, вы можете использовать команду `queue:failed` Artisan:
 
-    php artisan queue:failed
+```shell
+php artisan queue:failed
+```
 
 Команда `queue:failed` перечислит идентификатор задания, соединение, очередь, время сбоя и другую информацию о задании. Идентификатор задания может быть использован для повторной попытки выполнить неудачное задание. Например, чтобы повторить неудачное задание с идентификатором `ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece`, введите следующую команду:
 
-    php artisan queue:retry ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece
+```shell
+php artisan queue:retry ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece
+```
 
 При необходимости вы можете передать команде несколько идентификаторов:
 
-    php artisan queue:retry ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece 91401d2c-0784-4f43-824c-34f94a33c24d
+```shell
+php artisan queue:retry ce7bb17c-cdd8-41f0-a8ec-7b4fef4e5ece 91401d2c-0784-4f43-824c-34f94a33c24d
+```
 
 Вы также можете повторить все неудачные задания для определенной очереди:
 
-    php artisan queue:retry --queue=name
+```shell
+php artisan queue:retry --queue=name
+```
 
 Чтобы повторить все неудачные задания, выполните команду `queue:retry` и передайте `all` вместо идентификаторов:
 
-    php artisan queue:retry all
+```shell
+php artisan queue:retry all
+```
 
 Если вы хотите удалить неудачные задание, вы можете использовать команду `queue:forget`:
 
-    php artisan queue:forget 91401d2c-0784-4f43-824c-34f94a33c24d
+```shell
+php artisan queue:forget 91401d2c-0784-4f43-824c-34f94a33c24d
+```
 
-> {tip} При использовании [Horizon](/docs/{{version}}/horizon) вы должны использовать команду `horizon:forget` для удаления неудачного задания вместо команды `queue:forget`.
+> **Note**  
+> При использовании [Horizon](/docs/{{version}}/horizon) вы должны использовать команду `horizon:forget` для удаления неудачного задания вместо команды `queue:forget`.
 
 Чтобы удалить все неудачные задания из таблицы `failed_jobs`, вы можете использовать команду `queue:flush`:
 
-    php artisan queue:flush
+```shell
+php artisan queue:flush
+```
 
 <a name="ignoring-missing-models"></a>
 ### Игнорирование отсутствующих моделей
@@ -1711,13 +1841,17 @@ sudo supervisorctl start laravel-worker:*
 <a name="pruning-failed-jobs"></a>
 ### Удаление неудачных заданий
 
-Вы можете удалить все записи в таблице `failed_jobs` вашего приложения, вызвав команду `queue:prune-failed` Artisan:
+Вы можете удалить записи в таблице `failed_jobs` вашего приложения, вызвав команду `queue:prune-failed` Artisan:
 
-    php artisan queue:prune-failed
+```shell
+php artisan queue:prune-failed
+```
 
-Если в команде указать параметр `--hours`, будут сохранены только те записи о неудачных заданиях, которые были вставлены в течение последних N часов. Например, следующая команда удалит все записи неудачных заданий, которые были вставлены более 48 часов назад:
+По умолчанию все записи о неудачных заданиях старше 24 часов будут удалены. Если в команде указать параметр `--hours`, будут сохранены только те записи о неудачных заданиях, которые были вставлены в течение последних N часов. Например, следующая команда удалит все записи неудачных заданий, которые были вставлены более 48 часов назад:
 
-    php artisan queue:prune-failed --hours=48
+```shell
+php artisan queue:prune-failed --hours=48
+```
 
 <a name="storing-failed-jobs-in-dynamodb"></a>
 ### Хранение неудачных заданий в DynamoDB
@@ -1728,7 +1862,7 @@ Laravel поддерживает хранение записей о неудач
 
 Кроме того, убедитесь, что вы установили AWS SDK, чтобы ваше приложение Laravel могло работать с Amazon DynamoDB:
 
-```nothing
+```shell
 composer require aws/aws-sdk-php
 ```
 
@@ -1749,7 +1883,9 @@ composer require aws/aws-sdk-php
 
 Вы можете указать Laravel отбрасывать невыполненные задания без их сохранения, установив параметр конфигурации `queue.failed.driver` в значение `null`. Как правило, это можно сделать с помощью переменной окружения `QUEUE_FAILED_DRIVER`:
 
-    QUEUE_FAILED_DRIVER=null
+```ini
+QUEUE_FAILED_DRIVER=null
+```
 
 <a name="failed-job-events"></a>
 ### События неудачных заданий
@@ -1768,12 +1904,10 @@ composer require aws/aws-sdk-php
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
-            //
+            // ...
         }
 
         /**
@@ -1781,7 +1915,7 @@ composer require aws/aws-sdk-php
          *
          * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             Queue::failing(function (JobFailed $event) {
                 // $event->connectionName
@@ -1794,17 +1928,23 @@ composer require aws/aws-sdk-php
 <a name="clearing-jobs-from-queues"></a>
 ## Удаление заданий из очередей
 
-> {tip} При использовании [Horizon](/docs/{{version}}/horizon) вы должны использовать команду `horizon:clear` для удаления заданий из очереди вместо команды `queue:clear`.
+> **Note**
+> При использовании [Horizon](/docs/{{version}}/horizon) вы должны использовать команду `horizon:clear` для удаления заданий из очереди вместо команды `queue:clear`.
 
 Если вы хотите удалить все задания, принадлежащие соединению и очереди по умолчанию, вы можете сделать это с помощью команды `queue:clear` Artisan:
 
-    php artisan queue:clear
+```shell
+php artisan queue:clear
+```
 
 Вы также можете указать аргумент `connection` и параметр `queue` для удаления заданий из конкретного соединения / очереди:
 
-    php artisan queue:clear redis --queue=emails
+```shell
+php artisan queue:clear redis --queue=emails
+```
 
-> {note} Удаление заданий из очередей доступно только для драйверов очереди SQS, Redis и базы данных. Кроме того, процесс удаления в SQS занимает до 60 секунд, поэтому задания, отправленные в очередь SQS в течение 60 секунд после очистки очереди, также могут быть удалены.
+> **Warning**
+> Удаление заданий из очередей доступно только для драйверов очереди SQS, Redis и базы данных. Кроме того, процесс удаления в SQS занимает до 60 секунд, поэтому задания, отправленные в очередь SQS в течение 60 секунд после очистки очереди, также могут быть удалены.
 
 <a name="monitoring-your-queues"></a>
 ## Мониторинг очередей
@@ -1813,7 +1953,7 @@ composer require aws/aws-sdk-php
 
 Для этого добавьте в [планировщик](/docs/{{version}}/scheduling) команду `queue:monitor` на запуск раз в минуту. Команда принимает имена очередей, которые вы хотите контролировать, а также желаемый порог количества заданий:
 
-```bash
+```shell
 php artisan queue:monitor redis:default,redis:deployments --max=100
 ```
 
@@ -1827,10 +1967,8 @@ use Illuminate\Support\Facades\Notification;
 
 /**
  * Register any other events for your application.
- *
- * @return void
  */
-public function boot()
+public function boot(): void
 {
     Event::listen(function (QueueBusy $event) {
         Notification::route('mail', 'dev@example.com')
@@ -1842,6 +1980,164 @@ public function boot()
     });
 }
 ```
+
+<a name="testing"></a>
+## Тестирование
+
+При тестировании кода, отправляющего задание, вы можете указать Laravel не выполнять само задание, поскольку код задания можно тестировать напрямую и отдельно от остального кода, отправляющего его. Конечно, чтобы протестировать само задание, вы можете создать экземпляр задания и вызвать метод `handle` непосредственно в тесте.
+
+Вы можете использовать метод `fake` фасада `Queue`, чтобы предотвратить фактическую отправку заданий очередь. После вызова метода `fake` фасада `Queue` вы можете проверять в тестах, что приложение пыталось поместить задания в очередь:
+
+    <?php
+
+    namespace Tests\Feature;
+
+    use App\Jobs\AnotherJob;
+    use App\Jobs\FinalJob;
+    use App\Jobs\ShipOrder;
+    use Illuminate\Support\Facades\Queue;
+    use Tests\TestCase;
+
+    class ExampleTest extends TestCase
+    {
+        public function test_orders_can_be_shipped(): void
+        {
+            Queue::fake();
+
+            // Perform order shipping...
+
+            // Assert that no jobs were pushed...
+            Queue::assertNothingPushed();
+
+            // Assert a job was pushed to a given queue...
+            Queue::assertPushedOn('queue-name', ShipOrder::class);
+
+            // Assert a job was pushed twice...
+            Queue::assertPushed(ShipOrder::class, 2);
+
+            // Assert a job was not pushed...
+            Queue::assertNotPushed(AnotherJob::class);
+
+            // Assert that a Closure was pushed to the queue...
+            Queue::assertClosurePushed();
+        }
+    }
+
+Вы можете передать функцию-замыкание методам `assertPushed` или `assertNotPushed`, чтобы подтвердить, что задание было отправлено и прошло заданный «тест на истинность». Если было отправлено хотя бы одно задание, которое проходит заданный тест, то утверждение будет успешным:
+
+    Queue::assertPushed(function (ShipOrder $job) use ($order) {
+        return $job->order->id === $order->id;
+    });
+
+<a name="faking-a-subset-of-jobs"></a>
+### Подделка определённого списка заданий
+
+Если вам нужно имитировать только определенные задания, позволяя другим заданиям выполняться нормально, вы можете передать имена классов заданий, которые следует имитировать, методу `fake`:
+
+    public function test_orders_can_be_shipped(): void
+    {
+        Queue::fake([
+            ShipOrder::class,
+        ]);
+
+        // Perform order shipping...
+
+        // Assert a job was pushed twice...
+        Queue::assertPushed(ShipOrder::class, 2);
+    }
+
+Вы можете подделать все задания, кроме набора указанных, используя метод `except`:
+
+    Queue::fake()->except([
+        ShipOrder::class,
+    ]);
+
+<a name="testing-job-chains"></a>
+### Тестирование цепочку заданий
+
+Чтобы протестировать цепочки заданий, вам нужно будет использовать возможности фасада `Bus`. Метод `assertChained` фасада `Bus` может использоваться для подтверждения того, что [цепочка заданий](/docs/{{version}}/queues#job-chaining) была отправлена. Метод `assertChained` принимает массив связанных заданий в качестве первого аргумента:
+
+    use App\Jobs\RecordShipment;
+    use App\Jobs\ShipOrder;
+    use App\Jobs\UpdateInventory;
+    use Illuminate\Support\Facades\Bus;
+
+    Bus::fake();
+
+    // ...
+
+    Bus::assertChained([
+        ShipOrder::class,
+        RecordShipment::class,
+        UpdateInventory::class
+    ]);
+
+Как вы можете видеть в приведенном выше примере, массив цепочки заданий может быть массивом имен классов заданий. Однако вы также можете предоставить массив реальных экземпляров заданий. При этом Laravel гарантирует, что экземпляры заданий относятся к одному и тому же классу и имеют одинаковые значения свойств, что и связанные задания, отправленные вашим приложением:
+
+    Bus::assertChained([
+        new ShipOrder,
+        new RecordShipment,
+        new UpdateInventory,
+    ]);
+
+Вы можете использовать метод `assertDispatchedWithoutChain`, чтобы подтвердить, что задание было отправлено без цепочки заданий:
+
+    Bus::assertDispatchedWithoutChain(ShipOrder::class);
+
+<a name="testing-chained-batches"></a>
+#### Тестирование цепочки пакетов
+
+Если ваша цепочка заданий [содержит пакет заданий](#chains-and-batches), вы можете утверждать, что связанный пакет соответствует вашим ожиданиям, вставив определение `Bus::chainedBatch` в assert цепочки:
+
+    use App\Jobs\ShipOrder;
+    use App\Jobs\UpdateInventory;
+    use Illuminate\Bus\PendingBatch;
+    use Illuminate\Support\Facades\Bus;
+
+    Bus::assertChained([
+        new ShipOrder,
+        Bus::chainedBatch(function (PendingBatch $batch) {
+            return $batch->jobs->count() === 3;
+        }),
+        new UpdateInventory,
+    ]);
+
+<a name="testing-job-batches"></a>
+### Тестирование пакетов заданий
+
+Метод `assertBatched` фасада `Bus` может использоваться для подтверждения того, что [пакет заданий](/docs/{{version}}/queues#job-batching) был отправлен. Замыкание, данное методу `assertBatched`, получает экземпляр `Illuminate\Bus\PendingBatch`, который можно использовать для проверки заданий в пакете:
+
+    use Illuminate\Bus\PendingBatch;
+    use Illuminate\Support\Facades\Bus;
+
+    Bus::fake();
+
+    // ...
+
+    Bus::assertBatched(function (PendingBatch $batch) {
+        return $batch->name == 'import-csv' &&
+               $batch->jobs->count() === 10;
+    });
+
+Вы можете использовать метод `assertBatchCount`, чтобы подтвердить, что было отправлено заданное количество пакетов:
+
+    Bus::assertBatchCount(3);
+
+Вы можете использовать `assertNothingBatched`, чтобы подтвердить, что никакие пакеты не были отправлены:
+
+    Bus::assertNothingBatched();
+
+<a name="testing-job-batch-interaction"></a>
+#### Тестирования заданий / Взаимодействие пакетов
+
+Кроме того, иногда вам может потребоваться протестировать взаимодействие отдельного задания с его базовым пакетом. Например, вам может потребоваться проверить, не отменило ли задание дальнейшую обработку своего пакета. Для этого вам необходимо назначить заданию поддельный пакет с помощью метода `withFakeBatch`. Метод `withFakeBatch` возвращает массив, содержащий экземпляр задания и поддельный пакет:
+
+    [$job, $batch] = (new ShipOrder)->withFakeBatch();
+
+    $job->handle();
+
+    $this->assertTrue($batch->cancelled());
+    $this->assertEmpty($batch->added);
 
 <a name="job-events"></a>
 ## События заданий
@@ -1861,20 +2157,16 @@ public function boot()
     {
         /**
          * Регистрация любых служб приложения.
-         *
-         * @return void
          */
-        public function register()
+        public function register(): void
         {
-            //
+            // ...
         }
 
         /**
          * Загрузка любых служб приложения.
-         *
-         * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             Queue::before(function (JobProcessing $event) {
                 // $event->connectionName
