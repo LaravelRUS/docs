@@ -1,5 +1,5 @@
 ---
-git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
+git: 14f067aa12c9d78f9c2e375bae52854c80988432
 ---
 
 # HTTP-запросы
@@ -27,15 +27,14 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
     {
         /**
          * Сохранить нового пользователя.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function store(Request $request)
+        public function store(Request $request): RedirectResponse
         {
             $name = $request->input('name');
 
-            //
+            // Сохранить пользователя
+            
+            return redirect('/users');
         }
     }
 
@@ -44,7 +43,7 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
     use Illuminate\Http\Request;
 
     Route::get('/', function (Request $request) {
-        //
+        // ...
     });
 
 <a name="dependency-injection-route-parameters"></a>
@@ -68,24 +67,22 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
     {
         /**
          * Обновить конкретного пользователя.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @param  string  $id
-         * @return \Illuminate\Http\Response
          */
-        public function update(Request $request, $id)
+        public function update(Request $request, string $id): RedirectResponse
         {
-            //
+            // Обновляем пользователя ...
+
+            return redirect('/users');
         }
     }
 
 <a name="request-path-and-method"></a>
-### Путь и метод запроса
+### Path, Host и Method запроса
 
 Экземпляр `Illuminate\Http\Request` содержит множество методов для интерпретации входящего HTTP-запроса и расширяет класс `Symfony\Component\HttpFoundation\Request`. Ниже мы обсудим несколько наиболее важных методов.
 
 <a name="retrieving-the-request-path"></a>
-#### Получение пути запроса
+#### Получение Path запроса
 
 Метод `path` возвращает информацию о пути запроса. Итак, если целевой входящий запрос `http://example.com/foo/bar`, то метод `path` вернет `foo/bar`:
 
@@ -97,13 +94,13 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
 Метод `is` проверит, соответствует ли путь входящего запроса шаблону. Допускается использование метасимвола подстановки `*`:
 
     if ($request->is('admin/*')) {
-        //
+        // ...
     }
 
 Используя метод `routeIs`, вы можете определить, соответствует ли входящий запрос [именованному маршруту](/docs/{{version}}/routing#named-routes):
 
     if ($request->routeIs('admin.*')) {
-        //
+        // ...
     }
 
 <a name="retrieving-the-request-url"></a>
@@ -119,6 +116,21 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
 
     $request->fullUrlWithQuery(['type' => 'phone']);
 
+Если вы хотите получить текущий URL-адрес без заданного параметра строки запроса, вы можете использовать метод `fullUrlWithoutQuery`:
+
+```php
+$request->fullUrlWithoutQuery(['type']);
+```
+
+<a name="retrieving-the-request-host"></a>
+#### Получение хоста(host) запроса
+
+Вы можете получить "host" входящего запроса с помощью методов `host`, `httpHost`, и `schemeAndHttpHost` :
+
+    $request->host();
+    $request->httpHost();
+    $request->schemeAndHttpHost();
+
 <a name="retrieving-the-request-method"></a>
 #### Получение метода запроса
 
@@ -127,7 +139,7 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
     $method = $request->method();
 
     if ($request->isMethod('post')) {
-        //
+        // ...
     }
 
 <a name="request-headers"></a>
@@ -142,7 +154,7 @@ git: 6357172dc49acd8a2600b8d153f125ee743dfdb9
 Метод `hasHeader` используется, чтобы определить, содержит ли запрос указанный заголовок:
 
     if ($request->hasHeader('X-Header-Name')) {
-        //
+        // ...
     }
 
 Для удобства метод `bearerToken` может использоваться для получения токена из заголовка `Authorization`. Если такого заголовка нет, то будет возвращена пустая строка:
@@ -184,18 +196,21 @@ Laravel содержит несколько методов для проверк
 
 [Стандарт PSR-7](https://www.php-fig.org/psr/psr-7/) определяет интерфейсы для сообщений HTTP, включая запросы и ответы. Если вы хотите получить экземпляр запроса PSR-7 вместо запроса Laravel, вам сначала необходимо установить несколько библиотек. Laravel использует компонент *Symfony HTTP Message Bridge* для преобразования типичных запросов и ответов Laravel в реализации, совместимой с PSR-7:
 
-    composer require symfony/psr-http-message-bridge
-    composer require nyholm/psr7
+```shell
+composer require symfony/psr-http-message-bridge
+composer require nyholm/psr7
+```
 
 После того как вы установили эти библиотеки, вы можете получить запрос PSR-7, объявив тип интерфейса запроса для замыкания вашего маршрута или контроллера:
 
     use Psr\Http\Message\ServerRequestInterface;
 
     Route::get('/', function (ServerRequestInterface $request) {
-        //
+        // ...
     });
 
-> {tip} Если вы вернете экземпляр ответа PSR-7 из маршрута или контроллера, он будет автоматически преобразован обратно в экземпляр ответа Laravel и отобразится фреймворком.
+> **Note**  
+> Если вы возвращаете экземпляр response по PSR-7 из маршрута или контроллера, он автоматически преобразуется обратно в экземпляр ответа Laravel и отображается фреймворком.
 
 <a name="input"></a>
 ## Данные полей ввода
@@ -216,7 +231,7 @@ Laravel содержит несколько методов для проверк
 
 Метод `collect` также позволяет вам получить подмножество входных данных входящего запроса в виде коллекции:
 
-    $request->collect('users')->each(function ($user) {
+    $request->collect('users')->each(function (string $user) {
         // ...
     });
 
@@ -259,9 +274,17 @@ Laravel содержит несколько методов для проверк
 <a name="retrieving-json-input-values"></a>
 #### Получение значений JSON-содержимого
 
-При отправке запросов JSON в ваше приложение, вы можете получить доступ к данным JSON с помощью метода `input`, если заголовок запроса `Content-Type` корректно установлен как `application/json`. Вы даже можете использовать «точечную» нотацию для извлечения значений, вложенных в JSON-массивы:
+При отправке запросов JSON в ваше приложение, вы можете получить доступ к данным JSON с помощью метода `input`, если заголовок запроса `Content-Type` корректно установлен как `application/json`. Вы даже можете использовать «точечную» нотацию для извлечения значений, вложенных в JSON-массивы или объекты:
 
     $name = $request->input('user.name');
+
+<a name="retrieving-stringable-input-values"></a>
+#### Получение экземпляра Stringable из Input
+
+Вместо получения входных данных запроса в виде примитивной `string` вы можете использовать метод `string` для получения данных запроса как экземпляра [`Illuminate\Support\Stringable`](/docs/{{version}}/helpers#fluent-strings):
+
+    $name = $request->string('name')->trim();
+
 
 <a name="retrieving-boolean-input-values"></a>
 #### Получение значений логического типа
@@ -283,6 +306,15 @@ Laravel содержит несколько методов для проверк
     $elapsed = $request->date('elapsed', '!H:i', 'Europe/Madrid');
 
 Если входное значение присутствует, но имеет недопустимый формат, будет выброшено исключение `InvalidArgumentException`, поэтому рекомендуется проверять ввод перед вызовом метода `date`.
+
+<a name="retrieving-enum-input-values"></a>
+#### Retrieving Enum Input Values
+
+Входные значения, соответствующие [PHP enums](https://www.php.net/manual/en/language.types.enumerations.php), также могут быть извлечены из запроса. Если запрос не содержит входного значения с заданным именем или enum не имеет значения, соответствующего входному значению из request, будет возвращен `null`. Метод `enum` принимает имя входного значения из request первым аргументом и класс c перечислениями enums в качестве второго:
+
+    use App\Enums\Status;
+
+    $status = $request->enum('status', Status::class);
 
 <a name="retrieving-input-via-dynamic-properties"></a>
 #### Получение данных через динамические свойства
@@ -306,7 +338,8 @@ Laravel содержит несколько методов для проверк
 
     $input = $request->except('credit_card');
 
-> {note} Метод `only` возвращает все пары ключ / значение, которые вы запрашиваете. Однако, он не вернет пары ключ / значение, которых нет в запросе.
+> **Warning**  
+> Метод `only` возвращает все запрошенные вами пары ключ/значение; однако он не будет возвращать пары ключ/значение, которых нет в запросе.
 
 <a name="determining-if-input-is-present"></a>
 ### Определение наличия требуемых данных
@@ -314,47 +347,52 @@ Laravel содержит несколько методов для проверк
 Вы можете использовать метод `has`, чтобы определить, присутствует ли значение в запросе. Метод `has` возвращает `true`, если значение присутствует в запросе:
 
     if ($request->has('name')) {
-        //
+        // ...
     }
 
 При передаче массива метод `has` определяет, присутствуют ли все указанные значения:
 
     if ($request->has(['name', 'email'])) {
-        //
+        // ...
     }
 
+Метод `hasAny` возвращает `true`, если присутствует любое из указанных значений:
+
+    if ($request->hasAny(['name', 'email'])) {
+        // ...
+    }
+    
 Метод `whenHas` выполнит переданное замыкание, если в запросе присутствует значение:
 
-    $request->whenHas('name', function ($input) {
-        //
+    $request->whenHas('name', function (string $input) {
+        // ...
     });
 
 Второе замыкание может быть передано методу `whenHas`, которое будет выполнено, если указанное значение отсутствует в запросе:
 
-    $request->whenHas('name', function ($input) {
+    $request->whenHas('name', function (string $input) {
         // Значение "имя" присутствует...
     }, function () {
         // Значение "имя" отсутствует...
     });
 
-Метод `hasAny` возвращает `true`, если присутствует какое-либо из указанных значений:
-
-    if ($request->hasAny(['name', 'email'])) {
-        //
-    }
-
-Если вы хотите определить, присутствует ли значение в запросе и не является ли оно пустым, то вы можете использовать метод `filled`:
+Если вы хотите определить, присутствует ли значение в запросе и не является ли оно пустой строкой, вы можете использовать метод `filled`:
 
     if ($request->filled('name')) {
-        //
+        // ...
     }
 
-Метод `whenFilled` выполнит указанное замыкание, если значение присутствует в запросе и не является пустым:
+Метод `anyFilled` возвращает true, если какое-либо из указанных значений не является пустой строкой:
 
-    $request->whenFilled('name', function ($input) {
-        //
+    if ($request->anyFilled(['name', 'email'])) {
+        // ...
+    }}
+
+Метод `whenFilled` выполнит указанное замыкание, если значение присутствует в запросе и не является пустой строкой:
+
+    $request->whenFilled('name', function (string $input) {
+        // ...
     });
-
 
 Второе замыкание может быть передано методу `whenFilled` которое будет выполнено, если указанное значение «не заполнено»:
 
@@ -364,16 +402,22 @@ Laravel содержит несколько методов для проверк
         // Значение "имя" не заполнено...
     });
 
-Чтобы определить, отсутствует ли конкретный ключ в запросе, вы можете использовать метод `missing`:
+Чтобы определить, отсутствует ли конкретный ключ в запросе, вы можете использовать метод `missing` или `whenMissing`:
 
     if ($request->missing('name')) {
-        //
+        // ...
     }
 
+    $request->whenMissing('name', function (array $input) {
+        // Значение "name" пропущено...
+    }, function () {
+        // Значение "name" присутствует...
+    });
+    
 <a name="merging-additional-input"></a>
 ### Объединение дополнительных входных данных
 
-Иногда вам может потребоваться вручную объединить дополнительные входные данные с существующими входными данными запроса. Для достижения этой цели вы можете использовать метод `merge`:
+Иногда вам может потребоваться вручную объединить дополнительные входные данные с существующими входными данными запроса. Для достижения этой цели вы можете использовать метод `merge`. Если данный входной ключ уже существует в запросе, он будет перезаписан данными, предоставленными методу `merge`:
 
     $request->merge(['votes' => 0]);
 
@@ -438,7 +482,31 @@ Laravel также содержит глобального помощника `o
 
 По умолчанию Laravel содержит посредников `App\Http\Middleware\TrimStrings` и `App\Http\Middleware\ConvertEmptyStringsToNull` в глобальном стеке посредников вашего приложения. Эти посредники перечислены в классе `App\Http\Kernel`. Первый из упомянутых посредников будет автоматически обрезать все входящие строковые поля запроса, а второй – конвертировать любые пустые строковые поля в `null`. Это позволяет вам не беспокоиться об этих проблемах нормализации в ваших маршрутах и контроллерах.
 
+#### Отключение нормализации значений полей ввода
+
 Если вы хотите отключить это поведение, вы можете удалить два посредника из стека посредников вашего приложения, удалив их из свойства `$middleware` вашего класса `App\Http\Kernel`.
+
+Если вы хотите отключить обрезку строк и преобразование пустых строк для подмножества запросов к вашему приложению, вы можете использовать метод `skipWhen`, предлагаемый обоими middleware. Этот метод принимает замыкание, которое должно возвращать `true` или `false`, чтобы указать, следует ли пропустить нормализацию ввода. Обычно метод `skipWhen` следует вызывать в методе `boot` в `AppServiceProvider` вашего приложения.
+
+```php
+use App\Http\Middleware\TrimStrings;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+
+/**
+ * Bootstrap any application services.
+ */
+public function boot(): void
+{
+    TrimStrings::skipWhen(function (Request $request) {
+        return $request->is('admin/*');
+    });
+
+    ConvertEmptyStringsToNull::skipWhen(function (Request $request) {
+        // ...
+    });
+}
+```
 
 <a name="files"></a>
 ## Файлы
@@ -455,7 +523,7 @@ Laravel также содержит глобального помощника `o
 Вы можете определить, представлен ли файл в запросе, используя метод `hasFile`:
 
     if ($request->hasFile('photo')) {
-        //
+        // ...
     }
 
 <a name="validating-successful-uploads"></a>
@@ -464,7 +532,7 @@ Laravel также содержит глобального помощника `o
 Помимо проверки наличия файла, вы можете убедиться, что не было ли каких-либо проблем с загрузкой файла с помощью метода `isValid`:
 
     if ($request->file('photo')->isValid()) {
-        //
+        // ...
     }
 
 <a name="file-paths-extensions"></a>
@@ -479,7 +547,7 @@ Laravel также содержит глобального помощника `o
 <a name="other-file-methods"></a>
 #### Другие методы для работы с загружаемыми файлами
 
-Для экземпляров `UploadedFile` доступно множество других методов. Дополнительные сведения об этих методах смотрите в [документации по API](https://api.symfony.com/master/Symfony/Component/HttpFoundation/File/UploadedFile.html) для этого класса.
+Для экземпляров `UploadedFile` доступно множество других методов. Дополнительные сведения об этих методах смотрите в [документации по API](https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/File/UploadedFile.php) для этого класса.
 
 <a name="storing-uploaded-files"></a>
 ### Сохранение загруженных файлов
@@ -500,7 +568,8 @@ Laravel также содержит глобального помощника `o
 
     $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 
-> {tip} Для получения дополнительной информации о хранилище файлов в Laravel, ознакомьтесь с полной [документацией по файловому хранилищу](/docs/{{version}}/filesystem).
+> **Note**  
+> Для получения дополнительной информации о хранилище файлов в Laravel, ознакомьтесь с полной [документацией по файловому хранилищу](/docs/{{version}}/filesystem).
 
 <a name="configuring-trusted-proxies"></a>
 ## Конфигурирование доверенных прокси
@@ -536,7 +605,8 @@ Laravel также содержит глобального помощника `o
         protected $headers = Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO;
     }
 
-> {tip} Если вы используете AWS Elastic Load Balancing, значение `$headers` должно быть `Request::HEADER_X_FORWARDED_AWS_ELB`. Для получения дополнительной информации о константах, которые могут использоваться в свойстве `$headers`, ознакомьтесь с документацией Symfony о [доверенных прокси-серверах](https://symfony.com/doc/current/deployment/proxies.html).
+> **Note**  
+> Если вы используете AWS Elastic Load Balancing, значение `$headers` должно быть `Request::HEADER_X_FORWARDED_AWS_ELB`. Для получения дополнительной информации о константах, которые могут использоваться в свойстве `$headers`, ознакомьтесь с документацией Symfony о [доверенных прокси-серверах](https://symfony.com/doc/current/deployment/proxies.html).
 
 <a name="trusting-all-proxies"></a>
 #### Доверие ко всем прокси
@@ -562,9 +632,9 @@ Laravel также содержит глобального помощника `o
     /**
      * Получить шаблоны доверенных хостов.
      *
-     * @return array
+     * @return array<int, string>
      */
-    public function hosts()
+    public function hosts(): array
     {
         return [
             'laravel.test',
