@@ -1,5 +1,5 @@
 ---
-git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
+git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
 ---
 
 # Уведомления
@@ -17,7 +17,9 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 В Laravel каждое уведомление представлено единым классом. Чтобы сгенерировать новое уведомление, используйте команду `make:notification` [Artisan](artisan). Эта команда поместит новый класс уведомления в каталог `app/Notifications` вашего приложения. Если этот каталог не существует в вашем приложении, то Laravel предварительно создаст его:
 
-    php artisan make:notification InvoicePaid
+```shell
+php artisan make:notification InvoicePaid
+```
 
 Каждый класс уведомления содержит метод `via` и переменное количество методов формирования сообщений, таких как `toMail` или `toDatabase`, которые преобразуют уведомление в сообщение, адаптированное для этого конкретного канала.
 
@@ -47,7 +49,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     $user->notify(new InvoicePaid($invoice));
 
-> {tip} Помните, что вы можете использовать трейт `Notifiable` в любой из ваших моделей. Вы не ограничены использованием его только в модели `User`.
+> **Note**  
+> Помните, что вы можете использовать трейт `Notifiable` в любой из ваших моделей. Вы не ограничены использованием его только в модели `User`.
 
 <a name="using-the-notification-facade"></a>
 ### Использование фасада `Notification`
@@ -65,27 +68,28 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 <a name="specifying-delivery-channels"></a>
 ### Определение каналов доставки
 
-Каждый класс уведомлений имеет метод `via`, который определяет, по каким каналам будет доставлено уведомление. Уведомления можно отправлять по каналам `mail`, `database`, `broadcast`, `nexmo` и `slack`.
+Каждый класс уведомлений имеет метод `via`, который определяет, по каким каналам будет доставлено уведомление. Уведомления можно отправлять по каналам `mail`, `database`, `broadcast`, `vonage` и `slack`.
 
-> {tip} Если вы хотите использовать другие каналы доставки, такие как Telegram или Pusher, то посетите веб-сайт сообщества [Laravel Notification Channels](http://laravel-notification-channels.com).
+> **Note**  
+> Если вы хотите использовать другие каналы доставки, такие как Telegram или Pusher, то посетите веб-сайт сообщества [Laravel Notification Channels](http://laravel-notification-channels.com).
 
 Метод `via` получает экземпляр `$notifiable`, представляющий экземпляр класса, которому отправляется уведомление. Вы можете использовать `$notifiable`, чтобы определить, по каким каналам должно доставляться уведомление:
 
     /**
      * Получить каналы доставки уведомлений.
      *
-     * @param  mixed  $notifiable
-     * @return array
+     * @return array<int, string>
      */
-    public function via($notifiable)
+    public function via(object $notifiable): array
     {
-        return $notifiable->prefers_sms ? ['nexmo'] : ['mail', 'database'];
+        return $notifiable->prefers_sms ? ['vonage'] : ['mail', 'database'];
     }
 
 <a name="queueing-notifications"></a>
 ### Очереди уведомлений
 
-> {note} Перед отправкой уведомлений в очередь вы должны настроить и запустить [обработчик очереди](/docs/{{version}}/queues).
+> **Warning**  
+> Перед отправкой уведомлений в очередь вы должны настроить и запустить [обработчик очереди](/docs/{{version}}/queues).
 
 Отправка уведомлений может занять время, особенно если каналу необходимо выполнить внешний вызов API для доставки уведомления. Чтобы ускорить время отклика вашего приложения, поместите ваше уведомление в очередь, добавив интерфейс `ShouldQueue` и трейт `Queueable` в ваш класс. Интерфейс и трейт уже импортированы для всех уведомлений, сгенерированных с помощью команды `make:notification`, поэтому вы можете сразу добавить их в свой класс уведомлений:
 
@@ -108,11 +112,19 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     $user->notify(new InvoicePaid($invoice));
 
+При постановке уведомлений в очередь для каждого получателя и комбинации каналов будет создана задача в очереди. Например, если ваше уведомление имеет три получателя и два канала, в очередь будет отправлено шесть задач.
+
+<a name="delaying-notifications"></a>
+#### Отложенные уведомления
+
 Если вы хотите отложить доставку уведомления, то вы можете вызвать метод `delay` экземпляра уведомления:
 
     $delay = now()->addMinutes(10);
 
     $user->notify((new InvoicePaid($invoice))->delay($delay));
+
+<a name="delaying-notifications-per-channel"></a>
+#### Отложенные уведомления для каналов
 
 Вы можете передать массив методу `delay`, чтобы указать величину задержки для определенных каналов:
 
@@ -121,19 +133,69 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
         'sms' => now()->addMinutes(10),
     ]));
 
-При постановке уведомлений в очередь для каждого получателя и комбинации каналов создается задание в очереди. Например, в очередь будет отправлено шесть заданий, если у вашего уведомления три получателя и два канала.
+Как альтернативу, вы можете определить метод `withDelay` непосредственно в классе уведомления. Метод `withDelay` должен возвращать массив с именами каналов и значениями задержек:
+
+```php
+/**
+ * Определение задержки доставки уведомления.
+ *
+ * @return array<string, \Illuminate\Support\Carbon>
+ */
+public function withDelay(object $notifiable): array
+{
+    return [
+        'mail' => now()->addMinutes(5),
+        'sms' => now()->addMinutes(10),
+        // Задержки для других каналов
+    ];
+}
+```
+
+Этот подход позволяет централизованно управлять задержками для разных каналов в одном месте, что упрощает поддержку и модификацию кода.
 
 <a name="customizing-the-notification-queue-connection"></a>
 #### Изменение соединения отложенных уведомлений
 
-По умолчанию отложенные уведомления будут помещены в очередь с использованием соединения очереди по умолчанию для вашего приложения. Если вы хотите указать другое соединение, которое должно использоваться для определенного уведомления, то вы можете определить свойство `$connection` в классе уведомления:
+По умолчанию, уведомления, помещенные в очередь, будут использовать стандартное соединение очереди вашего приложения. Если вы хотите указать другое соединение, которое должно использоваться для конкретного уведомления, вы можете вызвать метод `onConnection` в конструкторе вашего уведомления:
+
+```php
+<?php
+
+namespace App\Notifications;
+
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+
+class InvoicePaid extends Notification implements ShouldQueue
+{
+    use Queueable;
 
     /**
-     * Имя соединения очереди, которое будет использоваться отложенным уведомлением.
-     *
-     * @var string
+     * Создание нового экземпляра уведомления.
      */
-    public $connection = 'redis';
+    public function __construct()
+    {
+        $this->onConnection('redis');
+    }
+}
+```
+
+Или, если вы хотите указать конкретное соединение с очередью, которое должно использоваться для каждого канала уведомлений, поддерживаемого уведомлением, вы можете определить метод `viaConnections` в вашем уведомлении. Этот метод должен возвращать массив пар имя канала / имя соединения с очередью:
+
+    /**
+     * Определение, какое соединение должно использоваться для каждого канала уведомлений.
+     *
+     * @return array<string, string>
+     */
+    public function viaConnections(): array
+    {
+        return [
+            'mail' => 'redis',
+            'database' => 'sync',
+        ];
+    }
+
 
 <a name="customizing-notification-channel-queues"></a>
 #### Изменение очереди канала уведомлений
@@ -143,9 +205,9 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
     /**
      * Определить, какие очереди следует использовать для каждого канала уведомления.
      *
-     * @return array
+     * @return array<string, string>
      */
-    public function viaQueues()
+    public function viaQueues(): array
     {
         return [
             'mail' => 'mail-queue',
@@ -180,8 +242,6 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
         /**
          * Create a new notification instance.
-         *
-         * @return void
          */
         public function __construct()
         {
@@ -189,7 +249,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
         }
     }
 
-> {tip} Чтобы узнать больше о том, как обойти эти проблемы, просмотрите документацию, касающуюся [заданий в очереди и транзакций базы данных](/docs/{{version}}/queues#jobs-and-database-transactions).
+> **Note**  
+> Чтобы узнать больше о том, как обойти эти проблемы, просмотрите документацию, касающуюся [заданий в очереди и транзакций базы данных](/docs/{{version}}/queues#jobs-and-database-transactions).
 
 <a name="determining-if-the-queued-notification-should-be-sent"></a>
 #### Определение необходимости отправки уведомления в очереди
@@ -200,12 +261,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Определите, нужно ли отправлять уведомление.
-     *
-     * @param  mixed  $notifiable
-     * @param  string  $channel
-     * @return bool
      */
-    public function shouldSend($notifiable, $channel)
+    public function shouldSend(object $notifiable, string $channel): bool
     {
         return $this->invoice->isPaid();
     }
@@ -215,9 +272,13 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 По желанию можно отправить уведомление кому-то, кто не сохранен как «пользователь» вашего приложения. Используя метод `route` фасада `Notification`, вы можете указать информацию о маршрутизации специального уведомления перед отправкой уведомления:
 
+    use Illuminate\Broadcasting\Channel;
+    use Illuminate\Support\Facades\Notification;
+
     Notification::route('mail', 'taylor@example.com')
-                ->route('nexmo', '5555555555')
-                ->route('slack', 'https://hooks.slack.com/services/...')
+                ->route('vonage', '5555555555')
+                ->route('slack', '#slack-channel')
+                ->route('broadcast', [new Channel('channel-name')])
                 ->notify(new InvoicePaid($invoice));
 
 Если вы хотите указать имя получателя при отправке уведомления по запросу на маршрут `mail`, вы можете предоставить массив, содержащий адрес электронной почты в качестве ключа и имя в качестве значения первого элемента в массиве:
@@ -238,11 +299,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         $url = url('/invoice/'.$this->invoice->id);
 
@@ -253,13 +311,35 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
                     ->line('Thank you for using our application!');
     }
 
-> {tip} Обратите внимание, что мы используем `$this->invoice->id` в нашем методе `toMail`. Вы можете передать любые данные, которые необходимы вашему уведомлению для генерации сообщения, в конструктор уведомления.
+> **Note**  
+> Обратите внимание, что мы используем `$this->invoice->id` в нашем методе `toMail`. Вы можете передать любые данные, которые необходимы вашему уведомлению для генерации сообщения, в конструктор уведомления.
 
 В этом примере мы регистрируем приветствие, строку текста, призыв к действию, а затем еще одну строку текста. Эти методы, предоставляемые объектом `MailMessage`, упрощают и ускоряют формирование небольших транзакционных электронных писем. Затем канал `mail` преобразует компоненты сообщения в красивый, отзывчивый HTML-шаблон сообщения электронной почты с аналогом в виде обычного текста. Вот пример электронного письма, созданного каналом `mail`:
 
 <img src="https://laravel.com/img/docs/notification-example-2.png" width="100%" alt="Notification example">
 
-> {tip} При отправке почтовых уведомлений не забудьте установить параметр `name` в вашем конфигурационном файле `config/app.php`. Это значение будет использоваться в верхнем и нижнем колонтитулах ваших почтовых уведомлений.
+> **Note**  
+> При отправке почтовых уведомлений не забудьте установить параметр `name` в вашем конфигурационном файле `config/app.php`. Это значение будет использоваться в верхнем и нижнем колонтитулах ваших почтовых уведомлений.
+
+
+#### Сообщения об ошибках
+
+Некоторые уведомления информируют пользователей об ошибках, таких как неудачный платеж по счету. Вы можете указать, что почтовое сообщение относится к ошибке, вызвав метод `error` при составлении вашего сообщения. При использовании метода `error` в почтовом сообщении кнопка действия будет красной, а не черной:
+
+```php
+/**
+ * Получить почтовое представление уведомления.
+ */
+public function toMail(object $notifiable): MailMessage
+{
+    return (new MailMessage)
+                ->error()
+                ->subject('Invoice Payment Failed')
+                ->line('...');
+}
+```
+
+Этот подход помогает ясно передать пользователю, что сообщение содержит информацию об ошибке, повышая визуальную восприимчивость и понимание сообщения.
 
 <a name="other-mail-notification-formatting-options"></a>
 #### Другие параметры формирования почтовых уведомлений
@@ -268,14 +348,11 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)->view(
-            'emails.name', ['invoice' => $this->invoice]
+            'mail.invoice.paid', ['invoice' => $this->invoice]
         );
     }
 
@@ -283,35 +360,25 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)->view(
-            ['emails.name.html', 'emails.name.plain'],
+            ['mail.invoice.paid', 'mail.invoice.paid-text'],
             ['invoice' => $this->invoice]
         );
     }
 
-<a name="error-messages"></a>
-#### Сообщения об ошибках
-
-Некоторые уведомления информируют пользователей об ошибках, например о неудачной оплате счета. Вы можете указать, что почтовое сообщение касается ошибки, вызвав метод `error` при построении вашего сообщения. При использовании метода `error` в почтовом сообщении кнопка призыва к действию будет красной вместо черной:
+Или, если ваше сообщение содержит только простой текст, вы можете использовать метод `text`:
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Message
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-                    ->error()
-                    ->subject('Notification Subject')
-                    ->line('...');
+        return (new MailMessage)->text(
+            'mail.invoice.paid-text', ['invoice' => $this->invoice]
+        );
     }
 
 <a name="customizing-the-sender"></a>
@@ -321,11 +388,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->from('barrett@example.com', 'Barrett Blair')
@@ -343,6 +407,7 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
+    use Illuminate\Notifications\Notification;
 
     class User extends Authenticatable
     {
@@ -351,10 +416,9 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
         /**
          * Маршрутизация уведомлений для почтового канала.
          *
-         * @param  \Illuminate\Notifications\Notification  $notification
-         * @return array|string
+         * @return  array<string, string>|string
          */
-        public function routeNotificationForMail($notification)
+        public function routeNotificationForMail(Notification $notification): array|string
         {
             // Вернуть только адрес электронной почты ...
             return $this->email_address;
@@ -371,11 +435,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->subject('Notification Subject')
@@ -389,11 +450,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->mailer('postmark')
@@ -405,7 +463,9 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 Вы можете изменить шаблон из HTML и обычного текста, используемый для почтовых уведомлений, опубликовав необходимые ресурсы уведомления. После выполнения этой команды шаблоны почтовых уведомлений будут расположены в каталоге `resources/views/vendor/notifications`:
 
-    php artisan vendor:publish --tag=laravel-notifications
+```shell
+php artisan vendor:publish --tag=laravel-notifications
+```
 
 <a name="mail-attachments"></a>
 ### Почтовые вложения
@@ -414,26 +474,23 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->greeting('Hello!')
                     ->attach('/path/to/file');
     }
 
+> **Note**  
+> Метод `attach`, предоставляемый почтовыми сообщениями уведомлений, также принимает [объекты, прикрепляемые к сообщению](/docs/{{version}}/mail#attachable-objects). Пожалуйста, ознакомьтесь с подробной [документацией об объектах, прикрепляемых к сообщениям](/docs/{{version}}/mail#attachable-objects), чтобы узнать больше.
+
 При прикреплении файлов к сообщению вы также можете указать отображаемое имя и / или MIME-тип, передав массив в качестве второго аргумента методу `attach`:
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->greeting('Hello!')
@@ -449,16 +506,33 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return Mailable
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): Mailable
     {
         return (new InvoicePaidMailable($this->invoice))
                     ->to($notifiable->email)
                     ->attachFromStorage('/path/to/file');
     }
+
+При необходимости к сообщению можно прикрепить несколько файлов, используя метод `attachMany`:
+
+    /**
+     * Получить содержимое почтового уведомления.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->greeting('Hello!')
+                    ->attachMany([
+                        '/path/to/forge.svg',
+                        '/path/to/vapor.svg' => [
+                            'as' => 'Logo.svg',
+                            'mime' => 'image/svg+xml',
+                        ],
+                    ]);
+    }
+
+
 
 <a name="raw-data-attachments"></a>
 #### Почтовые вложения необработанных данных
@@ -467,11 +541,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): Mailable
     {
         return (new MailMessage)
                     ->greeting('Hello!')
@@ -480,20 +551,59 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
                     ]);
     }
 
+<a name="adding-tags-metadata"></a>
+### Добавление тегов и метаданных
+
+Некоторые сторонние почтовые провайдеры, такие как Mailgun и Postmark, поддерживают "теги" и "метаданные" сообщений, которые могут использоваться для группировки и отслеживания электронных писем, отправленных вашим приложением. Вы можете добавить теги и метаданные к электронному сообщению с помощью методов `tag` и `metadata`:
+
+    /**
+     * Получить содержимое почтового уведомления.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->greeting('Comment Upvoted!')
+                    ->tag('upvote')
+                    ->metadata('comment_id', $this->comment->id);
+    }
+
+Если ваше приложение использует драйвер Mailgun, вы можете обратиться к документации Mailgun для получения дополнительной информации о [тегах](https://documentation.mailgun.com/en/latest/user_manual.html#tagging-1) и [метаданных](https://documentation.mailgun.com/en/latest/user_manual.html#attaching-data-to-messages). Аналогично, документацию Postmark можно также проконсультировать для получения информации о их поддержке [тегов](https://postmarkapp.com/blog/tags-support-for-smtp) и [метаданных](https://postmarkapp.com/support/article/1125-custom-metadata-faq).
+
+Если ваше приложение использует Amazon SES для отправки электронных писем, вы должны использовать метод `metadata` для прикрепления [тегов SES](https://docs.aws.amazon.com/ses/latest/APIReference/API_MessageTag.html) к сообщению.
+
+<a name="customizing-the-symfony-message"></a>
+### Настройка сообщения Symfony
+
+Метод `withSymfonyMessage` класса `MailMessage` позволяет зарегистрировать функцию обратного вызова, которая будет вызвана с экземпляром сообщения Symfony перед отправкой сообщения. Это дает вам возможность глубоко настроить сообщение перед его доставкой:
+
+    use Symfony\Component\Mime\Email;
+    
+    /**
+     * Получить содержимое почтового уведомления.
+     */
+    public function toMail(object $notifiable): MailMessage
+    {
+        return (new MailMessage)
+                    ->withSymfonyMessage(function (Email $message) {
+                        $message->getHeaders()->addTextHeader(
+                            'Custom-Header', 'Header Value'
+                        );
+                    });
+    }
+
+
 <a name="using-mailables"></a>
 ### Использование почтовых отправлений
 
 При необходимости вы можете вернуть полный [объект почтового отправления](/docs/{{version}}/mail) из метода `toMail` вашего уведомления. При возврате `Mailable` вместо `MailMessage` вам нужно будет указать получателя сообщения с помощью метода `to` объекта почтового отправления:
 
     use App\Mail\InvoicePaid as InvoicePaidMailable;
+    use Illuminate\Mail\Mailable;
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return Mailable
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): Mailable
     {
         return (new InvoicePaidMailable($this->invoice))
                     ->to($notifiable->email);
@@ -506,14 +616,12 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     use App\Mail\InvoicePaid as InvoicePaidMailable;
     use Illuminate\Notifications\AnonymousNotifiable;
+    use Illuminate\Mail\Mailable;
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return Mailable
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): Mailable
     {
         $address = $notifiable instanceof AnonymousNotifiable
                 ? $notifiable->routeNotificationFor('mail')
@@ -548,17 +656,16 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 Чтобы сгенерировать уведомление с соответствующим шаблоном Markdown, вы можете использовать параметр `--markdown` команды `make:notification` Artisan:
 
-    php artisan make:notification InvoicePaid --markdown=mail.invoice.paid
+```shell
+php artisan make:notification InvoicePaid --markdown=mail.invoice.paid
+```
 
 Как и все другие почтовые уведомления, уведомления, использующие шаблоны Markdown, должны определять метод `toMail` в своем классе уведомлений. Однако вместо использования методов `line` и `action` для создания уведомления используйте метод `markdown`, чтобы указать имя шаблона Markdown, который следует использовать. Массив данных, который вы хотите сделать доступным для шаблона, может быть передан в качестве второго аргумента метода:
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         $url = url('/invoice/'.$this->invoice->id);
 
@@ -572,55 +679,65 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 Почтовые уведомления Markdown используют комбинацию компонентов Blade и синтаксиса Markdown, которые позволяют легко создавать почтовые уведомления, используя предварительно созданные компоненты уведомлений Laravel:
 
-    @component('mail::message')
-    # Invoice Paid
+```blade
+<x-mail::message>
+# Invoice Paid
 
-    Your invoice has been paid!
+Your invoice has been paid!
 
-    @component('mail::button', ['url' => $url])
-    View Invoice
-    @endcomponent
+<x-mail::button :url="$url">
+View Invoice
+</x-mail::button>
 
-    Thanks,<br>
-    {{ config('app.name') }}
-    @endcomponent
+Thanks,<br>
+{{ config('app.name') }}
+</x-mail::message>
+```
 
 <a name="button-component"></a>
 #### Компонент Button
 
 Компонент кнопки отображает ссылку на кнопку по центру. Компонент принимает два аргумента: `url` и необязательный `color`. Поддерживаемые цвета: `primary`, `green`, и `red`. Вы можете добавить к уведомлению столько компонентов кнопки, сколько захотите:
 
-    @component('mail::button', ['url' => $url, 'color' => 'green'])
-    View Invoice
-    @endcomponent
+```blade
+<x-mail::button :url="$url" color="green">
+View Invoice
+</x-mail::button>
+```
 
 <a name="panel-component"></a>
 #### Компонент Panel
 
 Компонент панели отображает указанный блок текста на панели, цвет фона которой немного отличается от цвета остальной части сообщения. Это позволяет привлечь внимание к указанному блоку текста:
 
-    @component('mail::panel')
-    This is the panel content.
-    @endcomponent
+```blade
+<x-mail::panel>
+This is the panel content.
+</x-mail::panel>
+```
 
 <a name="table-component"></a>
 #### Компонент Table
 
 Компонент таблицы позволяет преобразовать таблицу Markdown в таблицу HTML. Компонент принимает в качестве содержимого таблицу Markdown. Выравнивание столбцов таблицы поддерживается с использованием синтаксиса выравнивания таблицы Markdown по умолчанию:
 
-    @component('mail::table')
-    | Laravel       | Table         | Example  |
-    | ------------- |:-------------:| --------:|
-    | Col 2 is      | Centered      | $10      |
-    | Col 3 is      | Right-Aligned | $20      |
-    @endcomponent
+```blade
+<x-mail::table>
+| Laravel       | Table         | Example  |
+| ------------- |:-------------:| --------:|
+| Col 2 is      | Centered      | $10      |
+| Col 3 is      | Right-Aligned | $20      |
+</x-mail::table>
+```
 
 <a name="customizing-the-components"></a>
 ### Изменение компонентов
 
 Вы можете экспортировать все почтовые компоненты Markdown в собственное приложение для настройки. Чтобы экспортировать компоненты, используйте команду `vendor:publish` Artisan с параметром `--tag=laravel-mail`:
 
-    php artisan vendor:publish --tag=laravel-mail
+```shell
+php artisan vendor:publish --tag=laravel-mail
+```
 
 Эта команда опубликует почтовые компоненты Markdown в каталоге `resources/views/vendor/mail`. Каталог `mail` будет содержать каталог `html` и `text`, каждый из которых содержит соответствующие представления каждого доступного компонента. Вы можете настроить эти компоненты по своему усмотрению.
 
@@ -635,11 +752,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое почтового уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
                     ->theme('invoice')
@@ -657,9 +771,14 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 Вы можете запросить таблицу, чтобы отобразить уведомления в пользовательском интерфейсе вашего приложения. Но прежде чем вы сможете это сделать, вам нужно будет создать таблицу базы данных для хранения ваших уведомлений. Вы можете использовать команду `notifications:table` для создания [миграции](/docs/{{version}}/migrations) с необходимой схемой таблицы:
 
-    php artisan notifications:table
+```shell
+php artisan notifications:table
 
-    php artisan migrate
+php artisan migrate
+```
+
+> **Note**  
+> Если ваши модели с уведомлениями используют [UUID или ULID в качестве первичных ключей](/docs/{{version}}/eloquent#uuid-and-ulid-keys), вы должны заменить метод `morphs` на [`uuidMorphs`](/docs/{{version}}/migrations#column-method-uuidMorphs) или [`ulidMorphs`](/docs/{{version}}/migrations#column-method-ulidMorphs) в миграции таблицы уведомлений.
 
 <a name="formatting-database-notifications"></a>
 ### Формирование уведомлений канала `database`
@@ -669,16 +788,31 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
     /**
      * Получить массив данных уведомления.
      *
-     * @param  mixed  $notifiable
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($notifiable)
+    public function toArray(object $notifiable): array
     {
         return [
             'invoice_id' => $this->invoice->id,
             'amount' => $this->invoice->amount,
         ];
     }
+
+Когда уведомление сохраняется в базе данных вашего приложения, столбец `type` заполняется именем класса уведомления. Однако вы можете настроить это поведение, определив метод `databaseType` в вашем классе уведомления:
+
+```php
+/**
+ * Получить тип уведомления для базы данных.
+ *
+ * @return string
+ */
+public function databaseType(object $notifiable): string
+{
+    return 'invoice-paid';
+}
+```
+
+Этот метод позволяет вам устанавливать пользовательский тип уведомления, который будет сохранен в столбце `type` в таблице уведомлений базы данных. Это может быть полезно для более удобного отслеживания и фильтрации уведомлений по типу.
 
 <a name="todatabase-vs-toarray"></a>
 #### Методы `toDatabase` и `toArray`
@@ -704,7 +838,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
         echo $notification->type;
     }
 
-> {tip} Чтобы получить доступ к уведомлениям в JavaScript-приложении на клиентской стороне, вы должны определить контроллер уведомлений для своего приложения, который возвращает уведомления для уведомляемого объекта, такого как текущий пользователь. Затем вы можете сделать HTTP-запрос к URL-адресу этого контроллера из своего JavaScript-приложения на клиентской стороне.
+> **Note**  
+> Чтобы получить доступ к уведомлениям в JavaScript-приложении на клиентской стороне, вы должны определить контроллер уведомлений для своего приложения, который возвращает уведомления для уведомляемого объекта, такого как текущий пользователь. Затем вы можете сделать HTTP-запрос к URL-адресу этого контроллера из своего JavaScript-приложения на клиентской стороне.
 
 <a name="marking-notifications-as-read"></a>
 ### Отметка прочитанных уведомлений
@@ -748,11 +883,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
     /**
      * Получить содержимое транслируемого уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return BroadcastMessage
      */
-    public function toBroadcast($notifiable)
+    public function toBroadcast(object $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
             'invoice_id' => $this->invoice->id,
@@ -774,14 +906,10 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
 В дополнение к указанным вами данным все транслируемые уведомления также имеют поле `type`, содержащее полное имя класса уведомления. Если вы хотите изменить `type` уведомления, то вы можете определить метод `broadcastType` в классе уведомления:
 
-    use Illuminate\Notifications\Messages\BroadcastMessage;
-
     /**
      * Получить тип транслируемого уведомления.
-     *
-     * @return string
      */
-    public function broadcastType()
+    public function broadcastType(): string
     {
         return 'broadcast.message';
     }
@@ -815,10 +943,8 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 
         /**
          * Каналы, по которым пользователь получает рассылку уведомлений.
-         *
-         * @return string
          */
-        public function receivesBroadcastNotificationsOn()
+        public function receivesBroadcastNotificationsOn(): string
         {
             return 'users.'.$this->id;
         }
@@ -830,82 +956,54 @@ git: f8eec0aa795d4fc21706d92e03dbaf0d6a3f4f30
 <a name="sms-prerequisites"></a>
 ### Предварительная подготовка канала SMS
 
-Отправка SMS-уведомлений в Laravel обеспечивается [Vonage](https://www.vonage.com/) (бывший Nexmo). Прежде чем вы сможете отправлять уведомления через Vonage, вам необходимо установить пакеты Composer:
+Отправка SMS-уведомлений в Laravel обеспечивается [Vonage](https://www.vonage.com/) (бывший Nexmo).
+Прежде чем вы сможете отправлять уведомления через Vonage, вам необходимо установить пакеты `laravel/vonage-notification-channel` и `guzzlehttp/guzzle`:
 
-    composer require laravel/nexmo-notification-channel nexmo/laravel
+    composer require laravel/vonage-notification-channel guzzlehttp/guzzle
 
-Пакет `nexmo/laravel` содержит [собственный конфигурационный файл](https://github.com/Nexmo/nexmo-laravel/blob/master/config/nexmo.php). Однако вам необязательно экспортировать этот файл конфигурации в собственное приложение. Вы можете просто использовать переменные окружения `NEXMO_KEY` и `NEXMO_SECRET` для установки публичного и секретного ключей Vonage.
+Пакет включает в себя [файл конфигурации](https://github.com/laravel/vonage-notification-channel/blob/3.x/config/vonage.php). Однако вам не обязательно экспортировать этот файл конфигурации в ваше собственное приложение. Вы можете просто использовать переменные окружения `VONAGE_KEY` и `VONAGE_SECRET` для определения ваших публичного и секретного ключей Vonage.
 
-Затем вам нужно будет добавить запись `nexmo` в ваш конфигурационный файл `config/services.php`. Для начала вам достаточно скопировать приведенный ниже пример конфигурации:
+После определения ваших ключей, вы должны установить переменную окружения `VONAGE_SMS_FROM`, которая определяет номер телефона, с которого по умолчанию будут отправляться ваши SMS-сообщения. Вы можете сгенерировать этот номер телефона в панели управления Vonage:
 
-    'nexmo' => [
-        'sms_from' => '15556666666',
-    ],
-
-Параметр `sms_from` – это номер телефона, с которого будут отправляться ваши SMS-сообщения. Вы должны сгенерировать номер телефона для своего приложения в панели управления Vonage.
+```
+VONAGE_SMS_FROM=15556666666
+```
 
 <a name="formatting-sms-notifications"></a>
 ### Формирование уведомлений через SMS
 
-Если уведомление поддерживает отправку в виде SMS, то вы должны определить метод `toNexmo` в классе уведомлений. Этот метод получит объект `$notifiable` и должен вернуть экземпляр `Illuminate\Notifications\Messages\NexmoMessage`:
+Если уведомление поддерживает отправку в виде SMS, то вы должны определить метод `toVonage` в классе уведомлений. Этот метод получит объект `$notifiable` и должен вернуть экземпляр `Illuminate\Notifications\Messages\NexmoMessage`:
 
     /**
      * Получить SMS-представление уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\NexmoMessage
      */
-    public function toNexmo($notifiable)
+    public function toVonage(object $notifiable): VonageMessage
     {
-        return (new NexmoMessage)
+        return (new VonageMessage)
                     ->content('Your SMS message content');
     }
 
 <a name="unicode-content"></a>
 #### Содержимое Unicode
 
-Если ваше SMS-сообщение будет содержать символы Unicode, то вы должны вызвать метод `unicode` при создании экземпляра `NexmoMessage`:
+Если ваше SMS-сообщение будет содержать символы Unicode, то вы должны вызвать метод `unicode` при создании экземпляра `VonageMessage`:
+
+    use Illuminate\Notifications\Messages\VonageMessage;
 
     /**
      * Получить SMS-представление уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\NexmoMessage
      */
-    public function toNexmo($notifiable)
+    public function toVonage(object $notifiable): VonageMessage
     {
-        return (new NexmoMessage)
+        return (new VonageMessage)
                     ->content('Your unicode message')
                     ->unicode();
     }
 
-<a name="formatting-shortcode-notifications"></a>
-### Использование шорткодов при формировании SMS-уведомлений
-
-Laravel также поддерживает отправку уведомлений с шорткодами, которые представляют собой предварительно определенные шаблоны сообщений в вашей учетной записи Vonage. Чтобы отправить такое SMS-уведомление, вы должны определить метод `toShortcode` в своем классе уведомления. Из этого метода вы можете вернуть массив, определяющий тип уведомления (`alert`, `2fa` или `marketing`) и значения, которые будут заполнять шаблон:
-
-    /**
-     * Получить SMS-представление уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function toShortcode($notifiable)
-    {
-        return [
-            'type' => 'alert',
-            'custom' => [
-                'code' => 'ABC123',
-            ],
-        ];
-    }
-
-> {tip} Как и в случае с [маршрутизацией SMS-уведомлений](#routing-sms-notifications), вам также следует реализовать метод `routeNotificationForShortcode` вашей уведомляемой модели.
-
 <a name="customizing-the-from-number"></a>
 ### Изменение номера отправителя
 
-Если вы хотите отправить уведомление с номера телефона, который отличается от номера телефона, указанного в вашем файле `config/services.php`, то вы можете вызвать метод `from` экземпляра `NexmoMessage`:
+Если вы хотите отправить уведомление с номера телефона, который отличается от номера телефона, указанного в вашем файле `config/services.php`, то вы можете вызвать метод `from` экземпляра `VonageMessage`:
 
     /**
      * Получить Vonage / SMS-представление уведомления.
@@ -913,9 +1011,9 @@ Laravel также поддерживает отправку уведомлен�
      * @param  mixed  $notifiable
      * @return NexmoMessage
      */
-    public function toNexmo($notifiable)
+    public function toVonage(object $notifiable): VonageMessage
     {
-        return (new NexmoMessage)
+        return (new VonageMessage)
                     ->content('Your SMS message content')
                     ->from('15554443333');
     }
@@ -928,13 +1026,10 @@ Laravel также поддерживает отправку уведомлен�
 
     /**
      * Получить Vonage / SMS-представление уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return NexmoMessage
      */
-    public function toNexmo($notifiable)
+    public function toVonage(object $notifiable): VonageMessage
     {
-        return (new NexmoMessage)
+        return (new VonageMessage)
                     ->clientReference((string) $notifiable->id)
                     ->content('Your SMS message content');
     }
@@ -942,7 +1037,7 @@ Laravel также поддерживает отправку уведомлен�
 <a name="routing-sms-notifications"></a>
 ### Маршрутизация SMS-уведомлений
 
-Для отправки уведомления с использованием Vonage на необходимый номер телефона, определите метод `routeNotificationForNexmo` вашего уведомляемого объекта:
+Для отправки уведомления с использованием Vonage на необходимый номер телефона, определите метод `routeNotificationForVonage` вашего уведомляемого объекта:
 
     <?php
 
@@ -950,18 +1045,16 @@ Laravel также поддерживает отправку уведомлен�
 
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Notifications\Notifiable;
+    use Illuminate\Notifications\Notification;
 
     class User extends Authenticatable
     {
         use Notifiable;
 
         /**
-         * Маршрутизация уведомлений для канала Nexmo.
-         *
-         * @param  \Illuminate\Notifications\Notification  $notification
-         * @return string
+         * Маршрутизация уведомлений для канала Vonage.
          */
-        public function routeNotificationForNexmo($notification)
+        public function routeNotificationForVonage(Notification $notification): string
         {
             return $this->phone_number;
         }
@@ -975,129 +1068,223 @@ Laravel также поддерживает отправку уведомлен�
 
 Прежде чем вы сможете отправлять уведомления через Slack, вы должны установить канал уведомлений Slack через Composer:
 
-    composer require laravel/slack-notification-channel
+```shell
+composer require laravel/slack-notification-channel
+```
 
-Вам также потребуется создать [Slack App](https://api.slack.com/apps?new_app=1) для своей команды Slack. После создания приложения вы должны настроить «Incoming Webhook» для рабочей области. Затем Slack предоставит вам URL-адрес веб-перехватчика, который вы можете использовать при [маршрутизации Slack-уведомлений](#routing-slack-notifications).
+Дополнительно, вы должны создать [Slack приложение](https://api.slack.com/apps?new_app=1) для вашего рабочего пространства Slack.
+
+Если вам нужно отправлять уведомления только в то же рабочее пространство Slack, в котором создано приложение, убедитесь, что ваше приложение имеет разрешения `chat:write`, `chat:write.public` и `chat:write.customize`. Эти разрешения можно добавить на вкладке "OAuth & Permissions" в управлении приложениями Slack.
+
+Далее, скопируйте "Bot User OAuth Token" вашего приложения и поместите его в массив конфигурации `slack` в файле конфигурации `services.php` вашего приложения. Этот токен можно найти на вкладке "OAuth & Permissions" в Slack:
+
+```php
+'slack' => [
+    'notifications' => [
+        'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),
+        'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
+    ],
+],
+```
+
+<a name="slack-app-distribution"></a>
+#### Распространение приложения Slack
+
+Если ваше приложение будет отправлять уведомления во внешние рабочие пространства Slack, которые принадлежат пользователям вашего приложения, вам нужно будет "распространить" ваше приложение через Slack. Управление распространением приложения можно осуществить на вкладке "Manage Distribution" вашего приложения в Slack. После того, как ваше приложение будет распространено, вы можете использовать [Socialite](/docs/{{version}}/socialite), чтобы [получать токены Slack Bot](/docs/{{version}}/socialite#slack-bot-scopes) от имени пользователей вашего приложения.
 
 <a name="formatting-slack-notifications"></a>
 ### Формирование уведомления через Slack
 
-Если уведомление поддерживает отправку в виде Slack-сообщения, то вы должны определить метод `toSlack` класса уведомления. Этот метод получит объект `$notifiable` и должен вернуть экземпляр `Illuminate\Notifications\Messages\SlackMessage`. Сообщения Slack могут содержать текстовое содержимое, а также «вложение», которое формирует дополнительный текст или массив полей. Давайте посмотрим на пример `toSlack`:
+Если уведомление поддерживает отправку в виде сообщения Slack, вы должны определить метод `toSlack` в классе уведомления. Этот метод получает сущность `$notifiable` и должен возвращать экземпляр `Illuminate\Notifications\Slack\SlackMessage`. Вы можете создавать богатые уведомления, используя [API Block Kit Slack](https://api.slack.com/block-kit). Следующий пример может быть предпросмотрен в [Block Kit Builder Slack](https://app.slack.com/block-kit-builder/T01KWS6K23Z#%7B%22blocks%22:%5B%7B%22type%22:%22header%22,%22text%22:%7B%22type%22:%22plain_text%22,%22text%22:%22Invoice%20Paid%22%7D%7D,%7B%22type%22:%22context%22,%22elements%22:%5B%7B%22type%22:%22plain_text%22,%22text%22:%22Customer%20%231234%22%7D%5D%7D,%7B%22type%22:%22section%22,%22text%22:%7B%22type%22:%22plain_text%22,%22text%22:%22An%20invoice%20has%20been%20paid.%22%7D,%22fields%22:%5B%7B%22type%22:%22mrkdwn%22,%22text%22:%22*Invoice%20No:*%5Cn1000%22%7D,%7B%22type%22:%22mrkdwn%22,%22text%22:%22*Invoice%20Recipient:*%5Cntaylor@laravel.com%22%7D%5D%7D,%7B%22type%22:%22divider%22%7D,%7B%22type%22:%22section%22,%22text%22:%7B%22type%22:%22plain_text%22,%22text%22:%22Congratulations!%22%7D%7D%5D%7D):
+
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
+    use Illuminate\Notifications\Slack\SlackMessage;
 
     /**
      * Получить представление Slack-уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\SlackMessage
      */
-    public function toSlack($notifiable)
+    public function toSlack(object $notifiable): SlackMessage
     {
         return (new SlackMessage)
-                    ->content('One of your invoices has been paid!');
+                ->text('One of your invoices has been paid!')
+                ->headerBlock('Invoice Paid')
+                ->contextBlock(function (ContextBlock $block) {
+                    $block->text('Customer #1234');
+                })
+                ->sectionBlock(function (SectionBlock $block) {
+                    $block->text('An invoice has been paid.');
+                    $block->field("*Invoice No:*\n1000")->markdown();
+                    $block->field("*Invoice Recipient:*\ntaylor@laravel.com")->markdown();
+                })
+                ->dividerBlock()
+                ->sectionBlock(function (SectionBlock $block) {
+                    $block->text('Congratulations!');
+                });
     }
 
-<a name="slack-attachments"></a>
-### Вложения Slack-уведомлений
+<a name="slack-interactivity"></a>
+### Взаимодействие в Slack
 
-Вы также можете добавлять «вложения» к сообщениям Slack. Вложения предоставляют более широкие возможности форматирования, чем простые текстовые сообщения. В этом примере мы отправим уведомление об ошибке об исключении, которое произошло в приложении, включая ссылку для просмотра дополнительных сведений об исключении:
+Система уведомлений Block Kit Slack предлагает мощные функции для [обработки взаимодействия пользователя](https://api.slack.com/interactivity/handling). Чтобы использовать эти функции, ваше приложение Slack должно иметь включенную функцию "Interactivity" и настроенный "Request URL", который указывает на URL, обслуживаемый вашим приложением. Эти настройки можно управлять на вкладке "Interactivity & Shortcuts" в управлении приложениями Slack.
+
+В следующем примере, который использует метод `actionsBlock`, Slack отправит `POST` запрос на ваш "Request URL" с полезной нагрузкой, содержащей пользователя Slack, который нажал на кнопку, идентификатор нажатой кнопки и дополнительную информацию. Ваше приложение может затем определить, какое действие следует предпринять на основе полученной полезной нагрузки. Также вы должны [проверить подлинность запроса](https://api.slack.com/authentication/verifying-requests-from-slack), чтобы убедиться, что он был сделан Slack:
+
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\ActionsBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
+    use Illuminate\Notifications\Slack\SlackMessage;
 
     /**
      * Получить представление Slack-уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\SlackMessage
      */
-    public function toSlack($notifiable)
+    public function toSlack(object $notifiable): SlackMessage
     {
-        $url = url('/exceptions/'.$this->exception->id);
-
         return (new SlackMessage)
-                    ->error()
-                    ->content('Whoops! Something went wrong.')
-                    ->attachment(function ($attachment) use ($url) {
-                        $attachment->title('Exception: File Not Found', $url)
-                                   ->content('File [background.jpg] was not found.');
-                    });
+                ->text('One of your invoices has been paid!')
+                ->headerBlock('Invoice Paid')
+                ->contextBlock(function (ContextBlock $block) {
+                    $block->text('Customer #1234');
+                })
+                ->sectionBlock(function (SectionBlock $block) {
+                    $block->text('An invoice has been paid.');
+                })
+                ->actionsBlock(function (ActionsBlock $block) {
+                     // ID defaults to "button_acknowledge_invoice"...
+                    $block->button('Acknowledge Invoice')->primary();
+
+                    // Manually configure the ID...
+                    $block->button('Deny')->danger()->id('deny_invoice');
+                });
     }
 
-Вложения также позволяют указать массив данных, которые должны быть представлены пользователю. Указанные данные будут представлены в формате таблицы для удобства при чтении:
+<a name="slack-confirmation-modals"></a>
+#### Модальные окна подтверждения
+
+Если вы хотите, чтобы пользователи подтверждали действие перед его выполнением, вы можете использовать метод `confirm` при определении вашей кнопки. Метод `confirm` принимает сообщение и замыкание, которое получает экземпляр `ConfirmObject`:
+
+
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\ActionsBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\ContextBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Blocks\SectionBlock;
+    use Illuminate\Notifications\Slack\BlockKit\Composites\ConfirmObject;
+    use Illuminate\Notifications\Slack\SlackMessage;
 
     /**
      * Получить представление Slack-уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return SlackMessage
      */
-    public function toSlack($notifiable)
+    public function toSlack(object $notifiable): SlackMessage
     {
-        $url = url('/invoices/'.$this->invoice->id);
-
         return (new SlackMessage)
-                    ->success()
-                    ->content('One of your invoices has been paid!')
-                    ->attachment(function ($attachment) use ($url) {
-                        $attachment->title('Invoice 1322', $url)
-                                   ->fields([
-                                        'Title' => 'Server Expenses',
-                                        'Amount' => '$1,234',
-                                        'Via' => 'American Express',
-                                        'Was Overdue' => ':-1:',
-                                    ]);
-                    });
+                ->text('One of your invoices has been paid!')
+                ->headerBlock('Invoice Paid')
+                ->contextBlock(function (ContextBlock $block) {
+                    $block->text('Customer #1234');
+                })
+                ->sectionBlock(function (SectionBlock $block) {
+                    $block->text('An invoice has been paid.');
+                })
+                ->actionsBlock(function (ActionsBlock $block) {
+                    $block->button('Acknowledge Invoice')
+                        ->primary()
+                        ->confirm(
+                            'Acknowledge the payment and send a thank you email?',
+                            function (ConfirmObject $dialog) {
+                                $dialog->confirm('Yes');
+                                $dialog->deny('No');
+                            }
+                        );
+                });
     }
 
-<a name="markdown-attachment-content"></a>
-#### Содержимое вложений с разметкой Markdown
 
-Если некоторые из ваших полей вложения содержат разметку Markdown, то вы можете использовать метод `markdown`, чтобы указать Slack на синтаксический анализ и отображение указанных полей вложения как текста в формате Markdown. Значения, принимаемые этим методом: `pretext`, `text` и / или `fields`. Дополнительные сведения о форматировании вложений Slack см. в [документации API Slack](https://api.slack.com/docs/message-formatting#message_formatting):
+<a name="inspecting-slack-blocks"></a>
+#### Просмотр cтруктуры блоков Slack
 
-    /**
-     * Получить представление Slack-уведомления.
-     *
-     * @param  mixed  $notifiable
-     * @return SlackMessage
-     */
-    public function toSlack($notifiable)
-    {
-        $url = url('/exceptions/'.$this->exception->id);
+Если вы хотите быстро проверить структуру блоков, которые вы создали, вы можете использовать метод `dd` в экземпляре `SlackMessage`. Метод `dd` сгенерирует и выведет URL-адрес для [Block Kit Builder Slack](https://app.slack.com/block-kit-builder/), который отображает предварительный просмотр полезной нагрузки и уведомления в вашем браузере. Вы можете передать `true` методу `dd`, чтобы вывести сырую полезную нагрузку:
 
-        return (new SlackMessage)
-                    ->error()
-                    ->content('Whoops! Something went wrong.')
-                    ->attachment(function ($attachment) use ($url) {
-                        $attachment->title('Exception: File Not Found', $url)
-                                   ->content('File [background.jpg] was *not found*.')
-                                   ->markdown(['text']);
-                    });
-    }
+```php
+return (new SlackMessage)
+        ->text('Один из ваших счетов оплачен!')
+        ->headerBlock('Счет Оплачен')
+        ->dd(); // Это вызовет просмотр блоков в Block Kit Builder
+```
+
+Этот метод особенно полезен во время разработки, так как позволяет быстро и удобно проверить внешний вид и структуру ваших уведомлений в Slack, не отправляя их на самом деле.
 
 <a name="routing-slack-notifications"></a>
-### Маршрутизация Slack-уведомлений
+### Маршрутизация уведомлений в Slack
 
-Для отправки уведомления с использованием Slack в соответствующую команду и канал, определите метод `routeNotificationForSlack` вашего уведомляемого объекта. Этот метод должен вернуть URL-адрес веб-хука, на который должно быть доставлено уведомление. URL-адреса веб-хуков могут быть сгенерированы путем добавления сервиса «Incoming Webhook» в вашу команду Slack:
+Чтобы направлять уведомления Slack в соответствующую команду Slack и канал, определите метод `routeNotificationForSlack` в вашей модели, уведомляемой событиями. Этот метод может возвращать одно из трех значений:
 
-    <?php
+- `null` - что означает использование маршрутизации к каналу, настроенному в самом уведомлении. Вы можете использовать метод `to` при создании вашего `SlackMessage` для настройки канала в уведомлении.
+- Строку, указывающую Slack канал, куда следует отправить уведомление, например, `#support-channel`.
+- Экземпляр `SlackRoute`, который позволяет вам указать OAuth токен и имя канала, например, `SlackRoute::make($this->slack_channel, $this->slack_token)`. Этот метод следует использовать для отправки уведомлений во внешние рабочие пространства.
 
-    namespace App\Models;
+Например, возвращение `#support-channel` из метода `routeNotificationForSlack` отправит уведомление в канал `#support-channel` рабочего пространства, связанного с OAuth токеном Bot User, расположенным в файле конфигурации `services.php` вашего приложения:
 
-    use Illuminate\Foundation\Auth\User as Authenticatable;
-    use Illuminate\Notifications\Notifiable;
+```php
+<?php
 
-    class User extends Authenticatable
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * Маршрутизация уведомлений для канала Slack.
+     */
+    public function routeNotificationForSlack(Notification $notification): string
     {
-        use Notifiable;
-
-        /**
-         * Маршрутизация уведомлений для канала Slack.
-         *
-         * @param  \Illuminate\Notifications\Notification  $notification
-         * @return string
-         */
-        public function routeNotificationForSlack($notification)
-        {
-            return 'https://hooks.slack.com/services/...';
-        }
+        return '#support-channel';
     }
+}
+```
+
+
+
+<a name="notifying-external-slack-workspaces"></a>
+### Уведомление во внешние рабочие пространства Slack
+
+> **Примечание**
+> Прежде чем отправлять уведомления во внешние рабочие пространства Slack, ваше приложение Slack должно быть [распространено](#slack-app-distribution).
+
+Конечно, часто вам захочется отправлять уведомления в рабочие пространства Slack, которые принадлежат пользователям вашего приложения. Для этого сначала вам потребуется получить OAuth-токен Slack для пользователя. К счастью, [Laravel Socialite](/docs/{{version}}/socialite) включает драйвер Slack, который позволит вам легко аутентифицировать пользователей вашего приложения в Slack и [получать токен бота](/docs/{{version}}/socialite#slack-bot-scopes).
+
+После получения токена бота и его сохранения в базе данных вашего приложения, вы можете использовать метод `SlackRoute::make` для направления уведомления в рабочее пространство пользователя. Кроме того, ваше приложение, скорее всего, должно предоставить пользователю возможность указать, в какой канал следует отправлять уведомления:
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Slack\SlackRoute;
+
+class User extends Authenticatable
+{
+    use Notifiable;
+
+    /**
+     * Маршрутизация уведомлений для канала Slack.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return string
+     */
+    public function routeNotificationForSlack(Notification $notification): mixed
+    {
+        return SlackRoute::make($this->slack_channel, $this->slack_token);
+    }
+}
+```
 
 <a name="localizing-notifications"></a>
 ## Локализация уведомлений
@@ -1125,10 +1312,8 @@ Laravel позволяет отправлять уведомления, испо
     {
         /**
          * Получить предпочитаемую пользователем локализацию.
-         *
-         * @return string
          */
-        public function preferredLocale()
+        public function preferredLocale(): string
         {
             return $this->locale;
         }
@@ -1138,6 +1323,80 @@ Laravel позволяет отправлять уведомления, испо
 
     $user->notify(new InvoicePaid($invoice));
 
+<a name="testing"></a>
+## Тестирование
+
+Вы можете использовать метод `fake` фасада `Notification`, чтобы предотвратить отправку уведомлений. Как правило, отправка уведомлений не имеет отношения к коду, который вы фактически тестируете. Вероятно, будет достаточно просто утверждать, что Laravel получил инструкцию отправить определенное уведомление.
+
+После вызова метода `fake` фасада `Notification`, вы можете проверить, было ли передано инструкции отправить уведомления пользователям, и даже проверить данные, полученные уведомлениями:
+
+```php
+<?php
+
+namespace Tests\Feature;
+
+use App\Notifications\OrderShipped;
+use Illuminate\Support\Facades\Notification;
+use Tests\TestCase;
+
+class ExampleTest extends TestCase
+{
+    public function test_orders_can_be_shipped(): void
+    {
+        Notification::fake();
+
+        // Выполняем доставку заказа...
+
+        // Утверждаем, что уведомления не были отправлены...
+        Notification::assertNothingSent();
+
+        // Утверждаем, что уведомление было отправлено указанным пользователям...
+        Notification::assertSentTo(
+            [$user], OrderShipped::class
+        );
+
+        // Утверждаем, что уведомление не было отправлено...
+        Notification::assertNotSentTo(
+            [$user], AnotherNotification::class
+        );
+
+        // Утверждаем, что было отправлено заданное количество уведомлений...
+        Notification::assertCount(3);
+    }
+}
+```
+
+Вы можете передать замыкание в методы `assertSentTo` или `assertNotSentTo`, чтобы проверить, что было отправлено уведомление, которое проходит заданный "тест истины". Если хотя бы одно уведомление было отправлено и прошло заданный тест, то утверждение будет успешным:
+
+```php
+Notification::assertSentTo(
+    $user,
+    function (OrderShipped $notification, array $channels) use ($order) {
+        return $notification->order->id === $order->id;
+    }
+);
+```
+
+<a name="on-demand-notifications"></a>
+#### Уведомления по требованию
+
+Если код, который вы тестируете, отправляет [уведомления по требованию](#on-demand-notifications), вы можете проверить, что уведомление по требованию было отправлено с помощью метода `assertSentOnDemand`:
+
+```php
+Notification::assertSentOnDemand(OrderShipped::class);
+```
+
+Передав замыкание вторым аргументом метода `assertSentOnDemand`, вы можете определить, отправлено ли уведомление по требованию на правильный "маршрут":
+
+```php
+Notification::assertSentOnDemand(
+    OrderShipped::class,
+    function (OrderShipped $notification, array $channels, object $notifiable) use ($user) {
+        return $notifiable->routes['mail'] === $user->email;
+    }
+);
+```
+
 <a name="notification-events"></a>
 ## События уведомления
 
@@ -1146,14 +1405,17 @@ Laravel позволяет отправлять уведомления, испо
 
 При отправке уведомлений, система уведомлений запускает [событие](/docs/{{version}}/events) `Illuminate\Notifications\Events\NotificationSending`. Событие содержит уведомляемую сущность и сам экземпляр уведомления. Вы можете зарегистрировать слушателей этого события в поставщике `EventServiceProvider`:
 
+    use App\Listeners\CheckNotificationStatus;
+    use Illuminate\Notifications\Events\NotificationSending;
+
     /**
      * Сопоставление прослушивателя событий для приложения.
      *
      * @var array
      */
     protected $listen = [
-        'Illuminate\Notifications\Events\NotificationSending' => [
-            'App\Listeners\CheckNotificationStatus',
+        NotificationSending::class => [
+            CheckNotificationStatus::class,
         ],
     ];
 
@@ -1163,11 +1425,8 @@ Laravel позволяет отправлять уведомления, испо
 
     /**
      * Обработка события.
-     *
-     * @param  \Illuminate\Notifications\Events\NotificationSending  $event
-     * @return void
      */
-    public function handle(NotificationSending $event)
+    public function handle(NotificationSending $event): bool
     {
         return false;
     }
@@ -1176,11 +1435,8 @@ Laravel позволяет отправлять уведомления, испо
 
     /**
      * Обработка события.
-     *
-     * @param  \Illuminate\Notifications\Events\NotificationSending  $event
-     * @return void
      */
-    public function handle(NotificationSending $event)
+    public function handle(NotificationSending $event): void
     {
         // $event->channel
         // $event->notifiable
@@ -1192,28 +1448,29 @@ Laravel позволяет отправлять уведомления, испо
 
 Когда уведомление отправлено, система уведомлений запускает [событие](/docs/{{version}}/events) `Illuminate\Notifications\Events\NotificationSent`. Событие содержит уведомляемую сущность и сам экземпляр уведомления. Вы можете зарегистрировать слушателей этого события в поставщике `EventServiceProvider`:
 
+    use App\Listeners\LogNotification;
+    use Illuminate\Notifications\Events\NotificationSent;
+
     /**
      * The event listener mappings for the application.
      *
      * @var array
      */
     protected $listen = [
-        'Illuminate\Notifications\Events\NotificationSent' => [
-            'App\Listeners\LogNotification',
+        NotificationSent::class => [
+            LogNotification::class,
         ],
     ];
 
-> {tip} После регистрации слушателей в вашем `EventServiceProvider` используйте команду `event:generate` Artisan, чтобы быстро сгенерировать классы слушателей.
+> **Note**  
+> После регистрации слушателей в вашем `EventServiceProvider` используйте команду `event:generate` Artisan, чтобы быстро сгенерировать классы слушателей.
 
 В слушателе события вы можете получить доступ к свойствам `notifiable`, `notification`, `channel` и `response` события, чтобы узнать больше о получателе уведомления или самом уведомлении:
 
     /**
      * Обработать переданное событие.
-     *
-     * @param  \Illuminate\Notifications\Events\NotificationSent  $event
-     * @return void
      */
-    public function handle(NotificationSent $event)
+    public function handle(NotificationSent $event): void
     {
         // $event->channel
         // $event->notifiable
@@ -1238,12 +1495,8 @@ Laravel предлагает несколько каналов уведомле�
     {
         /**
          * Отправить переданное уведомление.
-         *
-         * @param  mixed  $notifiable
-         * @param  \Illuminate\Notifications\Notification  $notification
-         * @return void
          */
-        public function send($notifiable, Notification $notification)
+        public function send(object $notifiable, Notification $notification): void
         {
             $message = $notification->toVoice($notifiable);
 
@@ -1269,22 +1522,16 @@ Laravel предлагает несколько каналов уведомле�
 
         /**
          * Получить каналы доставки уведомлений.
-         *
-         * @param  mixed  $notifiable
-         * @return array|string
          */
-        public function via($notifiable)
+        public function via(object $notifiable): string
         {
-            return [VoiceChannel::class];
+            return VoiceChannel::class;
         }
 
         /**
          * Получить содержимое голосового сообщения.
-         *
-         * @param  mixed  $notifiable
-         * @return VoiceMessage
          */
-        public function toVoice($notifiable)
+        public function toVoice(object $notifiable): VoiceMessage
         {
             // ...
         }
