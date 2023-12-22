@@ -1,5 +1,5 @@
 ---
-git: f71679293e68531933fb0acdb4673e649321d1c2
+git: f67793be5e6147550c8a69cef29cb43b19ac8598
 ---
 
 # Очереди
@@ -1206,7 +1206,9 @@ php artisan migrate
         new ImportCsv(201, 300),
         new ImportCsv(301, 400),
         new ImportCsv(401, 500),
-    ])->then(function (Batch $batch) {
+    ])->progress(function (Batch $batch) {
+        // Одна задача успешно завершена ...
+    })->then(function (Batch $batch) {
         // Все задания успешно завершены ...
     })->catch(function (Batch $batch, Throwable $e) {
         // Обнаружено первое проваленное задание из пакета ...
@@ -1443,6 +1445,62 @@ php artisan queue:retry-batch 32dbc76c-4f82-4749-b610-a639fe0099b5
 Аналогично, ваша таблица `jobs_batches` может также накапливать записи об отмененных пакетах. Вы можете указать команде `queue:prune-batches` удалить эти отмененные пакетные записи, используя флаг `cancelled`:
 
     $schedule->command('queue:prune-batches --hours=48 --cancelled=72')->daily();
+
+<a name="storing-batches-in-dynamodb"></a>
+### Хранение пакетов в DynamoDB
+
+Laravel также поддерживает хранение мета-информации о пакетах в [DynamoDB](https://aws.amazon.com/dynamodb), а не в реляционной базе данных. Однако вам придется вручную создать таблицу DynamoDB для хранения всех записей о пакетах.
+
+Обычно эта таблица должна называться `job_batches`, но вы можете назвать таблицу в зависимости от значения конфигурации `queue.batching.table` в файле конфигурации очереди вашего приложения.
+
+<a name="dynamodb-batch-table-configuration"></a>
+#### Конфигурация таблицы пакетов DynamoDB
+
+Таблица `job_batches` должна иметь строковый первичный ключ с именем `application` и строковый первичный ключ с именем `id`. Часть `application` ключа будет содержать имя вашего приложения, как определено значением `name` в файле конфигурации приложения `app`. Поскольку имя приложения является частью ключа таблицы DynamoDB, вы можете использовать ту же таблицу для хранения пакетов задач для нескольких приложений Laravel.
+
+Кроме того, вы можете определить атрибут `ttl` для вашей таблицы, если хотите воспользоваться [автоматической обрезкой пакетов](#pruning-batches-in-dynamodb).
+
+<a name="dynamodb-configuration"></a>
+#### Конфигурация DynamoDB
+
+Затем установите AWS SDK, чтобы ваше Laravel-приложение могло взаимодействовать с Amazon DynamoDB:
+
+```shell
+composer require aws/aws-sdk-php
+```
+
+Затем установите значение параметра конфигурации `queue.batching.driver` на `dynamodb`. Кроме того, вам следует определить параметры конфигурации `key`, `secret` и `region` в массиве конфигурации `batching`. Эти параметры будут использоваться для аутентификации в AWS. При использовании драйвера `dynamodb` параметр конфигурации `queue.batching.database` не требуется:
+
+```php
+'batching' => [
+    'driver' => env('QUEUE_FAILED_DRIVER', 'dynamodb'),
+    'key' => env('AWS_ACCESS_KEY_ID'),
+    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+    'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    'table' => 'job_batches',
+],
+```
+
+<a name="pruning-batches-in-dynamodb"></a>
+#### Очистка пакетов в DynamoDB
+
+При использовании [DynamoDB](https://aws.amazon.com/dynamodb) для хранения информации о пакетах задач, типичные команды очистки для пакетов не будут работать.
+Вместо этого вы можете использовать [встроенную функцию TTL в DynamoDB](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html) для автоматического удаления записей о старых пакетах.
+
+Если вы определили таблицу DynamoDB с атрибутом `ttl`, вы можете определить параметры конфигурации, чтобы указать Laravel, как удалять записи о пакетах. Значение параметра конфигурации `queue.batching.ttl_attribute` определяет имя атрибута, содержащего TTL, а значение параметра конфигурации `queue.batching.ttl` определяет количество секунд, через которое запись о пакете может быть удалена из таблицы DynamoDB, относительно последнего времени обновления записи:
+
+```php
+'batching' => [
+    'driver' => env('QUEUE_FAILED_DRIVER', 'dynamodb'),
+    'key' => env('AWS_ACCESS_KEY_ID'),
+    'secret' => env('AWS_SECRET_ACCESS_KEY'),
+    'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+    'table' => 'job_batches',
+    'ttl_attribute' => 'ttl',
+    'ttl' => 60 * 60 * 24 * 7, // 7 days...
+],
+```
+
 
 <a name="queueing-closures"></a>
 ## Анонимные очереди
@@ -1856,7 +1914,9 @@ php artisan queue:prune-failed --hours=48
 <a name="storing-failed-jobs-in-dynamodb"></a>
 ### Хранение неудачных заданий в DynamoDB
 
-Laravel поддерживает хранение записей о неудачных заданиях в [DynamoDB](https://aws.amazon.com/dynamodb) вместо таблицы реляционной базы данных. Перед этим вы должны создать таблицу DynamoDB для хранения всех записей о неудачных заданиях. Обычно эта таблица называется `failed_jobs`, но вы должны назвать ее в зависимости от значения параметра конфигурации `queue.failed.table` в конфигурационном файле `queue` вашего приложения.
+Laravel поддерживает хранение записей о неудачных заданиях в [DynamoDB](https://aws.amazon.com/dynamodb) вместо таблицы реляционной базы данных.
+Перед этим вы должны вручную создать таблицу DynamoDB для хранения всех записей о неудачных заданиях.
+Обычно эта таблица называется `failed_jobs`, но вы должны назвать ее в зависимости от значения параметра конфигурации `queue.failed.table` в конфигурационном файле `queue` вашего приложения.
 
 Таблица `failed_jobs` должна иметь строковый первичный partition key с именем `application` и строковый первичный sort key с именем `uuid`. Часть ключа `application` будет содержать имя вашего приложения, определенное значением конфигурации `name` в конфигурационном файле `app` вашего приложения. Поскольку имя приложения является частью ключа таблицы DynamoDB, вы можете использовать одну и ту же таблицу для хранения неудачных заданий для нескольких приложений Laravel.
 
