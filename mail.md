@@ -1,5 +1,5 @@
 ---
-git: b9cfe7d060f7e45fdc5e93459ae239eb005e620e
+git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
 ---
 
 # Отправка электронной почты
@@ -244,7 +244,7 @@ return new Envelope(
     public function content(): Content
     {
         return new Content(
-            view: 'emails.orders.shipped',
+            view: 'mail.orders.shipped',
         );
     }
 
@@ -262,8 +262,8 @@ return new Envelope(
     public function content(): Content
     {
        return new Content(
-            view: 'emails.orders.shipped',
-            text: 'emails.orders.shipped-text'
+            view: 'mail.orders.shipped',
+            text: 'mail.orders.shipped-text'
         );
     }
 
@@ -271,8 +271,8 @@ return new Envelope(
 
 ```php
 return new Content(
-    html: 'emails.orders.shipped',
-    text: 'emails.orders.shipped-text'
+    html: 'mail.orders.shipped',
+    text: 'mail.orders.shipped-text'
 );
 ```
 
@@ -311,7 +311,7 @@ return new Content(
         public function content(): Content
         {
            return new Content(
-                view: 'emails.orders.shipped',
+                view: 'mail.orders.shipped',
             );
         }
     }
@@ -356,7 +356,7 @@ return new Content(
         public function content(): Content
         {
             return new Content(
-                view: 'emails.orders.shipped',
+                view: 'mail.orders.shipped',
                 with: [
                     'orderName' => $this->order->name,
                     'orderPrice' => $this->order->price,
@@ -663,7 +663,7 @@ public function envelope(): Envelope
 Чтобы сгенерировать почтовый класс с соответствующим шаблоном Markdown, вы можете использовать параметр `--markdown` в команде `make:mail` Artisan:
 
 ```shell
-php artisan make:mail OrderShipped --markdown=emails.orders.shipped
+php artisan make:mail OrderShipped --markdown=mail.orders.shipped
 ```
 
 Затем, при настройке определения `Content` внутри его метода `content`, используйте параметр `markdown` вместо параметра `view`:
@@ -673,7 +673,7 @@ php artisan make:mail OrderShipped --markdown=emails.orders.shipped
      */
     public function content(): Content
        return new Content(
-            markdown: 'emails.orders.shipped',
+            markdown: 'mail.orders.shipped',
             with: [
                 'url' => $this->orderUrl,
             ],
