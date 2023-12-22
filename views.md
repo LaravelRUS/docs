@@ -1,5 +1,5 @@
 ---
-git: 9b546921226e9a9adacb74b802262291c19a93fe
+git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
 ---
 
 # HTML-шаблоны
@@ -89,7 +89,7 @@ php artisan make:view greeting
 
     use Illuminate\Support\Facades\View;
 
-    if (View::exists('emails.customer')) {
+    if (View::exists('admin.profile')) {
         // ...
     }
 
