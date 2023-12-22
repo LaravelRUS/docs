@@ -1,5 +1,5 @@
 ---
-git: 2e062ca334aacff39590afca7de003ba18e6537a
+git: ef9464ab472b14c6298fcde6406fc9435269f597
 ---
 
 # Пакет Laravel Telescope
