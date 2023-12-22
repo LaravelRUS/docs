@@ -1,5 +1,5 @@
 ---
-git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
+git: ae8b503736a0f1b9ded45853ea14ed1865033d19
 ---
 
 # Контейнер служб (service container)
@@ -18,34 +18,24 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
     use App\Http\Controllers\Controller;
     use App\Repositories\UserRepository;
     use App\Models\User;
+    use Illuminate\View\View;
 
     class UserController extends Controller
     {
-        /**
-         * Реализация репозитория User.
-         *
-         * @var UserRepository
-         */
-        protected $users;
-
         /**
          * Создать новый экземпляр контроллера.
          *
          * @param  UserRepository  $users
          * @return void
          */
-        public function __construct(UserRepository $users)
-        {
-            $this->users = $users;
-        }
+        public function __construct(
+            protected UserRepository $users,
+        ) {}
 
         /**
          * Показать профиль конкретного пользователя.
-         *
-         * @param  int  $id
-         * @return Response
          */
-        public function show($id)
+        public function show(string $id): View
         {
             $user = $this->users->find($id);
 
@@ -66,11 +56,11 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     class Service
     {
-        //
+        // ...
     }
 
     Route::get('/', function (Service $service) {
-        die(get_class($service));
+        die($service::class);
     });
 
 В этом примере, при посещении `/` вашего приложения, маршрут автоматически получит класс `Service` и внедрит его в обработчике вашего маршрута. Это меняет правила игры. Это означает, что вы можете разработать свое приложение и воспользоваться преимуществами внедрения зависимостей, не беспокоясь о раздутых файлах конфигурации.
@@ -107,8 +97,9 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     use App\Services\Transistor;
     use App\Services\PodcastParser;
+    use Illuminate\Contracts\Foundation\Application;
 
-    $this->app->bind(Transistor::class, function ($app) {
+    $this->app->bind(Transistor::class, function (Application $app) {
         return new Transistor($app->make(PodcastParser::class));
     });
 
@@ -117,13 +108,24 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 Как уже упоминалось, вы обычно будете взаимодействовать с контейнером внутри поставщиков служб; однако, если вы хотите взаимодействовать с контейнером в других частях приложения, вы можете сделать это через [фасад](/docs/{{version}}/facades) `App`:
 
     use App\Services\Transistor;
+    use Illuminate\Contracts\Foundation\Application;
     use Illuminate\Support\Facades\App;
 
-    App::bind(Transistor::class, function ($app) {
+    App::bind(Transistor::class, function (Application $app) {
         // ...
     });
 
-> {tip} Нет необходимости привязывать классы в контейнере, если они не зависят от каких-либо интерфейсов. Контейнеру не нужно указывать, как создавать эти объекты, поскольку он может автоматически извлекать эти объекты с помощью рефлексии.
+
+Вы можете использовать метод `bindIf` для регистрации привязки контейнера только в том случае, если привязка уже не была зарегистрирована для данного типа:
+
+```php
+$this->app->bindIf(Transistor::class, function (Application $app) {
+    return new Transistor($app->make(PodcastParser::class));
+});
+```
+
+> **Note**  
+> Нет необходимости привязывать классы в контейнере, если они не зависят от каких-либо интерфейсов. Контейнеру не нужно указывать, как создавать эти объекты, поскольку он может автоматически извлекать эти объекты с помощью рефлексии.
 
 <a name="binding-a-singleton"></a>
 #### Связывание одиночек
@@ -132,10 +134,19 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     use App\Services\Transistor;
     use App\Services\PodcastParser;
+    use Illuminate\Contracts\Foundation\Application;
 
-    $this->app->singleton(Transistor::class, function ($app) {
+    $this->app->singleton(Transistor::class, function (Application $app) {
         return new Transistor($app->make(PodcastParser::class));
     });
+
+Вы можете использовать метод `singletonIf` для регистрации синглтон-привязки контейнера только в том случае, если привязка уже не была зарегистрирована для данного типа:
+
+```php
+$this->app->singletonIf(Transistor::class, function (Application $app) {
+    return new Transistor($app->make(PodcastParser::class));
+});
+```
 
 <a name="binding-scoped"></a>
 #### Связывание одиночек с заданной областью действия
@@ -144,8 +155,9 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     use App\Services\Transistor;
     use App\Services\PodcastParser;
+    use Illuminate\Contracts\Foundation\Application;
 
-    $this->app->scoped(Transistor::class, function ($app) {
+    $this->app->scoped(Transistor::class, function (Application $app) {
         return new Transistor($app->make(PodcastParser::class));
     });
 
@@ -177,14 +189,10 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     /**
      * Создать новый экземпляр класса.
-     *
-     * @param  \App\Contracts\EventPusher  $pusher
-     * @return void
      */
-    public function __construct(EventPusher $pusher)
-    {
-        $this->pusher = $pusher;
-    }
+    public function __construct(
+        protected EventPusher $pusher
+    ) {}
 
 <a name="contextual-binding"></a>
 ### Контекстная привязка
@@ -214,7 +222,9 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
 Иногда у вас может быть класс, который получает некоторые внедренные классы, но также нуждается в примитиве, таком как целое число. Вы можете легко использовать контекстную привязку, чтобы внедрить любое значение, которое может понадобиться вашему классу:
 
-    $this->app->when('App\Http\Controllers\UserController')
+    use App\Http\Controllers\UserController;
+
+    $this->app->when(UserController::class)
               ->needs('$variableName')
               ->give($value);
 
@@ -243,29 +253,12 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
     class Firewall
     {
         /**
-         * Экземпляр регистратора.
-         *
-         * @var \App\Services\Logger
-         */
-        protected $logger;
-
-        /**
-         * Массив фильтров.
-         *
-         * @var array
-         */
-        protected $filters;
-
-        /**
          * Создать новый экземпляр класса.
-         *
-         * @param  \App\Services\Logger  $logger
-         * @param  array  $filters
-         * @return void
          */
-        public function __construct(Logger $logger, Filter ...$filters)
-        {
-            $this->logger = $logger;
+        public function __construct(
+            protected Logger $logger,
+            Filter ...$filters,
+        ) {
             $this->filters = $filters;
         }
     }
@@ -274,7 +267,7 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     $this->app->when(Firewall::class)
               ->needs(Filter::class)
-              ->give(function ($app) {
+              ->give(function (Application $app) {
                     return [
                         $app->make(NullFilter::class),
                         $app->make(ProfanityFilter::class),
@@ -307,27 +300,27 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 Иногда может потребоваться получить все привязки определенной «категории». Например, возможно, вы создаете анализатор отчетов, который получает массив из множества различных реализаций интерфейса `Report`. После регистрации реализаций `Report` вы можете назначить им метку с помощью метода `tag`:
 
     $this->app->bind(CpuReport::class, function () {
-        //
+        // ...
     });
 
     $this->app->bind(MemoryReport::class, function () {
-        //
+        // ...
     });
 
     $this->app->tag([CpuReport::class, MemoryReport::class], 'reports');
 
 После того как службы помечены, вы можете легко все их получить с помощью метода `tagged`:
 
-    $this->app->bind(ReportAnalyzer::class, function ($app) {
+    $this->app->bind(ReportAnalyzer::class, function (Application $app) {
         return new ReportAnalyzer($app->tagged('reports'));
     });
 
 <a name="extending-bindings"></a>
 ### Расширяемость связываний
 
-Метод `extend` позволяет модифицировать извлеченные службы. Например, когда служба получена, вы можете запустить дополнительный код для декорирования или конфигурирования службы. Метод `extend` принимает замыкание, которое должно возвращать измененную службу в качестве единственного аргумента. Замыкание получает службу для извлечения и экземпляр контейнера:
+Метод `extend` позволяет модифицировать извлеченные службы. Например, когда служба получена, вы можете выполнить дополнительный код для декорирования или конфигурирования службы. Метод `extend` принимает два аргумента: класс службы, который вы расширяете, и замыкание, которое должно возвращать модифицированную службу. Замыкание получает службу, которая извлечения, и экземпляр контейнера:
 
-    $this->app->extend(Service::class, function ($service, $app) {
+    $this->app->extend(Service::class, function (Service $service, Application $app) {
         return new DecoratedService($service);
     });
 
@@ -349,6 +342,12 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     $transistor = $this->app->makeWith(Transistor::class, ['id' => 1]);
 
+Метод `bound` может быть использован для определения, был ли класс или интерфейс явно привязан в контейнере:
+
+    if ($this->app->bound(Transistor::class)) {
+        // ...
+    }
+
 Если вы находитесь за пределами поставщика служб и не имеете доступа к переменной `$app`, вы можете использовать [фасад](/docs/{{version}}/facades) `App` для получения экземпляра класса из контейнера:
 
     use App\Services\Transistor;
@@ -362,14 +361,10 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 
     /**
      * Создать новый экземпляр класса.
-     *
-     * @param  \Illuminate\Container\Container  $container
-     * @return void
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public function __construct(
+        protected Container $container
+    ) {}
 
 <a name="automatic-injection"></a>
 ### Автоматическое внедрение зависимостей
@@ -383,36 +378,25 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
     namespace App\Http\Controllers;
 
     use App\Repositories\UserRepository;
+    use App\Models\User;
 
     class UserController extends Controller
     {
         /**
-         * Экземпляр репозитория Пользователь.
-         *
-         * @var \App\Repositories\UserRepository
-         */
-        protected $users;
-
-        /**
          * Создать новый экземпляр контроллера.
-         *
-         * @param  \App\Repositories\UserRepository  $users
-         * @return void
          */
-        public function __construct(UserRepository $users)
-        {
-            $this->users = $users;
-        }
+        public function __construct(
+            protected UserRepository $users,
+        ) {}
 
         /**
          * Показать пользователя с переданным идентификатором.
-         *
-         * @param  int  $id
-         * @return \Illuminate\Http\Response
          */
-        public function show($id)
+        public function show(string $id): User
         {
-            //
+            $user = $this->users->findOrFail($id);
+
+            return $user;
         }
     }
 
@@ -432,13 +416,12 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
     {
         /**
          * Generate a new user report.
-         *
-         * @param  \App\Repositories\UserRepository  $repository
-         * @return array
          */
-        public function generate(UserRepository $repository)
+        public function generate(UserRepository $repository): array
         {
-            // ...
+            return [
+                // ...
+            ];
         }
     }
 
@@ -464,12 +447,13 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 Контейнер служб инициирует событие каждый раз, когда извлекает объект. Вы можете прослушать это событие с помощью метода `resolving`:
 
     use App\Services\Transistor;
+    use Illuminate\Contracts\Foundation\Application;
 
-    $this->app->resolving(Transistor::class, function ($transistor, $app) {
+    $this->app->resolving(Transistor::class, function (Transistor $transistor, Application $app) {
         // Вызывается, когда контейнер извлекает объекты типа `Transistor` ...
     });
 
-    $this->app->resolving(function ($object, $app) {
+    $this->app->resolving(function (mixed $object, Application $app) {
         // Вызывается, когда контейнер извлекает объект любого типа ...
     });
 
@@ -486,7 +470,7 @@ git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
     Route::get('/', function (ContainerInterface $container) {
         $service = $container->get(Transistor::class);
 
-        //
+        // ...
     });
 
 Исключение выбрасывается, если данный идентификатор не может быть получен. Исключением будет экземпляр `Psr\Container\NotFoundExceptionInterface`, если идентификатор никогда не был привязан. Если идентификатор был привязан, но не может быть извлечен, будет брошен экземпляр `Psr \ Container \ ContainerExceptionInterface`.
