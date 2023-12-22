@@ -1,5 +1,5 @@
 ---
-git: ea932bb6145789c7a414ddb2f3fff61f716a00bb
+git: eaa2078a9e25de23aa0ae049ed40c7ff9d845fc5
 ---
 
 # База данных · Миграции
@@ -215,6 +215,14 @@ php artisan migrate:refresh --step=5
 php artisan migrate:fresh
 
 php artisan migrate:fresh --seed
+```
+
+По умолчанию команда `migrate:fresh` удаляет только таблицы из соединения с базой данных по умолчанию.
+Однако вы можете использовать опцию `--database`, чтобы указать соединение с базой данных, которое следует использовать.
+Имя соединения с базой данных должно соответствовать имени, определенному в [файле конфигурации базы данных](/docs/{{version}}/configuration) вашего приложения:
+
+```shell
+php artisan migrate:fresh --database=admin
 ```
 
 > **Warning**  
