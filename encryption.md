@@ -1,5 +1,5 @@
 ---
-git: 212cf52490604efe98f1e486c9db94dd69be24e4
+git: 29086d81ffeefa4f7609a79177e6ed3149dd1f9b
 ---
 
 # Шифрование
@@ -27,7 +27,7 @@ git: 212cf52490604efe98f1e486c9db94dd69be24e4
 
     namespace App\Http\Controllers;
 
-    use App\Http\Controllers\Controller;
+    use Illuminate\Http\RedirectResponse;
     use App\Models\User;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Crypt;
@@ -36,15 +36,14 @@ git: 212cf52490604efe98f1e486c9db94dd69be24e4
     {
         /**
          * Сохраните DigitalOcean API-токен пользователя.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @return \Illuminate\Http\Response
          */
-        public function storeSecret(Request $request)
+        public function store(Request $request): RedirectResponse
         {
             $request->user()->fill([
                 'token' => Crypt::encryptString($request->token),
             ])->save();
+
+            return redirect('/secrets');
         }
     }
 
@@ -59,5 +58,5 @@ git: 212cf52490604efe98f1e486c9db94dd69be24e4
     try {
         $decrypted = Crypt::decryptString($encryptedValue);
     } catch (DecryptException $e) {
-        //
+        // ...
     }
