@@ -360,15 +360,6 @@ Schema::create('calculations', function (Blueprint $table) {
 Построитель схем Blueprint предлагает множество методов, соответствующих различным типам столбцов, которые вы можете добавить в таблицы базы данных. Все доступные методы перечислены в таблице ниже:
 
 <!-- <style>
-    #collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    #collection-method-list a {
-        display: block;
-    }
-
     .collection-method code {
         font-size: 14px;
     }
@@ -378,7 +369,7 @@ Schema::create('calculations', function (Blueprint $table) {
     }
 </style> -->
 
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div id="docs-column-list" markdown="1">
 
 - [bigIncrements](#column-method-bigIncrements)
 - [bigInteger](#column-method-bigInteger)
@@ -449,7 +440,7 @@ Schema::create('calculations', function (Blueprint $table) {
 - [uuid](#column-method-uuid)
 - [year](#column-method-year)
 
-<!-- </div> -->
+</div>
 
 <a name="column-method-bigIncrements"></a>
 #### `bigIncrements()`
