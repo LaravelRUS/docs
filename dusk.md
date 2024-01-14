@@ -827,18 +827,7 @@ Dusk содержит различные методы для взаимодей�
 
 Dusk содержит множество утверждений, которые вы можете использовать при тестировании вашего приложения. Все доступные утверждения представлены в списке ниже:
 
-<!-- <style>
-    .collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    .collection-method-list a {
-        display: block;
-    }
-</style> -->
-
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [assertTitle](#assert-title)
 - [assertTitleContains](#assert-title-contains)
@@ -914,7 +903,7 @@ Dusk содержит множество утверждений, которые 
 - [assertVueContains](#assert-vue-contains)
 - [assertVueDoesNotContain](#assert-vue-does-not-contain)
 
-<!-- </div> -->
+</div>
 
 <a name="assert-title"></a>
 #### assertTitle

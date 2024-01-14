@@ -313,7 +313,7 @@ Laravel будет использовать имя миграции, чтобы 
     }
 </style> -->
 
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [bigIncrements](#column-method-bigIncrements)
 - [bigInteger](#column-method-bigInteger)
@@ -380,7 +380,7 @@ Laravel будет использовать имя миграции, чтобы 
 - [uuid](#column-method-uuid)
 - [year](#column-method-year)
 
-<!-- </div> -->
+</div>
 
 <a name="column-method-bigIncrements"></a>
 #### `bigIncrements()`

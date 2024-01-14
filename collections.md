@@ -71,7 +71,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 В большей части оставшейся документации по коллекциям мы обсудим каждый метод, доступный в классе `Collection`. Помните, что все эти методы можно объединить в цепочку для последовательного управления базовым массивом. Более того, почти каждый метод возвращает новый экземпляр `Collection`, позволяя вам при необходимости сохранить исходную копию коллекции:
 
 
- <div id="collection-method-list" markdown="1">
+ <div class="docs-column-list" markdown="1">
 
 - [`all()`](#method-all)
 - [`average()`](#method-average)
@@ -3202,7 +3202,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 
 Почти все методы, доступные в классе `Collection`, также доступны в классе `LazyCollection`. Оба класса реализуют контракт `Illuminate\Support\Enumerable`, который определяет следующие методы:
 
-<div id="collection-method-list" markdown="1"> 
+<div class="docs-column-list" markdown="1"> 
 
 - [`all()`](#method-all)
 - [`average()`](#method-average)

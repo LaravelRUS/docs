@@ -710,7 +710,7 @@ Laravel также содержит глобального помощника `o
 Ниже приведен список всех доступных правил валидации и их функций:
 
 
-<div class="collection-method-list" markdown="1">
+<div class="docs-column-list" markdown="1">
 
 - [Accepted](#rule-accepted)
 - [Accepted If](#rule-accepted-if)
