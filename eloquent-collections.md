@@ -39,20 +39,7 @@ git: 67937302eeadf6d1c8a37126933bb51d3681a81f
 
 Кроме того, класс `Illuminate\Database\Eloquent\Collection` содержит расширенный набор методов, помогающих управлять коллекциями моделей. Большинство методов возвращают экземпляры `Illuminate\Database\Eloquent\Collection`; однако некоторые методы, такие как `modelKeys`, возвращают экземпляр `Illuminate\Support\Collection`.
 
-<!-- <style>
-    #collection-method-list > p {
-        columns: 14.4em 1; -moz-columns: 14.4em 1; -webkit-columns: 14.4em 1;
-    }
-
-    .collection-method-list a {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style> -->
-
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div class="docs-column-list-1" markdown="1">
 
 - [append](#method-append)
 - [contains](#method-contains)
@@ -72,7 +59,7 @@ git: 67937302eeadf6d1c8a37126933bb51d3681a81f
 - [toQuery](#method-toquery)
 - [unique](#method-unique)
 
-<!-- </div> -->
+</div>
 
 <a name="method-append"></a>
 #### `append($attributes)`

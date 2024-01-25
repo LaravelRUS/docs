@@ -12,21 +12,11 @@ Laravel содержит множество глобальных «вспомо�
 <a name="available-methods"></a>
 ## Доступные методы
 
-<!-- <style>
-    .collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    .collection-method-list a {
-        display: block;
-    }
-</style> -->
 
 <a name="arrays-and-objects-method-list"></a>
 ### Массивы и объекты
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [Arr::accessible](#method-array-accessible)
 - [Arr::add](#method-array-add)
@@ -64,12 +54,12 @@ Laravel содержит множество глобальных «вспомо�
 - [data_set](#method-data-set)
 - [head](#method-head)
 - [last](#method-last)
-<!-- </div> -->
+</div>
 
 <a name="paths-method-list"></a>
 ### Пути
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [app_path](#method-app-path)
 - [base_path](#method-base-path)
@@ -80,12 +70,12 @@ Laravel содержит множество глобальных «вспомо�
 - [resource_path](#method-resource-path)
 - [storage_path](#method-storage-path)
 
-<!-- </div> -->
+</div>
 
 <a name="strings-method-list"></a>
 ### Строки
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [\__](#method-__)
 - [class_basename](#method-class-basename)
@@ -144,14 +134,14 @@ Laravel содержит множество глобальных «вспомо�
 - [trans](#method-trans)
 - [trans_choice](#method-trans-choice)
 
-<!-- </div> -->
+</div>
 
 <a name="fluent-strings-method-list"></a>
 ### Строки Fluent
 
 Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [after](#method-fluent-str-after)
 - [afterLast](#method-fluent-str-after-last)
@@ -227,12 +217,12 @@ Laravel содержит множество глобальных «вспомо�
 - [wordCount](#method-fluent-str-word-count)
 - [words](#method-fluent-str-words)
 
-<!-- </div> -->
+</div>
 
 <a name="urls-method-list"></a>
 ### URL-адреса
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [action](#method-action)
 - [asset](#method-asset)
@@ -241,12 +231,11 @@ Laravel содержит множество глобальных «вспомо�
 - [secure_url](#method-secure-url)
 - [url](#method-url)
 
-<!-- </div> -->
-
+</div>
 <a name="miscellaneous-method-list"></a>
 ### Разное
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [abort](#method-abort)
 - [abort_if](#method-abort-if)
@@ -296,7 +285,7 @@ Laravel содержит множество глобальных «вспомо�
 - [view](#method-view)
 - [with](#method-with)
 
-<!-- </div> -->
+</div>
 
 <a name="method-listing"></a>
 ## Список методов
