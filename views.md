@@ -1,5 +1,5 @@
 ---
-git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # HTML-шаблоны
@@ -28,7 +28,7 @@ git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
         return view('greeting', ['name' => 'James']);
     });
 
-> **Note**  
+> [!NOTE]
 > Ищете дополнительную информацию о том, как писать шаблоны Blade? Ознакомьтесь с полной [документацией по Blade](/docs/{{version}}/blade), чтобы начать работу.
 
 <a name="writing-views-in-react-or-vue"></a>
@@ -70,7 +70,7 @@ php artisan make:view greeting
 
     return view('admin.profile', $data);
 
-> **Warning**  
+> [!WARNING]
 > Имена каталогов шаблонов не должны содержать символа `.`.
 
 <a name="creating-the-first-available-view"></a>
@@ -184,7 +184,7 @@ php artisan make:view greeting
         }
     }
 
-> **Warning**  
+> [!WARNING]
 > Помните, что если вы создаете нового поставщика служб, который будет содержать регистрации вашего компоновщика, вам нужно будет добавить поставщика служб в массив `providers` в файле конфигурации `config/app.php`.
 
 Теперь, когда мы зарегистрировали компоновщик, метод `compose` класса `App\View\Composers\ProfileComposer` будет выполняться каждый раз, когда отрисовывается шаблон профиля. Давайте посмотрим на пример класса компоновщика:

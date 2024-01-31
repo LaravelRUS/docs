@@ -1,5 +1,5 @@
 ---
-git: 6e349907d080a5dfda42b1c733b4dad38aa02bdb
+git: 83761449ff271ccda95e4ea87eca0f5a772f59df
 ---
 
 # Генерация URL-адресов

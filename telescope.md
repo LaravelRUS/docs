@@ -1,5 +1,5 @@
 ---
-git: ef9464ab472b14c6298fcde6406fc9435269f597
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Пакет Laravel Telescope
@@ -113,7 +113,7 @@ php artisan migrate
         });
     }
 
-> **Warning**  
+> [!WARNING]
 > Убедитесь, что вы изменили значение переменной `APP_ENV` на `production` в эксплуатационном окружении. В противном случае доступ к Telescope будет публичным.
 
 <a name="upgrading-telescope"></a>
