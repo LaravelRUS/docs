@@ -192,15 +192,15 @@ php artisan make:command SendEmails
 
      <?php
     
-        namespace App\Console\Commands;
-    
-        use Illuminate\Console\Command;
-        use Illuminate\Contracts\Console\Isolatable;
-    
-        class SendEmails extends Command implements Isolatable
-        {
-            // ...
-        }
+    namespace App\Console\Commands;
+
+    use Illuminate\Console\Command;
+    use Illuminate\Contracts\Console\Isolatable;
+
+    class SendEmails extends Command implements Isolatable
+    {
+        // ...
+    }
 
 
 Когда команда отмечена как `Isolatable`, Laravel автоматически добавит опцию `--isolated` к команде. Когда команда вызывается с этой опцией, Laravel гарантирует, что никакие другие экземпляры этой команды в данный момент не выполняются. Laravel достигает этого, пытаясь получить блокировку с использованием кэш-драйвера по умолчанию вашего приложения. Если другие экземпляры команды выполняются, команда не будет выполнена; однако команда все равно завершится с кодом успешного завершения:
@@ -438,9 +438,9 @@ php artisan mail:send --id=1 --id=2
 
 Если вы хотите запросить у пользователя выбор или ввод опций, вы можете включить подсказки в метод `handle` вашей команды. Однако, если вы хотите запрашивать у пользователя только тогда, когда ему было автоматически предложено ввести отсутствующие аргументы, вы можете реализовать метод `afterPromptingForMissingArguments`:
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use function Laravel\Prompts\confirm;
+    use Symfony\Component\Console\Input\InputInterface;
+    use Symfony\Component\Console\Output\OutputInterface;
+    use function Laravel\Prompts\confirm;
 
     // ...
 
