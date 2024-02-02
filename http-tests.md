@@ -1,5 +1,5 @@
 ---
-git: 34eb006893f9e86010025689656aa8cba0096687
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Тестирование · Тесты HTTP
@@ -10,28 +10,26 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Laravel предлагает гибкий API в составе вашего приложения для выполнения HTTP-запросов и получения информации об ответах. Например, взгляните на следующий функциональный тест:
 
-    <?php
+```php
+<?php
 
-    namespace Tests\Feature;
+namespace Tests\Feature;
 
-    use Illuminate\Foundation\Testing\RefreshDatabase;
-    use Illuminate\Foundation\Testing\WithoutMiddleware;
-    use Tests\TestCase;
+use Tests\TestCase;
 
-    class ExampleTest extends TestCase
-    {
+class ExampleTest extends TestCase
+{
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_a_basic_request()
-        {
-            $response = $this->get('/');
+        public function test_the_application_returns_a_successful_response(): void
+    {
+        $response = $this->get('/');
 
-            $response->assertStatus(200);
-        }
+        $response->assertStatus(200);
     }
+}
+```
 
 Метод `get` отправляет в приложение запрос `GET`, а метод `assertStatus` утверждает, что возвращаемый ответ должен иметь указанный код состояния HTTP. Помимо этого простого утверждения, Laravel также содержит множество утверждений для получения информации о заголовках ответов, их содержимого, структуры JSON и др.
 
@@ -46,18 +44,14 @@ Laravel предлагает гибкий API в составе вашего п�
 
     namespace Tests\Feature;
 
-    use Illuminate\Foundation\Testing\RefreshDatabase;
-    use Illuminate\Foundation\Testing\WithoutMiddleware;
     use Tests\TestCase;
 
     class ExampleTest extends TestCase
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_a_basic_request()
+        public function test_a_basic_request(): void
         {
             $response = $this->get('/');
 
@@ -67,7 +61,8 @@ Laravel предлагает гибкий API в составе вашего п�
 
 Как правило, каждый из ваших тестов должен выполнять только один запрос к вашему приложению. Неожиданное поведение может возникнуть, если в рамках одного метода теста выполняется несколько запросов.
 
-> {tip} Для удобства посредник CSRF автоматически отключается при запуске тестов.
+> [!NOTE]
+> Для удобства посредник CSRF автоматически отключается при запуске тестов.
 
 <a name="customizing-request-headers"></a>
 ### Настройка заголовков запросов
@@ -84,10 +79,8 @@ Laravel предлагает гибкий API в составе вашего п�
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_interacting_with_headers()
+        public function test_interacting_with_headers(): void
         {
             $response = $this->withHeaders([
                 'X-Header' => 'Value',
@@ -110,7 +103,7 @@ Laravel предлагает гибкий API в составе вашего п�
 
     class ExampleTest extends TestCase
     {
-        public function test_interacting_with_cookies()
+        public function test_interacting_with_cookies(): void
         {
             $response = $this->withCookie('color', 'blue')->get('/');
 
@@ -134,13 +127,13 @@ Laravel предлагает несколько методов-хелперов 
 
     class ExampleTest extends TestCase
     {
-        public function test_interacting_with_the_session()
+        public function test_interacting_with_the_session(): void
         {
             $response = $this->withSession(['banned' => false])->get('/');
         }
     }
 
-Сессия Laravel обычно используется для сохранения состояния текущего аутентифицированного пользователя. Вспомогательный метод `actingAs` – это простой способ аутентифицировать конкретного пользователя как текущего. Например, мы можем использовать [фабрику модели](database-testing#defining-model-factories) для генерации и аутентификации пользователя:
+Сессия Laravel обычно используется для сохранения состояния текущего аутентифицированного пользователя. Вспомогательный метод `actingAs` – это простой способ аутентифицировать конкретного пользователя как текущего. Например, мы можем использовать [фабрику модели](/docs/{{version}}/eloquent-factories) для генерации и аутентификации пользователя:
 
     <?php
 
@@ -151,7 +144,7 @@ Laravel предлагает несколько методов-хелперов 
 
     class ExampleTest extends TestCase
     {
-        public function test_an_action_that_requires_authentication()
+        public function test_an_action_that_requires_authentication(): void
         {
             $user = User::factory()->create();
 
@@ -161,7 +154,7 @@ Laravel предлагает несколько методов-хелперов 
         }
     }
 
-Вы также можете указать, какой гейт должен использоваться для аутентификации конкретного пользователя, передав имя гейта в качестве второго аргумента методу `actingAs`:
+Вы также можете указать, какой гейт должен использоваться для аутентификации конкретного пользователя, передав имя гейта в качестве второго аргумента методу `actingAs`.  Гейт, предоставленный методу actingAs, также станет гейтом по умолчанию на протяжении всего теста::
 
     $this->actingAs($user, 'web')
 
@@ -180,10 +173,8 @@ Laravel предлагает несколько методов-хелперов 
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_basic_test()
+        public function test_basic_test(): void
         {
             $response = $this->get('/');
 
@@ -207,10 +198,8 @@ Laravel предлагает несколько методов-хелперов 
     {
         /**
          * Пример базового теста.
-         *
-         * @return void
          */
-        public function test_basic_test()
+        public function test_basic_test(): void
         {
             $response = $this->get('/');
 
@@ -233,6 +222,16 @@ Laravel предлагает несколько методов-хелперов 
 
     $response = $this->withoutDeprecationHandling()->get('/');
 
+
+Метод assertThrows можно использовать для проверки того, что код внутри заданного замыкания генерирует исключение `указанного` типа:
+
+```php
+$this->assertThrows(
+    fn () => (new ProcessOrder)->execute(),
+    OrderInvalid::class
+);
+```
+
 <a name="testing-json-apis"></a>
 ## Тестирование JSON API
 
@@ -248,10 +247,8 @@ Laravel также содержит несколько хелперов для �
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_making_an_api_request()
+        public function test_making_an_api_request(): void
         {
             $response = $this->postJson('/api/user', ['name' => 'Sally']);
 
@@ -267,7 +264,8 @@ Laravel также содержит несколько хелперов для �
 
     $this->assertTrue($response['created']);
 
-> {tip} Метод `assertJson` преобразует ответ в массив и использует `PHPUnit::assertArraySubset` для проверки того, что переданный массив существует в ответе JSON, возвращаемом приложением. Итак, если в ответе JSON есть другие свойства, этот тест все равно будет проходить, пока присутствует переданный фрагмент.
+> [!NOTE]
+> Метод `assertJson` преобразует ответ в массив и использует `PHPUnit::assertArraySubset` для проверки того, что переданный массив существует в ответе JSON, возвращаемом приложением. Итак, если в ответе JSON есть другие свойства, этот тест все равно будет проходить, пока присутствует переданный фрагмент.
 
 <a name="verifying-exact-match"></a>
 #### Утверждение точных совпадений JSON
@@ -284,10 +282,8 @@ Laravel также содержит несколько хелперов для �
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_asserting_an_exact_json_match()
+        public function test_asserting_an_exact_json_match(): void
         {
             $response = $this->postJson('/user', ['name' => 'Sally']);
 
@@ -314,10 +310,8 @@ Laravel также содержит несколько хелперов для �
     {
         /**
          * Отвлеченный пример функционального теста.
-         *
-         * @return void
          */
-        public function test_asserting_a_json_paths_value()
+        public function test_asserting_a_json_paths_value(): void
         {
             $response = $this->postJson('/user', ['name' => 'Sally']);
 
@@ -326,6 +320,10 @@ Laravel также содержит несколько хелперов для �
                 ->assertJsonPath('team.owner.name', 'Darian');
         }
     }
+
+Метод `assertJsonPath` также принимает замыкание, которое может быть использовано для динамического определения, должно ли утверждение выполниться:
+
+    $response->assertJsonPath('team.owner.name', fn (string $name) => strlen($name) >= 3);
 
 <a name="fluent-json-testing"></a>
 ### Последовательное тестирование JSON
@@ -336,10 +334,8 @@ Laravel предлагает способ последовательного т�
 
     /**
      * Отвлеченный пример функционального теста.
-     *
-     * @return void
      */
-    public function test_fluent_json()
+    public function test_fluent_json(): void
     {
         $response = $this->getJson('/users/1');
 
@@ -347,6 +343,8 @@ Laravel предлагает способ последовательного т�
             ->assertJson(fn (AssertableJson $json) =>
                 $json->where('id', 1)
                      ->where('name', 'Victoria Faith')
+                     ->where('email', fn (string $email) => str($email)->is('victoria@gmail.com'))
+                     ->whereNot('status', 'pending')
                      ->missing('password')
                      ->etc()
             );
@@ -357,6 +355,8 @@ Laravel предлагает способ последовательного т�
 В приведенном выше примере вы могли заметить, что мы вызвали метод `etc` в конце нашей цепочки утверждений. Этот метод сообщает Laravel, что в объекте JSON могут присутствовать другие атрибуты. Если метод `etc` не используется, то тест завершится неудачно, если в объекте JSON существуют другие атрибуты, для которых вы не сделали утверждений.
 
 Цель такого поведения – защитить вас от непреднамеренного раскрытия конфиденциальной информации в ваших ответах JSON, заставив вас либо явно сделать утверждение относительно атрибута, либо явно разрешить дополнительные атрибуты с помощью метода `etc`.
+
+Однако вы должны знать, что отсутствие метода `etc` в вашей цепочке утверждений не гарантирует, что дополнительные атрибуты не будут добавлены в массивы, вложенные в ваш объект JSON. Метод `etc` обеспечивает только отсутствие дополнительных атрибутов на уровне вложенности, на котором вызывается метод `etc`.
 
 <a name="asserting-json-attribute-presence-and-absence"></a>
 #### Утверждение наличия / отсутствия атрибута
@@ -371,8 +371,8 @@ Laravel предлагает способ последовательного т�
 Кроме того, методы `hasAll` и `missingAll` позволяют одновременно утверждать наличие или отсутствие нескольких атрибутов:
 
     $response->assertJson(fn (AssertableJson $json) =>
-        $json->hasAll('status', 'data')
-             ->missingAll('message', 'code')
+        $json->hasAll(['status', 'data'])
+            ->missingAll(['message', 'code'])
     );
 
 Вы можете использовать метод `hasAny`, чтобы определить, присутствует ли хотя бы один из заданного списка атрибутов:
@@ -396,9 +396,10 @@ Laravel предлагает способ последовательного т�
     $response
         ->assertJson(fn (AssertableJson $json) =>
             $json->has(3)
-                 ->first(fn ($json) =>
+                 ->first(fn (AssertableJson $json) =>
                     $json->where('id', 1)
                          ->where('name', 'Victoria Faith')
+                         ->where('email', fn (string $email) => str($email)->is('victoria@gmail.com'))
                          ->missing('password')
                          ->etc()
                  )
@@ -422,7 +423,7 @@ Laravel предлагает способ последовательного т�
         ->assertJson(fn (AssertableJson $json) =>
             $json->has('meta')
                  ->has('users', 3)
-                 ->has('users.0', fn ($json) =>
+                 ->has('users.0', fn (AssertableJson $json) =>
                     $json->where('id', 1)
                          ->where('name', 'Victoria Faith')
                          ->missing('password')
@@ -435,9 +436,10 @@ Laravel предлагает способ последовательного т�
     $response
         ->assertJson(fn (AssertableJson $json) =>
             $json->has('meta')
-                 ->has('users', 3, fn ($json) =>
+                 ->has('users', 3, fn (AssertableJson $json) =>
                     $json->where('id', 1)
                          ->where('name', 'Victoria Faith')
+                         ->where('email', fn (string $email) => str($email)->is('victoria@gmail.com'))
                          ->missing('password')
                          ->etc()
                  )
@@ -482,7 +484,7 @@ Laravel предлагает способ последовательного т�
 
     class ExampleTest extends TestCase
     {
-        public function test_avatars_can_be_uploaded()
+        public function test_avatars_can_be_uploaded(): void
         {
             Storage::fake('avatars');
 
@@ -534,7 +536,7 @@ Laravel также позволяет отображать шаблоны без
 
     class ExampleTest extends TestCase
     {
-        public function test_a_welcome_view_can_be_rendered()
+        public function test_a_welcome_view_can_be_rendered(): void
         {
             $view = $this->view('welcome', ['name' => 'Taylor']);
 
@@ -571,7 +573,7 @@ Laravel также позволяет отображать шаблоны без
 
     $view->assertSee('Taylor');
 
-Вы можете использовать метод `component` для анализа и отрисовки [компонента Blade](/docs/{{version}}/blade#components). Как и метод `view`, метод `component` возвращает экземпляр `Illuminate\Testing\TestView`:
+Вы можете использовать метод `component` для анализа и отрисовки [компонента Blade](/docs/{{version}}/blade#components). Метод `component` возвращает экземпляр `Illuminate\Testing\TestComponent`:
 
     $view = $this->component(Profile::class, ['name' => 'Taylor']);
 
@@ -587,6 +589,9 @@ Laravel также позволяет отображать шаблоны без
 
 <div class="docs-column-list-2" markdown="1">
 
+- [assertAccepted](#assert-accepted)
+- [assertBadRequest](#assert-bad-request)
+- [assertConflict](#assert-conflict)
 - [assertCookie](#assert-cookie)
 - [assertCookieExpired](#assert-cookie-expired)
 - [assertCookieNotExpired](#assert-cookie-not-expired)
@@ -597,30 +602,45 @@ Laravel также позволяет отображать шаблоны без
 - [assertDownload](#assert-download)
 - [assertExactJson](#assert-exact-json)
 - [assertForbidden](#assert-forbidden)
+- [assertFound](#assert-found)
+- [assertGone](#assert-gone)
 - [assertHeader](#assert-header)
 - [assertHeaderMissing](#assert-header-missing)
+- [assertInternalServerError](#assert-internal-server-error)
 - [assertJson](#assert-json)
 - [assertJsonCount](#assert-json-count)
 - [assertJsonFragment](#assert-json-fragment)
+- [assertJsonIsArray](#assert-json-is-array)
+- [assertJsonIsObject](#assert-json-is-object)
 - [assertJsonMissing](#assert-json-missing)
 - [assertJsonMissingExact](#assert-json-missing-exact)
 - [assertJsonMissingValidationErrors](#assert-json-missing-validation-errors)
 - [assertJsonPath](#assert-json-path)
+- [assertJsonMissingPath](#assert-json-missing-path)
 - [assertJsonStructure](#assert-json-structure)
 - [assertJsonValidationErrors](#assert-json-validation-errors)
 - [assertJsonValidationErrorFor](#assert-json-validation-error-for)
 - [assertLocation](#assert-location)
+- [assertMethodNotAllowed](#assert-method-not-allowed)
+- [assertMovedPermanently](#assert-moved-permanently)
+- [assertContent](#assert-content)
 - [assertNoContent](#assert-no-content)
+- [assertStreamedContent](#assert-streamed-content)
 - [assertNotFound](#assert-not-found)
 - [assertOk](#assert-ok)
+- [assertPaymentRequired](#assert-payment-required)
 - [assertPlainCookie](#assert-plain-cookie)
 - [assertRedirect](#assert-redirect)
 - [assertRedirectContains](#assert-redirect-contains)
+- [assertRedirectToRoute](#assert-redirect-to-route)
 - [assertRedirectToSignedRoute](#assert-redirect-to-signed-route)
+- [assertRequestTimeout](#assert-request-timeout)
 - [assertSee](#assert-see)
 - [assertSeeInOrder](#assert-see-in-order)
 - [assertSeeText](#assert-see-text)
 - [assertSeeTextInOrder](#assert-see-text-in-order)
+- [assertServerError](#assert-server-error)
+- [assertServiceUnavailable](#assert-server-unavailable)
 - [assertSessionHas](#assert-session-has)
 - [assertSessionHasInput](#assert-session-has-input)
 - [assertSessionHasAll](#assert-session-has-all)
@@ -629,11 +649,12 @@ Laravel также позволяет отображать шаблоны без
 - [assertSessionHasNoErrors](#assert-session-has-no-errors)
 - [assertSessionDoesntHaveErrors](#assert-session-doesnt-have-errors)
 - [assertSessionMissing](#assert-session-missing)
-- [assertSimilarJson](#assert-similar-json)
 - [assertStatus](#assert-status)
 - [assertSuccessful](#assert-successful)
+- [assertTooManyRequests](#assert-too-many-requests)
 - [assertUnauthorized](#assert-unauthorized)
 - [assertUnprocessable](#assert-unprocessable)
+- [assertUnsupportedMediaType](#assert-unsupported-media-type)
 - [assertValid](#assert-valid)
 - [assertInvalid](#assert-invalid)
 - [assertViewHas](#assert-view-has)
@@ -642,6 +663,27 @@ Laravel также позволяет отображать шаблоны без
 - [assertViewMissing](#assert-view-missing)
 
 </div>
+
+<a name="assert-bad-request"></a>
+#### assertBadRequest
+
+Утверждает, что ответ имеет код `400` состояния HTTP – `bad request`:
+
+    $response->assertBadRequest();
+
+<a name="assert-accepted"></a>
+#### assertAccepted
+
+Утверждает, что ответ имеет код `202` состояния HTTP – `accepted`:
+
+$response->assertAccepted();
+
+<a name="assert-conflict"></a>
+#### assertConflict
+
+Утверждает, что ответ имеет код `409` состояния HTTP – `conflict`:
+
+$response->assertConflict();
 
 <a name="assert-cookie"></a>
 #### assertCookie
@@ -717,6 +759,20 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertForbidden();
 
+<a name="assert-found"></a>
+#### assertFound
+
+Утверждает, что ответ имеет код `302` состояния HTTP – `found`:
+
+    $response->assertFound();
+
+<a name="assert-gone"></a>
+#### assertGone
+
+Утверждает, что ответ имеет код `420` состояния HTTP – `gone`:
+    
+    $response->assertGone();
+
 <a name="assert-header"></a>
 #### assertHeader
 
@@ -730,6 +786,13 @@ Laravel также позволяет отображать шаблоны без
 Утверждает, что переданный заголовок отсутствует в ответе:
 
     $response->assertHeaderMissing($headerName);
+
+<a name="assert-internal-server-error"></a>
+#### assertInternalServerError
+
+Утверждает, что ответ имеет код `500` состояния HTTP – `Internal Server Error`:
+
+    $response->assertInternalServerError();
 
 <a name="assert-json"></a>
 #### assertJson
@@ -764,6 +827,20 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertJsonFragment(['name' => 'Taylor Otwell']);
 
+<a name="assert-json-is-array"></a>
+#### assertJsonIsArray
+
+Утверждает, что ответ JSON представляет собой массив:
+
+    $response->assertJsonIsArray();
+
+<a name="assert-json-is-object"></a>
+#### assertJsonIsObject
+
+Утверждает, что ответ JSON представляет собой объект:
+
+    $response->assertJsonIsObject();
+
 <a name="assert-json-missing"></a>
 #### assertJsonMissing
 
@@ -785,7 +862,8 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertJsonMissingValidationErrors($keys);
 
-> {tip} Более общий метод [assertValid](#assert-valid) может использоваться для подтверждения того, что в ответе нет ошибок проверки, которые были возвращены как JSON **и** что ошибки не были записаны в хранилище сеанса.
+> [!NOTE]
+> Более общий метод [assertValid](#assert-valid) может использоваться для подтверждения того, что в ответе нет ошибок проверки, которые были возвращены как JSON **и** что ошибки не были записаны в хранилище сеанса.
 
 <a name="assert-json-path"></a>
 #### assertJsonPath
@@ -794,7 +872,7 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertJsonPath($path, $expectedValue);
 
-Например, если ответ JSON, возвращаемый вашим приложением, содержит следующие данные:
+Например, если ваше приложение возвращает следующий ответ JSON:
 
 ```json
 {
@@ -807,6 +885,27 @@ Laravel также позволяет отображать шаблоны без
 Вы можете утверждать, что свойство `name` объекта `user` соответствует переданному значению следующим образом:
 
     $response->assertJsonPath('user.name', 'Steve Schoger');
+
+<a name="assert-json-missing-path"></a>
+#### assertJsonMissingPath
+
+Утверждает, что ответ не содержит указанного пути:
+
+    $response->assertJsonMissingPath($path);
+
+Например, если ваше приложение возвращает следующий ответ JSON:
+
+```json
+{
+    "user": {
+        "name": "Steve Schoger"
+    }
+}
+```
+
+Вы можете утверждать, что ответ не содержит свойства `email` объекта `user`:
+
+    $response->assertJsonMissingPath('user.email');
 
 <a name="assert-json-structure"></a>
 #### assertJsonStructure
@@ -871,7 +970,8 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertJsonValidationErrors(array $data, $responseKey = 'errors');
 
-> {tip} Более общий метод [assertInvalid](#assert-invalid) может использоваться для подтверждения того, что в ответе есть ошибки проверки, возвращенные как JSON **или** что ошибки были записаны в хранилище сеанса.
+> [!NOTE]
+> Более общий метод [assertInvalid](#assert-invalid) может использоваться для подтверждения того, что в ответе есть ошибки проверки, возвращенные как JSON **или** что ошибки были записаны в хранилище сеанса.
 
 <a name="assert-json-validation-error-for"></a>
 #### assertJsonValidationErrorFor
@@ -880,6 +980,20 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertJsonValidationErrorFor(string $key, $responseKey = 'errors');
 
+<a name="assert-method-not-allowed"></a>
+#### assertMethodNotAllowed
+
+Утверждает, что ответ имеет код `405` состояния HTTP – `method not allowed`:
+
+    $response->assertMethodNotAllowed();
+
+<a name="assert-moved-permanently"></a>
+#### assertMovedPermanently
+
+Утверждает, что ответ имеет код `301` состояния HTTP – `moved permanently`:
+
+    $response->assertMovedPermanently();
+
 <a name="assert-location"></a>
 #### assertLocation
 
@@ -887,12 +1001,26 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertLocation($uri);
 
+<a name="assert-content"></a>
+#### assertContent
+
+Утверждает, что указанная строка соответствует содержимому ответа:
+
+    $response->assertContent($value);
+
 <a name="assert-no-content"></a>
 #### assertNoContent
 
 Утверждает, что ответ имеет код `204` состояния HTTP – `no content`:
 
     $response->assertNoContent($status = 204);
+
+<a name="assert-streamed-content"></a>
+#### assertStreamedContent
+
+Утверждает, что указанная строка соответствует потоковому содержимому ответа:
+
+    $response->assertStreamedContent($value);
 
 <a name="assert-not-found"></a>
 #### assertNotFound
@@ -908,6 +1036,13 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertOk();
 
+<a name="assert-payment-required"></a>
+#### assertPaymentRequired
+
+Утверждает, что ответ имеет код `402` состояния HTTP – `payment required`:
+    
+    $response->assertPaymentRequired();
+
 <a name="assert-plain-cookie"></a>
 #### assertPlainCookie
 
@@ -920,7 +1055,7 @@ Laravel также позволяет отображать шаблоны без
 
 Утверждает, что ответ является перенаправлением на указанный URI:
 
-    $response->assertRedirect($uri);
+    $response->assertRedirect($uri = null);
 
 <a name="assert-redirect-contains"></a>
 #### assertRedirectContains
@@ -929,12 +1064,27 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertRedirectContains($string);
 
+
+<a name="assert-redirect-to-route"></a>
+#### assertRedirectToRoute
+
+Утвердите, что ответ представляет собой перенаправление на указанный [именованный маршрут](/docs/{{version}}/routing#named-routes):
+
+    $response->assertRedirectToRoute($name, $parameters = []);
+
 <a name="assert-redirect-to-signed-route"></a>
 #### assertRedirectToSignedRoute
 
-Утверждает, что ответ является перенаправлением на маршрут с заданным именем:
+Утвердите, что ответ представляет собой перенаправление на указанный [подписанный маршрут](/docs/{{version}}/urls#signed-urls)::
 
     $response->assertRedirectToSignedRoute($name = null, $parameters = []);
+
+<a name="assert-request-timeout"></a>
+#### assertRequestTimeout
+
+Утверждает, что ответ имеет код `408` состояния HTTP – `request timeout`:
+
+    $response->assertRequestTimeout();
 
 <a name="assert-see"></a>
 #### assertSee
@@ -964,6 +1114,20 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertSeeTextInOrder(array $values, $escaped = true);
 
+<a name="assert-server-error"></a>
+#### assertServerError
+
+Утверждает, что ответ имеет код состояния HTTP соответствующий ошибке сервера - `>= 500 , < 600` :
+
+    $response->assertServerError();
+
+<a name="assert-server-unavailable"></a>
+#### assertServiceUnavailable
+
+Утверждает, что ответ имеет код `503` состояния HTTP – `Service Unavailable`:
+
+    $response->assertServiceUnavailable();
+
 <a name="assert-session-has"></a>
 #### assertSessionHas
 
@@ -973,7 +1137,7 @@ Laravel также позволяет отображать шаблоны без
 
 Если необходимо, замыкание может быть предоставлено в качестве второго аргумента метода `assertSessionHas`. Утверждение пройдет, если замыкание вернет `true`:
 
-    $response->assertSessionHas($key, function ($value) {
+    $$response->assertSessionHas($key, function (User $value) {
         return $value->name === 'Taylor Otwell';
     });
 
@@ -986,7 +1150,9 @@ Laravel также позволяет отображать шаблоны без
 
 Если необходимо, замыкание может быть предоставлено в качестве второго аргумента метода `assertSessionHasInput`. Утверждение пройдет, если замыкание вернет `true`:
 
-    $response->assertSessionHasInput($key, function ($value) {
+    use Illuminate\Support\Facades\Crypt;
+
+    $response->assertSessionHasInput($key, function (string $value) {
         return Crypt::decryptString($value) === 'secret';
     });
 
@@ -1010,7 +1176,7 @@ Laravel также позволяет отображать шаблоны без
 Утверждает, что сессия содержит ошибку для переданных `$keys`. Если `$keys` является ассоциативным массивом, следует утверждать, что сессия содержит конкретное сообщение об ошибке (значение) для каждого поля (ключа). Этот метод следует использовать при тестировании маршрутов, которые передают ошибки валидации в сессию вместо того, чтобы возвращать их в виде структуры JSON:
 
     $response->assertSessionHasErrors(
-        array $keys, $format = null, $errorBag = 'default'
+        array $keys = [], $format = null, $errorBag = 'default
     );
 
 Например, чтобы утверждать, что поля `name` и `email` содержат сообщения об ошибках валидации, которые были переданы в сессию, вы можете вызвать метод `assertSessionHasErrors` следующим образом:
@@ -1022,6 +1188,10 @@ Laravel также позволяет отображать шаблоны без
     $response->assertSessionHasErrors([
         'name' => 'The given name was invalid.'
     ]);
+
+> [!NOTE]
+> Более общий метод [assertInvalid](#assert-invalid) может быть использован для проверки, что ответ содержит ошибки валидации, представленные в формате JSON **или** что ошибки были сохранены в хранилище сессий.
+
 
 <a name="assert-session-has-errors-in"></a>
 #### assertSessionHasErrorsIn
@@ -1043,6 +1213,9 @@ Laravel также позволяет отображать шаблоны без
 Утверждает, что в сессии нет ошибок валидации для переданных ключей:
 
     $response->assertSessionDoesntHaveErrors($keys = [], $format = null, $errorBag = 'default');
+> [!NOTE]
+> Более общий метод [assertValid](#assert-valid)  может быть использован для проверки того, что ответ не содержит ошибок валидации, представленных в формате JSON **и** что ошибок не было сохранено в хранилище сессий.
+
 
 <a name="assert-session-missing"></a>
 #### assertSessionMissing
@@ -1065,6 +1238,13 @@ Laravel также позволяет отображать шаблоны без
 
     $response->assertSuccessful();
 
+<a name="assert-too-many-requests"></a>
+#### assertTooManyRequests
+
+Утверждает, что ответ имеет код `429` состояния HTTP – `too many requests`:
+
+    $response->assertTooManyRequests();
+
 <a name="assert-unauthorized"></a>
 #### assertUnauthorized
 
@@ -1078,6 +1258,13 @@ Laravel также позволяет отображать шаблоны без
 Утверждает, что ответ имеет необработанный код `422` состояния HTTP:
 
     $response->assertUnprocessable();
+
+<a name="assert-unsupported-media-type"></a>
+#### assertUnsupportedMediaType
+
+Утверждает, что ответ имеет код `415` состояния HTTP – `unsupported media type`:
+
+    $response->assertUnsupportedMediaType()
 
 <a name="assert-valid"></a>
 #### assertValid
@@ -1182,3 +1369,35 @@ Laravel также содержит множество утверждений, �
 Утверждает, что конкретный пользователь аутентифицирован:
 
     $this->assertAuthenticatedAs($user, $guard = null);
+
+
+<a name="validation-assertions"></a>
+## Утверждения валидации
+
+Laravel предоставляет два основных метода утверждения, связанных с валидацией, которые вы можете использовать, чтобы убедиться, что данные, предоставленные в вашем запросе, являются валидными или невалидными.
+
+<a name="validation-assert-valid"></a>
+#### assertValid
+
+Утверждает, что ответ не содержит ошибок валидации для указанных ключей. Этот метод может использоваться для проверки ответов, где ошибки валидации представлены в виде JSON-структуры или где ошибки валидации сохраняются в сессии:
+
+
+    // Утверждает, что ошибок валидации нет...
+    $response->assertValid();
+
+    // Утверждает, что нет ошибок валидации для указанных ключей...
+    $response->assertValid(['name', 'email']);
+
+<a name="validation-assert-invalid"></a>
+#### assertInvalid
+
+Утверждает, что ответ содержит ошибки валидации для указанных ключей. Этот метод может использоваться для проверки ответов, где ошибки валидации представлены в виде JSON-структуры или где ошибки валидации сохраняются в сессии:
+
+    $response->assertInvalid(['name', 'email']);
+
+Также вы можете утверждать, что для указанного ключа есть определенное сообщение об ошибке валидации. При этом вы можете предоставить либо полное сообщение, либо только его небольшую часть:
+
+    $response->assertInvalid([
+        'name' => 'The name field is required.',
+        'email' => 'valid email address',
+    ]);
