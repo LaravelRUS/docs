@@ -1,5 +1,5 @@
 ---
-git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
+git: 9c42f8596c5ceadc3496f20044b7a38f620419a2
 ---
 
 # Трансляция (broadcast) событий
@@ -18,9 +18,10 @@ git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
 <a name="supported-drivers"></a>
 #### Поддерживаемые драйверы
 
-По умолчанию Laravel содержит два серверных драйвера трансляции на выбор: [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.io). Однако пакеты сообщества, например, [laravel-websockets](https://beyondco.de/docs/laravel-websockets/getting-started/introduction) и [soketi](https://docs.soketi.app/), предлагают дополнительные драйверы трансляции без использования платных провайдеров.
+По умолчанию Laravel содержит два серверных драйвера трансляции на выбор: [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.com). Однако пакеты сообщества, например, [soketi](https://docs.soketi.app/), предлагают дополнительные драйверы трансляции без использования платных провайдеров.
 
-> {tip} Прежде чем ближе ознакомиться с трансляцией событий, убедитесь, что вы прочитали документацию Laravel о [событиях и слушателях](/docs/{{version}}/events).
+> [!NOTE]
+> Прежде чем ближе ознакомиться с трансляцией событий, убедитесь, что вы прочитали документацию Laravel о [событиях и слушателях](/docs/{{version}}/events).
 
 <a name="server-side-installation"></a>
 ## Установка на стороне сервера
@@ -49,52 +50,62 @@ git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
 
 Если вы планируете транслировать свои события с помощью [Pusher Channels](https://pusher.com/channels), то вам следует установить PHP SDK Pusher Channels с помощью менеджера пакетов Composer:
 
-    composer require pusher/pusher-php-server
+```shell
+composer require pusher/pusher-php-server
+```
 
 Далее, вы должны настроить свои учетные данные Pusher Channels в конфигурационном файле `config/broadcasting.php`. Пример конфигурации Pusher Channels уже содержится в этом файле, что позволяет быстро указать параметры `key`, `secret`, и `app_id`. Как правило, эти значения должны быть установлены через [переменные окружения](/docs/{{version}}/configuration#environment-configuration) `PUSHER_APP_KEY`, `PUSHER_APP_SECRET` и `PUSHER_APP_ID`:
 
-    PUSHER_APP_ID=your-pusher-app-id
-    PUSHER_APP_KEY=your-pusher-key
-    PUSHER_APP_SECRET=your-pusher-secret
-    PUSHER_APP_CLUSTER=mt1
+```ini
+PUSHER_APP_ID=your-pusher-app-id
+PUSHER_APP_KEY=your-pusher-key
+PUSHER_APP_SECRET=your-pusher-secret
+PUSHER_APP_CLUSTER=mt1
+```
 
 Конфигурация `pusher` в файле `config/broadcasting.php` также позволяет вам указывать дополнительные параметры, которые поддерживаются Pusher, например, `cluster`.
 
 Далее, вам нужно будет изменить драйвер трансляции на `pusher` в файле `.env`:
 
-    BROADCAST_DRIVER=pusher
+```ini
+BROADCAST_DRIVER=pusher
+```
 
 И, наконец, вы готовы установить и настроить [Laravel Echo](#client-side-installation), который будет получать транслируемые события на клиентской стороне.
 
 <a name="pusher-compatible-open-source-alternatives"></a>
 #### Альтернативы Pusher с открытым кодом
 
-Пакеты [laravel-websockets](https://github.com/beyondcode/laravel-websockets) и [soketi](https://docs.soketi.app/) предоставляют совместимые с Pusher серверы WebSocket для Laravel. Эти пакеты позволяют вам использовать всю мощь вещания Laravel без использования коммерческого провайдера WebSocket. Для получения дополнительной информации об установке и использовании этих пакетов обратитесь к нашей документации по [альтернативам с открытым исходным кодом](https://beyondco.de/docs/laravel-websockets).
+[Soketi](https://docs.soketi.app/) предоставляет совместимые с Pusher серверы WebSocket для Laravel, позволяя вам использовать всю мощь вещания Laravel без использования коммерческого провайдера WebSocket. Для получения дополнительной информации по установке и использованию открытых пакетов для вещания обратитесь к нашей документации по [альтернативам с открытым исходным кодом](#open-source-alternatives)..
 
 <a name="ably"></a>
 ### Ably
 
+> [!NOTE]  
+> Ниже приведено описание того, как использовать Ably в режиме "совместимости с Pusher". Однако команда Ably рекомендует и поддерживает вещатель и клиент Echo, способные использовать уникальные возможности, предлагаемые Ably. Для получения дополнительной информации о использовании поддерживаемых Ably драйверов обратитесь к [документации Ably по Laravel broadcaster](https://github.com/ably/laravel-broadcaster).
+
 Если вы планируете транслировать свои события с помощью [Ably](https://ably.io), то вам следует установить PHP SDK Ably с помощью менеджера пакетов Composer:
 
-    composer require ably/ably-php
+```shell
+composer require ably/ably-php
+```
 
 Далее, вы должны настроить свои учетные данные Ably в конфигурационном файле `config/broadcasting.php`. Пример конфигурации Ably уже содержится в этом файле, что позволяет быстро указать параметр `key`. Как правило, это значение должно быть установлено через [переменную окружения](/docs/{{version}}/configuration#environment-configuration) `ABLY_KEY`:
 
-    ABLY_KEY=your-ably-key
+```ini
+ABLY_KEY=your-ably-key
+```
 
 Далее, вам нужно будет изменить драйвер трансляции на `ably` в файле `.env`:
 
-    BROADCAST_DRIVER=ably
+```ini
+BROADCAST_DRIVER=ably
+```
 
 И, наконец, вы готовы установить и настроить [Laravel Echo](#client-side-installation), который будет получать транслируемые события на клиентской стороне.
 
 <a name="open-source-alternatives"></a>
 ### Альтернативы с открытым исходным кодом
-
-<a name="open-source-alternatives-php"></a>
-#### PHP
-
-Пакет [laravel-websockets](https://github.com/beyondcode/laravel-websockets) – это пакет для Laravel на «чистом» PHP, совместимый с Pusher. Этот пакет позволяет вам использовать всю мощь трансляции Laravel без использования платных провайдеров WebSocket. Для получения дополнительной информации об установке и использовании этого пакета обратитесь к его [официальной документации](https://beyondco.de/docs/laravel-websockets).
 
 <a name="open-source-alternatives-node"></a>
 #### Node
@@ -109,7 +120,7 @@ git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
 
 [Laravel Echo](https://github.com/laravel/echo) – это JavaScript-библиотека, которая упрощает подписку на каналы и прослушивание событий, транслируемые вашим драйвером трансляции на стороне сервера. Вы можете установить Echo через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`, так как мы будем использовать вещатель Pusher Channels:
 
-```bash
+```shell
 npm install --save-dev laravel-echo pusher-js
 ```
 
@@ -117,22 +128,26 @@ npm install --save-dev laravel-echo pusher-js
 
 ```js
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
 window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+    key: import.meta.env.VITE_PUSHER_APP_KEY,
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
     forceTLS: true
 });
 ```
 
 После того как вы раскомментировали и настроили конфигурацию Echo в соответствии с вашими потребностями, вы можете скомпилировать исходники вашего приложения:
 
-    npm run dev
+```shell
+npm run build
+```
 
-> {tip} Чтобы узнать больше о компиляции JavaScript-исходников вашего приложения, обратитесь к документации [Laravel Mix](/docs/{{version}}/mix).
+> [!NOTE]
+> Чтобы узнать больше о компиляции JavaScript-исходников вашего приложения, обратитесь к документации [Vite](/docs/{{version}}/vite).
 
 <a name="using-an-existing-client-instance"></a>
 #### Использование существующего экземпляра клиента
@@ -141,24 +156,30 @@ window.Echo = new Echo({
 
 ```js
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-const client = require('pusher-js');
+const options = {
+    broadcaster: 'pusher',
+    key: 'your-pusher-channels-key'
+}
 
 window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: 'your-pusher-channels-key',
-    client: client
+    ...options,
+    client: new Pusher(options.key, options)
 });
 ```
 
 <a name="client-ably"></a>
 ### Ably
 
+> [!NOTE]  
+> Ниже приведено описание того, как использовать Ably в режиме "совместимости с Pusher". Однако команда Ably рекомендует и поддерживает вещатель и клиент Echo, способные использовать уникальные возможности, предлагаемые Ably. Для получения дополнительной информации о использовании поддерживаемых Ably драйверов обратитесь к [документации Ably по Laravel broadcaster](https://github.com/ably/laravel-broadcaster).
+
 [Laravel Echo](https://github.com/laravel/echo) – это JavaScript-библиотека, которая позволяет безболезненно подписаться на каналы и прослушивать события, транслируемые вашим драйвером трансляции на стороне сервера. Вы можете установить Echo через менеджер пакетов NPM. В этом примере мы также установим пакет `pusher-js`.
 
 Вы можете задаться вопросом, зачем нам устанавливать библиотеку `pusher-js` JavaScript, даже если мы используем Ably для трансляции наших событий. К счастью, Ably имеет режим совместимости Pusher, который позволяет нам использовать протокол Pusher при прослушивании событий в нашем клиентском приложении:
 
-```bash
+```shell
 npm install --save-dev laravel-echo pusher-js
 ```
 
@@ -168,12 +189,13 @@ npm install --save-dev laravel-echo pusher-js
 
 ```js
 import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 
-window.Pusher = require('pusher-js');
+window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_ABLY_PUBLIC_KEY,
+    key: import.meta.env.VITE_ABLY_PUBLIC_KEY,
     wsHost: 'realtime-pusher.ably.io',
     wsPort: 443,
     disableStats: true,
@@ -181,22 +203,26 @@ window.Echo = new Echo({
 });
 ```
 
-Обратите внимание, что наша конфигурация Echo для Ably ссылается на переменную окружения `MIX_ABLY_PUBLIC_KEY`. Значение этой переменной должно быть вашим публичным ключом Ably. Ваш публичный ключ – это часть ключа Ably перед символом `:`.
+Обратите внимание, что наша конфигурация Echo для Ably ссылается на переменную окружения `VITE_ABLY_PUBLIC_KEY`. Значение этой переменной должно быть вашим публичным ключом Ably. Ваш публичный ключ – это часть ключа Ably перед символом `:`.
 
 После того как вы раскомментировали и настроили конфигурацию Echo в соответствии с вашими потребностями, вы можете скомпилировать исходники вашего приложения:
 
-    npm run dev
+```shell
+npm run dev
+```
 
-> {tip} Чтобы узнать больше о компиляции JavaScript-исходников вашего приложения, обратитесь к документации [Laravel Mix](/docs/{{version}}/mix).
+> [!NOTE]  
+> Чтобы узнать больше о компиляции JavaScript-исходников вашего приложения, обратитесь к документации [Vite](/docs/{{version}}/vite).
 
 <a name="concept-overview"></a>
 ## Обзор концепции
 
-Трансляция событий Laravel позволяет транслировать серверные события Laravel в JavaScript-приложение на клиентской стороне, используя драйверный подход к WebSockets. В настоящее время Laravel поставляется с драйверами [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.io). События могут быть легко обработаны на стороне клиента с помощью JavaScript-пакета [Laravel Echo](#client-side-installation).
+Трансляция событий Laravel позволяет транслировать серверные события Laravel в JavaScript-приложение на клиентской стороне, используя драйверный подход к WebSockets. В настоящее время Laravel поставляется с драйверами [Pusher Channels](https://pusher.com/channels) и [Ably](https://ably.com). События могут быть легко обработаны на стороне клиента с помощью JavaScript-пакета [Laravel Echo](#client-side-installation).
 
 События транслируются по «каналам», которые могут быть публичными или частными. Любой посетитель вашего приложения может подписаться на публичный канал без какой-либо аутентификации или авторизации; однако, чтобы подписаться на частный канал, пользователь должен быть аутентифицирован и авторизован для прослушивания событий на этом канале.
 
-{tip} Если вы хотите изучить альтернативы Pusher с открытым исходным кодом, ознакомьтесь с [альтернативами с открытым исходным кодом](#open-source-alternatives).
+> [!NOTE]  
+> Если вы хотите изучить альтернативы Pusher с открытым исходным кодом, ознакомьтесь с [альтернативами с открытым исходным кодом](#open-source-alternatives).
 
 <a name="using-example-application"></a>
 ### Пример использования
@@ -218,7 +244,7 @@ window.Echo = new Echo({
 
     namespace App\Events;
 
-    use App\Order;
+    use App\Models\Order;
     use Illuminate\Broadcasting\Channel;
     use Illuminate\Broadcasting\InteractsWithSockets;
     use Illuminate\Broadcasting\PresenceChannel;
@@ -238,14 +264,32 @@ window.Echo = new Echo({
 
 Интерфейс `ShouldBroadcast` требует, чтобы в нашем классе события был определен метод `broadcastOn`. Этот метод отвечает за возврат каналов, по которым должно транслироваться событие. Пустая заглушка этого метода уже определена в сгенерированных классах событий, поэтому нам нужно только заполнить ее реализацию. Мы хотим, чтобы только создатель заказа мог просматривать статус обновления, поэтому мы будем транслировать событие на частном канале, привязанном к конкретному заказу:
 
+    use Illuminate\Broadcasting\Channel;
+    use Illuminate\Broadcasting\PrivateChannel;
+
     /**
      * Получить каналы трансляции события.
-     *
-     * @return \Illuminate\Broadcasting\PrivateChannel
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
         return new PrivateChannel('orders.'.$this->order->id);
+    }
+
+Если вы хотите, чтобы событие передавалось по нескольким каналам, вы можете вернуть вместо этого `array`:
+
+    use Illuminate\Broadcasting\PrivateChannel;
+
+    /**
+     * Get the channels the event should broadcast on.
+     *
+     * @return array<int, \Illuminate\Broadcasting\Channel>
+     */
+    public function broadcastOn(): array
+    {
+        return [
+            new PrivateChannel('orders.'.$this->order->id),
+            // ...
+        ];
     }
 
 <a name="example-application-authorizing-channels"></a>
@@ -254,8 +298,9 @@ window.Echo = new Echo({
 Помните, что пользователи должны иметь разрешение на прослушивание частных каналов. Мы можем определить наши правила авторизации каналов в файле `routes/channels.php` нашего приложения. В этом примере нам нужно убедиться, что любой пользователь, пытающийся прослушивать частный канал `orders.1`, на самом деле является создателем заказа:
 
     use App\Models\Order;
+    use App\Models\User;
 
-    Broadcast::channel('orders.{orderId}', function ($user, $orderId) {
+    Broadcast::channel('orders.{orderId}', function (User $user, int $orderId) {
         return $user->id === Order::findOrNew($orderId)->user_id;
     });
 
@@ -299,31 +344,22 @@ Echo.private(`orders.${orderId}`)
         use SerializesModels;
 
         /**
-         * Пользователь, создавший сервер.
-         *
-         * @var \App\Models\User
-         */
-        public $user;
-
-        /**
          * Создать новый экземпляр события.
-         *
-         * @param  \App\Models\User  $user
-         * @return void
          */
-        public function __construct(User $user)
-        {
-            $this->user = $user;
-        }
+        public function __construct(
+            public User $user,
+        ) {}
 
         /**
          * Получить каналы трансляции события.
          *
-         * @return Channel|array
+         * @return array<int, \Illuminate\Broadcasting\Channel>
          */
-        public function broadcastOn()
+        public function broadcastOn(): array
         {
-            return new PrivateChannel('user.'.$this->user->id);
+            return [
+                new PrivateChannel('user.'.$this->user->id),
+            ];
         }
     }
 
@@ -336,10 +372,8 @@ Echo.private(`orders.${orderId}`)
 
     /**
      * Имя транслируемого события.
-     *
-     * @return string
      */
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'server.created';
     }
@@ -355,22 +389,24 @@ Echo.private(`orders.${orderId}`)
 
 При трансляции события, все его публичные свойства автоматически сериализуются и транслируются как полезная нагрузка события, что позволяет вам получить доступ к любым его публичным данным из вашего JavaScript-приложения. Так, например, если ваше событие имеет единственное публичное свойство `$user`, представляющее собой модель Eloquent, то полезная нагрузка при трансляции события будет:
 
-    {
-        "user": {
-            "id": 1,
-            "name": "Patrick Stewart"
-            ...
-        }
+```json
+{
+    "user": {
+        "id": 1,
+        "name": "Patrick Stewart"
+        ...
     }
+}
+```
 
 Однако, если вы хотите иметь более точный контроль над полезной нагрузкой трансляции, то вы можете определить метод `broadcastWith` вашего события. Этот метод должен возвращать массив данных, которые вы хотите использовать в качестве полезной нагрузки при трансляции события:
 
     /**
      * Получите данные для трансляции.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function broadcastWith()
+    public function broadcastWith(): array
     {
         return ['id' => $this->user->id];
     }
@@ -398,10 +434,8 @@ Echo.private(`orders.${orderId}`)
 
     /**
      * The name of the queue on which to place the broadcasting job.
-     *
-     * @return string
      */
-    public function broadcastQueue()
+    public function broadcastQueue(): string
     {
         return 'default';
     }
@@ -414,7 +448,7 @@ Echo.private(`orders.${orderId}`)
 
     class OrderShipmentStatusUpdated implements ShouldBroadcastNow
     {
-        //
+        // ...
     }
 
 <a name="broadcast-conditions"></a>
@@ -424,10 +458,8 @@ Echo.private(`orders.${orderId}`)
 
     /**
      * Определить, условия трансляции события.
-     *
-     * @return bool
      */
-    public function broadcastWhen()
+    public function broadcastWhen(): bool
     {
         return $this->order->value > 100;
     }
@@ -437,23 +469,23 @@ Echo.private(`orders.${orderId}`)
 
 Когда транслируемые события отправляются в транзакциях базы данных, они могут быть обработаны очередью до того, как транзакция базы данных будет зафиксирована. Когда это происходит, любые обновления, внесенные вами в модели или записи базы данных во время транзакции базы данных, могут еще не быть отражены в базе данных. Кроме того, любые модели или записи базы данных, созданные в рамках транзакции, могут не существовать в базе данных. Если ваше событие зависит от этих моделей, могут возникнуть непредвиденные ошибки при обработке задания, транслирующего событие.
 
-Если для параметра `after_commit` конфигурации вашего соединения с очередью установлено значение `false`, то вы все равно можете указать, что конкретное транслируемое событие должно быть отправлено после того, как все открытые транзакции базы данных были зафиксированы, путем определения свойства `$afterCommit` в классе события:
+Если для параметра `after_commit` конфигурации вашего соединения с очередью установлено значение `false`, то вы все равно можете указать, что конкретное транслируемое событие должно быть отправлено после того, как все открытые транзакции базы данных были зафиксированы, реализовав интерфейс `ShouldDispatchAfterCommit` в классе события:
 
     <?php
 
     namespace App\Events;
 
     use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+    use Illuminate\Contracts\Events\ShouldDispatchAfterCommit;
     use Illuminate\Queue\SerializesModels;
 
-    class ServerCreated implements ShouldBroadcast
+    class ServerCreated implements ShouldBroadcast, ShouldDispatchAfterCommit
     {
         use SerializesModels;
-
-        public $afterCommit = true;
     }
 
-> {tip} Чтобы узнать больше о том, как обойти эти проблемы, просмотрите документацию, касающуюся [заданий в очереди и транзакций базы данных](/docs/{{version}}/queues#jobs-and-database-transactions).
+> [!NOTE]
+> Чтобы узнать больше о том, как обойти эти проблемы, просмотрите документацию, касающуюся [заданий в очереди и транзакций базы данных](/docs/{{version}}/queues#jobs-and-database-transactions).
 
 <a name="authorizing-channels"></a>
 ## Авторизация каналов
@@ -476,43 +508,49 @@ Laravel упрощает определение маршрутов для отв
 
 По умолчанию Echo будет использовать конечную точку `/broadcasting/auth` для авторизации доступа к каналу. Однако вы можете указать свою собственную конечную точку авторизации, передав параметр конфигурации `authEndpoint` вашему экземпляру Echo:
 
-    window.Echo = new Echo({
-        broadcaster: 'pusher',
-        // ...
-        authEndpoint: '/custom/endpoint/auth'
-    });
+```js
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    // ...
+    authEndpoint: '/custom/endpoint/auth'
+});
+```
 
 <a name="customizing-the-authorization-request"></a>
 #### Настройка запроса на авторизацию
 
 Вы можете настроить, как Laravel Echo выполняет запросы авторизации, предоставив настраиваемый авторизатор при инициализации Echo:
 
-    window.Echo = new Echo({
-        // ...
-        authorizer: (channel, options) => {
-            return {
-                authorize: (socketId, callback) => {
-                    axios.post('/api/broadcasting/auth', {
-                        socket_id: socketId,
-                        channel_name: channel.name
-                    })
-                    .then(response => {
-                        callback(false, response.data);
-                    })
-                    .catch(error => {
-                        callback(true, error);
-                    });
-                }
-            };
-        },
-    })
+```js
+window.Echo = new Echo({
+    // ...
+    authorizer: (channel, options) => {
+        return {
+            authorize: (socketId, callback) => {
+                axios.post('/api/broadcasting/auth', {
+                    socket_id: socketId,
+                    channel_name: channel.name
+                })
+                .then(response => {
+                    callback(null, response.data);
+                })
+                .catch(error => {
+                    callback(error);
+                });
+            }
+        };
+    },
+})
+```
 
 <a name="defining-authorization-callbacks"></a>
 ### Определение авторизации канала
 
 Затем нам нужно определить логику, которая фактически будет определять, может ли текущий аутентифицированный пользователь прослушивать указанный канал. Это делается в файле `routes/channels.php`, находящемся в вашем приложении. В этом файле вы можете использовать метод `Broadcast::channel` для регистрации замыканий авторизации канала:
 
-    Broadcast::channel('orders.{orderId}', function ($user, $orderId) {
+    use App\Models\User;
+
+    Broadcast::channel('orders.{orderId}', function (User $user, int $orderId) {
         return $user->id === Order::findOrNew($orderId)->user_id;
     });
 
@@ -520,18 +558,27 @@ Laravel упрощает определение маршрутов для отв
 
 Все замыкания авторизации получают текущего аутентифицированного пользователя в качестве своего первого аргумента и любые дополнительные параметры в качестве своих последующих аргументов. В этом примере мы используем заполнитель `{orderId}`, чтобы указать, что часть «ID» имени канала является параметром.
 
+Вы можете просмотреть список замыканий авторизации вещания вашего приложения, используя команду Artisan `channel:list`:
+
+```shell
+php artisan channel:list
+```
+
 <a name="authorization-callback-model-binding"></a>
 #### Привязка модели к авторизации
 
 Как и HTTP-маршруты, для маршрутов каналов также могут использоваться неявные и явные [привязки модели к маршруту](/docs/{{version}}/routing#route-model-binding). Например, вместо получения строкового или числового идентификатора заказа вы можете запросить фактический экземпляр модели `Order`:
 
     use App\Models\Order;
+    use App\Models\User;
 
-    Broadcast::channel('orders.{order}', function ($user, Order $order) {
+    Broadcast::channel('orders.{order}', function (User $user, Order $order) {
         return $user->id === $order->user_id;
     });
 
-> {note} В отличие от привязки модели к HTTP-маршруту, привязка модели канала не поддерживает [ограничение неявной привязки модели](/docs/{{version}}/routing#implicit-model-binding-scoping). Однако это редко представляет собой проблему, потому что большинство каналов можно ограничить на основе уникального первичного ключа одной модели.
+
+> [!WARNING]  
+> В отличие от привязки модели к HTTP-маршруту, привязка модели канала не поддерживает [ограничение неявной привязки модели](/docs/{{version}}/routing#implicit-model-binding-scoping). Однако это редко представляет собой проблему, потому что большинство каналов можно ограничить на основе уникального первичного ключа одной модели.
 
 <a name="authorization-callback-authentication"></a>
 #### Предварительная аутентификация авторизации канала
@@ -547,7 +594,9 @@ Laravel упрощает определение маршрутов для отв
 
 Если ваше приложение использует много разных каналов, то ваш файл `routes/channels.php` может стать громоздким. Таким образом, вместо использования замыканий для авторизации каналов вы можете использовать классы каналов. Чтобы сгенерировать новый канал, используйте команду `make:channel` [Artisan](artisan). Эта команда поместит новый класс канала в каталог `app/Broadcasting` вашего приложения:
 
-    php artisan make:channel OrderChannel
+```shell
+php artisan make:channel OrderChannel
+```
 
 Затем зарегистрируйте свой канал в файле `routes/channels.php`:
 
@@ -568,28 +617,24 @@ Laravel упрощает определение маршрутов для отв
     {
         /**
          * Создать новый экземпляр канала.
-         *
-         * @return void
          */
         public function __construct()
         {
-            //
+            // ...
         }
 
         /**
          * Подтвердить доступ пользователя к каналу.
-         *
-         * @param  \App\Models\User  $user
-         * @param  \App\Models\Order  $order
-         * @return array|bool
          */
-        public function join(User $user, Order $order)
+        public function join(User $user, Order $order): array|bool
         {
             return $user->id === $order->user_id;
         }
     }
 
-> {tip} Как и многие другие классы в Laravel, классы каналов будут автоматически разрешены [контейнером служб](/docs/{{version}}/container). Таким образом, вы можете указать любые зависимости, необходимые для вашего канала, в его конструкторе.
+
+> [!NOTE]  
+> Как и многие другие классы в Laravel, классы каналов будут автоматически разрешены [контейнером служб](/docs/{{version}}/container). Таким образом, вы можете указать любые зависимости, необходимые для вашего канала, в его конструкторе.
 
 <a name="broadcasting-events"></a>
 ## Трансляция событий
@@ -611,14 +656,16 @@ Laravel упрощает определение маршрутов для отв
 
 Чтобы лучше понять необходимость использования метода `toOthers`, давайте представим приложение со списком задач, в котором пользователь может создать новую задачу, введя имя задачи. Чтобы создать задачу, ваше приложение может сделать запрос к URL-адресу `/task`, который транслирует создание задачи и возвращает JSON-представление новой задачи. Когда ваше JavaScript-приложение получает ответ от конечной точки, оно может напрямую вставить новую задачу в свой список задач следующим образом:
 
-    axios.post('/task', task)
-        .then((response) => {
-            this.tasks.push(response.data);
-        });
-
+```js
+axios.post('/task', task)
+    .then((response) => {
+        this.tasks.push(response.data);
+    });
+```
 Однако помните, что мы также транслируем создание задачи. Если ваше JavaScript-приложение также прослушивает это событие, чтобы добавить задачи в список задач, у вас будут дублирующиеся задачи в вашем списке: одна из конечной точки и одна из трансляции. Вы можете решить эту проблему, используя метод `toOthers`, чтобы указать вещателю не транслировать событие текущему пользователю.
 
-> {note} Ваше событие должно использовать трейт `Illuminate\Broadcasting\InteractsWithSockets` для вызова метода `toOthers`.
+> [!WARNING]  
+> Ваше событие должно использовать трейт `Illuminate\Broadcasting\InteractsWithSockets` для вызова метода `toOthers`.
 
 <a name="only-to-others-configuration"></a>
 #### Конфигурирование при использовании метода `toOthers`
@@ -627,7 +674,9 @@ Laravel упрощает определение маршрутов для отв
 
 Если вы не используете глобальный экземпляр Axios, то вам необходимо вручную сконфигурировать JavaScript-приложение для отправки заголовка `X-Socket-ID` со всеми исходящими запросами. Вы можете получить идентификатор сокета, используя метод `Echo.socketId`:
 
-    var socketId = Echo.socketId();
+```js
+var socketId = Echo.socketId();
+```
 
 <a name="customizing-the-connection"></a>
 ### Настройка подключения
@@ -658,8 +707,6 @@ Laravel упрощает определение маршрутов для отв
 
         /**
          * Create a new event instance.
-         *
-         * @return void
          */
         public function __construct()
         {
@@ -686,9 +733,9 @@ Echo.channel(`orders.${this.order.id}`)
 
 ```js
 Echo.private(`orders.${this.order.id}`)
-    .listen(...)
-    .listen(...)
-    .listen(...);
+    .listen(/* ... */)
+    .listen(/* ... */)
+    .listen(/* ... */);
 ```
 
 <a name="stop-listening-for-events"></a>
@@ -733,7 +780,7 @@ window.Echo = new Echo({
 ```js
 Echo.channel('orders')
     .listen('.Namespace\\Event\\Class', (e) => {
-        //
+        // ...
     });
 ```
 
@@ -749,7 +796,9 @@ Echo.channel('orders')
 
 Данные, возвращаемые замыканием авторизации, будут доступны для слушателей событий канала присутствия в вашем JavaScript-приложении. Если пользователь не авторизован для присоединения к каналу присутствия, то вы должны вернуть `false` или `null`:
 
-    Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
+    use App\Models\User;
+
+    Broadcast::channel('chat.{roomId}', function (User $user, int $roomId) {
         if ($user->canJoinRoom($roomId)) {
             return ['id' => $user->id, 'name' => $user->name];
         }
@@ -760,19 +809,21 @@ Echo.channel('orders')
 
 Чтобы присоединиться к каналу присутствия, вы можете использовать метод `join` Echo. Метод `join` вернет реализацию `PresenceChannel`, которая, наряду с методом `listen`, позволяет вам подписаться на события `here`, `joining` и `leave`.
 
-    Echo.join(`chat.${roomId}`)
-        .here((users) => {
-            //
-        })
-        .joining((user) => {
-            console.log(user.name);
-        })
-        .leaving((user) => {
-            console.log(user.name);
-        })
-        .error((error) => {
-            console.error(error);
-        });
+```js
+Echo.join(`chat.${roomId}`)
+    .here((users) => {
+        // ...
+    })
+    .joining((user) => {
+        console.log(user.name);
+    })
+    .leaving((user) => {
+        console.log(user.name);
+    })
+    .error((error) => {
+        console.error(error);
+    });
+```
 
 Замыкание `here` будет выполнено сразу после успешного присоединения к каналу и получит массив, содержащий информацию о пользователе для всех других пользователей, которые в настоящее время подписаны на канал. Метод `joining` будет выполняться, когда новый пользователь присоединяется к каналу, а метод `leaving` будет выполняться при покидании пользователем канала. Метод `error` будет выполнен, когда при аутентификации возвращается код HTTP-статуса отличный от 200 или если есть проблема с парсингом возвращаемого JSON.
 
@@ -784,9 +835,9 @@ Echo.channel('orders')
     /**
      * Получить каналы трансляции события.
      *
-     * @return Channel|array
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn()
+    public function broadcastOn(): array
     {
         return new PresenceChannel('room.'.$this->message->room_id);
     }
@@ -799,30 +850,34 @@ Echo.channel('orders')
 
 Как и для других типов событий, вы можете прослушивать события, отправленные в каналы присутствия, используя метод `listen` Echo:
 
-    Echo.join(`chat.${roomId}`)
-        .here(...)
-        .joining(...)
-        .leaving(...)
-        .listen('NewMessage', (e) => {
-            //
-        });
+```js
+Echo.join(`chat.${roomId}`)
+    .here(/* ... */)
+    .joining(/* ... */)
+    .leaving(/* ... */)
+    .listen('NewMessage', (e) => {
+        // ...
+    });
+```
 
 <a name="model-broadcasting"></a>
 ## Трансляция моделей
 
-> {note} Прежде чем читать следующую документацию о трансляции моделей, мы рекомендуем вам ознакомиться с общими концепциями модельных широковещательных служб Laravel, а также с тем, как вручную создавать и прослушивать широковещательные события.
+> [!WARNING]  
+> Прежде чем читать следующую документацию о трансляции моделей, мы рекомендуем вам ознакомиться с общими концепциями модельных широковещательных служб Laravel, а также с тем, как вручную создавать и прослушивать широковещательные события.
 
 Обычно транслируются события, когда [модели Eloquent](/docs/{{version}}/eloquent) создаются, обновляются или удаляются. Конечно, это легко можно сделать вручную, [определив пользовательские события для изменений состояния модели Eloquent](/docs/{{version}}/eloquent#events) и пометив эти события с помощью интерфейса `ShouldBroadcast`.
 
 Однако, если вы не используете эти события для каких-либо других целей в своем приложении, может оказаться обременительным создание классов событий с единственной целью их широковещательной передачи. Чтобы исправить это, Laravel позволяет вам указать, что модель Eloquent должна автоматически транслировать изменения своего состояния.
 
-Для начала ваша модель Eloquent должна использовать трейт `Illuminate\Database\Eloquent\BroadcastsEvents`. Кроме того, модель должна определять метод `broadcastsOn`, возвращающий массив каналов, по которым должны транслироваться события модели:
+Для начала ваша модель Eloquent должна использовать трейт `Illuminate\Database\Eloquent\BroadcastsEvents`. Кроме того, модель должна определять метод `broadcastOn`, возвращающий массив каналов, по которым должны транслироваться события модели:
 
 ```php
 <?php
 
 namespace App\Models;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\BroadcastsEvents;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -835,7 +890,7 @@ class Post extends Model
     /**
      * Получите пользователя, которому принадлежит сообщение.
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
@@ -843,10 +898,9 @@ class Post extends Model
     /**
      * Получите каналы, по которым должны транслироваться события модели.
      *
-     * @param  string  $event
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return array<int, \Illuminate\Broadcasting\Channel|\Illuminate\Database\Eloquent\Model>
      */
-    public function broadcastOn($event)
+    public function broadcastOn(string $event): array
     {
         return [$this, $this->user];
     }
@@ -861,10 +915,9 @@ class Post extends Model
 /**
  * Получите каналы, по которым должны транслироваться события модели.
  *
- * @param  string  $event
- * @return \Illuminate\Broadcasting\Channel|array
+* @return array<string, array<int, \Illuminate\Broadcasting\Channel|\Illuminate\Database\Eloquent\Model>>
  */
-public function broadcastOn($event)
+public function broadcastOn(string $event): array
 {
     return match ($event) {
         'deleted' => [],
@@ -879,15 +932,12 @@ public function broadcastOn($event)
 Иногда вы можете захотеть настроить то, как Laravel создает базовое событие трансляции модели. Вы можете добиться этого, определив метод `newBroadcastableEvent` в вашей модели Eloquent. Этот метод должен возвращать экземпляр `Illuminate\Database\Eloquent\BroadcastableModelEventOccurred`:
 
 ```php
-use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred
+use Illuminate\Database\Eloquent\BroadcastableModelEventOccurred;
 
 /**
  * Создайте новое транслируемое событие для модели.
- *
- * @param  string  $event
- * @return \Illuminate\Database\Eloquent\BroadcastableModelEventOccurred
  */
-protected function newBroadcastableEvent($event)
+protected function newBroadcastableEvent(string $event): BroadcastableModelEventOccurred
 {
     return (new BroadcastableModelEventOccurred(
         $this, $event
@@ -911,12 +961,13 @@ use Illuminate\Broadcasting\PrivateChannel;
 /**
  * Получите каналы, по которым должны транслироваться события модели.
  *
- * @param  string  $event
- * @return \Illuminate\Broadcasting\Channel|array
+* @return array<int, \Illuminate\Broadcasting\Channel>
  */
-public function broadcastOn($event)
+public function broadcastOn(string $event): array
 {
-    return [new PrivateChannel('user.'.$this->id)];
+    return [
+        new PrivateChannel('user.'.$this->id)
+    ];
 }
 ```
 
@@ -939,15 +990,17 @@ $user->broadcastChannel()
 
 Так, например, обновление модели `App\Models\Post` будет транслировать событие в ваше клиентское приложение как `PostUpdated` со следующей полезной нагрузкой:
 
-    {
-        "model": {
-            "id": 1,
-            "title": "My first post"
-            ...
-        },
+```json
+{
+    "model": {
+        "id": 1,
+        "title": "My first post"
         ...
-        "socket": "someSocketId",
-    }
+    },
+    ...
+    "socket": "someSocketId",
+}
+```
 
 Удаление модели `App\Models\User` приведет к трансляции события с именем `UserDeleted`.
 
@@ -956,11 +1009,8 @@ $user->broadcastChannel()
 ```php
 /**
  * The model event's broadcast name.
- *
- * @param  string  $event
- * @return string|null
  */
-public function broadcastAs($event)
+public function broadcastAs(string $event): string|null
 {
     return match ($event) {
         'created' => 'post.created',
@@ -971,10 +1021,9 @@ public function broadcastAs($event)
 /**
  * Get the data to broadcast for the model.
  *
- * @param  string  $event
- * @return array
+* @return array<string, mixed>
  */
-public function broadcastWith($event)
+public function broadcastWith(string $event): array
 {
     return match ($event) {
         'created' => ['title' => $this->title],
@@ -1002,23 +1051,28 @@ Echo.private(`App.Models.User.${this.user.id}`)
 <a name="client-events"></a>
 ## Клиентские события
 
-> {tip} При использовании [Pusher Channels](https://pusher.com/channels) вы должны включить опцию «Client Events» в разделе «App Settings» вашей [панели управления приложения](https://dashboard.pusher.com/) для отправки клиентских событий.
+> [!NOTE]
+> При использовании [Pusher Channels](https://pusher.com/channels) вы должны включить опцию «Client Events» в разделе «App Settings» вашей [панели управления приложения](https://dashboard.pusher.com/) для отправки клиентских событий.
 
 По желанию можно транслировать событие другим подключенным клиентам, вообще не затрагивая ваше приложение Laravel. Это может быть особенно полезно для таких вещей, как «ввод» уведомлений, когда вы хотите предупредить пользователей вашего приложения о том, что другой пользователь печатает сообщение.
 
 Чтобы транслировать клиентские события, вы можете использовать метод `whisper` Echo:
 
-    Echo.private(`chat.${roomId}`)
-        .whisper('typing', {
-            name: this.user.name
-        });
+```js
+Echo.private(`chat.${roomId}`)
+    .whisper('typing', {
+        name: this.user.name
+    });
+```
 
 Чтобы прослушивать клиентские события, вы можете использовать метод `listenForWhisper`:
 
-    Echo.private(`chat.${roomId}`)
-        .listenForWhisper('typing', (e) => {
-            console.log(e.name);
-        });
+```js
+Echo.private(`chat.${roomId}`)
+    .listenForWhisper('typing', (e) => {
+        console.log(e.name);
+    });
+```
 
 <a name="notifications"></a>
 ## Уведомления
@@ -1027,9 +1081,11 @@ Echo.private(`App.Models.User.${this.user.id}`)
 
 После того как вы настроили уведомление для использования трансляции канала, вы можете прослушивать транслируемые события, используя метод `notification` Echo. Помните, что имя канала должно соответствовать имени класса объекта, получающего уведомления:
 
-    Echo.private(`App.Models.User.${userId}`)
-        .notification((notification) => {
-            console.log(notification.type);
-        });
+```js
+Echo.private(`App.Models.User.${userId}`)
+    .notification((notification) => {
+        console.log(notification.type);
+    });
+```
 
 В этом примере все уведомления, отправленные экземплярам `App\Models\User` через канал `broadcast`, будут получены в замыкании. Авторизация канала `App.Models.User.{id}` уже изначально содержится в `BroadcastServiceProvider` фреймворка Laravel.
