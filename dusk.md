@@ -1,5 +1,5 @@
 ---
-git: 9d0c2bfa9e9ddf4c28c02e9461b497b1283f568e
+git: c7f1d2092cc8878ee36eabce7bfd72f86da6d287
 ---
 
 # Laravel Dusk
