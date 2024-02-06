@@ -1,5 +1,5 @@
 ---
-git: dbb3411ad44095dcc7d6250973d084d7f6b9814c
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # База данных · Наполнение фиктивными данными
@@ -10,7 +10,7 @@ git: dbb3411ad44095dcc7d6250973d084d7f6b9814c
 
 Laravel предлагает возможность наполнения вашей базы тестовыми данными с использованием классов-наполнителей. Все классы наполнителей хранятся в каталоге `database/seeders`. Класс `DatabaseSeeder` уже определен по умолчанию. В этом классе вы можете использовать метод `call` для запуска других наполнителей, что позволит вам контролировать порядок наполнения БД.
 
-> **Note**  
+> [!NOTE] 
 > При наполнении базы данных автоматически отключается защита [массового присвоения](/docs/{{version}}/eloquent#mass-assignment).
 
 <a name="writing-seeders"></a>
@@ -45,13 +45,13 @@ php artisan make:seeder UserSeeder
         {
             DB::table('users')->insert([
                 'name' => Str::random(10),
-                'email' => Str::random(10).'@gmail.com',
+                'email' => Str::random(10).'@example.com',
                 'password' => Hash::make('password'),
             ]);
         }
     }
 
-> **Note**  
+> [!NOTE]  
 > В методе `run` вы можете объявить любые необходимые типы зависимостей. Они будут автоматически извлечены и внедрены через [контейнер служб](/docs/{{version}}/container) Laravel.
 
 <a name="using-model-factories"></a>
