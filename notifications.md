@@ -1,5 +1,5 @@
 ---
-git: 4ce4aa4727ce854443dee9c5d7381caca6ccf2e7
+git: c36b582408cb0eddf291238ce5fb1bee21979402
 ---
 
 # Уведомления
@@ -49,7 +49,7 @@ php artisan make:notification InvoicePaid
 
     $user->notify(new InvoicePaid($invoice));
 
-> **Note**  
+> [!NOTE] 
 > Помните, что вы можете использовать трейт `Notifiable` в любой из ваших моделей. Вы не ограничены использованием его только в модели `User`.
 
 <a name="using-the-notification-facade"></a>
@@ -70,7 +70,7 @@ php artisan make:notification InvoicePaid
 
 Каждый класс уведомлений имеет метод `via`, который определяет, по каким каналам будет доставлено уведомление. Уведомления можно отправлять по каналам `mail`, `database`, `broadcast`, `vonage` и `slack`.
 
-> **Note**  
+> [!NOTE] 
 > Если вы хотите использовать другие каналы доставки, такие как Telegram или Pusher, то посетите веб-сайт сообщества [Laravel Notification Channels](http://laravel-notification-channels.com).
 
 Метод `via` получает экземпляр `$notifiable`, представляющий экземпляр класса, которому отправляется уведомление. Вы можете использовать `$notifiable`, чтобы определить, по каким каналам должно доставляться уведомление:
@@ -88,7 +88,7 @@ php artisan make:notification InvoicePaid
 <a name="queueing-notifications"></a>
 ### Очереди уведомлений
 
-> **Warning**  
+> [!WARNING]  
 > Перед отправкой уведомлений в очередь вы должны настроить и запустить [обработчик очереди](/docs/{{version}}/queues).
 
 Отправка уведомлений может занять время, особенно если каналу необходимо выполнить внешний вызов API для доставки уведомления. Чтобы ускорить время отклика вашего приложения, поместите ваше уведомление в очередь, добавив интерфейс `ShouldQueue` и трейт `Queueable` в ваш класс. Интерфейс и трейт уже импортированы для всех уведомлений, сгенерированных с помощью команды `make:notification`, поэтому вы можете сразу добавить их в свой класс уведомлений:
@@ -249,7 +249,7 @@ class InvoicePaid extends Notification implements ShouldQueue
         }
     }
 
-> **Note**  
+> [!NOTE]  
 > Чтобы узнать больше о том, как обойти эти проблемы, просмотрите документацию, касающуюся [заданий в очереди и транзакций базы данных](/docs/{{version}}/queues#jobs-and-database-transactions).
 
 <a name="determining-if-the-queued-notification-should-be-sent"></a>
@@ -287,6 +287,13 @@ class InvoicePaid extends Notification implements ShouldQueue
         'barrett@example.com' => 'Barrett Blair',
     ])->notify(new InvoicePaid($invoice));
 
+С помощью метода `routes` вы можете предоставить сразу несколько маршрутов для нескольких каналов уведомлений:
+
+    Notification::routes([
+        'mail' => ['barrett@example.com' => 'Barrett Blair'],
+        'vonage' => '5555555555',
+    ])->notify(new InvoicePaid($invoice));
+
 <a name="mail-notifications"></a>
 ## Почтовые уведомления
 
@@ -311,16 +318,15 @@ class InvoicePaid extends Notification implements ShouldQueue
                     ->line('Thank you for using our application!');
     }
 
-> **Note**  
+> [!NOTE] 
 > Обратите внимание, что мы используем `$this->invoice->id` в нашем методе `toMail`. Вы можете передать любые данные, которые необходимы вашему уведомлению для генерации сообщения, в конструктор уведомления.
 
 В этом примере мы регистрируем приветствие, строку текста, призыв к действию, а затем еще одну строку текста. Эти методы, предоставляемые объектом `MailMessage`, упрощают и ускоряют формирование небольших транзакционных электронных писем. Затем канал `mail` преобразует компоненты сообщения в красивый, отзывчивый HTML-шаблон сообщения электронной почты с аналогом в виде обычного текста. Вот пример электронного письма, созданного каналом `mail`:
 
 <img src="https://laravel.com/img/docs/notification-example-2.png" width="100%" alt="Notification example">
 
-> **Note**  
+> [!NOTE] 
 > При отправке почтовых уведомлений не забудьте установить параметр `name` в вашем конфигурационном файле `config/app.php`. Это значение будет использоваться в верхнем и нижнем колонтитулах ваших почтовых уведомлений.
-
 
 #### Сообщения об ошибках
 
@@ -482,7 +488,7 @@ php artisan vendor:publish --tag=laravel-notifications
                     ->attach('/path/to/file');
     }
 
-> **Note**  
+> [!NOTE]  
 > Метод `attach`, предоставляемый почтовыми сообщениями уведомлений, также принимает [объекты, прикрепляемые к сообщению](/docs/{{version}}/mail#attachable-objects). Пожалуйста, ознакомьтесь с подробной [документацией об объектах, прикрепляемых к сообщениям](/docs/{{version}}/mail#attachable-objects), чтобы узнать больше.
 
 При прикреплении файлов к сообщению вы также можете указать отображаемое имя и / или MIME-тип, передав массив в качестве второго аргумента методу `attach`:
@@ -531,8 +537,6 @@ php artisan vendor:publish --tag=laravel-notifications
                         ],
                     ]);
     }
-
-
 
 <a name="raw-data-attachments"></a>
 #### Почтовые вложения необработанных данных
@@ -590,7 +594,6 @@ php artisan vendor:publish --tag=laravel-notifications
                         );
                     });
     }
-
 
 <a name="using-mailables"></a>
 ### Использование почтовых отправлений
@@ -777,7 +780,7 @@ php artisan notifications:table
 php artisan migrate
 ```
 
-> **Note**  
+> [!NOTE]  
 > Если ваши модели с уведомлениями используют [UUID или ULID в качестве первичных ключей](/docs/{{version}}/eloquent#uuid-and-ulid-keys), вы должны заменить метод `morphs` на [`uuidMorphs`](/docs/{{version}}/migrations#column-method-uuidMorphs) или [`ulidMorphs`](/docs/{{version}}/migrations#column-method-ulidMorphs) в миграции таблицы уведомлений.
 
 <a name="formatting-database-notifications"></a>
@@ -838,7 +841,7 @@ public function databaseType(object $notifiable): string
         echo $notification->type;
     }
 
-> **Note**  
+> [!NOTE] 
 > Чтобы получить доступ к уведомлениям в JavaScript-приложении на клиентской стороне, вы должны определить контроллер уведомлений для своего приложения, который возвращает уведомления для уведомляемого объекта, такого как текущий пользователь. Затем вы можете сделать HTTP-запрос к URL-адресу этого контроллера из своего JavaScript-приложения на клиентской стороне.
 
 <a name="marking-notifications-as-read"></a>
@@ -1017,7 +1020,6 @@ VONAGE_SMS_FROM=15556666666
                     ->content('Your SMS message content')
                     ->from('15554443333');
     }
-
 
 <a name="adding-a-client-reference"></a>
 ### Добавление ссылки на клиента
@@ -1198,7 +1200,6 @@ composer require laravel/slack-notification-channel
                 });
     }
 
-
 <a name="inspecting-slack-blocks"></a>
 #### Просмотр cтруктуры блоков Slack
 
@@ -1247,12 +1248,10 @@ class User extends Authenticatable
 }
 ```
 
-
-
 <a name="notifying-external-slack-workspaces"></a>
 ### Уведомление во внешние рабочие пространства Slack
 
-> **Примечание**
+> [!NOTE]
 > Прежде чем отправлять уведомления во внешние рабочие пространства Slack, ваше приложение Slack должно быть [распространено](#slack-app-distribution).
 
 Конечно, часто вам захочется отправлять уведомления в рабочие пространства Slack, которые принадлежат пользователям вашего приложения. Для этого сначала вам потребуется получить OAuth-токен Slack для пользователя. К счастью, [Laravel Socialite](/docs/{{version}}/socialite) включает драйвер Slack, который позволит вам легко аутентифицировать пользователей вашего приложения в Slack и [получать токен бота](/docs/{{version}}/socialite#slack-bot-scopes).
@@ -1462,7 +1461,7 @@ Notification::assertSentOnDemand(
         ],
     ];
 
-> **Note**  
+> [!NOTE]  
 > После регистрации слушателей в вашем `EventServiceProvider` используйте команду `event:generate` Artisan, чтобы быстро сгенерировать классы слушателей.
 
 В слушателе события вы можете получить доступ к свойствам `notifiable`, `notification`, `channel` и `response` события, чтобы узнать больше о получателе уведомления или самом уведомлении:
