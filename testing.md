@@ -1,5 +1,5 @@
 ---
-git: 521051f089341fee2982ea001303cd723753a61d
+git: 4f8109fcc7f90aeec58214759b52ff5aa4dd148c
 ---
 
 # Тестирование · Начало работы
@@ -55,7 +55,7 @@ php artisan make:test UserTest --pest
 php artisan make:test UserTest --unit --pest
 ```
 
-> **Note**  
+> [!NOTE]
 > Заготовки тестов можно настроить с помощью [публикации заготовок](artisan#stub-customization).
 
 После того как тест был сгенерирован, вы можете определить методы тестирования, как обычно, используя [PHPUnit](https://phpunit.de). Чтобы запустить ваши тесты, выполните команду `vendor/bin/phpunit` или `php artisan test` из вашего терминала:
@@ -77,8 +77,8 @@ php artisan make:test UserTest --unit --pest
         }
     }
 
-> **Warning**  
-> Если вы определяете свои собственные методы `setUp` / `tearDown` в тестовом классе, обязательно вызывайте соответствующие методы `parent::setUp()` / `parent::tearDown()` родительского класса.
+> [!WARNING]  
+> Если вы определяете свои собственные методы `setUp` / `tearDown` в тестовом классе, обязательно вызывайте соответствующие методы `parent::setUp()` / `parent::tearDown()` родительского класса. Обычно вы должны вызывать `parent::setUp()` в начале своего собственного метода `setUp`, а `parent::tearDown()` в конце вашего метода `tearDown`.
 
 <a name="running-tests"></a>
 ## Запуск тестов
@@ -119,7 +119,7 @@ php artisan test --parallel
 php artisan test --parallel --processes=4
 ```
 
-> **Warning**  
+> [!WARNING]  
 > При параллельном запуске тестов некоторые параметры PHPUnit (такие, как `--do-not-cache-result`) могут быть недоступны.
 
 <a name="parallel-testing-and-databases"></a>
@@ -189,7 +189,7 @@ php artisan test --parallel --recreate-databases
 <a name="reporting-test-coverage"></a>
 ### Отчет о покрытии тестами
 
-> **Warning**  
+> [!WARNING]  
 > Для использования этой функции требуется [Xdebug](https://xdebug.org) или [PCOV](https://pecl.php.net/package/pcov).
 
 При запуске тестов вашего приложения вам может потребоваться определить, действительно ли ваши тесты охватывают код приложения и насколько много кода приложения используется при выполнении ваших тестов. Для этого вы можете использовать опцию `--coverage` при вызове команды `test`:
