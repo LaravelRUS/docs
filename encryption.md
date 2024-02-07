@@ -1,5 +1,5 @@
 ---
-git: 29086d81ffeefa4f7609a79177e6ed3149dd1f9b
+git: 83761449ff271ccda95e4ea87eca0f5a772f59df
 ---
 
 # Шифрование
