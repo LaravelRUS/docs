@@ -1,5 +1,5 @@
 ---
-git: dbb3411ad44095dcc7d6250973d084d7f6b9814c
+git: 7eb8b6df95471a64238cb535df75deaaba8e0334
 ---
 
 # База данных · Использование Redis
@@ -7,11 +7,11 @@ git: dbb3411ad44095dcc7d6250973d084d7f6b9814c
 <a name="introduction"></a>
 ## Введение
 
-[Redis](https://redis.io) – это расширенное хранилище ключ-значение с открытым исходным кодом. Его часто называют сервером структуры данных, поскольку ключи могут содержать [строки](https://redis.io/topics/data-types#strings), [хеши](https://redis.io/topics/data-types#hashes), [списки](https://redis.io/topics/data-types#lists), [наборы](https://redis.io/topics/data-types#sets) и [отсортированные наборы](https://redis.io/topics/data-types#sorted-sets).
+[Redis](https://redis.io) – это расширенное хранилище ключ-значение с открытым исходным кодом. Его часто называют сервером структуры данных, поскольку ключи могут содержать [строки](https://redis.io/docs/data-types/strings/), [хеши](https://redis.io/docs/data-types/hashes/), [списки]((https://redis.io/docs/data-types/lists/), [наборы](https://redis.io/docs/data-types/sets/) и [отсортированные наборы](https://redis.io/docs/data-types/sorted-sets/).
 
-Перед использованием Redis с Laravel мы рекомендуем вам установить и использовать расширение [phpredis](https://github.com/phpredis/phpredis) PHP через PECL. Расширение сложнее установить по сравнению с пакетами PHP пользовательского слоя, но оно может обеспечить лучшую производительность для приложений, интенсивно использующих Redis. Если вы используете [Laravel Sail](/docs/{{version}}/sail), то это расширение уже установлено в контейнере Docker вашего приложения.
+Перед использованием Redis с Laravel мы рекомендуем вам установить и использовать расширение [PhpRedis](https://github.com/phpredis/phpredis) PHP через PECL. Расширение сложнее установить по сравнению с пакетами PHP пользовательского слоя, но оно может обеспечить лучшую производительность для приложений, интенсивно использующих Redis. Если вы используете [Laravel Sail](/docs/{{version}}/sail), то это расширение уже установлено в контейнере Docker вашего приложения.
 
-Если вы не можете установить расширение phpredis, то установите пакет `predis/predis` через Composer. Predis – это клиент Redis, полностью написанный на PHP и не требующий дополнительных расширений:
+Если вы не можете установить расширение PhpRedis, то установите пакет `predis/predis` через Composer. Predis – это клиент Redis, полностью написанный на PHP и не требующий дополнительных расширений:
 
 ```shell
 composer require predis/predis
@@ -142,7 +142,7 @@ composer require predis/predis
 <a name="the-redis-facade-alias"></a>
 #### Псевдоним фасада Redis
 
-Конфигурационный файл `config/app.php` в Laravel содержит массив `aliases`, который определяет все псевдонимы классов, которые будут зарегистрированы фреймворком. По умолчанию в него не включается псевдоним `Redis`, чтобы избежать конфликта с именем класса `Redis`, предоставляемым расширением phpredis. Если вы используете клиент Predis и хотите добавить псевдоним `Redis`, вы можете добавить его в массив `aliases` в конфигурационном файле `config/app.php` вашего приложения:
+Конфигурационный файл `config/app.php` в Laravel содержит массив `aliases`, который определяет все псевдонимы классов, которые будут зарегистрированы фреймворком. По умолчанию в него не включается псевдоним `Redis`, чтобы избежать конфликта с именем класса `Redis`, предоставляемым расширением PhpRedis. Если вы используете клиент Predis и хотите добавить псевдоним `Redis`, вы можете добавить его в массив `aliases` в конфигурационном файле `config/app.php` вашего приложения:
 
 ```php
 'aliases' => Facade::defaultAliases()->merge([
@@ -151,9 +151,9 @@ composer require predis/predis
 ```
 
 <a name="phpredis"></a>
-### phpredis
+### PhpRedis
 
-По умолчанию Laravel будет использовать расширение phpredis для соединения с Redis. Клиент, который Laravel будет использовать для соединения с Redis, определяется значением параметра `redis.client` конфигурации, который обычно проксирует значение переменной `REDIS_CLIENT` окружения:
+По умолчанию Laravel будет использовать расширение PhpRedis для соединения с Redis. Клиент, который Laravel будет использовать для соединения с Redis, определяется значением параметра `redis.client` конфигурации, который обычно проксирует значение переменной `REDIS_CLIENT` окружения:
 
     'redis' => [
 
@@ -162,7 +162,7 @@ composer require predis/predis
         // Остальная часть конфигурации Redis ...
     ],
 
-Помимо основных параметров конфигурации сервера `scheme`, `host`, `port`, `database`, и `password`, phpredis поддерживает дополнительные параметры подключения: `name`, `persistent`, `persistent_id`, `prefix`, `read_timeout`, `retry_interval`, `timeout`, и `context`. Чтобы использовать эти дополнительные параметры конфигурации, добавьте их в конфигурацию сервера Redis в конфигурационном файле `config/database.php` вашего приложения:
+Помимо основных параметров конфигурации сервера `scheme`, `host`, `port`, `database`, и `password`, PhpRedis поддерживает дополнительные параметры подключения: `name`, `persistent`, `persistent_id`, `prefix`, `read_timeout`, `retry_interval`, `timeout`, и `context`. Чтобы использовать эти дополнительные параметры конфигурации, добавьте их в конфигурацию сервера Redis в конфигурационном файле `config/database.php` вашего приложения:
 
     'default' => [
         'host' => env('REDIS_HOST', 'localhost'),
@@ -177,9 +177,9 @@ composer require predis/predis
     ],
 
 <a name="phpredis-serialization"></a>
-#### phpredis Сериализация и сжатие
+#### PhpRedis Сериализация и сжатие
 
-Расширение phpredis также можно настроить для использования различных алгоритмов сериализации и сжатия. Эти алгоритмы можно настроить с помощью массива `options` вашей конфигурации Redis:
+Расширение PhpRedis также можно настроить для использования различных алгоритмов сериализации и сжатия. Эти алгоритмы можно настроить с помощью массива `options` вашей конфигурации Redis:
 
     'redis' => [
 
@@ -193,7 +193,7 @@ composer require predis/predis
         // Rest of Redis configuration...
     ],
 
-В настоящее время поддерживаются следующие алгоритмы сериализации: `Redis::SERIALIZER_NONE` (default), `Redis::SERIALIZER_PHP`, `Redis::SERIALIZER_JSON`, `Redis::SERIALIZER_IGBINARY`, и `Redis::SERIALIZER_MSGPACK`.
+В настоящее время поддерживаются следующие сериализаторы: `Redis::SERIALIZER_NONE` (default), `Redis::SERIALIZER_PHP`, `Redis::SERIALIZER_JSON`, `Redis::SERIALIZER_IGBINARY`, и `Redis::SERIALIZER_MSGPACK`.
 
 Поддерживаемые алгоритмы сжатия: `Redis::COMPRESSION_NONE` (default), `Redis::COMPRESSION_LZF`, `Redis::COMPRESSION_ZSTD`, и `Redis::COMPRESSION_LZ4`.
 
@@ -259,7 +259,7 @@ composer require predis/predis
         $redis->incr('total_visits', 1);
     });
 
-> **Warning**  
+> [!WARNING]
 > При определении транзакции Redis вы не можете получать какие-либо значения из соединения Redis. Помните, ваша транзакция выполняется как одна атомарная операция, и эта операция не выполнится, пока не завершится выполнение всех команд замыкания.
 
 #### Скрипты Lua
@@ -280,7 +280,7 @@ composer require predis/predis
         return counter
     LUA, 2, 'first-counter', 'second-counter');
 
-> **Warning**  
+> [!WARNING]
 > Пожалуйста, обратитесь к [документации Redis](https://redis.io/commands/eval) для получения дополнительных сведений о сценариях Redis.
 
 <a name="pipelining-commands"></a>

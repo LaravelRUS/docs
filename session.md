@@ -1,5 +1,5 @@
 ---
-git: 4e4517060f6f572b444e9763377ee2c383684e1f
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Сессия HTTP
@@ -29,7 +29,7 @@ Laravel предлагает множество различных типов х
 
 <!-- </div> -->
 
-> **Note**  
+> [!NOTE] 
 > Драйвер `array` в основном используется во время [тестирования](/docs/{{version}}/testing) и предотвращает сохранение данных, находящихся в сессии.
 
 <a name="driver-prerequisites"></a>
@@ -65,7 +65,7 @@ php artisan migrate
 
 Перед использованием Redis с Laravel вам нужно будет либо установить расширение PHP PhpRedis через PECL, либо установить пакет `predis/predis` (~ 1.0) через Composer. Для получения дополнительной информации о настройке Redis обратитесь к [документации Redis](/docs/{{version}}/redis#configuration) Laravel.
 
-> **Note**  
+> [!NOTE]  
 > В параметре `connection` конфигурационного файла `config/session.php` указывается, какое соединение Redis используется сессией.
 
 <a name="interacting-with-the-session"></a>
@@ -124,7 +124,7 @@ php artisan migrate
         session(['key' => 'value']);
     });
 
-> **Note**  
+> [!NOTE] 
 > Существует небольшая практическая разница между использованием сессии через экземпляр HTTP-запроса и использованием глобального помощника `session`. Оба метода [тестируемые](/docs/{{version}}/testing) с помощью метода `assertSessionHas`, который доступен во всех ваших тестах.
 
 <a name="retrieving-all-session-data"></a>
@@ -133,6 +133,15 @@ php artisan migrate
 Если вы хотите получить все данные сессии, то вы можете использовать метод `all`:
 
     $data = $request->session()->all();
+
+<a name="retrieving-a-portion-of-the-session-data"></a>
+### Получение части данных сессии
+
+Методы `only` и `except` могут быть использованы для извлечения подмножества данных сессии:
+
+    $data = $request->session()->only(['username', 'email']);
+
+    $data = $request->session()->except(['username', 'email']);
 
 <a name="determining-if-an-item-exists-in-the-session"></a>
 #### Определение наличия элемента в сессии
@@ -239,7 +248,7 @@ Laravel автоматически пересоздает идентификат
 <a name="session-blocking"></a>
 ## Блокировка сессии
 
-> **Warning**  
+> [!WARNING] 
 > Чтобы использовать блокировку сессии, ваше приложение должно использовать драйвер кеша, поддерживающий [атомарные блокировки](/docs/{{version}}/cache#atomic-locks).
 > В настоящее время этими драйверами кеширования являются `memcached`, `dynamodb`, `redis` и `database`, `file` и `array`.
 > Кроме того, вы не можете использовать драйвер сессии `cookie`.
@@ -288,7 +297,7 @@ Laravel автоматически пересоздает идентификат
         public function gc($lifetime) {}
     }
 
-> **Note**  
+> [!NOTE]  
 > Laravel не содержит каталога для хранения ваших расширений. Вы можете разместить их где угодно. В этом примере мы создали каталог `Extensions` для размещения `MongoSessionHandler`.
 
 Поскольку цель этих методов не совсем понятна, давайте быстро рассмотрим, что делает каждый из этих методов:

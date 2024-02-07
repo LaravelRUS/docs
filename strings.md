@@ -1,256 +1,247 @@
 ---
-git: 2a643174d2f46952bd3cd7975029c49cd505f049
+git: dc113868736123ab845451034064a460d21ca13e
 ---
 
-# Strings
-
-- [Introduction](#introduction)
-- [Available Methods](#available-methods)
+# Строки
 
 <a name="introduction"></a>
-## Introduction
+## Введение
 
-Laravel includes a variety of functions for manipulating string values. Many of these functions are used by the framework itself; however, you are free to use them in your own applications if you find them convenient.
+Laravel включает в себя различные функции для работы с строковыми значениями. Многие из этих функций используются самим фреймворком; однако, вы вольны использовать их в своих собственных приложениях, если считаете их удобными.
 
 <a name="available-methods"></a>
 ## Available Methods
 
-<style>
-    .collection-method-list > p {
-        columns: 10.8em 3; -moz-columns: 10.8em 3; -webkit-columns: 10.8em 3;
-    }
-
-    .collection-method-list a {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-</style>
-
 <a name="strings-method-list"></a>
 ### Strings
 
-<div class="collection-method-list" markdown="1">
+<div class="docs-column-list" markdown="1">
 
-[\__](#method-__)
-[class_basename](#method-class-basename)
-[e](#method-e)
-[preg_replace_array](#method-preg-replace-array)
-[Str::after](#method-str-after)
-[Str::afterLast](#method-str-after-last)
-[Str::ascii](#method-str-ascii)
-[Str::before](#method-str-before)
-[Str::beforeLast](#method-str-before-last)
-[Str::between](#method-str-between)
-[Str::betweenFirst](#method-str-between-first)
-[Str::camel](#method-camel-case)
-[Str::contains](#method-str-contains)
-[Str::containsAll](#method-str-contains-all)
-[Str::endsWith](#method-ends-with)
-[Str::excerpt](#method-excerpt)
-[Str::finish](#method-str-finish)
-[Str::headline](#method-str-headline)
-[Str::inlineMarkdown](#method-str-inline-markdown)
-[Str::is](#method-str-is)
-[Str::isAscii](#method-str-is-ascii)
-[Str::isJson](#method-str-is-json)
-[Str::isUlid](#method-str-is-ulid)
-[Str::isUrl](#method-str-is-url)
-[Str::isUuid](#method-str-is-uuid)
-[Str::kebab](#method-kebab-case)
-[Str::lcfirst](#method-str-lcfirst)
-[Str::length](#method-str-length)
-[Str::limit](#method-str-limit)
-[Str::lower](#method-str-lower)
-[Str::markdown](#method-str-markdown)
-[Str::mask](#method-str-mask)
-[Str::orderedUuid](#method-str-ordered-uuid)
-[Str::padBoth](#method-str-padboth)
-[Str::padLeft](#method-str-padleft)
-[Str::padRight](#method-str-padright)
-[Str::password](#method-str-password)
-[Str::plural](#method-str-plural)
-[Str::pluralStudly](#method-str-plural-studly)
-[Str::position](#method-str-position)
-[Str::random](#method-str-random)
-[Str::remove](#method-str-remove)
-[Str::repeat](#method-str-repeat)
-[Str::replace](#method-str-replace)
-[Str::replaceArray](#method-str-replace-array)
-[Str::replaceFirst](#method-str-replace-first)
-[Str::replaceLast](#method-str-replace-last)
-[Str::replaceMatches](#method-str-replace-matches)
-[Str::replaceStart](#method-str-replace-start)
-[Str::replaceEnd](#method-str-replace-end)
-[Str::reverse](#method-str-reverse)
-[Str::singular](#method-str-singular)
-[Str::slug](#method-str-slug)
-[Str::snake](#method-snake-case)
-[Str::squish](#method-str-squish)
-[Str::start](#method-str-start)
-[Str::startsWith](#method-starts-with)
-[Str::studly](#method-studly-case)
-[Str::substr](#method-str-substr)
-[Str::substrCount](#method-str-substrcount)
-[Str::substrReplace](#method-str-substrreplace)
-[Str::swap](#method-str-swap)
-[Str::take](#method-take)
-[Str::title](#method-title-case)
-[Str::toHtmlString](#method-str-to-html-string)
-[Str::ucfirst](#method-str-ucfirst)
-[Str::ucsplit](#method-str-ucsplit)
-[Str::upper](#method-str-upper)
-[Str::ulid](#method-str-ulid)
-[Str::uuid](#method-str-uuid)
-[Str::wordCount](#method-str-word-count)
-[Str::wordWrap](#method-str-word-wrap)
-[Str::words](#method-str-words)
-[Str::wrap](#method-str-wrap)
-[str](#method-str)
-[trans](#method-trans)
-[trans_choice](#method-trans-choice)
+- [\__](#method-__)
+- [class_basename](#method-class-basename)
+- [e](#method-e)
+- [preg_replace_array](#method-preg-replace-array)
+- [Str::after](#method-str-after)
+- [Str::afterLast](#method-str-after-last)
+- [Str::apa](#method-str-apa)
+- [Str::ascii](#method-str-ascii)
+- [Str::before](#method-str-before)
+- [Str::beforeLast](#method-str-before-last)
+- [Str::between](#method-str-between)
+- [Str::betweenFirst](#method-str-between-first)
+- [Str::camel](#method-camel-case)
+- [Str::charAt](#method-char-at)
+- [Str::contains](#method-str-contains)
+- [Str::containsAll](#method-str-contains-all)
+- [Str::endsWith](#method-ends-with)
+- [Str::excerpt](#method-excerpt)
+- [Str::finish](#method-str-finish)
+- [Str::headline](#method-str-headline)
+- [Str::inlineMarkdown](#method-str-inline-markdown)
+- [Str::is](#method-str-is)
+- [Str::isAscii](#method-str-is-ascii)
+- [Str::isJson](#method-str-is-json)
+- [Str::isUlid](#method-str-is-ulid)
+- [Str::isUrl](#method-str-is-url)
+- [Str::isUuid](#method-str-is-uuid)
+- [Str::kebab](#method-kebab-case)
+- [Str::lcfirst](#method-str-lcfirst)
+- [Str::length](#method-str-length)
+- [Str::limit](#method-str-limit)
+- [Str::lower](#method-str-lower)
+- [Str::markdown](#method-str-markdown)
+- [Str::mask](#method-str-mask)
+- [Str::orderedUuid](#method-str-ordered-uuid)
+- [Str::padBoth](#method-str-padboth)
+- [Str::padLeft](#method-str-padleft)
+- [Str::padRight](#method-str-padright)
+- [Str::password](#method-str-password)
+- [Str::plural](#method-str-plural)
+- [Str::pluralStudly](#method-str-plural-studly)
+- [Str::position](#method-str-position)
+- [Str::random](#method-str-random)
+- [Str::remove](#method-str-remove)
+- [Str::repeat](#method-str-repeat)
+- [Str::replace](#method-str-replace)
+- [Str::replaceArray](#method-str-replace-array)
+- [Str::replaceFirst](#method-str-replace-first)
+- [Str::replaceLast](#method-str-replace-last)
+- [Str::replaceMatches](#method-str-replace-matches)
+- [Str::replaceStart](#method-str-replace-start)
+- [Str::replaceEnd](#method-str-replace-end)
+- [Str::reverse](#method-str-reverse)
+- [Str::singular](#method-str-singular)
+- [Str::slug](#method-str-slug)
+- [Str::snake](#method-snake-case)
+- [Str::squish](#method-str-squish)
+- [Str::start](#method-str-start)
+- [Str::startsWith](#method-starts-with)
+- [Str::studly](#method-studly-case)
+- [Str::substr](#method-str-substr)
+- [Str::substrCount](#method-str-substrcount)
+- [Str::substrReplace](#method-str-substrreplace)
+- [Str::swap](#method-str-swap)
+- [Str::take](#method-take)
+- [Str::title](#method-title-case)
+- [Str::toHtmlString](#method-str-to-html-string)
+- [Str::ucfirst](#method-str-ucfirst)
+- [Str::ucsplit](#method-str-ucsplit)
+- [Str::upper](#method-str-upper)
+- [Str::ulid](#method-str-ulid)
+- [Str::unwrap](#method-str-unwrap)
+- [Str::uuid](#method-str-uuid)
+- [Str::wordCount](#method-str-word-count)
+- [Str::wordWrap](#method-str-word-wrap)
+- [Str::words](#method-str-words)
+- [Str::wrap](#method-str-wrap)
+- [str](#method-str)
+- [trans](#method-trans)
+- [trans_choice](#method-trans-choice)
 
 </div>
 
 <a name="fluent-strings-method-list"></a>
-### Fluent Strings
+### Строки Fluent
 
-<div class="collection-method-list" markdown="1">
+<div class="docs-column-list" markdown="1">
 
-[after](#method-fluent-str-after)
-[afterLast](#method-fluent-str-after-last)
-[append](#method-fluent-str-append)
-[ascii](#method-fluent-str-ascii)
-[basename](#method-fluent-str-basename)
-[before](#method-fluent-str-before)
-[beforeLast](#method-fluent-str-before-last)
-[between](#method-fluent-str-between)
-[betweenFirst](#method-fluent-str-between-first)
-[camel](#method-fluent-str-camel)
-[classBasename](#method-fluent-str-class-basename)
-[contains](#method-fluent-str-contains)
-[containsAll](#method-fluent-str-contains-all)
-[dirname](#method-fluent-str-dirname)
-[endsWith](#method-fluent-str-ends-with)
-[excerpt](#method-fluent-str-excerpt)
-[exactly](#method-fluent-str-exactly)
-[explode](#method-fluent-str-explode)
-[finish](#method-fluent-str-finish)
-[headline](#method-fluent-str-headline)
-[inlineMarkdown](#method-fluent-str-inline-markdown)
-[is](#method-fluent-str-is)
-[isAscii](#method-fluent-str-is-ascii)
-[isEmpty](#method-fluent-str-is-empty)
-[isNotEmpty](#method-fluent-str-is-not-empty)
-[isJson](#method-fluent-str-is-json)
-[isUlid](#method-fluent-str-is-ulid)
-[isUrl](#method-fluent-str-is-url)
-[isUuid](#method-fluent-str-is-uuid)
-[kebab](#method-fluent-str-kebab)
-[lcfirst](#method-fluent-str-lcfirst)
-[length](#method-fluent-str-length)
-[limit](#method-fluent-str-limit)
-[lower](#method-fluent-str-lower)
-[ltrim](#method-fluent-str-ltrim)
-[markdown](#method-fluent-str-markdown)
-[mask](#method-fluent-str-mask)
-[match](#method-fluent-str-match)
-[matchAll](#method-fluent-str-match-all)
-[isMatch](#method-fluent-str-is-match)
-[newLine](#method-fluent-str-new-line)
-[padBoth](#method-fluent-str-padboth)
-[padLeft](#method-fluent-str-padleft)
-[padRight](#method-fluent-str-padright)
-[pipe](#method-fluent-str-pipe)
-[plural](#method-fluent-str-plural)
-[position](#method-fluent-str-position)
-[prepend](#method-fluent-str-prepend)
-[remove](#method-fluent-str-remove)
-[repeat](#method-fluent-str-repeat)
-[replace](#method-fluent-str-replace)
-[replaceArray](#method-fluent-str-replace-array)
-[replaceFirst](#method-fluent-str-replace-first)
-[replaceLast](#method-fluent-str-replace-last)
-[replaceMatches](#method-fluent-str-replace-matches)
-[replaceStart](#method-fluent-str-replace-start)
-[replaceEnd](#method-fluent-str-replace-end)
-[rtrim](#method-fluent-str-rtrim)
-[scan](#method-fluent-str-scan)
-[singular](#method-fluent-str-singular)
-[slug](#method-fluent-str-slug)
-[snake](#method-fluent-str-snake)
-[split](#method-fluent-str-split)
-[squish](#method-fluent-str-squish)
-[start](#method-fluent-str-start)
-[startsWith](#method-fluent-str-starts-with)
-[studly](#method-fluent-str-studly)
-[substr](#method-fluent-str-substr)
-[substrReplace](#method-fluent-str-substrreplace)
-[swap](#method-fluent-str-swap)
-[take](#method-fluent-str-take)
-[tap](#method-fluent-str-tap)
-[test](#method-fluent-str-test)
-[title](#method-fluent-str-title)
-[trim](#method-fluent-str-trim)
-[ucfirst](#method-fluent-str-ucfirst)
-[ucsplit](#method-fluent-str-ucsplit)
-[upper](#method-fluent-str-upper)
-[when](#method-fluent-str-when)
-[whenContains](#method-fluent-str-when-contains)
-[whenContainsAll](#method-fluent-str-when-contains-all)
-[whenEmpty](#method-fluent-str-when-empty)
-[whenNotEmpty](#method-fluent-str-when-not-empty)
-[whenStartsWith](#method-fluent-str-when-starts-with)
-[whenEndsWith](#method-fluent-str-when-ends-with)
-[whenExactly](#method-fluent-str-when-exactly)
-[whenNotExactly](#method-fluent-str-when-not-exactly)
-[whenIs](#method-fluent-str-when-is)
-[whenIsAscii](#method-fluent-str-when-is-ascii)
-[whenIsUlid](#method-fluent-str-when-is-ulid)
-[whenIsUuid](#method-fluent-str-when-is-uuid)
-[whenTest](#method-fluent-str-when-test)
-[wordCount](#method-fluent-str-word-count)
-[words](#method-fluent-str-words)
+- [after](#method-fluent-str-after)
+- [afterLast](#method-fluent-str-after-last)
+- [apa](#method-fluent-str-apa)
+- [append](#method-fluent-str-append)
+- [ascii](#method-fluent-str-ascii)
+- [basename](#method-fluent-str-basename)
+- [before](#method-fluent-str-before)
+- [beforeLast](#method-fluent-str-before-last)
+- [between](#method-fluent-str-between)
+- [betweenFirst](#method-fluent-str-between-first)
+- [camel](#method-fluent-str-camel)
+- [charAt](#method-fluent-str-char-at)
+- [classBasename](#method-fluent-str-class-basename)
+- [contains](#method-fluent-str-contains)
+- [containsAll](#method-fluent-str-contains-all)
+- [dirname](#method-fluent-str-dirname)
+- [endsWith](#method-fluent-str-ends-with)
+- [excerpt](#method-fluent-str-excerpt)
+- [exactly](#method-fluent-str-exactly)
+- [explode](#method-fluent-str-explode)
+- [finish](#method-fluent-str-finish)
+- [headline](#method-fluent-str-headline)
+- [inlineMarkdown](#method-fluent-str-inline-markdown)
+- [is](#method-fluent-str-is)
+- [isAscii](#method-fluent-str-is-ascii)
+- [isEmpty](#method-fluent-str-is-empty)
+- [isNotEmpty](#method-fluent-str-is-not-empty)
+- [isJson](#method-fluent-str-is-json)
+- [isUlid](#method-fluent-str-is-ulid)
+- [isUrl](#method-fluent-str-is-url)
+- [isUuid](#method-fluent-str-is-uuid)
+- [kebab](#method-fluent-str-kebab)
+- [lcfirst](#method-fluent-str-lcfirst)
+- [length](#method-fluent-str-length)
+- [limit](#method-fluent-str-limit)
+- [lower](#method-fluent-str-lower)
+- [ltrim](#method-fluent-str-ltrim)
+- [markdown](#method-fluent-str-markdown)
+- [mask](#method-fluent-str-mask)
+- [match](#method-fluent-str-match)
+- [matchAll](#method-fluent-str-match-all)
+- [isMatch](#method-fluent-str-is-match)
+- [newLine](#method-fluent-str-new-line)
+- [padBoth](#method-fluent-str-padboth)
+- [padLeft](#method-fluent-str-padleft)
+- [padRight](#method-fluent-str-padright)
+- [pipe](#method-fluent-str-pipe)
+- [plural](#method-fluent-str-plural)
+- [position](#method-fluent-str-position)
+- [prepend](#method-fluent-str-prepend)
+- [remove](#method-fluent-str-remove)
+- [repeat](#method-fluent-str-repeat)
+- [replace](#method-fluent-str-replace)
+- [replaceArray](#method-fluent-str-replace-array)
+- [replaceFirst](#method-fluent-str-replace-first)
+- [replaceLast](#method-fluent-str-replace-last)
+- [replaceMatches](#method-fluent-str-replace-matches)
+- [replaceStart](#method-fluent-str-replace-start)
+- [replaceEnd](#method-fluent-str-replace-end)
+- [rtrim](#method-fluent-str-rtrim)
+- [scan](#method-fluent-str-scan)
+- [singular](#method-fluent-str-singular)
+- [slug](#method-fluent-str-slug)
+- [snake](#method-fluent-str-snake)
+- [split](#method-fluent-str-split)
+- [squish](#method-fluent-str-squish)
+- [start](#method-fluent-str-start)
+- [startsWith](#method-fluent-str-starts-with)
+- [stripTags](#method-fluent-str-strip-tags)
+- [studly](#method-fluent-str-studly)
+- [substr](#method-fluent-str-substr)
+- [substrReplace](#method-fluent-str-substrreplace)
+- [swap](#method-fluent-str-swap)
+- [take](#method-fluent-str-take)
+- [tap](#method-fluent-str-tap)
+- [test](#method-fluent-str-test)
+- [title](#method-fluent-str-title)
+- [trim](#method-fluent-str-trim)
+- [ucfirst](#method-fluent-str-ucfirst)
+- [ucsplit](#method-fluent-str-ucsplit)
+- [unwrap](#method-fluent-str-unwrap)
+- [upper](#method-fluent-str-upper)
+- [when](#method-fluent-str-when)
+- [whenContains](#method-fluent-str-when-contains)
+- [whenContainsAll](#method-fluent-str-when-contains-all)
+- [whenEmpty](#method-fluent-str-when-empty)
+- [whenNotEmpty](#method-fluent-str-when-not-empty)
+- [whenStartsWith](#method-fluent-str-when-starts-with)
+- [whenEndsWith](#method-fluent-str-when-ends-with)
+- [whenExactly](#method-fluent-str-when-exactly)
+- [whenNotExactly](#method-fluent-str-when-not-exactly)
+- [whenIs](#method-fluent-str-when-is)
+- [whenIsAscii](#method-fluent-str-when-is-ascii)
+- [whenIsUlid](#method-fluent-str-when-is-ulid)
+- [whenIsUuid](#method-fluent-str-when-is-uuid)
+- [whenTest](#method-fluent-str-when-test)
+- [wordCount](#method-fluent-str-word-count)
+- [words](#method-fluent-str-words)
 
 </div>
 
 <a name="strings"></a>
-## Strings
+## Строки
 
 <a name="method-__"></a>
-#### `__()` {.collection-method}
+#### `__()` 
 
-The `__` function translates the given translation string or translation key using your [language files](/docs/{{version}}/localization):
+Функция `__` переводит переданную строку перевода или ключ перевода, используя ваши [файлы локализации](/docs/{{version}}/localization):
 
     echo __('Welcome to our application');
 
     echo __('messages.welcome');
 
-If the specified translation string or key does not exist, the `__` function will return the given value. So, using the example above, the `__` function would return `messages.welcome` if that translation key does not exist.
+Если указанная строка перевода или ключ не существует, то функция `__` вернет переданное значение. Итак, используя приведенный выше пример, функция `__` вернет `messages.welcome`, если этот ключ перевода не существует.
 
 <a name="method-class-basename"></a>
-#### `class_basename()` {.collection-method}
+#### `class_basename()` 
 
-The `class_basename` function returns the class name of the given class with the class's namespace removed:
+Функция `class_basename` возвращает имя переданного класса с удаленным пространством имен этого класса:
 
     $class = class_basename('Foo\Bar\Baz');
 
     // Baz
 
 <a name="method-e"></a>
-#### `e()` {.collection-method}
+#### `e()` 
 
-The `e` function runs PHP's `htmlspecialchars` function with the `double_encode` option set to `true` by default:
+Функция `e` запускает PHP-функцию `htmlspecialchars` с параметром `double_encode`, установленным по умолчанию в `true`:
 
     echo e('<html>foo</html>');
 
     // &lt;html&gt;foo&lt;/html&gt;
 
 <a name="method-preg-replace-array"></a>
-#### `preg_replace_array()` {.collection-method}
+#### `preg_replace_array()` 
 
-The `preg_replace_array` function replaces a given pattern in the string sequentially using an array:
+Функция `preg_replace_array` последовательно заменяет переданный шаблон в строке, используя массив:
 
     $string = 'The event will take place between :start and :end';
 
@@ -259,9 +250,9 @@ The `preg_replace_array` function replaces a given pattern in the string sequent
     // The event will take place between 8:30 and 9:00
 
 <a name="method-str-after"></a>
-#### `Str::after()` {.collection-method}
+#### `Str::after()` 
 
-The `Str::after` method returns everything after the given value in a string. The entire string will be returned if the value does not exist within the string:
+Метод `Str::after` возвращает все после переданного значения в строке. Если значение не существует в строке, то будет возвращена вся строка:
 
     use Illuminate\Support\Str;
 
@@ -270,9 +261,9 @@ The `Str::after` method returns everything after the given value in a string. Th
     // ' my name'
 
 <a name="method-str-after-last"></a>
-#### `Str::afterLast()` {.collection-method}
+#### `Str::afterLast()` 
 
-The `Str::afterLast` method returns everything after the last occurrence of the given value in a string. The entire string will be returned if the value does not exist within the string:
+Метод `Str::afterLast` возвращает все после последнего вхождения переданного значения в строке. Если значение не существует в строке, то будет возвращена вся строка:
 
     use Illuminate\Support\Str;
 
@@ -280,10 +271,20 @@ The `Str::afterLast` method returns everything after the last occurrence of the 
 
     // 'Controller'
 
-<a name="method-str-ascii"></a>
-#### `Str::ascii()` {.collection-method}
+<a name="method-str-apa"></a>
+#### `Str::apa()` 
 
-The `Str::ascii` method will attempt to transliterate the string into an ASCII value:
+Метод `Str::apa` преобразует заданную строку в `Title Case` в соответствии с [правилами APA](https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case):
+    use Illuminate\Support\Str;
+
+    $title = Str::apa('Creating A Project');
+
+    // 'Creating a Project'
+
+<a name="method-str-ascii"></a>
+#### `Str::ascii()` 
+
+Метод `Str::ascii` попытается транслитерировать строку в ASCII значение:
 
     use Illuminate\Support\Str;
 
@@ -292,9 +293,9 @@ The `Str::ascii` method will attempt to transliterate the string into an ASCII v
     // 'u'
 
 <a name="method-str-before"></a>
-#### `Str::before()` {.collection-method}
+#### `Str::before()` 
 
-The `Str::before` method returns everything before the given value in a string:
+Метод `Str :: before` возвращает все до переданного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -303,9 +304,9 @@ The `Str::before` method returns everything before the given value in a string:
     // 'This is '
 
 <a name="method-str-before-last"></a>
-#### `Str::beforeLast()` {.collection-method}
+#### `Str::beforeLast()` 
 
-The `Str::beforeLast` method returns everything before the last occurrence of the given value in a string:
+Метод `Str::beforeLast` возвращает все до последнего вхождения переданного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -314,9 +315,9 @@ The `Str::beforeLast` method returns everything before the last occurrence of th
     // 'This '
 
 <a name="method-str-between"></a>
-#### `Str::between()` {.collection-method}
+#### `Str::between()` 
 
-The `Str::between` method returns the portion of a string between two values:
+Метод `Str::between` возвращает часть строки между двумя значениями:
 
     use Illuminate\Support\Str;
 
@@ -325,9 +326,9 @@ The `Str::between` method returns the portion of a string between two values:
     // ' is my '
 
 <a name="method-str-between-first"></a>
-#### `Str::betweenFirst()` {.collection-method}
+#### `Str::betweenFirst()` 
 
-The `Str::betweenFirst` method returns the smallest possible portion of a string between two values:
+Метод `Str::betweenFirst` возвращает наименьший возможный участок строки между двумя значениями:
 
     use Illuminate\Support\Str;
 
@@ -336,20 +337,32 @@ The `Str::betweenFirst` method returns the smallest possible portion of a string
     // 'a'
 
 <a name="method-camel-case"></a>
-#### `Str::camel()` {.collection-method}
+#### `Str::camel()` 
 
-The `Str::camel` method converts the given string to `camelCase`:
+Метод `Str::camel` преобразует переданную строку в `camelCase`:
 
     use Illuminate\Support\Str;
 
     $converted = Str::camel('foo_bar');
 
-    // fooBar
+    // 'fooBar'
+
+<a name="method-char-at"></a>
+
+#### `Str::charAt()` 
+
+Метод `Str::charAt` возвращает символ по указанному индексу. Если индекс выходит за границы, возвращается значение `false`:
+
+    use Illuminate\Support\Str;
+
+    $character = Str::charAt('This is my name.', 6);
+
+    // 's'
 
 <a name="method-str-contains"></a>
-#### `Str::contains()` {.collection-method}
+#### `Str::contains()` 
 
-The `Str::contains` method determines if the given string contains the given value. This method is case sensitive:
+Метод `Str::contains` определяет, содержит ли переданная строка указанное значение (с учетом регистра):
 
     use Illuminate\Support\Str;
 
@@ -357,7 +370,7 @@ The `Str::contains` method determines if the given string contains the given val
 
     // true
 
-You may also pass an array of values to determine if the given string contains any of the values in the array:
+Вы также можете указать массив значений, чтобы определить, содержит ли переданная строка какое-либо из значений:
 
     use Illuminate\Support\Str;
 
@@ -366,9 +379,9 @@ You may also pass an array of values to determine if the given string contains a
     // true
 
 <a name="method-str-contains-all"></a>
-#### `Str::containsAll()` {.collection-method}
+#### `Str::containsAll()` 
 
-The `Str::containsAll` method determines if the given string contains all of the values in a given array:
+Метод `Str::containsAll` определяет, содержит ли переданная строка все значения массива:
 
     use Illuminate\Support\Str;
 
@@ -377,9 +390,9 @@ The `Str::containsAll` method determines if the given string contains all of the
     // true
 
 <a name="method-ends-with"></a>
-#### `Str::endsWith()` {.collection-method}
+#### `Str::endsWith()` 
 
-The `Str::endsWith` method determines if the given string ends with the given value:
+Метод `Str::endsWith` определяет, заканчивается ли переданная строка указанным значением:
 
     use Illuminate\Support\Str;
 
@@ -388,7 +401,7 @@ The `Str::endsWith` method determines if the given string ends with the given va
     // true
 
 
-You may also pass an array of values to determine if the given string ends with any of the values in the array:
+Вы также можете указать массив значений, чтобы определить, заканчивается ли переданная строка каким-либо из значений:
 
     use Illuminate\Support\Str;
 
@@ -401,9 +414,9 @@ You may also pass an array of values to determine if the given string ends with 
     // false
 
 <a name="method-excerpt"></a>
-#### `Str::excerpt()` {.collection-method}
+#### `Str::excerpt()` 
 
-The `Str::excerpt` method extracts an excerpt from a given string that matches the first instance of a phrase within that string:
+Метод `Str::excerpt` извлекает отрывок из заданной строки, соответствующий первому вхождению фразы в эту строку:
 
     use Illuminate\Support\Str;
 
@@ -413,9 +426,9 @@ The `Str::excerpt` method extracts an excerpt from a given string that matches t
 
     // '...is my na...'
 
-The `radius` option, which defaults to `100`, allows you to define the number of characters that should appear on each side of the truncated string.
+Опция `radius`, по умолчанию равная `100`, позволяет определить количество символов, которые должны появиться с каждой стороны усеченной строки.
 
-In addition, you may use the `omission` option to define the string that will be prepended and appended to the truncated string:
+Кроме того, вы можете использовать опцию `omission`, чтобы определить строку, которая будет добавлена перед и после усеченной строки:
 
     use Illuminate\Support\Str;
 
@@ -427,9 +440,9 @@ In addition, you may use the `omission` option to define the string that will be
     // '(...) my name'
 
 <a name="method-str-finish"></a>
-#### `Str::finish()` {.collection-method}
+#### `Str::finish()` 
 
-The `Str::finish` method adds a single instance of the given value to a string if it does not already end with that value:
+Метод `Str::finish` добавляет один экземпляр указанного значения в переданную строку, если она еще не заканчивается этим значением:
 
     use Illuminate\Support\Str;
 
@@ -442,9 +455,9 @@ The `Str::finish` method adds a single instance of the given value to a string i
     // this/string/
 
 <a name="method-str-headline"></a>
-#### `Str::headline()` {.collection-method}
+#### `Str::headline()` 
 
-The `Str::headline` method will convert strings delimited by casing, hyphens, or underscores into a space delimited string with each word's first letter capitalized:
+Метод `Str::headline` преобразует строки, разделенные регистром, дефисами или подчеркиванием, в строку, разделенную пробелами, с заглавной первой буквой каждого слова:
 
     use Illuminate\Support\Str;
 
@@ -457,10 +470,9 @@ The `Str::headline` method will convert strings delimited by casing, hyphens, or
     // Email Notification Sent
 
 <a name="method-str-inline-markdown"></a>
-#### `Str::inlineMarkdown()` {.collection-method}
+#### `Str::inlineMarkdown()` 
 
-The `Str::inlineMarkdown` method converts GitHub flavored Markdown into inline HTML using [CommonMark](https://commonmark.thephpleague.com/). However, unlike the `markdown` method, it does not wrap all generated HTML in a block-level element:
-
+Метод `Str::inlineMarkdown` преобразует Markdown в стиле GitHub в HTML в одну строку с использованием [CommonMark](https://commonmark.thephpleague.com/). Однако, в отличие от метода `markdown`, он не оборачивает весь сгенерированный HTML в блочный элемент:
     use Illuminate\Support\Str;
 
     $html = Str::inlineMarkdown('**Laravel**');
@@ -468,9 +480,9 @@ The `Str::inlineMarkdown` method converts GitHub flavored Markdown into inline H
     // <strong>Laravel</strong>
 
 <a name="method-str-is"></a>
-#### `Str::is()` {.collection-method}
+#### `Str::is()` 
 
-The `Str::is` method determines if a given string matches a given pattern. Asterisks may be used as wildcard values:
+Метод `Str::is` определяет, соответствует ли переданная строка указанному шаблону. Допускается использование метасимвола подстановки `*`:
 
     use Illuminate\Support\Str;
 
@@ -483,9 +495,9 @@ The `Str::is` method determines if a given string matches a given pattern. Aster
     // false
 
 <a name="method-str-is-ascii"></a>
-#### `Str::isAscii()` {.collection-method}
+#### `Str::isAscii()` 
 
-The `Str::isAscii` method determines if a given string is 7 bit ASCII:
+Метод `Str::isAscii` определяет, является ли переданная строка 7-битной ASCII:
 
     use Illuminate\Support\Str;
 
@@ -498,9 +510,9 @@ The `Str::isAscii` method determines if a given string is 7 bit ASCII:
     // false
 
 <a name="method-str-is-json"></a>
-#### `Str::isJson()` {.collection-method}
+#### `Str::isJson()` 
 
-The `Str::isJson` method determines if the given string is valid JSON:
+Метод `Str::isJson` определяет, является ли заданная строка допустимым JSON:
 
     use Illuminate\Support\Str;
 
@@ -517,9 +529,9 @@ The `Str::isJson` method determines if the given string is valid JSON:
     // false
 
 <a name="method-str-is-url"></a>
-#### `Str::isUrl()` {.collection-method}
+#### `Str::isUrl()` 
 
-The `Str::isUrl` method determines if the given string is a valid URL:
+Метод `Str::isUrl` определяет, является ли заданная строка допустимым URL:
 
     use Illuminate\Support\Str;
 
@@ -532,9 +544,9 @@ The `Str::isUrl` method determines if the given string is a valid URL:
     // false
 
 <a name="method-str-is-ulid"></a>
-#### `Str::isUlid()` {.collection-method}
+#### `Str::isUlid()` 
 
-The `Str::isUlid` method determines if the given string is a valid ULID:
+Метод `Str::isUlid` определяет, является ли заданная строка допустимым ULID:
 
     use Illuminate\Support\Str;
 
@@ -547,9 +559,9 @@ The `Str::isUlid` method determines if the given string is a valid ULID:
     // false
 
 <a name="method-str-is-uuid"></a>
-#### `Str::isUuid()` {.collection-method}
+#### `Str::isUuid()` 
 
-The `Str::isUuid` method determines if the given string is a valid UUID:
+Метод `Str::isUuid` определяет, является ли заданная строка допустимым UUID:
 
     use Illuminate\Support\Str;
 
@@ -562,9 +574,9 @@ The `Str::isUuid` method determines if the given string is a valid UUID:
     // false
 
 <a name="method-kebab-case"></a>
-#### `Str::kebab()` {.collection-method}
+#### `Str::kebab()` 
 
-The `Str::kebab` method converts the given string to `kebab-case`:
+Метод `Str::kebab` преобразует переданную строку в `kebab-case`:
 
     use Illuminate\Support\Str;
 
@@ -573,9 +585,9 @@ The `Str::kebab` method converts the given string to `kebab-case`:
     // foo-bar
 
 <a name="method-str-lcfirst"></a>
-#### `Str::lcfirst()` {.collection-method}
+#### `Str::lcfirst()` 
 
-The `Str::lcfirst` method returns the given string with the first character lowercased:
+Метод `Str::lcfirst` возвращает переданную строку с первым символом в нижнем регистре:
 
     use Illuminate\Support\Str;
 
@@ -584,9 +596,9 @@ The `Str::lcfirst` method returns the given string with the first character lowe
     // foo Bar
 
 <a name="method-str-length"></a>
-#### `Str::length()` {.collection-method}
+#### `Str::length()` 
 
-The `Str::length` method returns the length of the given string:
+Метод `Str::length` возвращает длину переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -595,9 +607,9 @@ The `Str::length` method returns the length of the given string:
     // 7
 
 <a name="method-str-limit"></a>
-#### `Str::limit()` {.collection-method}
+#### `Str::limit()` 
 
-The `Str::limit` method truncates the given string to the specified length:
+Метод `Str::limit` усекает переданную строку до указанной длины:
 
     use Illuminate\Support\Str;
 
@@ -605,7 +617,7 @@ The `Str::limit` method truncates the given string to the specified length:
 
     // The quick brown fox...
 
-You may pass a third argument to the method to change the string that will be appended to the end of the truncated string:
+Вы также можете передать третий строковый аргумент, содержимое которого будет добавлено в конец:
 
     use Illuminate\Support\Str;
 
@@ -614,9 +626,9 @@ You may pass a third argument to the method to change the string that will be ap
     // The quick brown fox (...)
 
 <a name="method-str-lower"></a>
-#### `Str::lower()` {.collection-method}
+#### `Str::lower()` 
 
-The `Str::lower` method converts the given string to lowercase:
+Метод `Str::lower` преобразует переданную строку в нижний регистр:
 
     use Illuminate\Support\Str;
 
@@ -625,9 +637,9 @@ The `Str::lower` method converts the given string to lowercase:
     // laravel
 
 <a name="method-str-markdown"></a>
-#### `Str::markdown()` {.collection-method}
+#### `Str::markdown()` 
 
-The `Str::markdown` method converts GitHub flavored Markdown into HTML using [CommonMark](https://commonmark.thephpleague.com/):
+Метод `Str::markdown` конвертирует текст с разметкой [GitHub flavored Markdown](https://github.github.com/gfm/) в HTML:
 
     use Illuminate\Support\Str;
 
@@ -642,9 +654,9 @@ The `Str::markdown` method converts GitHub flavored Markdown into HTML using [Co
     // <h1>Taylor Otwell</h1>
 
 <a name="method-str-mask"></a>
-#### `Str::mask()` {.collection-method}
+#### `Str::mask()` 
 
-The `Str::mask` method masks a portion of a string with a repeated character, and may be used to obfuscate segments of strings such as email addresses and phone numbers:
+Метод `Str::mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
 
     use Illuminate\Support\Str;
 
@@ -652,25 +664,25 @@ The `Str::mask` method masks a portion of a string with a repeated character, an
 
     // tay***************
 
-If needed, you provide a negative number as the third argument to the `mask` method, which will instruct the method to begin masking at the given distance from the end of the string:
+При необходимости вы можете указать отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
 
     $string = Str::mask('taylor@example.com', '*', -15, 3);
 
     // tay***@example.com
 
 <a name="method-str-ordered-uuid"></a>
-#### `Str::orderedUuid()` {.collection-method}
+#### `Str::orderedUuid()` 
 
-The `Str::orderedUuid` method generates a "timestamp first" UUID that may be efficiently stored in an indexed database column. Each UUID that is generated using this method will be sorted after UUIDs previously generated using the method:
+Метод `Str::orderedUuid` генерирует UUID с «префиксом временной метки», который может быть эффективно сохранен в индексированном столбце базы данных. Каждый UUID, созданный с помощью этого метода, будет отсортирован после UUID, ранее созданных с помощью этого метода:
 
     use Illuminate\Support\Str;
 
     return (string) Str::orderedUuid();
 
 <a name="method-str-padboth"></a>
-#### `Str::padBoth()` {.collection-method}
+#### `Str::padBoth()` 
 
-The `Str::padBoth` method wraps PHP's `str_pad` function, padding both sides of a string with another string until the final string reaches a desired length:
+Метод `Str::padBoth` оборачивает функцию `str_pad` PHP, заполняя обе стороны строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -683,9 +695,9 @@ The `Str::padBoth` method wraps PHP's `str_pad` function, padding both sides of 
     // '  James   '
 
 <a name="method-str-padleft"></a>
-#### `Str::padLeft()` {.collection-method}
+#### `Str::padLeft()` 
 
-The `Str::padLeft` method wraps PHP's `str_pad` function, padding the left side of a string with another string until the final string reaches a desired length:
+Метод `Str::padLeft` оборачивает функцию `str_pad` PHP, заполняя левую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -698,9 +710,9 @@ The `Str::padLeft` method wraps PHP's `str_pad` function, padding the left side 
     // '     James'
 
 <a name="method-str-padright"></a>
-#### `Str::padRight()` {.collection-method}
+#### `Str::padRight()` 
 
-The `Str::padRight` method wraps PHP's `str_pad` function, padding the right side of a string with another string until the final string reaches a desired length:
+Метод `Str::padRight` оборачивает функцию `str_pad` PHP, заполняя правую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -713,10 +725,9 @@ The `Str::padRight` method wraps PHP's `str_pad` function, padding the right sid
     // 'James     '
 
 <a name="method-str-password"></a>
-#### `Str::password()` {.collection-method}
+#### `Str::password()` 
 
-The `Str::password` method may be used to generate a secure, random password of a given length. The password will consist of a combination of letters, numbers, symbols, and spaces. By default, passwords are 32 characters long:
-
+Метод `Str::password` можно использовать для генерации безопасного, случайного пароля заданной длины. Пароль будет состоять из комбинации букв, цифр, символов и пробелов. По умолчанию пароли имеют длину 32 символа:
     use Illuminate\Support\Str;
 
     $password = Str::password();
@@ -728,10 +739,9 @@ The `Str::password` method may be used to generate a secure, random password of 
     // 'qwuar>#V|i]N'
 
 <a name="method-str-plural"></a>
-#### `Str::plural()` {.collection-method}
+#### `Str::plural()` 
 
-The `Str::plural` method converts a singular word string to its plural form. This function supports [any of the languages support by Laravel's pluralizer](/docs/{{version}}/localization#pluralization-language):
-
+Метод `Str::plural` преобразует строку единственного числа в ее форму множественного числа. Эта функция поддерживает [любые из языков, поддерживаемых плюрализатором Laravel](/docs/{{version}}/localization#pluralization-language):
     use Illuminate\Support\Str;
 
     $plural = Str::plural('car');
@@ -742,7 +752,7 @@ The `Str::plural` method converts a singular word string to its plural form. Thi
 
     // children
 
-You may provide an integer as a second argument to the function to retrieve the singular or plural form of the string:
+Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
 
     use Illuminate\Support\Str;
 
@@ -755,10 +765,10 @@ You may provide an integer as a second argument to the function to retrieve the 
     // child
 
 <a name="method-str-plural-studly"></a>
-#### `Str::pluralStudly()` {.collection-method}
+#### `Str::pluralStudly()` 
 
-The `Str::pluralStudly` method converts a singular word string formatted in studly caps case to its plural form. This function supports [any of the languages support by Laravel's pluralizer](/docs/{{version}}/localization#pluralization-language):
-
+Метод `Str::pluralStudly` преобразует строку единственного слова, отформатированную в заглавном регистре studly, в форму множественного числа. Эта функция поддерживает [любой из языков, поддерживаемых плюрализатором Laravel](/docs/{{version}}/localization#pluralization-language):
+    
     use Illuminate\Support\Str;
 
     $plural = Str::pluralStudly('VerifiedHuman');
@@ -769,7 +779,7 @@ The `Str::pluralStudly` method converts a singular word string formatted in stud
 
     // UserFeedback
 
-You may provide an integer as a second argument to the function to retrieve the singular or plural form of the string:
+Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
 
     use Illuminate\Support\Str;
 
@@ -782,10 +792,9 @@ You may provide an integer as a second argument to the function to retrieve the 
     // VerifiedHuman
 
 <a name="method-str-position"></a>
-#### `Str::position()` {.collection-method}
+#### `Str::position()` 
 
-The `Str::position` method returns the position of the first occurrence of a substring in a string. If the substring does not exist in the given string, `false` is returned:
-
+Метод `Str::position` возвращает позицию первого вхождения подстроки в строке. Если подстрока не существует в данной строке, возвращается значение `false`:
     use Illuminate\Support\Str;
 
     $position = Str::position('Hello, World!', 'Hello');
@@ -797,18 +806,18 @@ The `Str::position` method returns the position of the first occurrence of a sub
     // 7
 
 <a name="method-str-random"></a>
-#### `Str::random()` {.collection-method}
+#### `Str::random()` 
 
-The `Str::random` method generates a random string of the specified length. This function uses PHP's `random_bytes` function:
+Метод `Str::random` генерирует случайную строку указанной длины. Этот метод использует функцию `random_bytes` PHP:
 
     use Illuminate\Support\Str;
 
     $random = Str::random(40);
 
 <a name="method-str-remove"></a>
-#### `Str::remove()` {.collection-method}
+#### `Str::remove()` 
 
-The `Str::remove` method removes the given value or array of values from the string:
+Метод `Str::remove` удаляет указанную подстроку или массив подстрок в строке:
 
     use Illuminate\Support\Str;
 
@@ -818,12 +827,12 @@ The `Str::remove` method removes the given value or array of values from the str
 
     // Ptr Pipr pickd a pck of pickld ppprs.
 
-You may also pass `false` as a third argument to the `remove` method to ignore case when removing strings.
+Вы можете передать `false` в качестве третьего аргумента для игнорирования регистра удаляемых подстрок.
 
 <a name="method-str-repeat"></a>
-#### `Str::repeat()` {.collection-method}
+#### `Str::repeat()` 
 
-The `Str::repeat` method repeats the given string:
+Метод `Str::repeat` повторяет заданную строку:
 
 ```php
 use Illuminate\Support\Str;
@@ -836,9 +845,9 @@ $repeat = Str::repeat($string, 5);
 ```
 
 <a name="method-str-replace"></a>
-#### `Str::replace()` {.collection-method}
+#### `Str::replace()` 
 
-The `Str::replace` method replaces a given string within the string:
+Метод `Str::replace` заменяет в строке одну подстроку другой:
 
     use Illuminate\Support\Str;
 
@@ -848,14 +857,14 @@ The `Str::replace` method replaces a given string within the string:
 
     // Laravel 9.x
 
-The `replace` method also accepts a `caseSensitive` argument. By default, the `replace` method is case sensitive:
+Метод `replace` также принимает аргумент `caseSensitive`. По умолчанию метод `replace` чувствителен к регистру:
 
     Str::replace('Framework', 'Laravel', caseSensitive: false);
 
 <a name="method-str-replace-array"></a>
-#### `Str::replaceArray()` {.collection-method}
+#### `Str::replaceArray()` 
 
-The `Str::replaceArray` method replaces a given value in the string sequentially using an array:
+Метод `Str::replaceArray` последовательно заменяет указанное значение в строке, используя массив:
 
     use Illuminate\Support\Str;
 
@@ -866,9 +875,9 @@ The `Str::replaceArray` method replaces a given value in the string sequentially
     // The event will take place between 8:30 and 9:00
 
 <a name="method-str-replace-first"></a>
-#### `Str::replaceFirst()` {.collection-method}
+#### `Str::replaceFirst()` 
 
-The `Str::replaceFirst` method replaces the first occurrence of a given value in a string:
+Метод `Str::replaceFirst` заменяет первое вхождение переданного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -877,9 +886,9 @@ The `Str::replaceFirst` method replaces the first occurrence of a given value in
     // a quick brown fox jumps over the lazy dog
 
 <a name="method-str-replace-last"></a>
-#### `Str::replaceLast()` {.collection-method}
+#### `Str::replaceLast()` 
 
-The `Str::replaceLast` method replaces the last occurrence of a given value in a string:
+Метод `Str::replaceLast` заменяет последнее вхождение переданного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -888,9 +897,9 @@ The `Str::replaceLast` method replaces the last occurrence of a given value in a
     // the quick brown fox jumps over a lazy dog
 
 <a name="method-str-replace-matches"></a>
-#### `Str::replaceMatches()` {.collection-method}
+#### `Str::replaceMatches()` 
 
-The `Str::replaceMatches` method replaces all portions of a string matching a pattern with the given replacement string:
+Метод `Str::replaceMatches` заменяет все части строки, соответствующие шаблону, заданной строкой замены:
 
     use Illuminate\Support\Str;
 
@@ -902,8 +911,8 @@ The `Str::replaceMatches` method replaces all portions of a string matching a pa
 
     // '15015551000'
 
-The `replaceMatches` method also accepts a closure that will be invoked with each portion of the string matching the given pattern, allowing you to perform the replacement logic within the closure and return the replaced value:
-
+Метод `replaceMatches` также принимает замыкание, которое будет вызвано для каждой части строки, соответствующей заданному шаблону, что позволяет вам выполнять логику замены внутри замыкания и возвращать замененное значение:
+    
     use Illuminate\Support\Str;
 
     $replaced = Str::replaceMatches('/\d/', function (array $matches) {
@@ -913,9 +922,9 @@ The `replaceMatches` method also accepts a closure that will be invoked with eac
     // '[1][2][3]'
 
 <a name="method-str-replace-start"></a>
-#### `Str::replaceStart()` {.collection-method}
+#### `Str::replaceStart()` 
 
-The `Str::replaceStart` method replaces the first occurrence of the given value only if the value appears at the start of the string:
+Метод `Str::replaceStart` заменяет только первое вхождение заданного значения, если значение появляется в начале строки:
 
     use Illuminate\Support\Str;
 
@@ -928,9 +937,9 @@ The `Str::replaceStart` method replaces the first occurrence of the given value 
     // Hello World
 
 <a name="method-str-replace-end"></a>
-#### `Str::replaceEnd()` {.collection-method}
+#### `Str::replaceEnd()` 
 
-The `Str::replaceEnd` method replaces the last occurrence of the given value only if the value appears at the end of the string:
+Метод `Str::replaceEnd` заменяет только последнее вхождение заданного значения, если значение появляется в конце строки:
 
     use Illuminate\Support\Str;
 
@@ -943,9 +952,9 @@ The `Str::replaceEnd` method replaces the last occurrence of the given value onl
     // Hello World
 
 <a name="method-str-reverse"></a>
-#### `Str::reverse()` {.collection-method}
+#### `Str::reverse()` 
 
-The `Str::reverse` method reverses the given string:
+Метод `Str::reverse` переворачивает данную строку:
 
     use Illuminate\Support\Str;
 
@@ -954,10 +963,9 @@ The `Str::reverse` method reverses the given string:
     // dlroW olleH
 
 <a name="method-str-singular"></a>
-#### `Str::singular()` {.collection-method}
+#### `Str::singular()` 
 
-The `Str::singular` method converts a string to its singular form. This function supports [any of the languages support by Laravel's pluralizer](/docs/{{version}}/localization#pluralization-language):
-
+Метод `Str::singular` преобразует строку в ее форму единственного числа. Эта функция поддерживает [любые из языков, поддерживаемых плюрализатором Laravel](/docs/{{version}}/localization#pluralization-language):
     use Illuminate\Support\Str;
 
     $singular = Str::singular('cars');
@@ -969,9 +977,9 @@ The `Str::singular` method converts a string to its singular form. This function
     // child
 
 <a name="method-str-slug"></a>
-#### `Str::slug()` {.collection-method}
+#### `Str::slug()` 
 
-The `Str::slug` method generates a URL friendly "slug" from the given string:
+Метод `Str::slug` создает «дружественный фрагмент» URL-адреса из переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -980,9 +988,9 @@ The `Str::slug` method generates a URL friendly "slug" from the given string:
     // laravel-5-framework
 
 <a name="method-snake-case"></a>
-#### `Str::snake()` {.collection-method}
+#### `Str::snake()` 
 
-The `Str::snake` method converts the given string to `snake_case`:
+Метод `Str::snake` преобразует переданную строку в `snake_case`:
 
     use Illuminate\Support\Str;
 
@@ -995,9 +1003,9 @@ The `Str::snake` method converts the given string to `snake_case`:
     // foo-bar
 
 <a name="method-str-squish"></a>
-#### `Str::squish()` {.collection-method}
+#### `Str::squish()` 
 
-The `Str::squish` method removes all extraneous white space from a string, including extraneous white space between words:
+Метод `Str::squish` удаляет все лишние пробелы из строки, включая лишние пробелы между словами:
 
     use Illuminate\Support\Str;
 
@@ -1006,9 +1014,9 @@ The `Str::squish` method removes all extraneous white space from a string, inclu
     // laravel framework
 
 <a name="method-str-start"></a>
-#### `Str::start()` {.collection-method}
+#### `Str::start()` 
 
-The `Str::start` method adds a single instance of the given value to a string if it does not already start with that value:
+Метод `Str::start` добавляет один экземпляр указанного значения в переданную строку, если она еще не начинается этим значением:
 
     use Illuminate\Support\Str;
 
@@ -1021,9 +1029,9 @@ The `Str::start` method adds a single instance of the given value to a string if
     // /this/string
 
 <a name="method-starts-with"></a>
-#### `Str::startsWith()` {.collection-method}
+#### `Str::startsWith()` 
 
-The `Str::startsWith` method determines if the given string begins with the given value:
+Метод `Str::startsWith` определяет, начинается ли переданная строка с указанного значения:
 
     use Illuminate\Support\Str;
 
@@ -1031,16 +1039,16 @@ The `Str::startsWith` method determines if the given string begins with the give
 
     // true
 
-If an array of possible values is passed, the `startsWith` method will return `true` if the string begins with any of the given values:
+Если передан массив возможных значений, метод `startsWith` вернет `true`, если строка начинается с любого из заданных значений:
 
     $result = Str::startsWith('This is my name', ['This', 'That', 'There']);
 
     // true
 
 <a name="method-studly-case"></a>
-#### `Str::studly()` {.collection-method}
+#### `Str::studly()` 
 
-The `Str::studly` method converts the given string to `StudlyCase`:
+Метод `Str::studly` преобразует переданную строку в `StudlyCase`:
 
     use Illuminate\Support\Str;
 
@@ -1049,9 +1057,9 @@ The `Str::studly` method converts the given string to `StudlyCase`:
     // FooBar
 
 <a name="method-str-substr"></a>
-#### `Str::substr()` {.collection-method}
+#### `Str::substr()` 
 
-The `Str::substr` method returns the portion of string specified by the start and length parameters:
+Метод `Str::substr` возвращает часть строки, заданную параметрами «начало» и «длина»:
 
     use Illuminate\Support\Str;
 
@@ -1060,9 +1068,9 @@ The `Str::substr` method returns the portion of string specified by the start an
     // Laravel
 
 <a name="method-str-substrcount"></a>
-#### `Str::substrCount()` {.collection-method}
+#### `Str::substrCount()` 
 
-The `Str::substrCount` method returns the number of occurrences of a given value in the given string:
+Метод `Str::substrCount` возвращает число вхождений подстроки в строку:
 
     use Illuminate\Support\Str;
 
@@ -1071,9 +1079,9 @@ The `Str::substrCount` method returns the number of occurrences of a given value
     // 2
 
 <a name="method-str-substrreplace"></a>
-#### `Str::substrReplace()` {.collection-method}
+#### `Str::substrReplace()` 
 
-The `Str::substrReplace` method replaces text within a portion of a string, starting at the position specified by the third argument and replacing the number of characters specified by the fourth argument. Passing `0` to the method's fourth argument will insert the string at the specified position without replacing any of the existing characters in the string:
+Метод `Str::substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав `0` четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
 
     use Illuminate\Support\Str;
 
@@ -1084,9 +1092,9 @@ The `Str::substrReplace` method replaces text within a portion of a string, star
     // 13:00
 
 <a name="method-str-swap"></a>
-#### `Str::swap()` {.collection-method}
+#### `Str::swap()` 
 
-The `Str::swap` method replaces multiple values in the given string using PHP's `strtr` function:
+Метод `Str::swap` заменяет несколько значений в заданной строке, используя функцию `strtr` PHP:
 
     use Illuminate\Support\Str;
 
@@ -1098,9 +1106,9 @@ The `Str::swap` method replaces multiple values in the given string using PHP's 
     // Burritos are fantastic!
 
 <a name="method-take"></a>
-#### `Str::take()` {.collection-method}
+#### `Str::take()` 
 
-The `Str::take` method returns a specified number of characters from the beginning of a string:
+Метод `Str::take` возвращает указанное количество символов из начала строки:
 
     use Illuminate\Support\Str;
 
@@ -1109,9 +1117,9 @@ The `Str::take` method returns a specified number of characters from the beginni
     // Build
 
 <a name="method-title-case"></a>
-#### `Str::title()` {.collection-method}
+#### `Str::title()` 
 
-The `Str::title` method converts the given string to `Title Case`:
+Метод `Str::title` преобразует переданную строку в `Title Case`:
 
     use Illuminate\Support\Str;
 
@@ -1120,18 +1128,18 @@ The `Str::title` method converts the given string to `Title Case`:
     // A Nice Title Uses The Correct Case
 
 <a name="method-str-to-html-string"></a>
-#### `Str::toHtmlString()` {.collection-method}
+#### `Str::toHtmlString()` 
 
-The `Str::toHtmlString` method converts the string instance to an instance of `Illuminate\Support\HtmlString`, which may be displayed in Blade templates:
+Метод `Str::toHtmlString` преобразует экземпляр строки в экземпляр `Illuminate\Support\HtmlString`, который может отображаться в шаблонах Blade:
 
     use Illuminate\Support\Str;
 
     $htmlString = Str::of('Nuno Maduro')->toHtmlString();
 
 <a name="method-str-ucfirst"></a>
-#### `Str::ucfirst()` {.collection-method}
+#### `Str::ucfirst()` 
 
-The `Str::ucfirst` method returns the given string with the first character capitalized:
+Метод `Str::ucfirst` возвращает переданную строку с первой заглавной буквой:
 
     use Illuminate\Support\Str;
 
@@ -1140,9 +1148,9 @@ The `Str::ucfirst` method returns the given string with the first character capi
     // Foo bar
 
 <a name="method-str-ucsplit"></a>
-#### `Str::ucsplit()` {.collection-method}
+#### `Str::ucsplit()` 
 
-The `Str::ucsplit` method splits the given string into an array by uppercase characters:
+Метод `Str::ucsplit` разделяет заданную строку на массив по символам в верхнем регистре:
 
     use Illuminate\Support\Str;
 
@@ -1151,9 +1159,9 @@ The `Str::ucsplit` method splits the given string into an array by uppercase cha
     // [0 => 'Foo', 1 => 'Bar']
 
 <a name="method-str-upper"></a>
-#### `Str::upper()` {.collection-method}
+#### `Str::upper()` 
 
-The `Str::upper` method converts the given string to uppercase:
+Метод `Str::upper` преобразует переданную строку в верхний регистр:
 
     use Illuminate\Support\Str;
 
@@ -1162,9 +1170,9 @@ The `Str::upper` method converts the given string to uppercase:
     // LARAVEL
 
 <a name="method-str-ulid"></a>
-#### `Str::ulid()` {.collection-method}
+#### `Str::ulid()` 
 
-The `Str::ulid` method generates a ULID, which is a compact, time-ordered unique identifier:
+Метод `Str::ulid` генерирует ULID, который является компактным, уникальным и упорядоченным по времени идентификатором:
 
     use Illuminate\Support\Str;
 
@@ -1172,8 +1180,7 @@ The `Str::ulid` method generates a ULID, which is a compact, time-ordered unique
     
     // 01gd6r360bp37zj17nxb55yv40
 
-If you would like to retrieve a `Illuminate\Support\Carbon` date instance representing the date and time that a given ULID was created, you may use the `createFromId` method provided by Laravel's Carbon integration:
-
+Если вы хотите получить экземпляр даты `Illuminate\Support\Carbon`, представляющий дату и время создания заданного ULID, вы можете использовать метод `createFromId`, предоставленный интеграцией Carbon в Laravel:
 ```php
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
@@ -1181,19 +1188,34 @@ use Illuminate\Support\Str;
 $date = Carbon::createFromId((string) Str::ulid());
 ```
 
-<a name="method-str-uuid"></a>
-#### `Str::uuid()` {.collection-method}
+<a name="method-str-unwrap"></a>
+#### `Str::unwrap()` 
 
-The `Str::uuid` method generates a UUID (version 4):
+Метод `Str::unwrap` удаляет указанные строки из начала и конца заданной строки:
+
+    use Illuminate\Support\Str;
+
+    Str::unwrap('-Laravel-', '-');
+
+    // Laravel
+
+    Str::unwrap('{framework: "Laravel"}', '{', '}');
+
+    // framework: "Laravel"
+
+<a name="method-str-uuid"></a>
+#### `Str::uuid()` 
+
+Метод `Str::uuid` генерирует UUID (версия 4):
 
     use Illuminate\Support\Str;
 
     return (string) Str::uuid();
 
 <a name="method-str-word-count"></a>
-#### `Str::wordCount()` {.collection-method}
+#### `Str::wordCount()` 
 
-The `Str::wordCount` method returns the number of words that a string contains:
+Метод `Str::wordCount` возвращает число слов в строке:
 
 ```php
 use Illuminate\Support\Str;
@@ -1202,9 +1224,9 @@ Str::wordCount('Hello, world!'); // 2
 ```
 
 <a name="method-str-word-wrap"></a>
-#### `Str::wordWrap()` {.collection-method}
+#### `Str::wordWrap()` 
 
-The `Str::wordWrap` method wraps a string to a given number of characters:
+Метод `Str::wordWrap` переносит строку по заданному количеству символов:
 
     use Illuminate\Support\Str;
 
@@ -1219,9 +1241,9 @@ The `Str::wordWrap` method wraps a string to a given number of characters:
     */
 
 <a name="method-str-words"></a>
-#### `Str::words()` {.collection-method}
+#### `Str::words()` 
 
-The `Str::words` method limits the number of words in a string. An additional string may be passed to this method via its third argument to specify which string should be appended to the end of the truncated string:
+Метод `Str::words` ограничивает количество слов в строке. Дополнительная строка может быть передана этому методу через его третий аргумент, чтобы указать, какая строка должна быть добавлена в конец усеченной строки:
 
     use Illuminate\Support\Str;
 
@@ -1230,9 +1252,9 @@ The `Str::words` method limits the number of words in a string. An additional st
     // Perfectly balanced, as >>>
 
 <a name="method-str-wrap"></a>
-#### `Str::wrap()` {.collection-method}
+#### `Str::wrap()` 
 
-The `Str::wrap` method wraps the given string with an additional string or pair of strings:
+Метод `Str::wrap` оборачивает заданную строку дополнительной строкой или парой строк:
 
     use Illuminate\Support\Str;
 
@@ -1245,47 +1267,47 @@ The `Str::wrap` method wraps the given string with an additional string or pair 
     // This is Laravel!
 
 <a name="method-str"></a>
-#### `str()` {.collection-method}
+#### `str()` 
 
-The `str` function returns a new `Illuminate\Support\Stringable` instance of the given string. This function is equivalent to the `Str::of` method:
+Функция `str` возвращает новый экземпляр `Illuminate\Support\Stringable` для заданной строки. Эта функция эквивалентна методу `Str::of`:
 
     $string = str('Taylor')->append(' Otwell');
 
     // 'Taylor Otwell'
 
-If no argument is provided to the `str` function, the function returns an instance of `Illuminate\Support\Str`:
+Если функции `str` не передается аргумент, она возвращает экземпляр `Illuminate\Support\Str`:
 
     $snake = str()->snake('FooBar');
 
     // 'foo_bar'
 
 <a name="method-trans"></a>
-#### `trans()` {.collection-method}
+#### `trans()` 
 
-The `trans` function translates the given translation key using your [language files](/docs/{{version}}/localization):
+Функция `trans` переводит переданный ключ перевода, используя ваши [файлы локализации](/docs/{{version}}/localization):
 
     echo trans('messages.welcome');
 
-If the specified translation key does not exist, the `trans` function will return the given key. So, using the example above, the `trans` function would return `messages.welcome` if the translation key does not exist.
+Если указанный ключ перевода не существует, функция `trans` вернет данный ключ. Итак, используя приведенный выше пример, функция `trans` вернет `messages.welcome`, если ключ перевода не существует.
 
 <a name="method-trans-choice"></a>
-#### `trans_choice()` {.collection-method}
+#### `trans_choice()` 
 
-The `trans_choice` function translates the given translation key with inflection:
+Функция `trans_choice` переводит заданный ключ перевода с изменением формы слова:
 
     echo trans_choice('messages.notifications', $unreadCount);
 
-If the specified translation key does not exist, the `trans_choice` function will return the given key. So, using the example above, the `trans_choice` function would return `messages.notifications` if the translation key does not exist.
+Если указанный ключ перевода не существует, функция `trans_choice` вернет данный ключ. Итак, используя приведенный выше пример, функция `trans_choice` вернет `messages.notifications`, если ключ перевода не существует.
 
 <a name="fluent-strings"></a>
-## Fluent Strings
+## Строки Fluent
 
-Fluent strings provide a more fluent, object-oriented interface for working with string values, allowing you to chain multiple string operations together using a more readable syntax compared to traditional string operations.
+Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
 
 <a name="method-fluent-str-after"></a>
-#### `after` {.collection-method}
+#### `after` 
 
-The `after` method returns everything after the given value in a string. The entire string will be returned if the value does not exist within the string:
+Метод `after` возвращает все после переданного значения в строке. Вся строка будет возвращена, если значение не существует в строке:
 
     use Illuminate\Support\Str;
 
@@ -1294,9 +1316,9 @@ The `after` method returns everything after the given value in a string. The ent
     // ' my name'
 
 <a name="method-fluent-str-after-last"></a>
-#### `afterLast` {.collection-method}
+#### `afterLast` 
 
-The `afterLast` method returns everything after the last occurrence of the given value in a string. The entire string will be returned if the value does not exist within the string:
+Метод `afterLast` возвращает все после последнего вхождения переданного значения в строке. Вся строка будет возвращена, если значение не существует в строке:
 
     use Illuminate\Support\Str;
 
@@ -1304,10 +1326,21 @@ The `afterLast` method returns everything after the last occurrence of the given
 
     // 'Controller'
 
-<a name="method-fluent-str-append"></a>
-#### `append` {.collection-method}
+<a name="method-fluent-str-apa"></a>
+#### `apa` 
 
-The `append` method appends the given values to the string:
+Метод `apa` преобразует заданную строку в `Title Case` в соответствии с [правилами APA](https://apastyle.apa.org/style-grammar-guidelines/capitalization/title-case):
+
+    use Illuminate\Support\Str;
+
+    $converted = Str::of('a nice title uses the correct case')->apa();
+
+    // A Nice Title Uses the Correct Case
+
+<a name="method-fluent-str-append"></a>
+#### `append` 
+
+Метод `append` добавляет указанные значения в строку:
 
     use Illuminate\Support\Str;
 
@@ -1316,9 +1349,9 @@ The `append` method appends the given values to the string:
     // 'Taylor Otwell'
 
 <a name="method-fluent-str-ascii"></a>
-#### `ascii` {.collection-method}
+#### `ascii` 
 
-The `ascii` method will attempt to transliterate the string into an ASCII value:
+Метод `ascii` попытается транслитерировать строку в значение ASCII:
 
     use Illuminate\Support\Str;
 
@@ -1327,9 +1360,9 @@ The `ascii` method will attempt to transliterate the string into an ASCII value:
     // 'u'
 
 <a name="method-fluent-str-basename"></a>
-#### `basename` {.collection-method}
+#### `basename` 
 
-The `basename` method will return the trailing name component of the given string:
+Метод `basename` вернет завершающий компонент имени переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -1337,7 +1370,7 @@ The `basename` method will return the trailing name component of the given strin
 
     // 'baz'
 
-If needed, you may provide an "extension" that will be removed from the trailing component:
+При необходимости вы можете указать «расширение», которое будет удалено из завершающего компонента:
 
     use Illuminate\Support\Str;
 
@@ -1346,9 +1379,9 @@ If needed, you may provide an "extension" that will be removed from the trailing
     // 'baz'
 
 <a name="method-fluent-str-before"></a>
-#### `before` {.collection-method}
+#### `before` 
 
-The `before` method returns everything before the given value in a string:
+Метод `before` возвращает все до указанного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -1357,9 +1390,9 @@ The `before` method returns everything before the given value in a string:
     // 'This is '
 
 <a name="method-fluent-str-before-last"></a>
-#### `beforeLast` {.collection-method}
+#### `beforeLast` 
 
-The `beforeLast` method returns everything before the last occurrence of the given value in a string:
+Метод `beforeLast` возвращает все до последнего вхождения переданного значения в строку:
 
     use Illuminate\Support\Str;
 
@@ -1368,9 +1401,9 @@ The `beforeLast` method returns everything before the last occurrence of the giv
     // 'This '
 
 <a name="method-fluent-str-between"></a>
-#### `between` {.collection-method}
+#### `between` 
 
-The `between` method returns the portion of a string between two values:
+Метод `between` возвращает часть строки между двумя значениями:
 
     use Illuminate\Support\Str;
 
@@ -1379,9 +1412,9 @@ The `between` method returns the portion of a string between two values:
     // ' is my '
 
 <a name="method-fluent-str-between-first"></a>
-#### `betweenFirst` {.collection-method}
+#### `betweenFirst` 
 
-The `betweenFirst` method returns the smallest possible portion of a string between two values:
+Метод `betweenFirst` возвращает наименьший возможный участок строки между двумя значениями:
 
     use Illuminate\Support\Str;
 
@@ -1390,31 +1423,41 @@ The `betweenFirst` method returns the smallest possible portion of a string betw
     // 'a'
 
 <a name="method-fluent-str-camel"></a>
-#### `camel` {.collection-method}
+#### `camel` 
 
-The `camel` method converts the given string to `camelCase`:
+Метод `camel` преобразует переданную строку в` camelCase`:
 
     use Illuminate\Support\Str;
 
     $converted = Str::of('foo_bar')->camel();
 
-    // fooBar
+    // 'fooBar'
+
+<a name="method-fluent-str-char-at"></a>
+#### `charAt` 
+
+Метод `charAt` возвращает символ по указанному индексу. Если индекс выходит за границы, возвращается значение `false`:
+    use Illuminate\Support\Str;
+
+    $character = Str::of('This is my name.')->charAt(6);
+
+    // 's'
 
 <a name="method-fluent-str-class-basename"></a>
-#### `classBasename` {.collection-method}
+#### `classBasename` 
 
-The `classBasename` method returns the class name of the given class with the class's namespace removed:
+Метод `classBasename` возвращает имя класса без пространства имен:
 
     use Illuminate\Support\Str;
 
     $class = Str::of('Foo\Bar\Baz')->classBasename();
 
-    // Baz
+    // 'Baz'
 
 <a name="method-fluent-str-contains"></a>
-#### `contains` {.collection-method}
+#### `contains` 
 
-The `contains` method determines if the given string contains the given value. This method is case sensitive:
+Метод `contains` определяет, содержит ли переданная строка указанное значение (с учетом регистра):
 
     use Illuminate\Support\Str;
 
@@ -1422,7 +1465,7 @@ The `contains` method determines if the given string contains the given value. T
 
     // true
 
-You may also pass an array of values to determine if the given string contains any of the values in the array:
+Вы также можете указать массив значений, чтобы определить, содержит ли переданная строка какое-либо из этих значений:
 
     use Illuminate\Support\Str;
 
@@ -1431,9 +1474,9 @@ You may also pass an array of values to determine if the given string contains a
     // true
 
 <a name="method-fluent-str-contains-all"></a>
-#### `containsAll` {.collection-method}
+#### `containsAll` 
 
-The `containsAll` method determines if the given string contains all of the values in the given array:
+Метод `containsAll` определяет, содержит ли переданная строка все значения массива:
 
     use Illuminate\Support\Str;
 
@@ -1442,9 +1485,9 @@ The `containsAll` method determines if the given string contains all of the valu
     // true
 
 <a name="method-fluent-str-dirname"></a>
-#### `dirname` {.collection-method}
+#### `dirname` 
 
-The `dirname` method returns the parent directory portion of the given string:
+Метод `dirname` возвращает родительскую часть директории переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -1452,7 +1495,7 @@ The `dirname` method returns the parent directory portion of the given string:
 
     // '/foo/bar'
 
-If necessary, you may specify how many directory levels you wish to trim from the string:
+При желании вы можете указать, сколько уровней каталогов вы хотите вырезать из строки:
 
     use Illuminate\Support\Str;
 
@@ -1461,35 +1504,36 @@ If necessary, you may specify how many directory levels you wish to trim from th
     // '/foo'
 
 <a name="method-fluent-str-excerpt"></a>
-#### `excerpt` {.collection-method}
+#### `excerpt` 
 
-The `excerpt` method extracts an excerpt from the string that matches the first instance of a phrase within that string:
+Метод `excerpt` извлекает отрывок из заданной строки, соответствующий первому вхождению фразы в эту строку:
 
     use Illuminate\Support\Str;
-
-    $excerpt = Str::of('This is my name')->excerpt('my', [
+    
+    $excerpt = Str::excerpt('This is my name', 'my', [
         'radius' => 3
     ]);
-
+    
     // '...is my na...'
 
-The `radius` option, which defaults to `100`, allows you to define the number of characters that should appear on each side of the truncated string.
 
-In addition, you may use the `omission` option to change the string that will be prepended and appended to the truncated string:
+Опция `radius`, по умолчанию равная `100`, позволяет определить количество символов, которые должны появиться с каждой стороны усеченной строки.
+
+Кроме того, вы можете использовать опцию `omission`, чтобы определить строку, которая будет добавлена перед и после усеченной строки:
 
     use Illuminate\Support\Str;
-
-    $excerpt = Str::of('This is my name')->excerpt('name', [
+    
+    $excerpt = Str::excerpt('This is my name', 'name', [
         'radius' => 3,
         'omission' => '(...) '
     ]);
-
+    
     // '(...) my name'
 
 <a name="method-fluent-str-ends-with"></a>
-#### `endsWith` {.collection-method}
+#### `endsWith` 
 
-The `endsWith` method determines if the given string ends with the given value:
+Метод `endsWith` определяет, заканчивается ли переданная строка указанным значением:
 
     use Illuminate\Support\Str;
 
@@ -1497,7 +1541,7 @@ The `endsWith` method determines if the given string ends with the given value:
 
     // true
 
-You may also pass an array of values to determine if the given string ends with any of the values in the array:
+Вы также можете указать массив значений, чтобы определить, заканчивается ли переданная строка каким-либо из указанных значений:
 
     use Illuminate\Support\Str;
 
@@ -1510,9 +1554,9 @@ You may also pass an array of values to determine if the given string ends with 
     // false
 
 <a name="method-fluent-str-exactly"></a>
-#### `exactly` {.collection-method}
+#### `exactly` 
 
-The `exactly` method determines if the given string is an exact match with another string:
+Метод `exactly` определяет, является ли переданная строка точным совпадением с другой строкой:
 
     use Illuminate\Support\Str;
 
@@ -1521,9 +1565,9 @@ The `exactly` method determines if the given string is an exact match with anoth
     // true
 
 <a name="method-fluent-str-explode"></a>
-#### `explode` {.collection-method}
+#### `explode` 
 
-The `explode` method splits the string by the given delimiter and returns a collection containing each section of the split string:
+Метод `explode` разделяет строку по заданному разделителю и возвращает коллекцию, содержащую каждый раздел строки разбиения:
 
     use Illuminate\Support\Str;
 
@@ -1532,9 +1576,9 @@ The `explode` method splits the string by the given delimiter and returns a coll
     // collect(['foo', 'bar', 'baz'])
 
 <a name="method-fluent-str-finish"></a>
-#### `finish` {.collection-method}
+#### `finish` 
 
-The `finish` method adds a single instance of the given value to a string if it does not already end with that value:
+Метод `finish` добавляет один экземпляр указанного значения в переданную строку, если она еще не заканчивается этим значением:
 
     use Illuminate\Support\Str;
 
@@ -1547,9 +1591,9 @@ The `finish` method adds a single instance of the given value to a string if it 
     // this/string/
 
 <a name="method-fluent-str-headline"></a>
-#### `headline` {.collection-method}
+#### `headline` 
 
-The `headline` method will convert strings delimited by casing, hyphens, or underscores into a space delimited string with each word's first letter capitalized:
+Метод `headline` преобразует строки, разделенные регистром, дефисами или подчеркиваниями, в строку с пробелами, где первая буква каждого слова написана заглавной:
 
     use Illuminate\Support\Str;
 
@@ -1562,10 +1606,10 @@ The `headline` method will convert strings delimited by casing, hyphens, or unde
     // Email Notification Sent
 
 <a name="method-fluent-str-inline-markdown"></a>
-#### `inlineMarkdown` {.collection-method}
+#### `inlineMarkdown` 
 
-The `inlineMarkdown` method converts GitHub flavored Markdown into inline HTML using [CommonMark](https://commonmark.thephpleague.com/). However, unlike the `markdown` method, it does not wrap all generated HTML in a block-level element:
-
+Метод `inlineMarkdown` преобразует Markdown в стиле GitHub в HTML в одну строку с использованием [CommonMark](https://commonmark.thephpleague.com/). Однако, в отличие от метода `markdown`, он не оборачивает весь сгенерированный HTML в блочный элемент:
+    
     use Illuminate\Support\Str;
 
     $html = Str::of('**Laravel**')->inlineMarkdown();
@@ -1573,9 +1617,9 @@ The `inlineMarkdown` method converts GitHub flavored Markdown into inline HTML u
     // <strong>Laravel</strong>
 
 <a name="method-fluent-str-is"></a>
-#### `is` {.collection-method}
+#### `is` 
 
-The `is` method determines if a given string matches a given pattern. Asterisks may be used as wildcard values
+Метод `is` определяет, соответствует ли переданная строка указанному шаблону. Допускается использование метасимвола подстановки `*`:
 
     use Illuminate\Support\Str;
 
@@ -1588,9 +1632,9 @@ The `is` method determines if a given string matches a given pattern. Asterisks 
     // false
 
 <a name="method-fluent-str-is-ascii"></a>
-#### `isAscii` {.collection-method}
+#### `isAscii` 
 
-The `isAscii` method determines if a given string is an ASCII string:
+Метод `isAscii` определяет, является ли переданная строка строкой ASCII:
 
     use Illuminate\Support\Str;
 
@@ -1603,9 +1647,9 @@ The `isAscii` method determines if a given string is an ASCII string:
     // false
 
 <a name="method-fluent-str-is-empty"></a>
-#### `isEmpty` {.collection-method}
+#### `isEmpty` 
 
-The `isEmpty` method determines if the given string is empty:
+Метод `isEmpty` определяет, является ли переданная строка пустой:
 
     use Illuminate\Support\Str;
 
@@ -1618,10 +1662,9 @@ The `isEmpty` method determines if the given string is empty:
     // false
 
 <a name="method-fluent-str-is-not-empty"></a>
-#### `isNotEmpty` {.collection-method}
+#### `isNotEmpty` 
 
-The `isNotEmpty` method determines if the given string is not empty:
-
+Метод `isNotEmpty` определяет, является ли переданная строка не пустой:
 
     use Illuminate\Support\Str;
 
@@ -1634,9 +1677,9 @@ The `isNotEmpty` method determines if the given string is not empty:
     // true
 
 <a name="method-fluent-str-is-json"></a>
-#### `isJson` {.collection-method}
+#### `isJson` 
 
-The `isJson` method determines if a given string is valid JSON:
+Метод `isJson` определяет, является ли заданная строка допустимым JSON:
 
     use Illuminate\Support\Str;
 
@@ -1653,9 +1696,9 @@ The `isJson` method determines if a given string is valid JSON:
     // false
 
 <a name="method-fluent-str-is-ulid"></a>
-#### `isUlid` {.collection-method}
+#### `isUlid` 
 
-The `isUlid` method determines if a given string is a ULID:
+Метод `isUlid` определяет, является ли заданная строка ULID:
 
     use Illuminate\Support\Str;
 
@@ -1668,9 +1711,9 @@ The `isUlid` method determines if a given string is a ULID:
     // false
 
 <a name="method-fluent-str-is-url"></a>
-#### `isUrl` {.collection-method}
+#### `isUrl` 
 
-The `isUrl` method determines if a given string is a URL:
+Метод `isUrl` определяет, является ли заданная строка URL:
 
     use Illuminate\Support\Str;
 
@@ -1683,9 +1726,9 @@ The `isUrl` method determines if a given string is a URL:
     // false
 
 <a name="method-fluent-str-is-uuid"></a>
-#### `isUuid` {.collection-method}
+#### `isUuid` 
 
-The `isUuid` method determines if a given string is a UUID:
+Метод `isUuid` определяет, является ли заданная строка UUID:
 
     use Illuminate\Support\Str;
 
@@ -1698,9 +1741,9 @@ The `isUuid` method determines if a given string is a UUID:
     // false
 
 <a name="method-fluent-str-kebab"></a>
-#### `kebab` {.collection-method}
+#### `kebab` 
 
-The `kebab` method converts the given string to `kebab-case`:
+Метод `kebab` преобразует переданную строку в `kebab-case`:
 
     use Illuminate\Support\Str;
 
@@ -1709,9 +1752,9 @@ The `kebab` method converts the given string to `kebab-case`:
     // foo-bar
 
 <a name="method-fluent-str-lcfirst"></a>
-#### `lcfirst` {.collection-method}
+#### `lcfirst` 
 
-The `lcfirst` method returns the given string with the first character lowercased:
+Метод `lcfirst` возвращает заданную строку с первым символом в нижнем регистре:
 
     use Illuminate\Support\Str;
 
@@ -1721,9 +1764,9 @@ The `lcfirst` method returns the given string with the first character lowercase
 
 
 <a name="method-fluent-str-length"></a>
-#### `length` {.collection-method}
+#### `length` 
 
-The `length` method returns the length of the given string:
+Метод `length` возвращает длину переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -1732,9 +1775,9 @@ The `length` method returns the length of the given string:
     // 7
 
 <a name="method-fluent-str-limit"></a>
-#### `limit` {.collection-method}
+#### `limit` 
 
-The `limit` method truncates the given string to the specified length:
+Метод `limit` усекает переданную строку до указанной длины:
 
     use Illuminate\Support\Str;
 
@@ -1742,7 +1785,7 @@ The `limit` method truncates the given string to the specified length:
 
     // The quick brown fox...
 
-You may also pass a second argument to change the string that will be appended to the end of the truncated string:
+Вы также можете передать второй строковый аргумент, содержимое которого будет добавлено в конец:
 
     use Illuminate\Support\Str;
 
@@ -1751,9 +1794,9 @@ You may also pass a second argument to change the string that will be appended t
     // The quick brown fox (...)
 
 <a name="method-fluent-str-lower"></a>
-#### `lower` {.collection-method}
+#### `lower` 
 
-The `lower` method converts the given string to lowercase:
+Метод `lower` преобразует переданную строку в нижний регистр:
 
     use Illuminate\Support\Str;
 
@@ -1762,9 +1805,9 @@ The `lower` method converts the given string to lowercase:
     // 'laravel'
 
 <a name="method-fluent-str-ltrim"></a>
-#### `ltrim` {.collection-method}
+#### `ltrim` 
 
-The `ltrim` method trims the left side of the string:
+Метод `ltrim` удаляет символы из начала строки:
 
     use Illuminate\Support\Str;
 
@@ -1777,9 +1820,9 @@ The `ltrim` method trims the left side of the string:
     // 'Laravel/'
 
 <a name="method-fluent-str-markdown"></a>
-#### `markdown` {.collection-method}
+#### `markdown` 
 
-The `markdown` method converts GitHub flavored Markdown into HTML:
+Метод `markdown` преобразует Markdown в стиле GitHub в HTML:
 
     use Illuminate\Support\Str;
 
@@ -1794,9 +1837,9 @@ The `markdown` method converts GitHub flavored Markdown into HTML:
     // <h1>Taylor Otwell</h1>
 
 <a name="method-fluent-str-mask"></a>
-#### `mask` {.collection-method}
+#### `mask` 
 
-The `mask` method masks a portion of a string with a repeated character, and may be used to obfuscate segments of strings such as email addresses and phone numbers:
+Метод `mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
 
     use Illuminate\Support\Str;
 
@@ -1804,7 +1847,7 @@ The `mask` method masks a portion of a string with a repeated character, and may
 
     // tay***************
 
-If needed, you may provide negative numbers as the third or fourth argument to the `mask` method, which will instruct the method to begin masking at the given distance from the end of the string:
+При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
 
     $string = Str::of('taylor@example.com')->mask('*', -15, 3);
 
@@ -1815,9 +1858,9 @@ If needed, you may provide negative numbers as the third or fourth argument to t
     // tayl**********.com
 
 <a name="method-fluent-str-match"></a>
-#### `match` {.collection-method}
+#### `match` 
 
-The `match` method will return the portion of a string that matches a given regular expression pattern:
+Метод `match` вернет часть строки, которая соответствует указанному шаблону регулярного выражения:
 
     use Illuminate\Support\Str;
 
@@ -1830,9 +1873,9 @@ The `match` method will return the portion of a string that matches a given regu
     // 'bar'
 
 <a name="method-fluent-str-match-all"></a>
-#### `matchAll` {.collection-method}
+#### `matchAll` 
 
-The `matchAll` method will return a collection containing the portions of a string that match a given regular expression pattern:
+Метод `matchAll` вернет коллекцию, содержащую части строки, которые соответствуют указанному шаблону регулярного выражения:
 
     use Illuminate\Support\Str;
 
@@ -1840,7 +1883,7 @@ The `matchAll` method will return a collection containing the portions of a stri
 
     // collect(['bar', 'bar'])
 
-If you specify a matching group within the expression, Laravel will return a collection of that group's matches:
+Если вы укажете группировку в выражении, то Laravel вернет коллекцию совпадений этой группы:
 
     use Illuminate\Support\Str;
 
@@ -1848,12 +1891,12 @@ If you specify a matching group within the expression, Laravel will return a col
 
     // collect(['un', 'ly']);
 
-If no matches are found, an empty collection will be returned.
+Если совпадений не найдено, будет возвращена пустая коллекция.
 
 <a name="method-fluent-str-is-match"></a>
-#### `isMatch` {.collection-method}
+#### `isMatch` 
 
-The `isMatch` method will return `true` if the string matches a given regular expression:
+Метод `isMatch` вернет `true`, если строка соответствует заданному регулярному выражению:
 
     use Illuminate\Support\Str;
 
@@ -1866,9 +1909,9 @@ The `isMatch` method will return `true` if the string matches a given regular ex
     // false
 
 <a name="method-fluent-str-new-line"></a>
-#### `newLine` {.collection-method}
+#### `newLine` 
 
-The `newLine` method appends an "end of line" character to a string:
+Метод `newLine` добавляет символ "конец строки" к строке:
 
     use Illuminate\Support\Str;
 
@@ -1878,9 +1921,9 @@ The `newLine` method appends an "end of line" character to a string:
     //  Framework'
 
 <a name="method-fluent-str-padboth"></a>
-#### `padBoth` {.collection-method}
+#### `padBoth` 
 
-The `padBoth` method wraps PHP's `str_pad` function, padding both sides of a string with another string until the final string reaches the desired length:
+Метод `padBoth` оборачивает функцию `str_pad` PHP, заполняя обе стороны строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -1893,9 +1936,9 @@ The `padBoth` method wraps PHP's `str_pad` function, padding both sides of a str
     // '  James   '
 
 <a name="method-fluent-str-padleft"></a>
-#### `padLeft` {.collection-method}
+#### `padLeft` 
 
-The `padLeft` method wraps PHP's `str_pad` function, padding the left side of a string with another string until the final string reaches the desired length:
+Метод `padLeft` оборачивает функцию `str_pad` PHP, заполняя левую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -1908,9 +1951,9 @@ The `padLeft` method wraps PHP's `str_pad` function, padding the left side of a 
     // '     James'
 
 <a name="method-fluent-str-padright"></a>
-#### `padRight` {.collection-method}
+#### `padRight` 
 
-The `padRight` method wraps PHP's `str_pad` function, padding the right side of a string with another string until the final string reaches the desired length:
+Метод `padRight` оборачивает функцию `str_pad` PHP, заполняя правую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
 
     use Illuminate\Support\Str;
 
@@ -1923,9 +1966,9 @@ The `padRight` method wraps PHP's `str_pad` function, padding the right side of 
     // 'James     '
 
 <a name="method-fluent-str-pipe"></a>
-#### `pipe` {.collection-method}
+#### `pipe` 
 
-The `pipe` method allows you to transform the string by passing its current value to the given callable:
+Метод `pipe` позволяет вам преобразовать строку, передав ее текущее значение указанной функции обратного вызова:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -1941,10 +1984,9 @@ The `pipe` method allows you to transform the string by passing its current valu
     // 'bar'
 
 <a name="method-fluent-str-plural"></a>
-#### `plural` {.collection-method}
+#### `plural` 
 
-The `plural` method converts a singular word string to its plural form. This function supports [any of the languages support by Laravel's pluralizer](/docs/{{version}}/localization#pluralization-language):
-
+Метод `plural` преобразует строку в единственном числе во множественное число. Эта функция поддерживает [любые из языков, поддерживаемых плюрализатором Laravel](/docs/{{version}}/localization#pluralization-language):
     use Illuminate\Support\Str;
 
     $plural = Str::of('car')->plural();
@@ -1955,7 +1997,7 @@ The `plural` method converts a singular word string to its plural form. This fun
 
     // children
 
-You may provide an integer as a second argument to the function to retrieve the singular or plural form of the string:
+Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
 
     use Illuminate\Support\Str;
 
@@ -1968,9 +2010,9 @@ You may provide an integer as a second argument to the function to retrieve the 
     // child
 
 <a name="method-fluent-str-position"></a>
-#### `position` {.collection-method}
+#### `position` 
 
-The `position` method returns the position of the first occurrence of a substring in a string. If the substring does not exist within the string, `false` is returned:
+Метод `position` возвращает позицию первого вхождения подстроки в строку. Если подстрока не существует внутри строки, возвращается значение `false`:
 
     use Illuminate\Support\Str;
 
@@ -1983,9 +2025,9 @@ The `position` method returns the position of the first occurrence of a substrin
     // 7
 
 <a name="method-fluent-str-prepend"></a>
-#### `prepend` {.collection-method}
+#### `prepend` 
 
-The `prepend` method prepends the given values onto the string:
+Метод `prepend` добавляет указанные значения в начало строки:
 
     use Illuminate\Support\Str;
 
@@ -1994,9 +2036,9 @@ The `prepend` method prepends the given values onto the string:
     // Laravel Framework
 
 <a name="method-fluent-str-remove"></a>
-#### `remove` {.collection-method}
+#### `remove` 
 
-The `remove` method removes the given value or array of values from the string:
+Метод `remove` удаляет указанную подстроку или массив подстрок в строке:
 
     use Illuminate\Support\Str;
 
@@ -2004,12 +2046,12 @@ The `remove` method removes the given value or array of values from the string:
 
     // Arkansas is beautiful!
 
-You may also pass `false` as a second parameter to ignore case when removing strings.
+Вы можете передать `false` в качестве второго аргумента для игнорирования регистра удаляемых строк.
 
 <a name="method-fluent-str-repeat"></a>
-#### `repeat` {.collection-method}
+#### `repeat` 
 
-The `repeat` method repeats the given string:
+Метод `repeat` повторяет заданную строку:
 
 ```php
 use Illuminate\Support\Str;
@@ -2020,9 +2062,9 @@ $repeated = Str::of('a')->repeat(5);
 ```
 
 <a name="method-fluent-str-replace"></a>
-#### `replace` {.collection-method}
+#### `replace` 
 
-The `replace` method replaces a given string within the string:
+Метод `replace` заменяет указанную строку внутри строки:
 
     use Illuminate\Support\Str;
 
@@ -2030,16 +2072,16 @@ The `replace` method replaces a given string within the string:
 
     // Laravel 7.x
 
-The `replace` method also accepts a `caseSensitive` argument. By default, the `replace` method is case sensitive:
+Метод `replace` также принимает аргумент `caseSensitive`. По умолчанию метод `replace` чувствителен к регистру:
 
     $replaced = Str::of('macOS 13.x')->replace(
         'macOS', 'iOS', caseSensitive: false
     );
 
 <a name="method-fluent-str-replace-array"></a>
-#### `replaceArray` {.collection-method}
+#### `replaceArray` 
 
-The `replaceArray` method replaces a given value in the string sequentially using an array:
+Метод `replaceArray` последовательно заменяет указанное значение в строке, используя массив:
 
     use Illuminate\Support\Str;
 
@@ -2050,9 +2092,9 @@ The `replaceArray` method replaces a given value in the string sequentially usin
     // The event will take place between 8:30 and 9:00
 
 <a name="method-fluent-str-replace-first"></a>
-#### `replaceFirst` {.collection-method}
+#### `replaceFirst` 
 
-The `replaceFirst` method replaces the first occurrence of a given value in a string:
+Метод `replaceFirst` заменяет первое вхождение указанного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -2061,9 +2103,9 @@ The `replaceFirst` method replaces the first occurrence of a given value in a st
     // a quick brown fox jumps over the lazy dog
 
 <a name="method-fluent-str-replace-last"></a>
-#### `replaceLast` {.collection-method}
+#### `replaceLast` 
 
-The `replaceLast` method replaces the last occurrence of a given value in a string:
+Метод `replaceLast` заменяет последнее вхождение указанного значения в строке:
 
     use Illuminate\Support\Str;
 
@@ -2072,9 +2114,9 @@ The `replaceLast` method replaces the last occurrence of a given value in a stri
     // the quick brown fox jumps over a lazy dog
 
 <a name="method-fluent-str-replace-matches"></a>
-#### `replaceMatches` {.collection-method}
+#### `replaceMatches` 
 
-The `replaceMatches` method replaces all portions of a string matching a pattern with the given replacement string:
+Метод `replaceMatches` заменяет все части строки, соответствующие указанному шаблону, переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -2082,7 +2124,7 @@ The `replaceMatches` method replaces all portions of a string matching a pattern
 
     // '15015551000'
 
-The `replaceMatches` method also accepts a closure that will be invoked with each portion of the string matching the given pattern, allowing you to perform the replacement logic within the closure and return the replaced value:
+Метод `replaceMatches` также принимает замыкание, которое будет вызвано для каждой части строки, соответствующей шаблону, что позволяет вам выполнять логику замены в замыкании и возвращать замененное значение:
 
     use Illuminate\Support\Str;
 
@@ -2093,9 +2135,9 @@ The `replaceMatches` method also accepts a closure that will be invoked with eac
     // '[1][2][3]'
 
 <a name="method-fluent-str-replace-start"></a>
-#### `replaceStart` {.collection-method}
+#### `replaceStart` 
 
-The `replaceStart` method replaces the first occurrence of the given value only if the value appears at the start of the string:
+Метод `replaceStart` заменяет только первое вхождение заданного значения, если значение появляется в начале строки:
 
     use Illuminate\Support\Str;
 
@@ -2108,9 +2150,9 @@ The `replaceStart` method replaces the first occurrence of the given value only 
     // Hello World
 
 <a name="method-fluent-str-replace-end"></a>
-#### `replaceEnd` {.collection-method}
+#### `replaceEnd` 
 
-The `replaceEnd` method replaces the last occurrence of the given value only if the value appears at the end of the string:
+Метод `replaceEnd` заменяет только последнее вхождение заданного значения, если значение появляется в конце строки:
 
     use Illuminate\Support\Str;
 
@@ -2123,9 +2165,9 @@ The `replaceEnd` method replaces the last occurrence of the given value only if 
     // Hello World
 
 <a name="method-fluent-str-rtrim"></a>
-#### `rtrim` {.collection-method}
+#### `rtrim` 
 
-The `rtrim` method trims the right side of the given string:
+Метод `rtrim` удаляет символы из конца строки:
 
     use Illuminate\Support\Str;
 
@@ -2138,9 +2180,9 @@ The `rtrim` method trims the right side of the given string:
     // '/Laravel'
 
 <a name="method-fluent-str-scan"></a>
-#### `scan` {.collection-method}
+#### `scan` 
 
-The `scan` method parses input from a string into a collection according to a format supported by the [`sscanf` PHP function](https://www.php.net/manual/en/function.sscanf.php):
+Метод `scan` анализирует входные данные из строки в коллекцию в соответствии с форматом, поддерживаемым [`sscanf` функцией PHP](https://www.php.net/manual/ru/function.sscanf.php):
 
     use Illuminate\Support\Str;
 
@@ -2149,9 +2191,9 @@ The `scan` method parses input from a string into a collection according to a fo
     // collect(['filename', 'jpg'])
 
 <a name="method-fluent-str-singular"></a>
-#### `singular` {.collection-method}
+#### `singular` 
 
-The `singular` method converts a string to its singular form. This function supports [any of the languages support by Laravel's pluralizer](/docs/{{version}}/localization#pluralization-language):
+Метод `singular` преобразует строку в ее форму единственного числа. Эта функция поддерживает [любые из языков, поддерживаемых плюрализатором Laravel](/docs/{{version}}/localization#pluralization-language):
 
     use Illuminate\Support\Str;
 
@@ -2164,9 +2206,9 @@ The `singular` method converts a string to its singular form. This function supp
     // child
 
 <a name="method-fluent-str-slug"></a>
-#### `slug` {.collection-method}
+#### `slug` 
 
-The `slug` method generates a URL friendly "slug" from the given string:
+Метод `slug` создает «дружественный фрагмент» URL-адреса из переданной строки:
 
     use Illuminate\Support\Str;
 
@@ -2175,9 +2217,9 @@ The `slug` method generates a URL friendly "slug" from the given string:
     // laravel-framework
 
 <a name="method-fluent-str-snake"></a>
-#### `snake` {.collection-method}
+#### `snake` 
 
-The `snake` method converts the given string to `snake_case`:
+Метод `snake` преобразует переданную строку в `snake_case`:
 
     use Illuminate\Support\Str;
 
@@ -2186,9 +2228,9 @@ The `snake` method converts the given string to `snake_case`:
     // foo_bar
 
 <a name="method-fluent-str-split"></a>
-#### `split` {.collection-method}
+#### `split` 
 
-The `split` method splits a string into a collection using a regular expression:
+Метод `split` разбивает строку на коллекцию с помощью регулярного выражения:
 
     use Illuminate\Support\Str;
 
@@ -2197,9 +2239,9 @@ The `split` method splits a string into a collection using a regular expression:
     // collect(["one", "two", "three"])
 
 <a name="method-fluent-str-squish"></a>
-#### `squish` {.collection-method}
+#### `squish` 
 
-The `squish` method removes all extraneous white space from a string, including extraneous white space between words:
+Метод `squish` удаляет все лишние пробелы из строки, включая лишние пробелы между словами:
 
     use Illuminate\Support\Str;
 
@@ -2208,9 +2250,9 @@ The `squish` method removes all extraneous white space from a string, including 
     // laravel framework
 
 <a name="method-fluent-str-start"></a>
-#### `start` {.collection-method}
+#### `start` 
 
-The `start` method adds a single instance of the given value to a string if it does not already start with that value:
+Метод `start` добавляет один экземпляр указанного значения в переданную строку, если она еще не начинается этим значением:
 
     use Illuminate\Support\Str;
 
@@ -2223,9 +2265,9 @@ The `start` method adds a single instance of the given value to a string if it d
     // /this/string
 
 <a name="method-fluent-str-starts-with"></a>
-#### `startsWith` {.collection-method}
+#### `startsWith` 
 
-The `startsWith` method determines if the given string begins with the given value:
+Метод `startsWith` определяет, начинается ли переданная строка с указанного значения:
 
     use Illuminate\Support\Str;
 
@@ -2233,10 +2275,25 @@ The `startsWith` method determines if the given string begins with the given val
 
     // true
 
-<a name="method-fluent-str-studly"></a>
-#### `studly` {.collection-method}
+<a name="method-fluent-str-strip-tags"></a>
+#### `stripTags` 
 
-The `studly` method converts the given string to `StudlyCase`:
+Метод `stripTags` удаляет все HTML- и PHP-теги из строки:
+
+    use Illuminate\Support\Str;
+
+    $result = Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->stripTags();
+
+    // Taylor Otwell
+
+    $result = Str::of('<a href="https://laravel.com">Taylor <b>Otwell</b></a>')->stripTags('<b>');
+
+    // Taylor <b>Otwell</b>
+
+<a name="method-fluent-str-studly"></a>
+#### `studly` 
+
+Метод `studly` преобразует переданную строку в `StudlyCase`:
 
     use Illuminate\Support\Str;
 
@@ -2245,9 +2302,9 @@ The `studly` method converts the given string to `StudlyCase`:
     // FooBar
 
 <a name="method-fluent-str-substr"></a>
-#### `substr` {.collection-method}
+#### `substr` 
 
-The `substr` method returns the portion of the string specified by the given start and length parameters:
+Метод `substr` возвращает часть строки, заданную параметрами «начало» и «длина»:
 
     use Illuminate\Support\Str;
 
@@ -2260,9 +2317,9 @@ The `substr` method returns the portion of the string specified by the given sta
     // Frame
 
 <a name="method-fluent-str-substrreplace"></a>
-#### `substrReplace` {.collection-method}
+#### `substrReplace` 
 
-The `substrReplace` method replaces text within a portion of a string, starting at the position specified by the second argument and replacing the number of characters specified by the third argument. Passing `0` to the method's third argument will insert the string at the specified position without replacing any of the existing characters in the string:
+Метод `substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав 0 четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
 
     use Illuminate\Support\Str;
 
@@ -2275,9 +2332,9 @@ The `substrReplace` method replaces text within a portion of a string, starting 
     // The Laravel Framework
 
 <a name="method-fluent-str-swap"></a>
-#### `swap` {.collection-method}
+#### `swap` 
 
-The `swap` method replaces multiple values in the string using PHP's `strtr` function:
+Метод `swap` заменяет несколько значений в строке с использованием функции `strtr` PHP:
 
     use Illuminate\Support\Str;
 
@@ -2290,9 +2347,9 @@ The `swap` method replaces multiple values in the string using PHP's `strtr` fun
     // Burritos are fantastic!
 
 <a name="method-fluent-str-take"></a>
-#### `take` {.collection-method}
+#### `take` 
 
-The `take` method returns a specified number of characters from the beginning of the string:
+Метод `take` возвращает указанное количество символов из начала строки:
 
     use Illuminate\Support\Str;
 
@@ -2301,9 +2358,9 @@ The `take` method returns a specified number of characters from the beginning of
     // Build
 
 <a name="method-fluent-str-tap"></a>
-#### `tap` {.collection-method}
+#### `tap` 
 
-The `tap` method passes the string to the given closure, allowing you to examine and interact with the string while not affecting the string itself. The original string is returned by the `tap` method regardless of what is returned by the closure:
+Метод `tap` передает строку заданному замыканию, позволяя вам взаимодействовать с ней, не затрагивая при этом саму строку. Исходная строка возвращается методом `tap` независимо от того, что возвращает замыкание:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2318,9 +2375,9 @@ The `tap` method passes the string to the given closure, allowing you to examine
     // LARAVEL FRAMEWORK
 
 <a name="method-fluent-str-test"></a>
-#### `test` {.collection-method}
+#### `test` 
 
-The `test` method determines if a string matches the given regular expression pattern:
+Метод `test` определяет, соответствует ли строка переданному шаблону регулярного выражения:
 
     use Illuminate\Support\Str;
 
@@ -2329,9 +2386,9 @@ The `test` method determines if a string matches the given regular expression pa
     // true
 
 <a name="method-fluent-str-title"></a>
-#### `title` {.collection-method}
+#### `title` 
 
-The `title` method converts the given string to `Title Case`:
+Метод `title` преобразует переданную строку в `Title Case`:
 
     use Illuminate\Support\Str;
 
@@ -2340,9 +2397,9 @@ The `title` method converts the given string to `Title Case`:
     // A Nice Title Uses The Correct Case
 
 <a name="method-fluent-str-trim"></a>
-#### `trim` {.collection-method}
+#### `trim` 
 
-The `trim` method trims the given string:
+Метод `trim` обрезает переданную строку:
 
     use Illuminate\Support\Str;
 
@@ -2355,9 +2412,9 @@ The `trim` method trims the given string:
     // 'Laravel'
 
 <a name="method-fluent-str-ucfirst"></a>
-#### `ucfirst` {.collection-method}
+#### `ucfirst` 
 
-The `ucfirst` method returns the given string with the first character capitalized:
+Метод `ucfirst` возвращает переданную строку с первой заглавной буквой:
 
     use Illuminate\Support\Str;
 
@@ -2366,9 +2423,9 @@ The `ucfirst` method returns the given string with the first character capitaliz
     // Foo bar
 
 <a name="method-fluent-str-ucsplit"></a>
-#### `ucsplit` {.collection-method}
+#### `ucsplit` 
 
-The `ucsplit` method splits the given string into a collection by uppercase characters:
+Метод `upper` преобразует переданную строку в верхний регистр:
 
     use Illuminate\Support\Str;
 
@@ -2376,10 +2433,25 @@ The `ucsplit` method splits the given string into a collection by uppercase char
 
     // collect(['Foo', 'Bar'])
 
-<a name="method-fluent-str-upper"></a>
-#### `upper` {.collection-method}
+<a name="method-fluent-str-unwrap"></a>
+#### `unwrap` 
 
-The `upper` method converts the given string to uppercase:
+Метод `unwrap` удаляет указанные строки из начала и конца заданной строки:
+
+    use Illuminate\Support\Str;
+
+    Str::of('-Laravel-')->unwrap('-');
+
+    // Laravel
+
+    Str::of('{framework: "Laravel"}')->unwrap('{', '}');
+
+    // framework: "Laravel"
+
+<a name="method-fluent-str-upper"></a>
+#### `upper` 
+
+Метод `upper` преобразует заданную строку в верхний регистр:
 
     use Illuminate\Support\Str;
 
@@ -2388,9 +2460,9 @@ The `upper` method converts the given string to uppercase:
     // LARAVEL
 
 <a name="method-fluent-str-when"></a>
-#### `when` {.collection-method}
+#### `when` 
 
-The `when` method invokes the given closure if a given condition is `true`. The closure will receive the fluent string instance:
+Метод `when` вызывает указанное замыкание, если переданное условие истинно. Замыкание получит экземпляр Fluent:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2402,12 +2474,12 @@ The `when` method invokes the given closure if a given condition is `true`. The 
 
     // 'Taylor Otwell'
 
-If necessary, you may pass another closure as the third parameter to the `when` method. This closure will execute if the condition parameter evaluates to `false`.
+При необходимости вы можете передать другое замыкание в качестве третьего параметра методу `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
 
 <a name="method-fluent-str-when-contains"></a>
-#### `whenContains` {.collection-method}
+#### `whenContains` 
 
-The `whenContains` method invokes the given closure if the string contains the given value. The closure will receive the fluent string instance:
+Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2419,9 +2491,9 @@ The `whenContains` method invokes the given closure if the string contains the g
 
     // 'Tony Stark'
 
-If necessary, you may pass another closure as the third parameter to the `when` method. This closure will execute if the string does not contain the given value.
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если строка не содержит заданного значения.
 
-You may also pass an array of values to determine if the given string contains any of the values in the array:
+Вы также можете передать массив значений, чтобы определить, содержит ли данная строка какие-либо значения в массиве:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2434,9 +2506,9 @@ You may also pass an array of values to determine if the given string contains a
     // Tony Stark
 
 <a name="method-fluent-str-when-contains-all"></a>
-#### `whenContainsAll` {.collection-method}
+#### `whenContainsAll` 
 
-The `whenContainsAll` method invokes the given closure if the string contains all of the given sub-strings. The closure will receive the fluent string instance:
+Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2448,12 +2520,12 @@ The `whenContainsAll` method invokes the given closure if the string contains al
 
     // 'Tony Stark'
 
-If necessary, you may pass another closure as the third parameter to the `when` method. This closure will execute if the condition parameter evaluates to `false`.
+При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
 
 <a name="method-fluent-str-when-empty"></a>
-#### `whenEmpty` {.collection-method}
+#### `whenEmpty` 
 
-The `whenEmpty` method invokes the given closure if the string is empty. If the closure returns a value, that value will also be returned by the `whenEmpty` method. If the closure does not return a value, the fluent string instance will be returned:
+Метод `whenEmpty` вызывает переданное замыкание, если строка пуста. Если замыкание возвращает значение, то это значение будет возвращено методом `whenEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр Fluent:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2465,9 +2537,9 @@ The `whenEmpty` method invokes the given closure if the string is empty. If the 
     // 'Laravel'
 
 <a name="method-fluent-str-when-not-empty"></a>
-#### `whenNotEmpty` {.collection-method}
+#### `whenNotEmpty` 
 
-The `whenNotEmpty` method invokes the given closure if the string is not empty. If the closure returns a value, that value will also be returned by the `whenNotEmpty` method. If the closure does not return a value, the fluent string instance will be returned:
+Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр класса `Stringable`:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2479,9 +2551,9 @@ The `whenNotEmpty` method invokes the given closure if the string is not empty. 
     // 'Laravel Framework'
 
 <a name="method-fluent-str-when-starts-with"></a>
-#### `whenStartsWith` {.collection-method}
+#### `whenStartsWith` 
 
-The `whenStartsWith` method invokes the given closure if the string starts with the given sub-string. The closure will receive the fluent string instance:
+Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Замыкание получит свободный экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2493,9 +2565,9 @@ The `whenStartsWith` method invokes the given closure if the string starts with 
     // 'Disney World'
 
 <a name="method-fluent-str-when-ends-with"></a>
-#### `whenEndsWith` {.collection-method}
+#### `whenEndsWith` 
 
-The `whenEndsWith` method invokes the given closure if the string ends with the given sub-string. The closure will receive the fluent string instance:
+Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Замыкание получит свободный экземпляр строки:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2507,9 +2579,9 @@ The `whenEndsWith` method invokes the given closure if the string ends with the 
     // 'Disney World'
 
 <a name="method-fluent-str-when-exactly"></a>
-#### `whenExactly` {.collection-method}
+#### `whenExactly` 
 
-The `whenExactly` method invokes the given closure if the string exactly matches the given string. The closure will receive the fluent string instance:
+Метод `whenExactly` вызывает данное замыкание, если строка точно соответствует заданной строке. Закрытие получит свободный экземпляр строки:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2521,9 +2593,9 @@ The `whenExactly` method invokes the given closure if the string exactly matches
     // 'Laravel'
 
 <a name="method-fluent-str-when-not-exactly"></a>
-#### `whenNotExactly` {.collection-method}
+#### `whenNotExactly` 
 
-The `whenNotExactly` method invokes the given closure if the string does not exactly match the given string. The closure will receive the fluent string instance:
+Метод `whenExactly` вызывает данное замыкание, если строка не соответствует заданной строке. Закрытие получит свободный экземпляр строки:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2535,9 +2607,9 @@ The `whenNotExactly` method invokes the given closure if the string does not exa
     // 'Framework'
 
 <a name="method-fluent-str-when-is"></a>
-#### `whenIs` {.collection-method}
+#### `whenIs` 
 
-The `whenIs` method invokes the given closure if the string matches a given pattern. Asterisks may be used as wildcard values. The closure will receive the fluent string instance:
+Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2549,9 +2621,9 @@ The `whenIs` method invokes the given closure if the string matches a given patt
     // 'foo/bar/baz'
 
 <a name="method-fluent-str-when-is-ascii"></a>
-#### `whenIsAscii` {.collection-method}
+#### `whenIsAscii` 
 
-The `whenIsAscii` method invokes the given closure if the string is 7 bit ASCII. The closure will receive the fluent string instance:
+Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2563,9 +2635,9 @@ The `whenIsAscii` method invokes the given closure if the string is 7 bit ASCII.
     // 'Laravel'
 
 <a name="method-fluent-str-when-is-ulid"></a>
-#### `whenIsUlid` {.collection-method}
+#### `whenIsUlid` 
 
-The `whenIsUlid` method invokes the given closure if the string is a valid ULID. The closure will receive the fluent string instance:
+Метод `whenIsUlid` вызывает заданное замыкание, если строка является допустимым ULID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
 
@@ -2576,9 +2648,9 @@ The `whenIsUlid` method invokes the given closure if the string is a valid ULID.
     // '01gd6r36'
 
 <a name="method-fluent-str-when-is-uuid"></a>
-#### `whenIsUuid` {.collection-method}
+#### `whenIsUuid` 
 
-The `whenIsUuid` method invokes the given closure if the string is a valid UUID. The closure will receive the fluent string instance:
+Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2590,9 +2662,9 @@ The `whenIsUuid` method invokes the given closure if the string is a valid UUID.
     // 'a0a2a2d2'
 
 <a name="method-fluent-str-when-test"></a>
-#### `whenTest` {.collection-method}
+#### `whenTest` 
 
-The `whenTest` method invokes the given closure if the string matches the given regular expression. The closure will receive the fluent string instance:
+Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
     use Illuminate\Support\Str;
     use Illuminate\Support\Stringable;
@@ -2604,9 +2676,9 @@ The `whenTest` method invokes the given closure if the string matches the given 
     // 'Laravel Framework'
 
 <a name="method-fluent-str-word-count"></a>
-#### `wordCount` {.collection-method}
+#### `wordCount` 
 
-The `wordCount` method returns the number of words that a string contains:
+Метод `wordCount` возвращает число слов в строке:
 
 ```php
 use Illuminate\Support\Str;
@@ -2615,9 +2687,9 @@ Str::of('Hello, world!')->wordCount(); // 2
 ```
 
 <a name="method-fluent-str-words"></a>
-#### `words` {.collection-method}
+#### `words` 
 
-The `words` method limits the number of words in a string. If necessary, you may specify an additional string that will be appended to the truncated string:
+Метод `words` ограничивает количество слов в строке. Дополнительная строка может быть передана этому методу, чтобы указать, какая строка должна быть добавлена в конец усеченной строки:
 
     use Illuminate\Support\Str;
 
