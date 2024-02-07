@@ -1,5 +1,5 @@
 ---
-git: 1962bbefab861798980d411895dc095b1a758770
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Обработка ошибок (Exception)
@@ -49,7 +49,7 @@ git: 1962bbefab861798980d411895dc095b1a758770
         return false;
     });
 
-> **Note**  
+> [!NOTE]  
 > Чтобы настроить отчет об исключениях для переданного исключения, вы можете рассмотреть возможность использования [отчетных исключений](#renderable-exceptions).
 
 <a name="global-log-context"></a>
@@ -320,7 +320,7 @@ public function register(): void
         return false;
     }
 
-> **Note**  
+> [!NOTE]  
 > Вы можете указать любые требуемые зависимости метода `report`, и они будут автоматически внедрены в метод [контейнером служб](/docs/{{version}}/container) Laravel.
 
 <a name="throttling-reported-exceptions"></a>
