@@ -1,5 +1,5 @@
 ---
-git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Eloquent · Сериализация
@@ -10,7 +10,8 @@ git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
 При создании API-интерфейсов с использованием Laravel вам часто нужно преобразовывать свои модели и отношения в массивы или JSON. Eloquent включает удобные методы для выполнения этих преобразований, а также для управления тем, какие атрибуты включаются в сериализованное представление ваших моделей.
 
-> {tip} Чтобы получить еще более надежный способ обработки JSON-сериализации модели Eloquent и коллекции, ознакомьтесь с документацией на [Ресурсы API Eloquent](/docs/{{version}}/eloquent-resources).
+> [!NOTE
+> Чтобы получить еще более надежный способ обработки JSON-сериализации модели Eloquent и коллекции, ознакомьтесь с документацией на [Ресурсы API Eloquent](/docs/{{version}}/eloquent-resources).
 
 <a name="serializing-models-and-collections"></a>
 ## Сериализация моделей и коллекций
@@ -87,7 +88,8 @@ git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
         protected $hidden = ['password'];
     }
 
-> {tip} Чтобы скрыть отношения, добавьте имя метода-отношения к свойству `$hidden` модели Eloquent.
+> [!NOTE]
+> Чтобы скрыть отношения, добавьте имя метода-отношения к свойству `$hidden` модели Eloquent.
 
 В качестве альтернативы вы можете использовать свойство `visible` для определения «разрешенного списка» атрибутов, которые должны быть включены в массив модели и представление JSON. Все атрибуты, отсутствующие в массиве `$visible`, будут скрыты при преобразовании модели в массив или JSON:
 
@@ -118,6 +120,12 @@ git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
     return $user->makeHidden('attribute')->toArray();
 
+Если вам нужно временно переопределить все видимые или скрытые атрибуты, вы можете использовать методы `setVisible` и `setHidden` соответственно:
+
+    return $user->setVisible(['id', 'name'])->toArray();
+
+    return $user->setHidden(['email', 'password', 'remember_token'])->toArray();
+
 <a name="appending-values-to-json"></a>
 ## Добавление значений в JSON
 
@@ -127,22 +135,23 @@ git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
     namespace App\Models;
 
+    use Illuminate\Database\Eloquent\Casts\Attribute;
     use Illuminate\Database\Eloquent\Model;
 
     class User extends Model
     {
         /**
          * Определить, является ли пользователь администратором.
-         *
-         * @return bool
          */
-        public function getIsAdminAttribute()
+        protected function isAdmin(): Attribute
         {
-            return $this->attributes['admin'] === 'yes';
+             return new Attribute(
+                get: fn () => 'yes',
+            );
         }
     }
 
-После создания аксессора добавьте имя атрибута к свойству `appends` модели. Обратите внимание, что на имена атрибутов обычно ссылаются в «змеиной нотации», даже если аксессор определяется с помощью «верблюжьей нотации»:
+Если вы хотите, чтобы аксессор всегда добавлялся к массиву и JSON-представлению вашей модели, добавьте имя атрибута к свойству `appends` модели. Обратите внимание, что на имена атрибутов обычно ссылаются в «змеиной нотации», даже если аксессор определяется с помощью «верблюжьей нотации»:
 
     <?php
 
@@ -181,11 +190,8 @@ git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 
     /**
      * Подготовить дату для сериализации массива / JSON.
-     *
-     * @param  \DateTimeInterface  $date
-     * @return string
      */
-    protected function serializeDate(DateTimeInterface $date)
+    protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d');
     }

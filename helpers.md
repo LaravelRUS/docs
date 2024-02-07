@@ -1,5 +1,5 @@
 ---
-git: ff7f2bf9e463e6f4027d6c6218107f319effead9
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Глобальные помощники (helpers)
@@ -33,18 +33,27 @@ Laravel содержит множество глобальных «вспомо�
 - [Arr::has](#method-array-has)
 - [Arr::hasAny](#method-array-hasany)
 - [Arr::isAssoc](#method-array-isassoc)
+- [Arr::isList](#method-array-islist)
+- [Arr::join](#method-array-join)
+- [Arr::keyBy](#method-array-keyby)
 - [Arr::last](#method-array-last)
+- [Arr::map](#method-array-map)
+- [Arr::mapWithKeys](#method-array-map-with-keys)
 - [Arr::only](#method-array-only)
 - [Arr::pluck](#method-array-pluck)
 - [Arr::prepend](#method-array-prepend)
+- [Arr::prependKeysWith](#method-array-prependkeyswith)
 - [Arr::pull](#method-array-pull)
 - [Arr::query](#method-array-query)
 - [Arr::random](#method-array-random)
 - [Arr::set](#method-array-set)
 - [Arr::shuffle](#method-array-shuffle)
 - [Arr::sort](#method-array-sort)
+- [Arr::sortDesc](#method-array-sort-desc)
 - [Arr::sortRecursive](#method-array-sort-recursive)
+- [Arr::sortRecursiveDesc](#method-array-sort-recursive-desc)
 - [Arr::toCssClasses](#method-array-to-css-classes)
+- [Arr::toCssStyles](#method-array-to-css-styles)
 - [Arr::undot](#method-array-undot)
 - [Arr::where](#method-array-where)
 - [Arr::whereNotNull](#method-array-where-not-null)
@@ -52,8 +61,23 @@ Laravel содержит множество глобальных «вспомо�
 - [data_fill](#method-data-fill)
 - [data_get](#method-data-get)
 - [data_set](#method-data-set)
+- [data_forget](#method-data-forget)
 - [head](#method-head)
 - [last](#method-last)
+</div>
+
+<a name="numbers-method-list"></a>
+### Numbers
+
+<div class="docs-column-list" markdown="1">
+
+[Number::abbreviate](#method-number-abbreviate)
+[Number::format](#method-number-format)
+[Number::percentage](#method-number-percentage)
+[Number::currency](#method-number-currency)
+[Number::fileSize](#method-number-file-size)
+[Number::forHumans](#method-number-for-humans)
+
 </div>
 
 <a name="paths-method-list"></a>
@@ -65,157 +89,11 @@ Laravel содержит множество глобальных «вспомо�
 - [base_path](#method-base-path)
 - [config_path](#method-config-path)
 - [database_path](#method-database-path)
+- [lang_path](#method-lang-path)
 - [mix](#method-mix)
 - [public_path](#method-public-path)
 - [resource_path](#method-resource-path)
 - [storage_path](#method-storage-path)
-
-</div>
-
-<a name="strings-method-list"></a>
-### Строки
-
-<div class="docs-column-list" markdown="1">
-
-- [\__](#method-__)
-- [class_basename](#method-class-basename)
-- [e](#method-e)
-- [preg_replace_array](#method-preg-replace-array)
-- [Str::after](#method-str-after)
-- [Str::afterLast](#method-str-after-last)
-- [Str::ascii](#method-str-ascii)
-- [Str::before](#method-str-before)
-- [Str::beforeLast](#method-str-before-last)
-- [Str::between](#method-str-between)
-- [Str::camel](#method-camel-case)
-- [Str::contains](#method-str-contains)
-- [Str::containsAll](#method-str-contains-all)
-- [Str::endsWith](#method-ends-with)
-- [Str::finish](#method-str-finish)
-- [Str::headline](#method-str-headline)
-- [Str::is](#method-str-is)
-- [Str::isAscii](#method-str-is-ascii)
-- [Str::isUuid](#method-str-is-uuid)
-- [Str::kebab](#method-kebab-case)
-- [Str::length](#method-str-length)
-- [Str::limit](#method-str-limit)
-- [Str::lower](#method-str-lower)
-- [Str::markdown](#method-str-markdown)
-- [Str::mask](#method-str-mask)
-- [Str::orderedUuid](#method-str-ordered-uuid)
-- [Str::padBoth](#method-str-padboth)
-- [Str::padLeft](#method-str-padleft)
-- [Str::padRight](#method-str-padright)
-- [Str::plural](#method-str-plural)
-- [Str::pluralStudly](#method-str-plural-studly)
-- [Str::random](#method-str-random)
-- [Str::remove](#method-str-remove)
-- [Str::replace](#method-str-replace)
-- [Str::replaceArray](#method-str-replace-array)
-- [Str::replaceFirst](#method-str-replace-first)
-- [Str::replaceLast](#method-str-replace-last)
-- [Str::reverse](#method-str-reverse)
-- [Str::singular](#method-str-singular)
-- [Str::slug](#method-str-slug)
-- [Str::snake](#method-snake-case)
-- [Str::start](#method-str-start)
-- [Str::startsWith](#method-starts-with)
-- [Str::studly](#method-studly-case)
-- [Str::substr](#method-str-substr)
-- [Str::substrCount](#method-str-substrcount)
-- [Str::substrReplace](#method-str-substrreplace)
-- [Str::title](#method-title-case)
-- [Str::toHtmlString](#method-str-to-html-string)
-- [Str::ucfirst](#method-str-ucfirst)
-- [Str::upper](#method-str-upper)
-- [Str::uuid](#method-str-uuid)
-- [Str::wordCount](#method-str-word-count)
-- [Str::words](#method-str-words)
-- [trans](#method-trans)
-- [trans_choice](#method-trans-choice)
-
-</div>
-
-<a name="fluent-strings-method-list"></a>
-### Строки Fluent
-
-Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
-
-<div class="docs-column-list" markdown="1">
-
-- [after](#method-fluent-str-after)
-- [afterLast](#method-fluent-str-after-last)
-- [append](#method-fluent-str-append)
-- [ascii](#method-fluent-str-ascii)
-- [basename](#method-fluent-str-basename)
-- [before](#method-fluent-str-before)
-- [beforeLast](#method-fluent-str-before-last)
-- [between](#method-fluent-str-between)
-- [camel](#method-fluent-str-camel)
-- [contains](#method-fluent-str-contains)
-- [containsAll](#method-fluent-str-contains-all)
-- [dirname](#method-fluent-str-dirname)
-- [endsWith](#method-fluent-str-ends-with)
-- [exactly](#method-fluent-str-exactly)
-- [explode](#method-fluent-str-explode)
-- [finish](#method-fluent-str-finish)
-- [is](#method-fluent-str-is)
-- [isAscii](#method-fluent-str-is-ascii)
-- [isEmpty](#method-fluent-str-is-empty)
-- [isNotEmpty](#method-fluent-str-is-not-empty)
-- [isUuid](#method-fluent-str-is-uuid)
-- [kebab](#method-fluent-str-kebab)
-- [length](#method-fluent-str-length)
-- [limit](#method-fluent-str-limit)
-- [lower](#method-fluent-str-lower)
-- [ltrim](#method-fluent-str-ltrim)
-- [markdown](#method-fluent-str-markdown)
-- [mask](#method-fluent-str-mask)
-- [match](#method-fluent-str-match)
-- [matchAll](#method-fluent-str-match-all)
-- [padBoth](#method-fluent-str-padboth)
-- [padLeft](#method-fluent-str-padleft)
-- [padRight](#method-fluent-str-padright)
-- [pipe](#method-fluent-str-pipe)
-- [plural](#method-fluent-str-plural)
-- [prepend](#method-fluent-str-prepend)
-- [remove](#method-fluent-str-remove)
-- [replace](#method-fluent-str-replace)
-- [replaceArray](#method-fluent-str-replace-array)
-- [replaceFirst](#method-fluent-str-replace-first)
-- [replaceLast](#method-fluent-str-replace-last)
-- [replaceMatches](#method-fluent-str-replace-matches)
-- [rtrim](#method-fluent-str-rtrim)
-- [scan](#method-fluent-str-scan)
-- [singular](#method-fluent-str-singular)
-- [slug](#method-fluent-str-slug)
-- [snake](#method-fluent-str-snake)
-- [split](#method-fluent-str-split)
-- [start](#method-fluent-str-start)
-- [startsWith](#method-fluent-str-starts-with)
-- [studly](#method-fluent-str-studly)
-- [substr](#method-fluent-str-substr)
-- [substrReplace](#method-fluent-str-substrreplace)
-- [tap](#method-fluent-str-tap)
-- [test](#method-fluent-str-test)
-- [title](#method-fluent-str-title)
-- [trim](#method-fluent-str-trim)
-- [ucfirst](#method-fluent-str-ucfirst)
-- [upper](#method-fluent-str-upper)
-- [when](#method-fluent-str-when)
-- [whenContains](#method-fluent-str-when-contains)
-- [whenContainsAll](#method-fluent-str-when-contains-all)
-- [whenEmpty](#method-fluent-str-when-empty)
-- [whenNotEmpty](#method-fluent-str-when-not-empty)
-- [whenStartsWith](#method-fluent-str-when-starts-with)
-- [whenEndsWith](#method-fluent-str-when-ends-with)
-- [whenExactly](#method-fluent-str-when-exactly)
-- [whenIs](#method-fluent-str-when-is)
-- [whenIsAscii](#method-fluent-str-when-is-ascii)
-- [whenIsUuid](#method-fluent-str-when-is-uuid)
-- [whenTest](#method-fluent-str-when-test)
-- [wordCount](#method-fluent-str-word-count)
-- [words](#method-fluent-str-words)
 
 </div>
 
@@ -229,6 +107,7 @@ Laravel содержит множество глобальных «вспомо�
 - [route](#method-route)
 - [secure_asset](#method-secure-asset)
 - [secure_url](#method-secure-url)
+- [to_route](#method-to-route)
 - [url](#method-url)
 
 </div>
@@ -253,11 +132,15 @@ Laravel содержит множество глобальных «вспомо�
 - [cookie](#method-cookie)
 - [csrf_field](#method-csrf-field)
 - [csrf_token](#method-csrf-token)
+- [decrypt](#method-decrypt)
 - [dd](#method-dd)
 - [dispatch](#method-dispatch)
+- [dispatch_sync](#method-dispatch-sync)
 - [dump](#method-dump)
+- [encrypt](#method-encrypt)
 - [env](#method-env)
 - [event](#method-event)
+- [fake](#method-fake)
 - [filled](#method-filled)
 - [info](#method-info)
 - [logger](#method-logger)
@@ -268,6 +151,8 @@ Laravel содержит множество глобальных «вспомо�
 - [policy](#method-policy)
 - [redirect](#method-redirect)
 - [report](#method-report)
+- [report_if](#method-report-if)
+  [report_unless](#method-report-unless)
 - [request](#method-request)
 - [rescue](#method-rescue)
 - [resolve](#method-resolve)
@@ -286,19 +171,6 @@ Laravel содержит множество глобальных «вспомо�
 - [with](#method-with)
 
 </div>
-
-<a name="method-listing"></a>
-## Список методов
-
-<!-- <style>
-    #collection-method code {
-        font-size: 14px;
-    }
-
-    #collection-method:not(.first-collection-method) {
-        margin-top: 50px;
-    }
-</style> -->
 
 <a name="arrays"></a>
 ## Массивы и объекты
@@ -452,7 +324,7 @@ Laravel содержит множество глобальных «вспомо�
 
     $array = [100, 200, 300];
 
-    $first = Arr::first($array, function ($value, $key) {
+    $first = Arr::first($array, function (int $value, int $key) {
         return $value >= 150;
     });
 
@@ -564,6 +436,60 @@ Laravel содержит множество глобальных «вспомо�
 
     // false
 
+<a name="method-array-islist"></a>
+#### `Arr::isList()`
+
+Метод `Arr::isList` возвращает true, если ключи заданного массива представляют собой последовательные целые числа, начиная с нуля:
+
+
+    use Illuminate\Support\Arr;
+
+    $isList = Arr::isList(['foo', 'bar', 'baz']);
+
+    // true
+
+    $isList = Arr::isList(['product' => ['name' => 'Desk', 'price' => 100]]);
+
+    // false
+
+<a name="method-array-join"></a>
+#### `Arr::join()`
+
+Метод `Arr::join` объединяет элементы массива в строку. Используя второй аргумента этого метода вы также можете указать строку для соединения последнего элемента массива:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['Tailwind', 'Alpine', 'Laravel', 'Livewire'];
+
+    $joined = Arr::join($array, ', ');
+
+    // Tailwind, Alpine, Laravel, Livewire
+
+    $joined = Arr::join($array, ', ', ' and ');
+
+    // Tailwind, Alpine, Laravel and Livewire
+
+<a name="method-array-keyby"></a>
+#### `Arr::keyBy()`
+
+Метод `Arr::keyBy` присваивает ключи элементам базового массива на основе указанного ключа.  Если у нескольких элементов один и тот же ключ, в новом массиве появится только последний:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        ['product_id' => 'prod-100', 'name' => 'Desk'],
+        ['product_id' => 'prod-200', 'name' => 'Chair'],
+    ];
+
+    $keyed = Arr::keyBy($array, 'product_id');
+
+    /*
+        [
+            'prod-100' => ['product_id' => 'prod-100', 'name' => 'Desk'],
+            'prod-200' => ['product_id' => 'prod-200', 'name' => 'Chair'],
+        ]
+    */
+
 <a name="method-array-last"></a>
 #### `Arr::last()`
 
@@ -573,7 +499,7 @@ Laravel содержит множество глобальных «вспомо�
 
     $array = [100, 200, 300, 110];
 
-    $last = Arr::last($array, function ($value, $key) {
+    $last = Arr::last($array, function (int $value, int $key) {
         return $value >= 150;
     });
 
@@ -584,6 +510,53 @@ Laravel содержит множество глобальных «вспомо�
     use Illuminate\Support\Arr;
 
     $last = Arr::last($array, $callback, $default);
+
+<a name="method-array-map"></a>
+#### `Arr::map()`
+
+Метод `Arr::map` проходит по массиву и передает каждое значение и ключ указанной функции обратного вызова. Значение массива заменяется значением, возвращаемым обратным вызовом:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['first' => 'james', 'last' => 'kirk'];
+
+    $mapped = Arr::map($array, function (string $value, string $key) {
+        return ucfirst($value);
+    });
+
+    // ['first' => 'James', 'last' => 'Kirk']
+
+<a name="method-array-map-with-keys"></a>
+#### `Arr::mapWithKeys()
+
+
+Метод `Arr::mapWithKeys` проходит по массиву и передает каждое значение указанной функции обратного вызова, которая должна возвращать ассоциативный массив, содержащий одну пару ключ / значение:
+
+use Illuminate\Support\Arr;
+
+    $array = [
+        [
+            'name' => 'John',
+            'department' => 'Sales',
+            'email' => 'john@example.com',
+        ],
+        [
+            'name' => 'Jane',
+            'department' => 'Marketing',
+            'email' => 'jane@example.com',
+        ]
+    ];
+
+    $mapped = Arr::mapWithKeys($array, function (array $item, int $key) {
+        return [$item['email'] => $item['name']];
+    });
+
+    /*
+        [
+            'john@example.com' => 'John',
+            'jane@example.com' => 'Jane',
+        ]
+    */
 
 <a name="method-array-only"></a>
 #### `Arr::only()`
@@ -644,6 +617,28 @@ Laravel содержит множество глобальных «вспомо�
     $array = Arr::prepend($array, 'Desk', 'name');
 
     // ['name' => 'Desk', 'price' => 100]
+
+<a name="method-array-prependkeyswith"></a>
+#### `Arr::prependKeysWith()`
+
+
+Метод `Arr::prependKeysWith` добавляет указанный префикс ко всем именам ключей ассоциативного массива:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        'name' => 'Desk',
+        'price' => 100,
+    ];
+
+    $keyed = Arr::prependKeysWith($array, 'product.');
+
+    /*
+        [
+            'product.name' => 'Desk',
+            'product.price' => 100,
+        ]
+    */
 
 <a name="method-array-pull"></a>
 #### `Arr::pull()`
@@ -753,7 +748,7 @@ Laravel содержит множество глобальных «вспомо�
         ['name' => 'Chair'],
     ];
 
-    $sorted = array_values(Arr::sort($array, function ($value) {
+    $sorted = array_values(Arr::sort($array, function (array $value) {
         return $value['name'];
     }));
 
@@ -762,6 +757,41 @@ Laravel содержит множество глобальных «вспомо�
             ['name' => 'Chair'],
             ['name' => 'Desk'],
             ['name' => 'Table'],
+        ]
+    */
+
+<a name="method-array-sort-desc"></a>
+#### `Arr::sortDesc()`
+
+Метод `Arr::sortDesc` сортирует массив по убыванию значений:
+
+    use Illuminate\Support\Arr;
+
+    $array = ['Desk', 'Table', 'Chair'];
+
+    $sorted = Arr::sortDesc($array);
+
+    // ['Table', 'Desk', 'Chair']
+
+Вы также можете отсортировать массив по результатам переданного замыкания:
+
+    use Illuminate\Support\Arr;
+
+    $array = [
+        ['name' => 'Desk'],
+        ['name' => 'Table'],
+        ['name' => 'Chair'],
+    ];
+
+    $sorted = array_values(Arr::sortDesc($array, function (array $value) {
+        return $value['name'];
+    }));
+
+    /*
+        [
+            ['name' => 'Table'],
+            ['name' => 'Desk'],
+            ['name' => 'Chair'],
         ]
     */
 
@@ -788,6 +818,10 @@ Laravel содержит множество глобальных «вспомо�
         ]
     */
 
+Если вы хотите, чтобы результаты были отсортированы по убыванию, вы можете использовать метод` Arr::sortRecursiveDesc`.
+
+    $sorted = Arr::sortRecursiveDesc($array);
+
 <a name="method-array-to-css-classes"></a>
 #### `Arr::toCssClasses()` 
 
@@ -806,8 +840,24 @@ Laravel содержит множество глобальных «вспомо�
         'p-4 bg-red'
     */
 
-При помощи этого метода осуществляется [объединение css-классов в Blade](/docs/{{version}}/blade#conditionally-merge-classes), а также [в директиве](/docs/{{version}}/blade#conditional-classes) `@class`. 
+<a name="method-array-to-css-styles"></a>
+#### `Arr::toCssStyles()`
 
+Метод `Arr::toCssStyles` условно компилирует строку стилей CSS. Метод принимает массив классов, где ключ массива содержит класс или классы, которые вы хотите добавить, а значение - логическое выражение. Если элемент массива имеет числовой ключ, он всегда будет включен в список отображаемых классов:
+
+```php
+$hasColor = true;
+
+$array = ['background-color: blue', 'color: blue' => $hasColor];
+
+$classes = Arr::toCssStyles($array);
+
+/*
+    'background-color: blue; color: blue;'
+*/
+```
+
+При помощи этого метода осуществляется [объединение css-классов в Blade](/docs/{{version}}/blade#conditionally-merge-classes), а также [в директиве](/docs/{{version}}/blade#conditional-classes) `@class`. 
 
 <a name="method-array-undot"></a>
 #### `Arr::undot()`
@@ -834,7 +884,7 @@ Laravel содержит множество глобальных «вспомо�
 
     $array = [100, '200', 300, '400', 500];
 
-    $filtered = Arr::where($array, function ($value, $key) {
+    $filtered = Arr::where($array, function (string|int $value, int $key) {
         return is_string($value);
     });
 
@@ -972,9 +1022,40 @@ Laravel содержит множество глобальных «вспомо�
 
     $data = ['products' => ['desk' => ['price' => 100]]];
 
-    data_set($data, 'products.desk.price', 200, $overwrite = false);
+    data_set($data, 'products.desk.price', 200, overwrite: false);
 
     // ['products' => ['desk' => ['price' => 100]]]
+
+<a name="method-data-forget"></a>
+#### `data_forget()`
+
+Функция `data_forget` удаляет значение внутри вложенного массива или объекта, используя "точечную" нотацию:
+
+    $data = ['products' => ['desk' => ['price' => 100]]];
+
+    data_forget($data, 'products.desk.price');
+
+    // ['products' => ['desk' => []]]
+
+Эта функция также принимает маски с использованием звездочек и удаляет соответствующие значения из цели:
+
+    $data = [
+        'products' => [
+            ['name' => 'Desk 1', 'price' => 100],
+            ['name' => 'Desk 2', 'price' => 150],
+        ],
+    ];
+
+    data_forget($data, 'products.*.price');
+
+    /*
+        [
+            'products' => [
+                ['name' => 'Desk 1'],
+                ['name' => 'Desk 2'],
+            ],
+        ]
+    */
 
 <a name="method-head"></a>
 #### `head()`
@@ -997,6 +1078,131 @@ Laravel содержит множество глобальных «вспомо�
     $last = last($array);
 
     // 300
+
+<a name="numbers"></a>
+## Числа 
+
+<a name="method-number-abbreviate"></a>
+#### `Number::abbreviate()`
+
+Метод `Number::abbreviate` возвращает числовое значение в удобочитаемом формате с сокращением для единиц измерения:
+
+    use Illuminate\Support\Number;
+
+    $number = Number::abbreviate(1000);
+
+    // 1K
+
+    $number = Number::abbreviate(489939);
+
+    // 490K
+
+    $number = Number::abbreviate(1230000, precision: 2);
+
+    // 1.23M
+
+<a name="method-number-format"></a>
+#### `Number::format()`
+
+Метод `Number::format` форматирует предоставленное число в строку с учетом локализации:
+
+use Illuminate\Support\Number;
+
+    $number = Number::format(100000);
+
+    // 100,000
+
+    $number = Number::format(100000, precision: 2);
+
+    // 100,000.00
+
+    $number = Number::format(100000.123, maxPrecision: 2);
+
+    // 100,000.12
+
+    $number = Number::format(100000, locale: 'de');
+
+    // 100.000
+
+<a name="method-number-percentage"></a>
+#### `Number::percentage()`
+
+Метод `Number::percentage` возвращает процентное представление указанного значения в виде строки:
+
+    use Illuminate\Support\Number;
+
+    $percentage = Number::percentage(10);
+
+    // 10%
+
+    $percentage = Number::percentage(10, precision: 2);
+
+    // 10.00%
+
+    $percentage = Number::percentage(10.123, maxPrecision: 2);
+
+    // 10.12%
+
+    $percentage = Number::percentage(10, precision: 2, locale: 'de');
+
+    // 10,00%
+
+<a name="method-number-currency"></a>
+#### `Number::currency()`
+
+Метод `Number::currency` возвращает представление указанного значения в валюте в виде строки:
+
+    use Illuminate\Support\Number;
+
+    $currency = Number::currency(1000);
+
+    // $1,000
+
+    $currency = Number::currency(1000, in: 'EUR');
+
+    // €1,000
+
+    $currency = Number::currency(1000, in: 'EUR', locale: 'de');
+
+    // 1.000 €
+
+<a name="method-number-file-size"></a>
+#### `Number::fileSize()`
+
+Метод `Number::fileSize` для указанного значения в байтах возвращает представление размера файла в виде строки:
+
+    use Illuminate\Support\Number;
+
+    $size = Number::fileSize(1024);
+
+    // 1 KB
+
+    $size = Number::fileSize(1024 * 1024);
+
+    // 1 MB
+
+    $size = Number::fileSize(1024, precision: 2);
+
+    // 1.00 KB
+
+<a name="method-number-for-humans"></a>
+#### `Number::forHumans()`
+
+Метод Number::forHumans возвращает числовое значение в удобочитаемом формате:
+
+    use Illuminate\Support\Number;
+
+    $number = Number::forHumans(1000);
+
+    // 1 thousand
+
+    $number = Number::forHumans(489939);
+
+    // 490 thousand
+
+    $number = Number::forHumans(1230000, precision: 2);
+
+    // 1.23 million
 
 <a name="paths"></a>
 ## Пути
@@ -1037,6 +1243,18 @@ Laravel содержит множество глобальных «вспомо�
 
     $path = database_path('factories/UserFactory.php');
 
+<a name="method-lang-path"></a>
+#### `lang_path()`
+
+Функция `lang_path` возвращает полный путь к каталогу `lang` вашего приложения. Вы также можете использовать функцию `lang_path` для генерации полного пути к указанному файлу внутри этого каталога:
+
+    $path = lang_path();
+
+    $path = lang_path('en/messages.php');
+
+> [!NOTE]
+> По умолчанию в структуре приложения Laravel отсутствует каталог `lang`. Если вы хотите настроить языковые файлы Laravel, вы можете опубликовать их с помощью команды Artisan `lang:publish`.
+
 <a name="method-mix"></a>
 #### `mix()`
 
@@ -1070,1765 +1288,6 @@ Laravel содержит множество глобальных «вспомо�
     $path = storage_path();
 
     $path = storage_path('app/file.txt');
-
-<a name="strings"></a>
-## Строки
-
-<a name="method-__"></a>
-#### `__()`
-
-Функция `__` переводит переданную строку перевода или ключ перевода, используя ваши [файлы локализации](/docs/{{version}}/localization):
-
-    echo __('Welcome to our application');
-
-    echo __('messages.welcome');
-
-Если указанная строка перевода или ключ не существует, то функция `__` вернет переданное значение. Итак, используя приведенный выше пример, функция `__` вернет `messages.welcome`, если этот ключ перевода не существует.
-
-<a name="method-class-basename"></a>
-#### `class_basename()`
-
-Функция `class_basename` возвращает имя переданного класса с удаленным пространством имен этого класса:
-
-    $class = class_basename('Foo\Bar\Baz');
-
-    // Baz
-
-<a name="method-e"></a>
-#### `e()`
-
-Функция `e` запускает PHP-функцию `htmlspecialchars` с параметром `double_encode`, установленным по умолчанию в `true`:
-
-    echo e('<html>foo</html>');
-
-    // &lt;html&gt;foo&lt;/html&gt;
-
-<a name="method-preg-replace-array"></a>
-#### `preg_replace_array()`
-
-Функция `preg_replace_array` последовательно заменяет переданный шаблон в строке, используя массив:
-
-    $string = 'The event will take place between :start and :end';
-
-    $replaced = preg_replace_array('/:[a-z_]+/', ['8:30', '9:00'], $string);
-
-    // The event will take place between 8:30 and 9:00
-
-<a name="method-str-after"></a>
-#### `Str::after()`
-
-Метод `Str::after` возвращает все после переданного значения в строке. Если значение не существует в строке, то будет возвращена вся строка:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::after('This is my name', 'This is');
-
-    // ' my name'
-
-<a name="method-str-after-last"></a>
-#### `Str::afterLast()`
-
-Метод `Str::afterLast` возвращает все после последнего вхождения переданного значения в строке. Если значение не существует в строке, то будет возвращена вся строка:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::afterLast('App\Http\Controllers\Controller', '\\');
-
-    // 'Controller'
-
-<a name="method-str-ascii"></a>
-#### `Str::ascii()`
-
-Метод `Str::ascii` попытается транслитерировать строку в ASCII значение:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::ascii('û');
-
-    // 'u'
-
-<a name="method-str-before"></a>
-#### `Str::before()`
-
-Метод `Str :: before` возвращает все до переданного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::before('This is my name', 'my name');
-
-    // 'This is '
-
-<a name="method-str-before-last"></a>
-#### `Str::beforeLast()`
-
-Метод `Str::beforeLast` возвращает все до последнего вхождения переданного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::beforeLast('This is my name', 'is');
-
-    // 'This '
-
-<a name="method-str-between"></a>
-#### `Str::between()`
-
-Метод `Str::between` возвращает часть строки между двумя значениями:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::between('This is my name', 'This', 'name');
-
-    // ' is my '
-
-<a name="method-camel-case"></a>
-#### `Str::camel()`
-
-Метод `Str::camel` преобразует переданную строку в `camelCase`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::camel('foo_bar');
-
-    // fooBar
-
-<a name="method-str-contains"></a>
-#### `Str::contains()`
-
-Метод `Str::contains` определяет, содержит ли переданная строка указанное значение (с учетом регистра):
-
-    use Illuminate\Support\Str;
-
-    $contains = Str::contains('This is my name', 'my');
-
-    // true
-
-Вы также можете указать массив значений, чтобы определить, содержит ли переданная строка какое-либо из значений:
-
-    use Illuminate\Support\Str;
-
-    $contains = Str::contains('This is my name', ['my', 'foo']);
-
-    // true
-
-<a name="method-str-contains-all"></a>
-#### `Str::containsAll()`
-
-Метод `Str::containsAll` определяет, содержит ли переданная строка все значения массива:
-
-    use Illuminate\Support\Str;
-
-    $containsAll = Str::containsAll('This is my name', ['my', 'name']);
-
-    // true
-
-<a name="method-ends-with"></a>
-#### `Str::endsWith()`
-
-Метод `Str::endsWith` определяет, заканчивается ли переданная строка указанным значением:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::endsWith('This is my name', 'name');
-
-    // true
-
-
-Вы также можете указать массив значений, чтобы определить, заканчивается ли переданная строка каким-либо из значений:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::endsWith('This is my name', ['name', 'foo']);
-
-    // true
-
-    $result = Str::endsWith('This is my name', ['this', 'foo']);
-
-    // false
-
-<a name="method-str-finish"></a>
-#### `Str::finish()`
-
-Метод `Str::finish` добавляет один экземпляр указанного значения в переданную строку, если она еще не заканчивается этим значением:
-
-    use Illuminate\Support\Str;
-
-    $adjusted = Str::finish('this/string', '/');
-
-    // this/string/
-
-    $adjusted = Str::finish('this/string/', '/');
-
-    // this/string/
-
-<a name="method-str-headline"></a>
-#### `Str::headline()`
-
-Метод `Str::headline` преобразует строки, разделенные регистром, дефисами или подчеркиванием, в строку, разделенную пробелами, с заглавной первой буквой каждого слова:
-
-    use Illuminate\Support\Str;
-
-    $headline = Str::headline('steve_jobs');
-
-    // Steve Jobs
-
-    $headline = Str::headline('EmailNotificationSent');
-
-    // Email Notification Sent
-
-<a name="method-str-is"></a>
-#### `Str::is()`
-
-Метод `Str::is` определяет, соответствует ли переданная строка указанному шаблону. Допускается использование метасимвола подстановки `*`:
-
-    use Illuminate\Support\Str;
-
-    $matches = Str::is('foo*', 'foobar');
-
-    // true
-
-    $matches = Str::is('baz*', 'foobar');
-
-    // false
-
-<a name="method-str-is-ascii"></a>
-#### `Str::isAscii()`
-
-Метод `Str::isAscii` определяет, является ли переданная строка 7-битной ASCII:
-
-    use Illuminate\Support\Str;
-
-    $isAscii = Str::isAscii('Taylor');
-
-    // true
-
-    $isAscii = Str::isAscii('ü');
-
-    // false
-
-<a name="method-str-is-uuid"></a>
-#### `Str::isUuid()`
-
-Метод `Str::isUuid` определяет, является ли переданная строка допустимым UUID:
-
-    use Illuminate\Support\Str;
-
-    $isUuid = Str::isUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de');
-
-    // true
-
-    $isUuid = Str::isUuid('laravel');
-
-    // false
-
-<a name="method-kebab-case"></a>
-#### `Str::kebab()`
-
-Метод `Str::kebab` преобразует переданную строку в `kebab-case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::kebab('fooBar');
-
-    // foo-bar
-
-<a name="method-str-length"></a>
-#### `Str::length()`
-
-Метод `Str::length` возвращает длину переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $length = Str::length('Laravel');
-
-    // 7
-
-<a name="method-str-limit"></a>
-#### `Str::limit()`
-
-Метод `Str::limit` усекает переданную строку до указанной длины:
-
-    use Illuminate\Support\Str;
-
-    $truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20);
-
-    // The quick brown fox...
-
-Вы также можете передать третий строковый аргумент, содержимое которого будет добавлено в конец:
-
-    use Illuminate\Support\Str;
-
-    $truncated = Str::limit('The quick brown fox jumps over the lazy dog', 20, ' (...)');
-
-    // The quick brown fox (...)
-
-<a name="method-str-lower"></a>
-#### `Str::lower()`
-
-Метод `Str::lower` преобразует переданную строку в нижний регистр:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::lower('LARAVEL');
-
-    // laravel
-
-<a name="method-str-markdown"></a>
-#### `Str::markdown()`
-
-Метод `Str::markdown` конвертирует текст с разметкой [GitHub flavored Markdown](https://github.github.com/gfm/) в HTML:
-
-    use Illuminate\Support\Str;
-
-    $html = Str::markdown('# Laravel');
-
-    // <h1>Laravel</h1>
-
-    $html = Str::markdown('# Taylor <b>Otwell</b>', [
-        'html_input' => 'strip',
-    ]);
-
-    // <h1>Taylor Otwell</h1>
-
-<a name="method-str-mask"></a>
-#### `Str::mask()`
-
-Метод `Str::mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::mask('taylor@example.com', '*', 3);
-
-    // tay***************
-
-При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
-
-    $string = Str::mask('taylor@example.com', '*', -15, 3);
-
-    // tay***@example.com
-
-<a name="method-str-ordered-uuid"></a>
-#### `Str::orderedUuid()`
-
-Метод `Str::orderedUuid` генерирует UUID с «префиксом временной метки», который может быть эффективно сохранен в индексированном столбце базы данных. Каждый UUID, созданный с помощью этого метода, будет отсортирован после UUID, ранее созданных с помощью этого метода:
-
-    use Illuminate\Support\Str;
-
-    return (string) Str::orderedUuid();
-
-<a name="method-str-padboth"></a>
-#### `Str::padBoth()`
-
-Метод `Str::padBoth` оборачивает функцию `str_pad` PHP, заполняя обе стороны строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::padBoth('James', 10, '_');
-
-    // '__James___'
-
-    $padded = Str::padBoth('James', 10);
-
-    // '  James   '
-
-<a name="method-str-padleft"></a>
-#### `Str::padLeft()`
-
-Метод `Str::padLeft` оборачивает функцию `str_pad` PHP, заполняя левую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::padLeft('James', 10, '-=');
-
-    // '-=-=-James'
-
-    $padded = Str::padLeft('James', 10);
-
-    // '     James'
-
-<a name="method-str-padright"></a>
-#### `Str::padRight()`
-
-Метод `Str::padRight` оборачивает функцию `str_pad` PHP, заполняя правую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::padRight('James', 10, '-');
-
-    // 'James-----'
-
-    $padded = Str::padRight('James', 10);
-
-    // 'James     '
-
-<a name="method-str-plural"></a>
-#### `Str::plural()`
-
-Метод `Str::plural` преобразует слово в форму множественного числа. В настоящее время этот метод поддерживает только английский язык:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::plural('car');
-
-    // cars
-
-    $plural = Str::plural('child');
-
-    // children
-
-Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::plural('child', 2);
-
-    // children
-
-    $singular = Str::plural('child', 1);
-
-    // child
-
-<a name="method-str-plural-studly"></a>
-#### `Str::pluralStudly()`
-
-Метод `Str::pluralStudly` преобразует строку единственного числа формата `StudlyCase` в форму множественного числа. В настоящее время этот метод поддерживает только английский язык:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::pluralStudly('VerifiedHuman');
-
-    // VerifiedHumans
-
-    $plural = Str::pluralStudly('UserFeedback');
-
-    // UserFeedback
-
-Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::pluralStudly('VerifiedHuman', 2);
-
-    // VerifiedHumans
-
-    $singular = Str::pluralStudly('VerifiedHuman', 1);
-
-    // VerifiedHuman
-
-<a name="method-str-random"></a>
-#### `Str::random()`
-
-Метод `Str::random` генерирует случайную строку указанной длины. Этот метод использует функцию `random_bytes` PHP:
-
-    use Illuminate\Support\Str;
-
-    $random = Str::random(40);
-
-<a name="method-str-remove"></a>
-#### `Str::remove()`
-
-Метод `Str::remove` удаляет указанную подстроку или массив подстрок в строке:
-
-    use Illuminate\Support\Str;
-
-    $string = 'Peter Piper picked a peck of pickled peppers.';
-
-    $removed = Str::remove('e', $string);
-
-    // Ptr Pipr pickd a pck of pickld ppprs.
-
-Вы можете передать `false` в качестве третьего аргумента для игнорирования регистра удаляемых подстрок.
-
-<a name="method-str-replace"></a>
-#### `Str::replace()`
-
-Метод `Str::replace` заменяет в строке одну подстроку другой:
-
-    use Illuminate\Support\Str;
-
-    $string = 'Laravel 8.x';
-
-    $replaced = Str::replace('8.x', '9.x', $string);
-
-    // Laravel 9.x
-
-
-<a name="method-str-replace-array"></a>
-#### `Str::replaceArray()`
-
-Метод `Str::replaceArray` последовательно заменяет указанное значение в строке, используя массив:
-
-    use Illuminate\Support\Str;
-
-    $string = 'The event will take place between ? and ?';
-
-    $replaced = Str::replaceArray('?', ['8:30', '9:00'], $string);
-
-    // The event will take place between 8:30 and 9:00
-
-<a name="method-str-replace-first"></a>
-#### `Str::replaceFirst()`
-
-Метод `Str::replaceFirst` заменяет первое вхождение переданного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::replaceFirst('the', 'a', 'the quick brown fox jumps over the lazy dog');
-
-    // a quick brown fox jumps over the lazy dog
-
-<a name="method-str-replace-last"></a>
-#### `Str::replaceLast()`
-
-Метод `Str::replaceLast` заменяет последнее вхождение переданного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::replaceLast('the', 'a', 'the quick brown fox jumps over the lazy dog');
-
-    // the quick brown fox jumps over a lazy dog
-
-<a name="method-str-reverse"></a>
-#### `Str::reverse()`
-
-Метод `Str::reverse` переворачивает данную строку:
-
-    use Illuminate\Support\Str;
-
-    $reversed = Str::reverse('Hello World');
-
-    // dlroW olleH
-
-<a name="method-str-singular"></a>
-#### `Str::singular()`
-
-Метод `Str::singular` преобразует слово в форму единственного числа. В настоящее время этот метод поддерживает только английский язык:
-
-    use Illuminate\Support\Str;
-
-    $singular = Str::singular('cars');
-
-    // car
-
-    $singular = Str::singular('children');
-
-    // child
-
-<a name="method-str-slug"></a>
-#### `Str::slug()`
-
-Метод `Str::slug` создает «дружественный фрагмент» URL-адреса из переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $slug = Str::slug('Laravel 5 Framework', '-');
-
-    // laravel-5-framework
-
-<a name="method-snake-case"></a>
-#### `Str::snake()`
-
-Метод `Str::snake` преобразует переданную строку в `snake_case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::snake('fooBar');
-
-    // foo_bar
-
-    $converted = Str::snake('fooBar', '-');
-
-    // foo-bar
-
-<a name="method-str-start"></a>
-#### `Str::start()`
-
-Метод `Str::start` добавляет один экземпляр указанного значения в переданную строку, если она еще не начинается этим значением:
-
-    use Illuminate\Support\Str;
-
-    $adjusted = Str::start('this/string', '/');
-
-    // /this/string
-
-    $adjusted = Str::start('/this/string', '/');
-
-    // /this/string
-
-<a name="method-starts-with"></a>
-#### `Str::startsWith()`
-
-Метод `Str::startsWith` определяет, начинается ли переданная строка с указанного значения:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::startsWith('This is my name', 'This');
-
-    // true
-
-<a name="method-studly-case"></a>
-#### `Str::studly()`
-
-Метод `Str::studly` преобразует переданную строку в `StudlyCase`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::studly('foo_bar');
-
-    // FooBar
-
-<a name="method-str-substr"></a>
-#### `Str::substr()`
-
-Метод `Str::substr` возвращает часть строки, заданную параметрами «начало» и «длина»:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::substr('The Laravel Framework', 4, 7);
-
-    // Laravel
-
-<a name="method-str-substrcount"></a>
-#### `Str::substrCount()`
-
-Метод `Str::substrCount` возвращает число вхождений подстроки в строку:
-
-    use Illuminate\Support\Str;
-
-    $count = Str::substrCount('If you like ice cream, you will like snow cones.', 'like');
-
-    // 2
-
-<a name="method-str-substrreplace"></a>
-#### `Str::substrReplace()` {.collection-method}
-
-Метод `Str::substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав `0` четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::substrReplace('1300', ':', 2); 
-    // 13:
-    
-    $result = Str::substrReplace('1300', ':', 2, 0); 
-    // 13:00
-
-<a name="method-title-case"></a>
-#### `Str::title()`
-
-Метод `Str::title` преобразует переданную строку в `Title Case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::title('a nice title uses the correct case');
-
-    // A Nice Title Uses The Correct Case
-
-<a name="method-str-to-html-string"></a>
-#### `Str::toHtmlString()` {.collection-method}
-
-Метод `Str::toHtmlString` преобразует экземпляр строки в экземпляр Illuminate\Support\HtmlString, который может отображаться в шаблонах Blade:
-
-    use Illuminate\Support\Str;
-
-    $htmlString = Str::of('Nuno Maduro')->toHtmlString();
-
-<a name="method-str-ucfirst"></a>
-#### `Str::ucfirst()`
-
-Метод `Str::ucfirst` возвращает переданную строку с первой заглавной буквой:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::ucfirst('foo bar');
-
-    // Foo bar
-
-<a name="method-str-upper"></a>
-#### `Str::upper()`
-
-Метод `Str::upper` преобразует переданную строку в верхний регистр:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::upper('laravel');
-
-    // LARAVEL
-
-<a name="method-str-uuid"></a>
-#### `Str::uuid()`
-
-Метод `Str::uuid` генерирует UUID (версия 4):
-
-    use Illuminate\Support\Str;
-
-    return (string) Str::uuid();
-
-<a name="method-str-word-count"></a>
-#### `Str::wordCount`
-
-Метод `Str::wordCount` возвращает число слов в строке:
-
-```php
-use Illuminate\Support\Str;
-
-Str::wordCount('Hello, world!'); // 2
-```
-
-<a name="method-str-words"></a>
-#### `Str::words()`
-
-Метод `Str::words` ограничивает количество слов в строке. Дополнительная строка может быть передана этому методу через его третий аргумент, чтобы указать, какая строка должна быть добавлена в конец усеченной строки:
-
-    use Illuminate\Support\Str;
-
-    return Str::words('Perfectly balanced, as all things should be.', 3, ' >>>');
-
-    // Perfectly balanced, as >>>
-
-<a name="method-trans"></a>
-#### `trans()`
-
-Функция `trans` переводит переданный ключ перевода, используя ваши [файлы локализации](/docs/{{version}}/localization):
-
-    echo trans('messages.welcome');
-
-Если указанный ключ перевода не существует, функция `trans` вернет данный ключ. Итак, используя приведенный выше пример, функция `trans` вернет `messages.welcome`, если ключ перевода не существует.
-
-<a name="method-trans-choice"></a>
-#### `trans_choice()`
-
-Функция `trans_choice` переводит заданный ключ перевода с изменением формы слова:
-
-    echo trans_choice('messages.notifications', $unreadCount);
-
-Если указанный ключ перевода не существует, функция `trans_choice` вернет данный ключ. Итак, используя приведенный выше пример, функция `trans_choice` вернет `messages.notifications`, если ключ перевода не существует.
-
-<a name="fluent-strings"></a>
-## Строки Fluent
-
-Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
-
-<a name="method-fluent-str-after"></a>
-#### `after`
-
-Метод `after` возвращает все после переданного значения в строке. Вся строка будет возвращена, если значение не существует в строке:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::of('This is my name')->after('This is');
-
-    // ' my name'
-
-<a name="method-fluent-str-after-last"></a>
-#### `afterLast`
-
-Метод `afterLast` возвращает все после последнего вхождения переданного значения в строке. Вся строка будет возвращена, если значение не существует в строке:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::of('App\Http\Controllers\Controller')->afterLast('\\');
-
-    // 'Controller'
-
-<a name="method-fluent-str-append"></a>
-#### `append`
-
-Метод `append` добавляет указанные значения в строку:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Taylor')->append(' Otwell');
-
-    // 'Taylor Otwell'
-
-<a name="method-fluent-str-ascii"></a>
-#### `ascii`
-
-Метод `ascii` попытается транслитерировать строку в значение ASCII:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('ü')->ascii();
-
-    // 'u'
-
-<a name="method-fluent-str-basename"></a>
-#### `basename`
-
-Метод `basename` вернет завершающий компонент имени переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('/foo/bar/baz')->basename();
-
-    // 'baz'
-
-При необходимости вы можете указать «расширение», которое будет удалено из завершающего компонента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('/foo/bar/baz.jpg')->basename('.jpg');
-
-    // 'baz'
-
-<a name="method-fluent-str-before"></a>
-#### `before`
-
-Метод `before` возвращает все до указанного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::of('This is my name')->before('my name');
-
-    // 'This is '
-
-<a name="method-fluent-str-before-last"></a>
-#### `beforeLast`
-
-Метод `beforeLast` возвращает все до последнего вхождения переданного значения в строку:
-
-    use Illuminate\Support\Str;
-
-    $slice = Str::of('This is my name')->beforeLast('is');
-
-    // 'This '
-
-<a name="method-fluent-str-between"></a>
-#### `between` {.collection-method}
-
-Метод `between` возвращает часть строки между двумя значениями:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('This is my name')->between('This', 'name');
-
-    // ' is my '
-
-<a name="method-fluent-str-camel"></a>
-#### `camel`
-
-Метод `camel` преобразует переданную строку в` camelCase`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('foo_bar')->camel();
-
-    // fooBar
-
-<a name="method-fluent-str-contains"></a>
-#### `contains`
-
-Метод `contains` определяет, содержит ли переданная строка указанное значение (с учетом регистра):
-
-    use Illuminate\Support\Str;
-
-    $contains = Str::of('This is my name')->contains('my');
-
-    // true
-
-Вы также можете указать массив значений, чтобы определить, содержит ли переданная строка какое-либо из этих значений:
-
-    use Illuminate\Support\Str;
-
-    $contains = Str::of('This is my name')->contains(['my', 'foo']);
-
-    // true
-
-<a name="method-fluent-str-contains-all"></a>
-#### `containsAll`
-
-Метод `containsAll` определяет, содержит ли переданная строка все значения массива:
-
-    use Illuminate\Support\Str;
-
-    $containsAll = Str::of('This is my name')->containsAll(['my', 'name']);
-
-    // true
-
-<a name="method-fluent-str-dirname"></a>
-#### `dirname`
-
-Метод `dirname` возвращает родительскую часть директории переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('/foo/bar/baz')->dirname();
-
-    // '/foo/bar'
-
-При желании вы можете указать, сколько уровней каталогов вы хотите вырезать из строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('/foo/bar/baz')->dirname(2);
-
-    // '/foo'
-
-<a name="method-fluent-str-ends-with"></a>
-#### `endsWith`
-
-Метод `endsWith` определяет, заканчивается ли переданная строка указанным значением:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('This is my name')->endsWith('name');
-
-    // true
-
-Вы также можете указать массив значений, чтобы определить, заканчивается ли переданная строка каким-либо из указанных значений:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('This is my name')->endsWith(['name', 'foo']);
-
-    // true
-
-    $result = Str::of('This is my name')->endsWith(['this', 'foo']);
-
-    // false
-
-<a name="method-fluent-str-exactly"></a>
-#### `exactly`
-
-Метод `exactly` определяет, является ли переданная строка точным совпадением с другой строкой:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('Laravel')->exactly('Laravel');
-
-    // true
-
-<a name="method-fluent-str-explode"></a>
-#### `explode`
-
-Метод `explode` разделяет строку по заданному разделителю и возвращает коллекцию, содержащую каждый раздел строки разбиения:
-
-    use Illuminate\Support\Str;
-
-    $collection = Str::of('foo bar baz')->explode(' ');
-
-    // collect(['foo', 'bar', 'baz'])
-
-<a name="method-fluent-str-finish"></a>
-#### `finish`
-
-Метод `finish` добавляет один экземпляр указанного значения в переданную строку, если она еще не заканчивается этим значением:
-
-    use Illuminate\Support\Str;
-
-    $adjusted = Str::of('this/string')->finish('/');
-
-    // this/string/
-
-    $adjusted = Str::of('this/string/')->finish('/');
-
-    // this/string/
-
-<a name="method-fluent-str-is"></a>
-#### `is`
-
-Метод `is` определяет, соответствует ли переданная строка указанному шаблону. Допускается использование метасимвола подстановки `*`:
-
-    use Illuminate\Support\Str;
-
-    $matches = Str::of('foobar')->is('foo*');
-
-    // true
-
-    $matches = Str::of('foobar')->is('baz*');
-
-    // false
-
-<a name="method-fluent-str-is-ascii"></a>
-#### `isAscii`
-
-Метод `isAscii` определяет, является ли переданная строка строкой ASCII:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('Taylor')->isAscii();
-
-    // true
-
-    $result = Str::of('ü')->isAscii();
-
-    // false
-
-<a name="method-fluent-str-is-empty"></a>
-#### `isEmpty`
-
-Метод `isEmpty` определяет, является ли переданная строка пустой:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('  ')->trim()->isEmpty();
-
-    // true
-
-    $result = Str::of('Laravel')->trim()->isEmpty();
-
-    // false
-
-<a name="method-fluent-str-is-not-empty"></a>
-#### `isNotEmpty`
-
-Метод `isNotEmpty` определяет, является ли переданная строка не пустой:
-
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('  ')->trim()->isNotEmpty();
-
-    // false
-
-    $result = Str::of('Laravel')->trim()->isNotEmpty();
-
-    // true
-
-<a name="method-fluent-str-is-uuid"></a>
-#### `isUuid` 
-
-Метод `isUuid` определяет, является ли заданная строка UUID:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('5ace9ab9-e9cf-4ec6-a19d-5881212a452c')->isUuid();
-
-    // true
-
-    $result = Str::of('Taylor')->isUuid();
-
-    // false    
-
-<a name="method-fluent-str-kebab"></a>
-#### `kebab`
-
-Метод `kebab` преобразует переданную строку в `kebab-case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('fooBar')->kebab();
-
-    // foo-bar
-
-<a name="method-fluent-str-length"></a>
-#### `length`
-
-Метод `length` возвращает длину переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $length = Str::of('Laravel')->length();
-
-    // 7
-
-<a name="method-fluent-str-limit"></a>
-#### `limit`
-
-Метод `limit` усекает переданную строку до указанной длины:
-
-    use Illuminate\Support\Str;
-
-    $truncated = Str::of('The quick brown fox jumps over the lazy dog')->limit(20);
-
-    // The quick brown fox...
-
-Вы также можете передать второй строковый аргумент, содержимое которого будет добавлено в конец:
-
-    use Illuminate\Support\Str;
-
-    $truncated = Str::of('The quick brown fox jumps over the lazy dog')->limit(20, ' (...)');
-
-    // The quick brown fox (...)
-
-<a name="method-fluent-str-lower"></a>
-#### `lower`
-
-Метод `lower` преобразует переданную строку в нижний регистр:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('LARAVEL')->lower();
-
-    // 'laravel'
-
-<a name="method-fluent-str-ltrim"></a>
-#### `ltrim`
-
-Метод `ltrim` удаляет символы из начала строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('  Laravel  ')->ltrim();
-
-    // 'Laravel  '
-
-    $string = Str::of('/Laravel/')->ltrim('/');
-
-    // 'Laravel/'
-
-<a name="method-fluent-str-markdown"></a>
-#### `markdown`
-
-Метод `markdown` конвертирует текст с разметкой [GitHub flavored Markdown](https://github.github.com/gfm/) в HTML:
-
-    use Illuminate\Support\Str;
-
-    $html = Str::of('# Laravel')->markdown();
-
-    // <h1>Laravel</h1>
-
-    $html = Str::of('# Taylor <b>Otwell</b>')->markdown([
-        'html_input' => 'strip',
-    ]);
-
-    // <h1>Taylor Otwell</h1>
-
-<a name="method-fluent-str-mask"></a>
-#### `mask`
-
-Метод `mask` маскирует часть строки повторяющимся символом и может использоваться для обфускации сегментов строк, таких как адреса электронной почты и номера телефонов:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('taylor@example.com')->mask('*', 3);
-
-    // tay***************
-
-При необходимости вы указываете отрицательное число в качестве третьего аргумента метода `mask`, который даст указание методу начать маскировку на заданном расстоянии от конца строки:
-
-    $string = Str::of('taylor@example.com')->mask('*', -15, 3);
-
-    // tay***@example.com
-
-<a name="method-fluent-str-match"></a>
-#### `match`
-
-Метод `match` вернет часть строки, которая соответствует указанному шаблону регулярного выражения:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('foo bar')->match('/bar/');
-
-    // 'bar'
-
-    $result = Str::of('foo bar')->match('/foo (.*)/');
-
-    // 'bar'
-
-<a name="method-fluent-str-match-all"></a>
-#### `matchAll`
-
-Метод `matchAll` вернет коллекцию, содержащую части строки, которые соответствуют указанному шаблону регулярного выражения:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('bar foo bar')->matchAll('/bar/');
-
-    // collect(['bar', 'bar'])
-
-Если вы укажете группировку в выражении, то Laravel вернет коллекцию совпадений этой группы:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('bar fun bar fly')->matchAll('/f(\w*)/');
-
-    // collect(['un', 'ly']);
-
-If no matches are found, an empty collection will be returned.
-
-<a name="method-fluent-str-padboth"></a>
-#### `padBoth`
-
-Метод `padBoth` оборачивает функцию `str_pad` PHP, заполняя обе стороны строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::of('James')->padBoth(10, '_');
-
-    // '__James___'
-
-    $padded = Str::of('James')->padBoth(10);
-
-    // '  James   '
-
-<a name="method-fluent-str-padleft"></a>
-#### `padLeft`
-
-Метод `padLeft` оборачивает функцию `str_pad` PHP, заполняя левую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::of('James')->padLeft(10, '-=');
-
-    // '-=-=-James'
-
-    $padded = Str::of('James')->padLeft(10);
-
-    // '     James'
-
-<a name="method-fluent-str-padright"></a>
-#### `padRight`
-
-Метод `padRight` оборачивает функцию `str_pad` PHP, заполняя правую часть строки другой строкой, пока конечная строка не достигнет желаемой длины:
-
-    use Illuminate\Support\Str;
-
-    $padded = Str::of('James')->padRight(10, '-');
-
-    // 'James-----'
-
-    $padded = Str::of('James')->padRight(10);
-
-    // 'James     '
-
-<a name="method-fluent-str-pipe"></a>
-#### `pipe`
-
-Метод `pipe` позволяет вам преобразовать строку, передав ее текущее значение указанной функции обратного вызова:
-
-    use Illuminate\Support\Str;
-
-    $hash = Str::of('Laravel')->pipe('md5')->prepend('Checksum: ');
-
-    // 'Checksum: a5c95b86291ea299fcbe64458ed12702'
-
-    $closure = Str::of('foo')->pipe(function ($str) {
-        return 'bar';
-    });
-
-    // 'bar'
-
-<a name="method-fluent-str-plural"></a>
-#### `plural`
-
-Метод `plural` преобразует слово в форму множественного числа. В настоящее время этот метод поддерживает только английский язык:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::of('car')->plural();
-
-    // cars
-
-    $plural = Str::of('child')->plural();
-
-    // children
-
-Вы можете передать целое число в качестве второго аргумента метода для получения строки в единственном или множественном числе:
-
-    use Illuminate\Support\Str;
-
-    $plural = Str::of('child')->plural(2);
-
-    // children
-
-    $plural = Str::of('child')->plural(1);
-
-    // child
-
-<a name="method-fluent-str-prepend"></a>
-#### `prepend`
-
-Метод `prepend` добавляет указанные значения в начало строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Framework')->prepend('Laravel ');
-
-    // Laravel Framework
-
-<a name="method-fluent-str-remove"></a>
-#### `remove`
-
-Метод `remove` удаляет указанную подстроку или массив подстрок в строке:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Arkansas is quite beautiful!')->remove('quite');
-
-    // Arkansas is beautiful!
-
-Вы можете передать `false` в качестве второго аргумента для игнорирования регистра удаляемых строк.
-
-<a name="method-fluent-str-replace"></a>
-#### `replace`
-
-Метод `replace` заменяет указанную строку внутри строки:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::of('Laravel 6.x')->replace('6.x', '7.x');
-
-    // Laravel 7.x
-
-<a name="method-fluent-str-replace-array"></a>
-#### `replaceArray`
-
-Метод `replaceArray` последовательно заменяет указанное значение в строке, используя массив:
-
-    use Illuminate\Support\Str;
-
-    $string = 'The event will take place between ? and ?';
-
-    $replaced = Str::of($string)->replaceArray('?', ['8:30', '9:00']);
-
-    // The event will take place between 8:30 and 9:00
-
-<a name="method-fluent-str-replace-first"></a>
-#### `replaceFirst`
-
-Метод `replaceFirst` заменяет первое вхождение указанного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::of('the quick brown fox jumps over the lazy dog')->replaceFirst('the', 'a');
-
-    // a quick brown fox jumps over the lazy dog
-
-<a name="method-fluent-str-replace-last"></a>
-#### `replaceLast`
-
-Метод `replaceLast` заменяет последнее вхождение указанного значения в строке:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::of('the quick brown fox jumps over the lazy dog')->replaceLast('the', 'a');
-
-    // the quick brown fox jumps over a lazy dog
-
-<a name="method-fluent-str-replace-matches"></a>
-#### `replaceMatches`
-
-Метод `replaceMatches` заменяет все части строки, соответствующие указанному шаблону, переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::of('(+1) 501-555-1000')->replaceMatches('/[^A-Za-z0-9]++/', '')
-
-    // '15015551000'
-
-Метод `replaceMatches` также принимает замыкание, которое будет вызвано для каждой части строки, соответствующей шаблону, что позволяет вам выполнять логику замены в замыкании и возвращать замененное значение:
-
-    use Illuminate\Support\Str;
-
-    $replaced = Str::of('123')->replaceMatches('/\d/', function ($match) {
-        return '['.$match[0].']';
-    });
-
-    // '[1][2][3]'
-
-<a name="method-fluent-str-rtrim"></a>
-#### `rtrim`
-
-Метод `rtrim` удаляет символы из конца строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('  Laravel  ')->rtrim();
-
-    // '  Laravel'
-
-    $string = Str::of('/Laravel/')->rtrim('/');
-
-    // '/Laravel'
-
-<a name="method-fluent-str-scan"></a>
-#### `scan` {.collection-method}
-
-Метод `scan` анализирует входные данные из строки в коллекцию в соответствии с форматом, поддерживаемым [`sscanf` функцией PHP](https://www.php.net/manual/ru/function.sscanf.php):
-
-    use Illuminate\Support\Str;
-
-    $collection = Str::of('filename.jpg')->scan('%[^.].%s');
-
-    // collect(['filename', 'jpg'])
-
-<a name="method-fluent-str-singular"></a>
-#### `singular`
-
-Метод `singular` преобразует слово в форму единственного числа. В настоящее время этот метод поддерживает только английский язык:
-
-    use Illuminate\Support\Str;
-
-    $singular = Str::of('cars')->singular();
-
-    // car
-
-    $singular = Str::of('children')->singular();
-
-    // child
-
-<a name="method-fluent-str-slug"></a>
-#### `slug`
-
-Метод `slug` создает «дружественный фрагмент» URL-адреса из переданной строки:
-
-    use Illuminate\Support\Str;
-
-    $slug = Str::of('Laravel Framework')->slug('-');
-
-    // laravel-framework
-
-<a name="method-fluent-str-snake"></a>
-#### `snake`
-
-Метод `snake` преобразует переданную строку в `snake_case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('fooBar')->snake();
-
-    // foo_bar
-
-<a name="method-fluent-str-split"></a>
-#### `split`
-
-Метод `split` разбивает строку на коллекцию с помощью регулярного выражения:
-
-    use Illuminate\Support\Str;
-
-    $segments = Str::of('one, two, three')->split('/[\s,]+/');
-
-    // collect(["one", "two", "three"])
-
-<a name="method-fluent-str-start"></a>
-#### `start`
-
-Метод `start` добавляет один экземпляр указанного значения в переданную строку, если она еще не начинается этим значением:
-
-    use Illuminate\Support\Str;
-
-    $adjusted = Str::of('this/string')->start('/');
-
-    // /this/string
-
-    $adjusted = Str::of('/this/string')->start('/');
-
-    // /this/string
-
-<a name="method-fluent-str-starts-with"></a>
-#### `startsWith`
-
-Метод `startsWith` определяет, начинается ли переданная строка с указанного значения:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('This is my name')->startsWith('This');
-
-    // true
-
-<a name="method-fluent-str-studly"></a>
-#### `studly`
-
-Метод `studly` преобразует переданную строку в `StudlyCase`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('foo_bar')->studly();
-
-    // FooBar
-
-<a name="method-fluent-str-substr"></a>
-#### `substr`
-
-Метод `substr` возвращает часть строки, заданную параметрами «начало» и «длина»:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Laravel Framework')->substr(8);
-
-    // Framework
-
-    $string = Str::of('Laravel Framework')->substr(8, 5);
-
-    // Frame
-
-<a name="method-fluent-str-substrreplace"></a>
-#### `substrReplace` {.collection-method}
-
-Метод `substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав 0 четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('1300')->substrReplace(':', 2);
-
-    // 13:
-
-    $string = Str::of('The Framework')->substrReplace(' Laravel', 3, 0);
-
-    // The Laravel Framework
-
-<a name="method-fluent-str-tap"></a>
-#### `tap`
-
-Метод `tap` передает строку заданному замыканию, позволяя вам взаимодействовать с ней, не затрагивая при этом саму строку. Исходная строка возвращается методом `tap` независимо от того, что возвращает замыкание:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Laravel')
-        ->append(' Framework')
-        ->tap(function ($string) {
-            dump('String after append: ' . $string);
-        })
-        ->upper();
-
-    // LARAVEL FRAMEWORK
-
-<a name="method-fluent-str-test"></a>
-#### `test`
-
-Метод `test` определяет, соответствует ли строка переданному шаблону регулярного выражения:
-
-    use Illuminate\Support\Str;
-
-    $result = Str::of('Laravel Framework')->test('/Laravel/');
-
-    // true
-
-<a name="method-fluent-str-title"></a>
-#### `title`
-
-Метод `title` преобразует переданную строку в `Title Case`:
-
-    use Illuminate\Support\Str;
-
-    $converted = Str::of('a nice title uses the correct case')->title();
-
-    // A Nice Title Uses The Correct Case
-
-<a name="method-fluent-str-trim"></a>
-#### `trim`
-
-Метод `trim` обрезает переданную строку:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('  Laravel  ')->trim();
-
-    // 'Laravel'
-
-    $string = Str::of('/Laravel/')->trim('/');
-
-    // 'Laravel'
-
-<a name="method-fluent-str-ucfirst"></a>
-#### `ucfirst`
-
-Метод `ucfirst` возвращает переданную строку с первой заглавной буквой:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('foo bar')->ucfirst();
-
-    // Foo bar
-
-<a name="method-fluent-str-upper"></a>
-#### `upper`
-
-Метод `upper` преобразует переданную строку в верхний регистр:
-
-    use Illuminate\Support\Str;
-
-    $adjusted = Str::of('laravel')->upper();
-
-    // LARAVEL
-
-<a name="method-fluent-str-when"></a>
-#### `when`
-
-Метод `when` вызывает указанное замыкание, если переданное условие истинно. Замыкание получит экземпляр Fluent:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Taylor')
-                    ->when(true, function ($string) {
-                        return $string->append(' Otwell');
-                    });
-
-    // 'Taylor Otwell'
-
-При необходимости вы можете передать другое замыкание в качестве третьего параметра методу `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
-
-<a name="method-fluent-str-when-contains"></a>
-#### `whenContains` {.collection-method}
-
-Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('tony stark')
-                ->whenContains('tony', function ($string) {
-                    return $string->title();
-                });
-
-    // 'Tony Stark'
-
-При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если строка не содержит заданного значения.
-
-Вы также можете передать массив значений, чтобы определить, содержит ли данная строка какие-либо значения в массиве:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('tony stark')
-                ->whenContains(['tony', 'hulk'], function ($string) {
-                    return $string->title();
-                });
-
-    // Tony Stark
-
-<a name="method-fluent-str-when-contains-all"></a>
-#### `whenContainsAll` {.collection-method}
-
-Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('tony stark')
-                    ->whenContainsAll(['tony', 'stark'], function ($string) {
-                        return $string->title();
-                    });
-
-    // 'Tony Stark'
-
-При необходимости вы можете передать другое замыкание в качестве третьего параметра метода `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
-
-<a name="method-fluent-str-when-empty"></a>
-#### `whenEmpty`
-
-Метод `whenEmpty` вызывает переданное замыкание, если строка пуста. Если замыкание возвращает значение, то это значение будет возвращено методом `whenEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр Fluent:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('  ')->whenEmpty(function ($string) {
-        return $string->trim()->prepend('Laravel');
-    });
-
-    // 'Laravel'
-
-<a name="method-fluent-str-when-not-empty"></a>
-#### `whenNotEmpty` {.collection-method}
-
-Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр класса `Stringable`:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Framework')->whenNotEmpty(function ($string) {
-        return $string->prepend('Laravel ');
-    });
-
-    // 'Laravel Framework'
-
-<a name="method-fluent-str-when-starts-with"></a>
-#### `whenStartsWith` {.collection-method}
-
-Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Замыкание получит свободный экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('disney world')->whenStartsWith('disney', function ($string) {
-        return $string->title();
-    });
-
-    // 'Disney World'
-
-<a name="method-fluent-str-when-ends-with"></a>
-#### `whenEndsWith` {.collection-method}
-
-Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Замыкание получит свободный экземпляр строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('disney world')->whenEndsWith('world', function ($string) {
-        return $string->title();
-    });
-
-    // 'Disney World'
-
-<a name="method-fluent-str-when-exactly"></a>
-#### `whenExactly` {.collection-method}
-
-Метод `whenExactly` вызывает данное замыкание, если строка точно соответствует заданной строке. Закрытие получит свободный экземпляр строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('laravel')->whenExactly('laravel', function ($string) {
-        return $string->title();
-    });
-
-    // 'Laravel'
-
-<a name="method-fluent-str-when-is"></a>
-#### `whenIs` {.collection-method}
-
-Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:	
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('foo/bar')->whenIs('foo/*', function ($string) {
-        return $string->append('/baz');
-    });
-
-    // 'foo/bar/baz'
-
-<a name="method-fluent-str-when-is-ascii"></a>
-#### `whenIsAscii` {.collection-method}
-
-Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('foo/bar')->whenIsAscii('laravel', function ($string) {
-        return $string->title();
-    });
-
-    // 'Laravel'
-
-<a name="method-fluent-str-when-is-uuid"></a>
-#### `whenIsUuid` {.collection-method}
-
-Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('foo/bar')->whenIsUuid('a0a2a2d2-0b87-4a18-83f2-2529882be2de', function ($string) {
-        return $string->substr(0, 8);
-    });
-
-    // 'a0a2a2d2'
-
-<a name="method-fluent-str-when-test"></a>
-#### `whenTest` {.collection-method}
-
-Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('laravel framework')->whenTest('/laravel/', function ($string) {
-        return $string->title();
-    });
-
-    // 'Laravel Framework'
-
-<a name="method-fluent-str-word-count"></a>
-#### `wordCount`
-
-Метод `wordCount` возвращает число слов в строке:
-
-```php
-use Illuminate\Support\Str;
-
-Str::of('Hello, world!')->wordCount(); // 2
-```
-
-<a name="method-fluent-str-words"></a>
-#### `words`
-
-Метод `words` ограничивает количество слов в строке. Дополнительная строка может быть передана этому методу, чтобы указать, какая строка должна быть добавлена в конец усеченной строки:
-
-    use Illuminate\Support\Str;
-
-    $string = Str::of('Perfectly balanced, as all things should be.')->words(3, ' >>>');
-
-    // Perfectly balanced, as >>>
 
 <a name="urls"></a>
 ## URL-адреса
@@ -2889,6 +1348,17 @@ Str::of('Hello, world!')->wordCount(); // 2
     $url = secure_url('user/profile');
 
     $url = secure_url('user/profile', [1]);
+
+<a name="method-to-route"></a>
+#### `to_route()`
+
+Функция `to_route` генерирует [HTTP-ответ перенаправления](/docs/{{version}}/responses#redirects) для заданного [именованного маршрута](/docs/{{version}}/routing#named-routes) :
+
+    return to_route('users.show', ['user' => 1]);
+
+return to_route('users.show', ['user' => 1], 302, ['X-Framework' => 'Laravel']);
+
+При необходимости вы можете передать методу `to_route` код состояния HTTP, который должен быть присвоен перенаправлению, а также любые дополнительные заголовки ответа в качестве третьего и четвёртого аргументов:
 
 <a name="method-url"></a>
 #### `url()`
@@ -3069,6 +1539,13 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     $token = csrf_token();
 
+<a name="method-decrypt"></a>
+#### `decrypt()`
+
+Функция `decrypt` [расшифровывает](/docs/{{version}}/encryption) предоставленное значение. Вы можете использовать эту функцию в качестве альтернативы фасаду `Crypt`.
+
+$password = decrypt($value);
+
 <a name="method-dd"></a>
 #### `dd()`
 
@@ -3087,6 +1564,13 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     dispatch(new App\Jobs\SendEmails);
 
+<a name="method-dispatch-sync"></a>
+#### `dispatch_sync()`
+
+Функция `dispatch_sync` помещает предоставленную задачу в очередь  [синхронно](/docs/{{version}}/queues#synchronous-dispatching) для немедленной обработки:
+
+    dispatch_sync(new App\Jobs\SendEmails);
+
 <a name="method-dump"></a>
 #### `dump()`
 
@@ -3098,6 +1582,13 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Если вы хотите прекратить выполнение скрипта после вывода переменных, используйте вместо этого функцию [`dd`](#method-dd).
 
+<a name="method-encrypt"></a>
+#### `encrypt()`
+
+Функция `encrypt` [шифрует](/docs/{{version}}/encryption) предоставленное значение. Вы можете использовать эту функцию в качестве альтернативы фасаду `Crypt`.
+
+    $secret = encrypt('my-secret-value');
+
 <a name="method-env"></a>
 #### `env()`
 
@@ -3107,7 +1598,9 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     $env = env('APP_ENV', 'production');
 
-> {note} Если вы выполнили команду `config:cache` во время процесса развертывания, вы должны быть уверены, что вызываете функцию `env` только из файлов конфигурации. Как только конфигурации будут кешированы, файл `.env` не будет загружаться, и все вызовы функции `env` будут возвращать `null`.
+
+> [!WARNING]  
+> Если вы выполнили команду `config:cache` во время процесса развертывания, вы должны быть уверены, что вызываете функцию `env` только из файлов конфигурации. Как только конфигурации будут кешированы, файл `.env` не будет загружаться, и все вызовы функции `env` будут возвращать `null`.
 
 <a name="method-event"></a>
 #### `event()`
@@ -3115,6 +1608,26 @@ Str::of('Hello, world!')->wordCount(); // 2
 Функция `event` отправляет переданное [событие](/docs/{{version}}/events) своим слушателям:
 
     event(new UserRegistered($user));
+
+<a name="method-fake"></a>
+#### `fake()`
+
+Функция `fake` получает экземпляр [Faker](https://github.com/FakerPHP/Faker) из контейнера, что может быть полезно при создании фиктивных данных в фабриках моделей, наполнении базы данных, тестировании и создании макетов представлений:
+
+```blade
+@for($i = 0; $i < 10; $i++)
+    <dl>
+        <dt>Name</dt>
+        <dd>{{ fake()->name() }}</dd>
+        <dt>Email</dt>
+        <dd>{{ fake()->unique()->safeEmail() }}</dd>
+    </dl>
+@endfor
+```
+
+По умолчанию функция `fake` будет использовать опцию `app.faker_locale` из файла конфигурации `config/app.php`. Однако вы также можете указать локализацию, передав ее в функцию `fake`. Для каждой локализации будет создан свой собственный экземпляр:
+
+    fake('nl_NL')->name()
 
 <a name="method-filled"></a>
 #### `filled()`
@@ -3187,6 +1700,14 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     $value = old('value', 'default');
 
+Поскольку значение по умолчанию, предоставляемое вторым аргументом функции `old`, часто является атрибутом модели Eloquent, Laravel позволяет вам просто передать всю модель Eloquent в качестве второго аргумента функции `old`. При этом Laravel предполагает, что первый аргумент, предоставленный функции `old`, - это имя атрибута Eloquent, которое следует считать значением по умолчанию:
+
+    {{ old('name', $user->name) }}
+
+    // Is equivalent to...
+
+    {{ old('name', $user) }}
+
 <a name="method-optional"></a>
 #### `optional()`
 
@@ -3198,7 +1719,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Функция `optional` также принимает замыкание в качестве второго аргумента. Замыкание будет вызвано, если значение, указанное в качестве первого аргумента, не равно `null`:
 
-    return optional(User::find($id), function ($user) {
+    return optional(User::find($id), function (User $user) {
         return $user->name;
     });
 
@@ -3231,6 +1752,24 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     report('Something went wrong.');
 
+<a name="method-report-if"></a>
+#### `report_if()`
+
+Функция `report_if` будет сообщать об исключении с использованием вашего [обработчика исключений](/docs/{{version}}/errors#the-exception-handler), если заданное условие является `true`:
+
+    report_if($shouldReport, $e);
+
+    report_if($shouldReport, 'Something went wrong.');
+
+<a name="method-report-unless"></a>
+#### `report_unless()`
+
+Функция `report_unless` будет сообщать об исключении с использованием вашего [обработчика исключений](/docs/{{version}}/errors#the-exception-handler), если заданное условие является `false`:
+
+    report_unless($reportingDisabled, $e);
+
+    report_unless($reportingDisabled, 'Something went wrong.');
+
 <a name="method-request"></a>
 #### `request()`
 
@@ -3261,6 +1800,15 @@ Str::of('Hello, world!')->wordCount(); // 2
         return $this->failure();
     });
 
+Функции `rescue`  может быть предоставлен аргумент `report`, чтобы определить, следует ли сообщать об исключении чрез функцию `report`:
+
+
+    return rescue(function () {
+        return $this->method();
+    }, report: function (Throwable $throwable) {
+        return $throwable instanceof InvalidArgumentException;
+    });
+
 <a name="method-resolve"></a>
 #### `resolve()`
 
@@ -3280,21 +1828,31 @@ Str::of('Hello, world!')->wordCount(); // 2
 <a name="method-retry"></a>
 #### `retry()`
 
-Функция `retry` пытается выполнить переданную функцию, пока не будет достигнут указанный лимит попыток. Если функция не выбросит исключение, то будет возвращено её значение. Если функция выбросит исключение, то будет автоматически повторена. Если максимальное количество попыток превышено, будет выброшено исключение:
+Функция `retry` пытается выполнить переданную функцию, пока не будет достигнут указанный лимит попыток. Если функция не выбросит исключение, то будет возвращено её значение. Если функция выбросит исключение, то будет автоматически повторена. Если максимальное количество попыток превышено, будет выброшено исключение
 
     return retry(5, function () {
-        // Attempt 5 times while resting 100ms in between attempts...
+        // Attempt 5 times while resting 100ms between attempts...
     }, 100);
 
 Если вы хотите вручную вычислить количество миллисекунд, которое должно пройти между попытками, вы можете передать функцию в качестве третьего аргумента функции `retry`:
 
+    use Exception;
+
     return retry(5, function () {
         // ...
-    }, function ($attempt) {
+    }, function (int $attempt, Exception $exception) {
         return $attempt * 100;
     });
 
+Для удобства вы можете передать функции `retry` в качестве первого аргумента массив. Этот массив будет использоваться для определения интервала в миллисекундах между последующими попытками:
+
+    return retry([100, 200], function () {
+        // Sleep for 100ms on first retry, 200ms on second retry...
+    });
+
 Чтобы повторить попытку только при определенных условиях, вы можете передать функцию, определяющее это условие, в качестве четвертого аргумента функции `retry`:
+
+    use Exception;
 
     return retry(5, function () {
         // ...
@@ -3324,7 +1882,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Функция `tap` принимает два аргумента: произвольное значение и замыкание. Значение будет передано в замыкание, а затем возвращено функцией `tap`. Возвращаемое значение замыкания не имеет значения:
 
-    $user = tap(User::first(), function ($user) {
+    $user = tap(User::first(), function (User $user) {
         $user->name = 'taylor';
 
         $user->save();
@@ -3339,7 +1897,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Чтобы добавить к своему классу метод `tap`, используйте трейт `Illuminate\Support\Traits\Tappable` в вашем классе. Метод `tap` этого трейта принимает замыкание в качестве единственного аргумента. Сам экземпляр объекта будет передан замыканию, а затем будет возвращен методом `tap`:
 
-    return $user->tap(function ($user) {
+    return $user->tap(function (User $user) {
         //
     });
 
@@ -3388,7 +1946,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Функция `transform` выполняет замыкание для переданного значения, если значение не [пустое](#method-blank), и возвращает результат замыкания:
 
-    $callback = function ($value) {
+    $callback = function (int $value) {
         return $value * 2;
     };
 
@@ -3424,6 +1982,14 @@ Str::of('Hello, world!')->wordCount(); // 2
 
     // false
 
+Функции `value`  могут быть переданы дополнительные аргументы. Если первый аргумент является замыканием, то дополнительные параметры будут переданы в замыкание в качестве аргументов, в противном случае они будут проигнорированы:
+
+    $result = value(function (string $name) {
+        return $name;
+    }, 'Taylor');
+
+    // 'Taylor'
+
 <a name="method-view"></a>
 #### `view()`
 
@@ -3436,7 +2002,7 @@ Str::of('Hello, world!')->wordCount(); // 2
 
 Функция `with` возвращает переданное значение. Если вы передадите замыкание в функцию в качестве второго аргумента, то замыкание будет выполнено и будет возвращен результат его выполнения:
 
-    $callback = function ($value) {
+    $callback = function (mixed $value) {
         return is_numeric($value) ? $value * 2 : 0;
     };
 
@@ -3451,3 +2017,262 @@ Str::of('Hello, world!')->wordCount(); // 2
     $result = with(5, null);
 
     // 5
+
+<a name="other-utilities"></a>
+## Другие утилиты
+
+<a name="benchmarking"></a>
+### Benchmark
+
+Иногда вам может потребоваться быстро оценить производительность определенных частей вашего приложения. В таких случаях вы можете воспользоваться классом `Benchmark` для измерения времени выполнения переданных обратных вызовов в миллисекундах:
+
+
+    <?php
+
+    use App\Models\User;
+    use Illuminate\Support\Benchmark;
+
+    Benchmark::dd(fn () => User::find(1)); // 0.1 ms
+
+    Benchmark::dd([
+        'Scenario 1' => fn () => User::count(), // 0.5 ms
+        'Scenario 2' => fn () => User::all()->count(), // 20.0 ms
+    ]);
+
+
+По умолчанию переданные обратные вызовы будут выполнены один раз (одна итерация), и их длительность будет отображена в браузере / консоли.
+
+Чтобы выполнить обратный вызов более одного раза, вы можете указать количество итераций вторым аргументом метода. При выполнении обратного вызова более одного раза класс `Benchmark` вернет среднее количество миллисекунд, затраченных на выполнение обратного вызова за все итерации:
+
+    Benchmark::dd(fn () => User::count(), iterations: 10); // 0.5 ms
+
+Иногда вам может потребоваться измерить время выполнения обратного вызова, сохраняя при этом значение, возвращаемое обратным вызовом. Метод `value` вернет кортеж, содержащий значение, возвращаемое обратным вызовом, и количество миллисекунд, затраченных на выполнение обратного вызова:
+
+    [$count, $duration] = Benchmark::value(fn () => User::count());
+
+<a name="dates"></a>
+### Даты
+
+Laravel включает в себя [Carbon](https://carbon.nesbot.com/docs/), мощную библиотеку для манипулирования датой и временем. Чтобы создать новый экземпляр `Carbon`, вы можете вызвать функцию `now`. Эта функция доступна глобально в вашем приложении Laravel:
+
+```php
+$now = now();
+```
+
+Или же вы можете создать новый экземпляр `Carbon`, используя класс `Illuminate\Support\Carbon`:
+
+```php
+use Illuminate\Support\Carbon;
+
+$now = Carbon::now();
+```
+
+Подробное описание `Carbon` и его функций можно найти в [официальной документации Carbon](https://carbon.nesbot.com/docs/).
+
+<a name="lottery"></a>
+### Лотерея
+
+Класс лотереи Laravel может использоваться для выполнения обратных вызовов на основе заданных шансов. Это может быть особенно полезно, когда вы хотите выполнить код только для определенного процента ваших входящих запросов:
+
+    use Illuminate\Support\Lottery;
+
+    Lottery::odds(1, 20)
+        ->winner(fn () => $user->won())
+        ->loser(fn () => $user->lost())
+        ->choose();
+
+Вы можете комбинировать класс лотереи Laravel с другими функциями Laravel. Например, вы можете захотеть сообщать обработчику исключений только о небольшом проценте медленных запросов. А поскольку класс лотереи является вызываемым, мы можем передать экземпляр класса в любой метод, который принимает вызываемые объекты:
+
+    use Carbon\CarbonInterval;
+    use Illuminate\Support\Facades\DB;
+    use Illuminate\Support\Lottery;
+
+    DB::whenQueryingForLongerThan(
+        CarbonInterval::seconds(2),
+        Lottery::odds(1, 100)->winner(fn () => report('Querying > 2 seconds.')),
+    );
+
+<a name="testing-lotteries"></a>
+#### Тестирование лотерей
+
+Laravel предоставляет несколько простых методов, которые позволяют легко тестировать вызовы лотереи в вашем приложении:
+
+    // Лотерея всегда вииграшная...
+    Lottery::alwaysWin();
+
+    // Лотерея всегда проиграшная...
+    Lottery::alwaysLose();
+
+    // Выигрыш, проигрыш, затем вернуться к нормальному поведению...
+    Lottery::fix([true, false]);
+
+    // Вернуться к нормальному поведению...
+    Lottery::determineResultsNormally();
+
+<a name="pipeline"></a>
+### Pipeline
+
+Фасад `Pipeline` в Laravel предоставляет удобный способ "прокидывания" ввода через серию вызовов классов, замыканий или вызываемых объектов, предоставляя каждому классу возможность проверить или изменить входные данные и вызвать следующий элемент в цепочке вызовов пайплайна:
+
+```php
+use Closure;
+use App\Models\User;
+use Illuminate\Support\Facades\Pipeline;
+
+$user = Pipeline::send($user)
+            ->through([
+                function (User $user, Closure $next) {
+                    // ...
+
+                    return $next($user);
+                },
+                function (User $user, Closure $next) {
+                    // ...
+
+                    return $next($user);
+                },
+            ])
+            ->then(fn (User $user) => $user);
+```
+
+
+Как видите, каждый вызываемый класс или замыкание указанное в pipeline получает входные данные и замыкание `$next`. Вызов замыкания `$next` приведет к вызову следующего вызываемого объекта в пайплайне. Как вы могли заметить, это очень похоже на [middleware](/docs/{{version}}/middleware).
+
+Когда последний вызываемый объект в пайплайне вызывает `$next`, будет выполнен объект, предоставленный методу `then`. Обычно этот вызываемый объект просто возвращает предоставленные входные данные.
+
+Как было описано ранее, вы не ограничены предоставлением только замыканий в свой пайплайн. Вы также можете использовать вызываемые классы. Если предоставлено имя класса, экземпляр класса будет создан с использованием [контейнера служб Laravel](/docs/{{version}}/container), что позволяет внедрять зависимости в вызываемый класс:
+
+```php
+$user = Pipeline::send($user)
+            ->through([
+                GenerateProfilePhoto::class,
+                ActivateSubscription::class,
+                SendWelcomeEmail::class,
+            ])
+            ->then(fn (User $user) => $user);
+```
+
+<a name="sleep"></a>
+### Sleep
+
+Класс `Sleep` в Laravel представляет собой легковесную обертку вокруг нативных функций PHP `sleep` и `usleep`, предоставляя большую тестируемость и удобный API для работы с временем:
+
+
+    use Illuminate\Support\Sleep;
+
+    $waiting = true;
+
+    while ($waiting) {
+        Sleep::for(1)->second();
+
+        $waiting = /* ... */;
+    }
+
+Класс `Sleep` предоставляет разнообразные методы, позволяющие вам работать с различными единицами времени:
+
+    //Приостановите выполнение на 90 секунд...
+    Sleep::for(1.5)->minutes();
+
+    // Приостановите выполнение на 2 секунды...
+    Sleep::for(2)->seconds();
+
+    // Pause execution for 500 milliseconds...
+    Sleep::for(500)->milliseconds();
+
+    // Приостановите выполнение на 500 миллисекунд...
+    Sleep::for(5000)->microseconds();
+
+    // Приостановить выполнение до заданного времени...
+    Sleep::until(now()->addMinute());
+
+    // Псевдоним функции PHP "sleep"...
+    Sleep::sleep(2);
+
+    // Псевдоним функции PHP  "usleep"
+    Sleep::usleep(5000);
+
+Чтобы легко объединять единицы времени, вы можете использовать метод `and`:
+
+    Sleep::for(1)->second()->and(10)->milliseconds();
+
+<a name="testing-sleep"></a>
+#### Тестирование Sleep
+
+При тестировании кода, использующего класс `Sleep` или функции PHP `sleep` , выполнение вашего теста будет приостановлено. Как можно ожидать, это делает ваш пакет тестов значительно медленнее. Например, представьте, что вы тестируете следующий код:
+
+
+    $waiting = /* ... */;
+
+    $seconds = 1;
+
+    while ($waiting) {
+        Sleep::for($seconds++)->seconds();
+
+        $waiting = /* ... */;
+    }
+
+
+Обычно тестирование этого кода займет как минимум одну секунду. К счастью, класс `Sleep` позволяет нам "подделывать" задержку, чтобы наш тестовый набор оставался быстрым:
+
+    public function test_it_waits_until_ready()
+    {
+        Sleep::fake();
+
+        // ...
+    }
+
+
+При подделке класса `Sleep` реальная задержка выполнения обходится, что приводит к более быстрому тестированию.
+
+Как только класс `Sleep` был подделан, можно делать утверждения относительно ожидаемых "пауз". Для иллюстрации давайте представим, что мы тестируем код, который приостанавливает выполнение три раза, при этом каждая задержка увеличивается на одну секунду. Используя метод `assertSequence`, мы можем проверить, что наш код "спал" нужное количество времени, сохраняя при этом скорость выполнения теста:
+
+    public function test_it_checks_if_ready_four_times()
+    {
+        Sleep::fake();
+
+        // ...
+
+        Sleep::assertSequence([
+            Sleep::for(1)->second(),
+            Sleep::for(2)->seconds(),
+            Sleep::for(3)->seconds(),
+        ]);
+    }
+
+Конечно же, класс Sleep предоставляет и другие утверждения, которые вы можете использовать при тестировании:
+
+
+    use Carbon\CarbonInterval as Duration;
+    use Illuminate\Support\Sleep;
+
+    // Утверждение, что sliip вызывали 3 раза...
+    Sleep::assertSleptTimes(3);
+
+    // Утверждение, что продолжительность сна... 
+    Sleep::assertSlept(function (Duration $duration): bool {
+        return /* ... */;
+    }, times: 1);
+
+    // Утверждение, что класс Sleep никогда не вызывался...
+    Sleep::assertNeverSlept();
+
+    // Утверждение, что, даже если был вызван Sleep, пауза в выполнении не наступила...
+    Sleep::assertInsomniac();
+
+Иногда бывает полезно выполнять действие при каждом имитированном ожидании в коде вашего приложения. Для этого вы можете предоставить обратный вызов методу `whenFakingSleep`. В следующем примере мы используем помощники Laravel по [манипулированию временем](/docs/{{version}}/mocking#interacting-with-time), чтобы мгновенно продвинуть время на продолжительность каждого ожидания:
+
+
+```php
+use Carbon\CarbonInterval as Duration;
+
+$this->freezeTime();
+
+Sleep::fake();
+
+Sleep::whenFakingSleep(function (Duration $duration) {
+    // Progress time when faking sleep...
+    $this->travel($duration->totalMilliseconds)->milliseconds();
+});
+```
+
+Класс `Sleep` используется внутри Laravel при приостановке выполнения. Например, помощник [retry](#method-retry) использует класс `Sleep` при задержке, что обеспечивает лучшую тестируемость при использовании данного помощника.

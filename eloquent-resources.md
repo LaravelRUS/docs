@@ -1,5 +1,5 @@
 ---
-git: 34eb006893f9e86010025689656aa8cba0096687
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Eloquent · Ресурсы API (Resource)
@@ -17,7 +17,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Ресурсы расширяют класс `Illuminate\Http\Resources\Json\JsonResource`. Чтобы сгенерировать новый ресурс, используйте команду `make:resource` [Artisan](artisan). Эта команда поместит новый класс ресурса в каталог `app/Http/Resources` вашего приложения:
 
-    php artisan make:resource UserResource
+```shell
+php artisan make:resource UserResource
+```
 
 <a name="generating-resource-collections"></a>
 #### Генерация коллекций ресурса
@@ -26,14 +28,17 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Чтобы сгенерировать новую коллекцию ресурса, вы должны использовать флаг `--collection` при создании ресурса. Или включение слова `Collection` в имя ресурса укажет Laravel, что он должен создать коллекцию ресурса. Коллекции ресурса расширяют класс `Illuminate\Http\Resources\Json\ResourceCollection`:
 
-    php artisan make:resource User --collection
+```shell
+php artisan make:resource User --collection
 
-    php artisan make:resource UserCollection
+php artisan make:resource UserCollection
+```
 
 <a name="concept-overview"></a>
 ## Обзор концепции
 
-> {tip} Это лишь общий обзор ресурсов и коллекций ресурса. Мы настоятельно рекомендуем вам прочитать другие разделы этой документации, чтобы получить более глубокое понимание возможностей создания и настройки ресурса, предлагаемые вам.
+> [!NOTE]
+> Это лишь общий обзор ресурсов и коллекций ресурса. Мы настоятельно рекомендуем вам прочитать другие разделы этой документации, чтобы получить более глубокое понимание возможностей создания и настройки ресурса, предлагаемые вам.
 
 Прежде чем углубляться во все варианты, доступные вам при написании ресурсов, давайте сначала рассмотрим, как ресурсы используются в Laravel. Класс ресурсов представляет собой единую модель, которую необходимо преобразовать в структуру JSON. Например, вот простой класс ресурса `UserResource`:
 
@@ -41,6 +46,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
     namespace App\Http\Resources;
 
+    use Illuminate\Http\Request;
     use Illuminate\Http\Resources\Json\JsonResource;
 
     class UserResource extends JsonResource
@@ -48,10 +54,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать ресурс в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return [
                 'id' => $this->id,
@@ -70,7 +75,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     use App\Http\Resources\UserResource;
     use App\Models\User;
 
-    Route::get('/user/{id}', function ($id) {
+    Route::get('/user/{id}', function (string $id) {
         return new UserResource(User::findOrFail($id));
     });
 
@@ -88,7 +93,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Обратите внимание, что это не позволит добавить пользовательские метаданные, которые могут потребоваться при возвращении с вашей коллекцией. Если вы хотите получить больший контроль над ответом коллекции ресурса, то вы можете создать выделенный ресурс для представления коллекции:
 
-    php artisan make:resource UserCollection
+```shell
+php artisan make:resource UserCollection
+```
 
 После создания класса коллекции ресурса, вы можете легко определить любые метаданные, которые должны быть включены в ответ:
 
@@ -96,6 +103,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
     namespace App\Http\Resources;
 
+    use Illuminate\Http\Request;
     use Illuminate\Http\Resources\Json\ResourceCollection;
 
     class UserCollection extends ResourceCollection
@@ -103,10 +111,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать коллекцию ресурса в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<int|string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return [
                 'data' => $this->collection,
@@ -182,14 +189,16 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 <a name="writing-resources"></a>
 ## Написание ресурсов
 
-> {tip} Если вы не читали [обзор концепции](#concept-overview), настоятельно рекомендуется сделать это, прежде чем приступить к работе с этой документацией.
+> [!NOTE]
+> Если вы не читали [обзор концепции](#concept-overview), настоятельно рекомендуется сделать это, прежде чем приступить к работе с этой документацией.
 
-По сути, ресурсы просты. Им нужно только преобразовать переданную модель в массив. Итак, каждый ресурс содержит метод `toArray`, переводящий атрибуты вашей модели в удобный для API массив, который может быть возвращен из маршрутов или контроллеров вашего приложения:
+Ресурсам нужно только преобразовать данную модель в массив. Итак, каждый ресурс содержит метод `toArray`, переводящий атрибуты вашей модели в удобный для API массив, который может быть возвращен из маршрутов или контроллеров вашего приложения:
 
     <?php
 
     namespace App\Http\Resources;
 
+    use Illuminate\Http\Request;
     use Illuminate\Http\Resources\Json\JsonResource;
 
     class UserResource extends JsonResource
@@ -197,10 +206,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать ресурс в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return [
                 'id' => $this->id,
@@ -217,7 +225,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     use App\Http\Resources\UserResource;
     use App\Models\User;
 
-    Route::get('/user/{id}', function ($id) {
+    Route::get('/user/{id}', function (string $id) {
         return new UserResource(User::findOrFail($id));
     });
 
@@ -227,14 +235,14 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 Если вы хотите включить связанные ресурсы в свой ответ, вы можете добавить их в массив, возвращаемый методом вашего ресурса `toArray`. В этом примере мы будем использовать метод `collection` ресурса `PostResource`, чтобы добавить посты пользователя из блога в ответ ресурса:
 
     use App\Http\Resources\PostResource;
+    use Illuminate\Http\Request;
 
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -246,7 +254,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         ];
     }
 
-> {tip} Если вы хотите включить отношения только тогда, когда они уже загружены, ознакомьтесь с документацией по [условным отношениям](#conditional-relationships).
+> [!NOTE]
+> {Если вы хотите включить отношения только тогда, когда они уже загружены, ознакомьтесь с документацией по [условным отношениям](#conditional-relationships).
 
 <a name="writing-resource-collections"></a>
 #### Коллекции ресурса
@@ -265,7 +274,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     <?php
 
     namespace App\Http\Resources;
-
+    
+    use Illuminate\Http\Request
     use Illuminate\Http\Resources\Json\ResourceCollection;
 
     class UserCollection extends ResourceCollection
@@ -273,10 +283,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать коллекцию ресурса в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+          * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return [
                 'data' => $this->collection,
@@ -301,20 +310,22 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 По умолчанию, ваш самый верхний ресурс будет заключен в ключ `data`, когда ответ ресурса преобразуется в JSON. Так, например, типичный ответ коллекции ресурса выглядит следующим образом:
 
-    {
-        "data": [
-            {
-                "id": 1,
-                "name": "Eladio Schroeder Sr.",
-                "email": "therese28@example.com",
-            },
-            {
-                "id": 2,
-                "name": "Liliana Mayert",
-                "email": "evandervort@example.com",
-            }
-        ]
-    }
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Eladio Schroeder Sr.",
+            "email": "therese28@example.com"
+        },
+        {
+            "id": 2,
+            "name": "Liliana Mayert",
+            "email": "evandervort@example.com"
+        }
+    ]
+}
+```
 
 Если вы хотите использовать собственный ключ вместо `data`, вы можете определить свойство `$wrap` в классе ресурса:
 
@@ -329,7 +340,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Обертка «данных», которую следует применить.
          *
-         * @var string
+         * @var string|null
          */
         public static $wrap = 'user';
     }
@@ -350,9 +361,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
          *
          * @return void
          */
-        public function register()
+        public function register(): void
         {
-            //
+            // ...
         }
 
         /**
@@ -360,13 +371,14 @@ git: 34eb006893f9e86010025689656aa8cba0096687
          *
          * @return void
          */
-        public function boot()
+        public function boot(): void
         {
             JsonResource::withoutWrapping();
         }
     }
 
-> {note} Метод `withoutWrapping` влияет только на самый верхний уровень ответа и не удаляет ключи `data`, которые вы вручную добавляете в свои собственные коллекции ресурса.
+> [!WARNING]
+> Метод `withoutWrapping` влияет только на самый верхний уровень ответа и не удаляет ключи `data`, которые вы вручную добавляете в свои собственные коллекции ресурса.
 
 <a name="wrapping-nested-resources"></a>
 #### Обертывание вложенных ресурсов
@@ -386,10 +398,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать коллекцию ресурса в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return ['data' => $this->collection];
         }
@@ -400,35 +411,37 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 При возврате разбитых на страницы коллекций через ответ ресурса, Laravel обернет ваши данные ресурса в ключ `data`, даже если был вызван метод `withoutWrapping`. Это потому, что разбитые на страницы ответы всегда содержат ключи `meta` и `links` с информацией о состоянии постраничной разбивки:
 
-    {
-        "data": [
-            {
-                "id": 1,
-                "name": "Eladio Schroeder Sr.",
-                "email": "therese28@example.com",
-            },
-            {
-                "id": 2,
-                "name": "Liliana Mayert",
-                "email": "evandervort@example.com",
-            }
-        ],
-        "links":{
-            "first": "http://example.com/pagination?page=1",
-            "last": "http://example.com/pagination?page=1",
-            "prev": null,
-            "next": null
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Eladio Schroeder Sr.",
+            "email": "therese28@example.com"
         },
-        "meta":{
-            "current_page": 1,
-            "from": 1,
-            "last_page": 1,
-            "path": "http://example.com/pagination",
-            "per_page": 15,
-            "to": 10,
-            "total": 10
+        {
+            "id": 2,
+            "name": "Liliana Mayert",
+            "email": "evandervort@example.com"
         }
+    ],
+    "links":{
+        "first": "http://example.com/users?page=1",
+        "last": "http://example.com/users?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta":{
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://example.com/users",
+        "per_page": 15,
+        "to": 10,
+        "total": 10
     }
+}
+```
 
 <a name="pagination"></a>
 ### Постраничная разбивка
@@ -444,34 +457,57 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Ответы с постраничной разбивкой всегда содержат ключи `meta` и `links` с информацией о состоянии пагинатора:
 
-    {
-        "data": [
-            {
-                "id": 1,
-                "name": "Eladio Schroeder Sr.",
-                "email": "therese28@example.com",
-            },
-            {
-                "id": 2,
-                "name": "Liliana Mayert",
-                "email": "evandervort@example.com",
-            }
-        ],
-        "links":{
-            "first": "http://example.com/pagination?page=1",
-            "last": "http://example.com/pagination?page=1",
-            "prev": null,
-            "next": null
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Eladio Schroeder Sr.",
+            "email": "therese28@example.com"
         },
-        "meta":{
-            "current_page": 1,
-            "from": 1,
-            "last_page": 1,
-            "path": "http://example.com/pagination",
-            "per_page": 15,
-            "to": 10,
-            "total": 10
+        {
+            "id": 2,
+            "name": "Liliana Mayert",
+            "email": "evandervort@example.com"
         }
+    ],
+    "links":{
+        "first": "http://example.com/users?page=1",
+        "last": "http://example.com/users?page=1",
+        "prev": null,
+        "next": null
+    },
+    "meta":{
+        "current_page": 1,
+        "from": 1,
+        "last_page": 1,
+        "path": "http://example.com/users",
+        "per_page": 15,
+        "to": 10,
+        "total": 10
+    }
+}
+```
+
+<a name="customizing-the-pagination-information"></a>
+#### Настроика информации о постраничной навигации
+
+Если вы хотите настроить информацию, включаемую в ключи `links` или `meta` ответа пагинации, вы можете определить метод `paginationInformation` в ресурсе. Этот метод получит данные `$paginated` и массив `$default` информации, который содержит ключи `links` и `meta`:
+
+
+    /**
+     * Настроика информации о постраничной навигации для ресурса.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  array $paginated
+     * @param  array $default
+     * @return array
+     */
+    public function paginationInformation($request, $paginated, $default)
+    {
+        $default['links']['custom'] = 'https://example.com';
+
+        return $default;
     }
 
 <a name="conditional-attributes"></a>
@@ -479,21 +515,18 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 По желанию можно включить атрибут в ответ ресурса, только если какое-то условие выполнено. Например, бывает необходимо включить значение, только если текущий пользователь является «администратором». Laravel предлагает множество вспомогательных методов, которые помогут вам в этой ситуации. Метод `when` используется для условного добавления атрибута в ответ ресурса:
 
-    use Illuminate\Support\Facades\Auth;
-
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'secret' => $this->when(Auth::user()->isAdmin(), 'secret-value'),
+            'secret' => $this->when($request->user()->isAdmin(), 'secret-value'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -503,9 +536,17 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Метод `when` также принимает замыкание в качестве второго аргумента, позволяя вам вычислить результирующее значение, только если переданное условие истинно:
 
-    'secret' => $this->when(Auth::user()->isAdmin(), function () {
+    'secret' => $this->when($request->user()->isAdmin(), function () {
         return 'secret-value';
     }),
+
+Метод `whenHas` может быть использован для включения атрибута, если он действительно присутствует в основной модели:
+
+    'name' => $this->whenHas('name'),
+
+Кроме того, метод `whenNotNull` может быть использован для включения атрибута в ответ ресурса, если атрибут не равен null:
+
+    'name' => $this->whenNotNull($this->name),
 
 <a name="merging-conditional-attributes"></a>
 #### Слияние условных атрибутов
@@ -515,16 +556,15 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            $this->mergeWhen(Auth::user()->isAdmin(), [
+            $this->mergeWhen($request->user()->isAdmin(), [
                 'first-secret' => 'value',
                 'second-secret' => 'value',
             ]),
@@ -535,7 +575,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Опять же, если переданное условие равносильно `false`, то эти атрибуты будут удалены из ответа ресурса перед его отправкой клиенту.
 
-> {note} Метод `mergeWhen` не следует использовать в массивах, в которых смешиваются строковые и числовые ключи. Кроме того, его не следует использовать в массивах с цифровыми ключами, которые не упорядочены последовательно.
+> [!WARNING]
+> Метод `mergeWhen` не следует использовать в массивах, в которых смешиваются строковые и числовые ключи. Кроме того, его не следует использовать в массивах с цифровыми ключами, которые не упорядочены последовательно.
 
 <a name="conditional-relationships"></a>
 ### Условные отношения
@@ -549,10 +590,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -566,6 +606,45 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 В этом примере, если отношение не было загружено, ключ `posts` будет удален из ответа ресурса перед его отправкой клиенту.
 
+<a name="conditional-relationship-counts"></a>
+#### Условные подсчеты отношений
+
+Помимо условного включения отношений, вы также можете условно включать "счетчики" отношений в ответах вашего ресурса в зависимости от того, был ли загружен счетчик отношений в модели:
+
+    new UserResource($user->loadCount('posts'));
+
+
+Метод `whenCounted` может быть использован для условного включения подсчета отношения в ответ вашего ресурса. Этот метод избегает лишнего включения атрибута, если подсчет отношения отсутствует:
+
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+            'posts_count' => $this->whenCounted('posts'),
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ];
+    }
+
+В данном примере, если подсчет отношения posts не был загружен, ключ `posts_count` будет удален из ответа ресурса перед его отправкой клиенту.
+
+Другие типы агрегатов, такие как `avg`, `sum`, `min` и `max`, также могут быть условно загружены с использованием метода `whenAggregated`:
+
+
+```php
+'words_avg' => $this->whenAggregated('posts', 'words', 'avg'),
+'words_sum' => $this->whenAggregated('posts', 'words', 'sum'),
+'words_min' => $this->whenAggregated('posts', 'words', 'min'),
+'words_max' => $this->whenAggregated('posts', 'words', 'max'),
+```
+
 <a name="conditional-pivot-information"></a>
 #### Условная сводная информация
 
@@ -574,10 +653,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -599,10 +677,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
@@ -621,10 +698,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     /**
      * Преобразовать ресурс в массив.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
+     * @return array<string, mixed>
      */
-    public function toArray($request)
+    public function toArray(Request $request): array
     {
         return [
             'data' => $this->collection,
@@ -652,10 +728,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать коллекцию ресурса в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return parent::toArray($request);
         }
@@ -663,10 +738,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Получить дополнительные данные, возвращаемые с массивом ресурса.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function with($request)
+        public function with(Request $request): array
         {
             return [
                 'meta' => [
@@ -694,7 +768,7 @@ git: 34eb006893f9e86010025689656aa8cba0096687
     use App\Http\Resources\User as UserResource;
     use App\Models\User;
 
-    Route::get('/user/{id}', function ($id) {
+    Route::get('/user/{id}', function (string $id) {
         return new UserResource(User::findOrFail($id));
     });
 
@@ -715,6 +789,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
     namespace App\Http\Resources;
 
+    use Illuminate\Http\JsonResponse;
+    use Illuminate\Http\Request;
     use Illuminate\Http\Resources\Json\JsonResource;
 
     class UserResource extends JsonResource
@@ -722,10 +798,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Преобразовать ресурс в массив.
          *
-         * @param  \Illuminate\Http\Request  $request
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toArray($request)
+        public function toArray(Request $request): array
         {
             return [
                 'id' => $this->id,
@@ -734,12 +809,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
         /**
          * Настроить исходящий ответ для ресурса.
-         *
-         * @param  \Illuminate\Http\Request  $request
-         * @param  \Illuminate\Http\Response  $response
-         * @return void
          */
-        public function withResponse($request, $response)
+        public function withResponse(Request $request, JsonResponse $response): void
         {
             $response->header('X-Value', 'True');
         }
