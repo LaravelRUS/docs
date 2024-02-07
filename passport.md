@@ -1,5 +1,5 @@
 ---
-git: e588bf079a123f1155b92812d33a233d4a283682
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Laravel Passport
@@ -9,7 +9,7 @@ git: e588bf079a123f1155b92812d33a233d4a283682
 
 [Laravel Passport](https://github.com/laravel/passport) обеспечивает полную реализацию сервера OAuth2 для вашего приложения Laravel за считанные минуты. Passport построен на основе [League OAuth2](https://github.com/thephpleague/oauth2-server), который поддерживается Энди Миллингтоном (Andy Millington) и Саймоном Хэмпом (Simon Hamp).
 
-> **Warning**  
+> [!WARNING] 
 > В этой документации предполагается, что вы уже знакомы с OAuth2. Если вы ничего не знаете о OAuth2, перед продолжением ознакомьтесь с общей [терминологией](https://oauth2.thephpleague.com/terminology/) и функциями OAuth2.
 
 <a name="passport-or-sanctum"></a>
@@ -40,7 +40,7 @@ php artisan migrate
 php artisan passport:install
 ```
 
-> **Note**  
+> [!NOTE]  
 > Если вы хотите использовать UUID в качестве значения первичного ключа модели Passport `Client` вместо автоматически увеличивающихся целых чисел, установите Passport, используя [the `uuids` option](#client-uuids).
 
 После выполнения команды `passport:install` добавьте [трейт](https://www.php.net/manual/ru/language.oop5.traits.php) `Laravel\Passport\HasApiTokens` в свою модель `App\Models\User`. Этот трейт предоставит вашей модели несколько вспомогательных методов, которые позволят вам проверить токен и области аутентифицированного пользователя. Если ваша модель уже использует трейт `Laravel\Sanctum\HasApiTokens`, вы можете его удалить:
@@ -165,7 +165,7 @@ php artisan vendor:publish --tag=passport-migrations
         Passport::personalAccessTokensExpireIn(now()->addMonths(6));
     }
 
-> **Warning**  
+> [!WARNING] 
 > Поля `expires_at` в таблицах базы данных Passport доступны только для чтения и только для отображения. При выпуске токенов Passport сохраняет информацию об истечении срока действия в подписанных и зашифрованных токенах. Если вам нужно сделать токен недействительным, вы должны [отозвать его](#revoking-tokens).
 
 <a name="overriding-default-models"></a>
@@ -365,7 +365,7 @@ axios.delete('/oauth/clients/' + clientId)
 
 Если значение `prompt` не указано, пользователь будет приглашен к авторизации только в том случае, если он ранее не авторизовал доступ потребляющему приложению для запрашиваемых разрешений.
 
-> **Note**  
+> [!NOTE]  
 > Помните, что маршрут `/oauth/authorize` уже определен в Passport. Вам не нужно вручную определять этот маршрут.
 
 <a name="approving-the-request"></a>
@@ -429,7 +429,7 @@ php artisan vendor:publish --tag=passport-views
 
 Маршрут `/oauth/token` вернет ответ JSON, содержащий атрибуты `access_token`, `refresh_token` и `expires_in`. Атрибут `expires_in` содержит количество секунд до истечения срока действия токена доступа.
 
-> **Note**  
+> [!NOTE]  
 > Как и маршрут `/oauth/authorize`, маршрут `/oauth/token` определяется для вас методом `Passport::routes`. Нет необходимости определять этот маршрут вручную.
 
 <a name="tokens-json-api"></a>
@@ -617,7 +617,7 @@ php artisan passport:client --public
 <a name="password-grant-tokens"></a>
 ## Парольные токены
 
-> **Warning**  
+> [!WARNING]  
 > Мы больше не рекомендуем использовать токены для предоставления пароля. Вместо этого вам следует выбрать [тип гаранта, который в настоящее время рекомендуется OAuth2 Server](https://oauth2.thephpleague.com/authorization-server/which-grant/).
 
 Предоставление пароля OAuth2 позволяет другим сторонним клиентам, таким как мобильное приложение, получать токен доступа, используя адрес электронной почты / имя пользователя и пароль. Это позволяет вам безопасно выдавать токены доступа своим основным клиентам, не требуя от пользователей прохождения всего потока перенаправления кода авторизации OAuth2.
@@ -650,7 +650,7 @@ php artisan passport:client --password
 
     return $response->json();
 
-> **Note**  
+> [!NOTE]  
 > Помните, токены доступа по умолчанию являются долгоживущими. Однако вы можете [настроить максимальное время жизни токена доступа](#configuration), если это необходимо.
 
 <a name="requesting-all-scopes"></a>
@@ -730,7 +730,7 @@ php artisan passport:client --password
 <a name="implicit-grant-tokens"></a>
 ## Неявные токены
 
-> **Warning**  
+> [!WARNING]  
 > Мы больше не рекомендуем использовать токены для предоставления пароля. Вместо этого вам следует выбрать [тип гаранта, который в настоящее время рекомендуется OAuth2 Server](https://oauth2.thephpleague.com/authorization-server/which-grant/).
 
 Неявное разрешение аналогично предоставлению кода авторизации; однако токен возвращается клиенту без обмена кодом авторизации. Это разрешение чаще всего используется для JavaScript или мобильных приложений, где учетные данные клиента не могут быть надежно сохранены. Чтобы включить разрешение, вызовите метод `enableImplicitGrant` в методе `boot` класса `App\Providers\AuthServiceProvider` вашего приложения:
@@ -762,7 +762,7 @@ php artisan passport:client --password
         return redirect('http://passport-app.test/oauth/authorize?'.$query);
     });
 
-> **Note**  
+> [!NOTE]  
 > Помните, что маршрут `/oauth/authorize` уже определен методом `Passport::routes`. Вам не нужно вручную определять этот маршрут.
 
 <a name="client-credentials-grant-tokens"></a>
@@ -817,7 +817,7 @@ php artisan passport:client --client
 
 Иногда ваши пользователи могут захотеть выдать себе токены доступа, не проходя типичный поток перенаправления кода авторизации. Разрешение пользователям выдавать себе токены через пользовательский интерфейс вашего приложения может быть полезно для предоставления пользователям возможности экспериментировать с вашим API или может служить более простым подходом к выдаче токенов доступа в целом.
 
-> **Note**  
+> [!NOTE]  
 > Если ваше приложение в основном использует Passport для выдачи токенов личного доступа, рассмотрите возможность использования [Laravel Sanctum](/docs/{{version}}/sanctum), облегченной собственной библиотеки Laravel для выдачи токенов доступа к API.
 
 <a name="creating-a-personal-access-client"></a>
@@ -922,7 +922,7 @@ axios.delete('/oauth/personal-access-tokens/' + tokenId);
         // ...
     })->middleware('auth:api');
 
-> **Warning**  
+> [!WARNING]  
 > Если вы используете [токены учетных данных](#client-credentials-grant-tokens), вы должны вместо этого использовать [посредник `client`](#client-credentials-grant-tokens) для защиты ваших маршрутов `auth:api`.
 
 <a name="multiple-authentication-guards"></a>
@@ -946,7 +946,7 @@ axios.delete('/oauth/personal-access-tokens/' + tokenId);
         // ...
     })->middleware('auth:api-customers');
 
-> **Note**  
+> [!NOTE] 
 > Для получения дополнительной информации об использовании нескольких поставщиков пользователей с Passport обратитесь к [документации по предоставлению пароля](#customizing-the-user-provider).
 
 <a name="passing-the-access-token"></a>
@@ -1001,7 +1001,7 @@ axios.delete('/oauth/personal-access-tokens/' + tokenId);
         'place-orders',
     ]);
 
-> **Note**
+> [!NOTE]
 > Стандартные области применения (scopes) Passport не распространяются на личные токены доступа, которые генерируются пользователем.
 
 <a name="assigning-scopes-to-tokens"></a>
@@ -1102,7 +1102,7 @@ Passport включает два посредника, которые могут
         \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
     ],
 
-> **Warning**  
+> [!WARNING]
 > Вы должны убедиться, что посредник `CreateFreshApiToken` является последним в списке ваших посредников указанных ранее.
 
 Это посредник будет прикреплять файл cookie `laravel_token` к вашим исходящим ответам. Этот файл cookie содержит зашифрованный JWT, который Passport будет использовать для аутентификации запросов API от вашего приложения JavaScript. Время жизни JWT равно вашему значению конфигурации session.lifetime. Теперь, поскольку браузер автоматически отправляет cookie со всеми последующими запросами, вы можете делать запросы к API вашего приложения без явной передачи токена доступа:
@@ -1130,7 +1130,7 @@ Passport включает два посредника, которые могут
 
 При использовании этого метода аутентификации вам необходимо убедиться, что в ваши запросы включен действительный заголовок токена CSRF. В состав шаблонов JavaScript Laravel по умолчанию входит экземпляр Axios, который будет автоматически использовать зашифрованное значение cookie `XSRF-TOKEN` для отправки заголовка `X-XSRF-TOKEN` в запросах.
 
-> **Note**  
+> [!NOTE]  
 > Если вы решите отправить заголовок `X-CSRF-TOKEN` вместо `X-XSRF-TOKEN`, вам нужно использовать незашифрованный токен, предоставленный `csrf_token()`.
 
 <a name="events"></a>
