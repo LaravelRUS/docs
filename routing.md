@@ -1,5 +1,5 @@
 ---
-git: b4bc74ffe7e176408c49739beb268a205daf22aa
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Маршрутизация
@@ -51,7 +51,7 @@ git: b4bc74ffe7e176408c49739beb268a205daf22aa
         // ...
     });
 
-> **Note**  
+> [!NOTE]   
 > При определении нескольких маршрутов, которые используют один и тот же URI, маршруты, использующие методы `get`, `post`, `put`, `patch`, `delete` и `options`, должны быть определены перед маршрутами, использующими методы `any`, `match` и `redirect`. Это гарантирует, что входящий запрос соответствует правильному маршруту.
 
 <a name="dependency-injection"></a>
@@ -90,7 +90,7 @@ git: b4bc74ffe7e176408c49739beb268a205daf22aa
 
     Route::permanentRedirect('/here', '/there');
 
-> **Warning**  
+> [!WARNING]  
 > При использовании параметров маршрута в маршрутах перенаправления, следующие параметры зарезервированы Laravel и не могут быть использованы: `destination` и `status`.
 
 <a name="view-routes"></a>
@@ -102,7 +102,7 @@ git: b4bc74ffe7e176408c49739beb268a205daf22aa
 
     Route::view('/welcome', 'welcome', ['name' => 'Taylor']);
 
-> **Warning**  
+> [!WARNING]
 > При использовании параметров маршрута в маршрутах представлений, следующие параметры зарезервированы Laravel и не могут быть использованы: `view`, `data`, `status` и `headers`.
 
 <a name="the-route-list"></a>
@@ -254,7 +254,7 @@ php artisan route:list --only-vendor
         return $search;
     })->where('search', '.*');
 
-> **Warning**  
+> [!WARNING] 
 > Обратные слеши поддерживаются только в рамках последнего сегмента маршрута.
 
 <a name="named-routes"></a>
@@ -273,7 +273,7 @@ php artisan route:list --only-vendor
         [UserProfileController::class, 'show']
     )->name('profile');
 
-> **Warning**  
+> [!WARNING]  
 > Имена маршрутов всегда должны быть уникальными.
 
 <a name="generating-urls-to-named-routes"></a>
@@ -307,7 +307,7 @@ php artisan route:list --only-vendor
 
     // /user/1/profile?photos=yes
 
-> **Note**  
+> [!NOTE]
 > Иногда требуется указать значение по умолчанию для параметров URL запроса, например, текущий язык. Для этого вы можете использовать метод [`URL::defaults`](/docs/{{version}}/urls#default-values).
 
 <a name="inspecting-the-current-route"></a>
@@ -377,7 +377,7 @@ php artisan route:list --only-vendor
         });
     });
 
-> **Warning**  
+> [!WARNING] 
 > Чтобы обеспечить доступность маршрутов поддоменов, вы должны зарегистрировать маршруты поддоменов перед регистрацией маршрутов корневого домена. Это предотвратит перезапись маршрутами корневого домена маршрутов поддоменов, имеющих одинаковый путь URI.
 
 <a name="route-group-prefixes"></a>
@@ -637,7 +637,7 @@ Route::get('/categories/{category}', function (Category $category) {
         // ...
     });
 
-> **Warning**  
+> [!WARNING]
 > Резервный маршрут всегда должен быть последним зарегистрированным маршрутом в вашем приложении.
 
 <a name="rate-limiting"></a>
@@ -790,7 +790,7 @@ HTML-формы не поддерживают действия `PUT`, `PATCH` и
 
 Laravel может автоматически отвечать на HTTP-запросы CORS `OPTIONS` значениями, которые вы сконфигурируете. Все параметры CORS могут быть настроены в конфигурационном файле `config/cors.php` вашего приложения. Запросы `OPTIONS` будут автоматически обрабатываться [посредником](/docs/{{version}}/middleware) `HandleCors`, который по умолчанию входит в ваш глобальный стек посредников. Ваш глобальный стек посредников находится в HTTP-ядре вашего приложения (`App\Http\Kernel`).
 
-> **Note**  
+> [!NOTE]   
 > Для получения дополнительной информации о CORS и заголовках CORS обратитесь к [веб-документации MDN по CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#The_HTTP_response_headers).
 
 <a name="route-caching"></a>

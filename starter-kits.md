@@ -1,5 +1,5 @@
 ---
-git: a2f48a373e83b529d67d904865205f22bc78d110
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Стартовые комплекты
@@ -61,7 +61,7 @@ npm run dev
 
 Затем, вы можете перейти в своем веб-браузере по URL-адресам вашего приложения `/login` или `/register`. Все маршруты Breeze определены в файле `routes/auth.php`.
 
-> **Note**
+> [!NOTE]
 > Чтобы узнать больше о компиляции CSS и JavaScript вашего приложения, ознакомьтесь с [документацией Laravel по Vite](/docs/{{version}}/vite#running-vite).
 
 <a name="breeze-and-livewire"></a>

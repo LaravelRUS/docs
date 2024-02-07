@@ -1,5 +1,5 @@
 ---
-git: a161d55be58e3c2738107d3be742df2133a3c354
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # HTTP-запросы
@@ -215,7 +215,7 @@ composer require nyholm/psr7
         // ...
     });
 
-> **Note**  
+> [!NOTE]
 > Если вы возвращаете экземпляр response по PSR-7 из маршрута или контроллера, он автоматически преобразуется обратно в экземпляр ответа Laravel и отображается фреймворком.
 
 <a name="input"></a>
@@ -344,11 +344,11 @@ composer require nyholm/psr7
 
     $input = $request->except('credit_card');
 
-> **Warning**  
+> [!WARNING]
 > Метод `only` возвращает все запрошенные вами пары ключ/значение; однако он не будет возвращать пары ключ/значение, которых нет в запросе.
 
-<a name="determining-if-input-is-present"></a>
-### Определение наличия требуемых данных
+<a name="input-presence"></a>
+### Наличие требуемых данных
 
 Вы можете использовать метод `has`, чтобы определить, присутствует ли значение в запросе. Метод `has` возвращает `true`, если значение присутствует в запросе:
 
@@ -574,7 +574,7 @@ public function boot(): void
 
     $path = $request->photo->storeAs('images', 'filename.jpg', 's3');
 
-> **Note**  
+> [!NOTE]
 > Для получения дополнительной информации о хранилище файлов в Laravel, ознакомьтесь с полной [документацией по файловому хранилищу](/docs/{{version}}/filesystem).
 
 <a name="configuring-trusted-proxies"></a>
@@ -611,7 +611,7 @@ public function boot(): void
         protected $headers = Request::HEADER_X_FORWARDED_FOR | Request::HEADER_X_FORWARDED_HOST | Request::HEADER_X_FORWARDED_PORT | Request::HEADER_X_FORWARDED_PROTO;
     }
 
-> **Note**  
+> [!NOTE]  
 > Если вы используете AWS Elastic Load Balancing, значение `$headers` должно быть `Request::HEADER_X_FORWARDED_AWS_ELB`. Для получения дополнительной информации о константах, которые могут использоваться в свойстве `$headers`, ознакомьтесь с документацией Symfony о [доверенных прокси-серверах](https://symfony.com/doc/current/deployment/proxies.html).
 
 <a name="trusting-all-proxies"></a>
