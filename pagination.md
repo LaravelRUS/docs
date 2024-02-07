@@ -1,5 +1,5 @@
 ---
-git: 61da0b9f020ffe3d577599838000b5706238dfa8
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # База данных · Постраничная навигация
@@ -114,7 +114,7 @@ http://localhost/users?cursor=eyJpZCI6MTUsIl9wb2ludHNUb05leHRJdGVtcyI6dHJ1ZX0
 
 После того как вы получили экземпляр Cursor-пагинации, вы можете [отобразить результаты постраничной навигации](#displaying-pagination-results) как обычно при использовании методов `paginate` и `simplePaginate`. Для получения дополнительной информации о методах экземпляра, предлагаемых средством Cursor-пагинации, обратитесь к [документации по методам экземпляра Cursor Paginator](#cursor-paginator-instance-methods).
 
-> **Warning**
+> [!WARNING]  
 > Ваш запрос должен содержать "order by", чтобы использовать Cursor-пагинацию. Кроме того, столбцы, по которым осуществляется сортировка запроса, должны принадлежать таблице, для которой вы используете пагинацию.
 
 <a name="cursor-vs-offset-pagination"></a>
@@ -152,7 +152,7 @@ Cursor-пагинация предлагает следующие преимущ
 
 Другими словами, `Paginator` соответствует методу `simplePaginate` построителя запросов, `CursorPaginator` соответствует методу `cursorPaginate`, а `LengthAwarePaginator` соответствует методу `paginate`.
 
-> **Warning**  
+> [!WARNING]    
 > При ручном создании экземпляра пагинатора вы должны самостоятельно «разрезать» массив результатов, который вы передаете в пагинатор. Если вы не знаете, как это сделать, ознакомьтесь с функцией PHP [`array_slice`](https://www.php.net/manual/ru/function.array-slice.php).
 
 <a name="customizing-pagination-urls"></a>
