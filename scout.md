@@ -9,18 +9,22 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 [Laravel Scout](https://github.com/laravel/scout) предоставляет простое решение на основе драйверов для добавления полнотекстового поиска в ваши [модели Eloquent](/docs/{{version}}/eloquent). Используя наблюдателей (observers) моделей, Scout будет автоматически синхронизировать поисковые индексы с данными моделей Eloquent.
 
-В настоящее время Scout поставляется с драйверами [Algolia](https://www.algolia.com/) и [MeiliSearch](https://www.meilisearch.com). Кроме того, Scout включает поисковый драйвер «коллекций», предназначенный для использования в локальной разработке и не требующий каких-либо внешних зависимостей или сторонних сервисов. Кроме того, написать собственные драйверы просто, и вы можете свободно расширять Scout своими собственными реализациями поиска.
+В настоящее время Scout поставляется с драйверами [Algolia](https://www.algolia.com/), [Meilisearch](https://www.meilisearch.com), [Typesense](https://typesense.org) и MySQL / PostgreSQL (`database`) . Кроме того, Scout включает поисковый драйвер «коллекций», предназначенный для использования в локальной разработке и не требующий каких-либо внешних зависимостей или сторонних сервисов. Кроме того, написать собственные драйверы просто, и вы можете свободно расширять Scout своими собственными реализациями поиска.
 
 <a name="installation"></a>
 ## Установка
 
 Сначала установите Scout через менеджер пакетов Composer:
 
-    composer require laravel/scout
+```shell
+composer require laravel/scout
+```
 
 После установки Scout вы должны опубликовать файл конфигурации Scout с помощью Artisan-команды `vendor:publish`. Эта команда добавит файл конфигурации `scout.php` в каталог `config` вашего приложения:
 
-    php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
+```shell
+php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
+```
 
 Наконец, добавьте трейт (trait) `Laravel\Scout\Searchable` к модели, которую вы хотите сделать доступной для поиска. Этот трейт зарегистрирует наблюдателя модели, который будет автоматически синхронизировать модель с вашим драйвером поиска:
 
@@ -36,45 +40,153 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         use Searchable;
     }
 
+
+<a name="queueing"></a>
+### Использование очереди
+
+Хотя не обязательно использовать Scout с настройками очередей, рекомендуется настроить [драйвер очереди](/docs/{{version}}/queues) перед использованием библиотеки. Запуск рабочего процесса очереди позволит Scout помещать все операции, синхронизирующие информацию модели с поисковыми индексами, в очередь, что обеспечит более быстрое время ответа для веб-интерфейса вашего приложения.
+
+После настройки драйвера очереди установите значение параметра `queue` в вашем конфигурационном файле `config/scout.php` в `true`:
+
+    'queue' => true,
+
+Даже когда параметр `queue` установлен в `false`, важно помнить, что некоторые драйверы Scout, такие как Algolia и Meilisearch, всегда индексируют записи асинхронно. Это означает, что даже если операция индексации завершена в вашем приложении Laravel, сама поисковая система может не сразу отразить новые и обновленные записи.
+
+Чтобы указать соединение и очередь, которые используют ваши задания Scout, вы можете определить параметр конфигурации `queue` как массив:
+
+    'queue' => [
+        'connection' => 'redis',
+        'queue' => 'scout'
+    ],
+
+Конечно, если вы настроите соединение и очередь, которые используют задания Scout, вам следует запустить обработчик очереди для обработки заданий в этом соединении и очереди:
+
+    php artisan queue:work redis --queue=scout
+
 <a name="driver-prerequisites"></a>
-### Требования к драйверам
+## Требования к драйверам
 
 <a name="algolia"></a>
-#### Algolia
+### Algolia
 
 При использовании драйвера Algolia вы должны настроить учетные данные Algolia `id` и `secret` в файле конфигурации `config/scout.php`. После того как ваши учетные данные будут настроены, вам также необходимо будет установить Algolia PHP SDK через диспетчер пакетов Composer:
 
-    composer require algolia/algoliasearch-client-php
+```shell
+composer require algolia/algoliasearch-client-php
+```
 
 <a name="meilisearch"></a>
-#### MeiliSearch
+#### Meilisearch
 
-[MeiliSearch](https://www.meilisearch.com) это невероятно быстрая поисковая система с открытым исходным кодом. Если вы не знаете, как установить MeiliSearch на свой локальный компьютер, вы можете использовать [Laravel Sail](/docs/{{version}}/sail#meilisearch), официально поддерживаемую Laravel среду разработки Docker.
+[Meilisearch](https://www.meilisearch.com) это невероятно быстрая поисковая система с открытым исходным кодом. Если вы не знаете, как установить Meilisearch на свой локальный компьютер, вы можете использовать [Laravel Sail](/docs/{{version}}/sail#meilisearch), официально поддерживаемую Laravel среду разработки Docker.
 
-При использовании драйвера MeiliSearch вам необходимо установить MeiliSearch PHP SDK через менеджер пакетов Composer:
+При использовании драйвера Meilisearch вам необходимо установить Meilisearch PHP SDK через менеджер пакетов Composer:
 
     composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle
 
-Затем установите переменную среды `SCOUT_DRIVER`, а также учетные данные вашего MeiliSearch `host` и `key` в файле` .env` вашего приложения:
+Затем установите переменную среды `SCOUT_DRIVER`, а также учетные данные вашего Meilisearch `host` и `key` в файле` .env` вашего приложения:
 
-    SCOUT_DRIVER=meilisearch
-    MEILISEARCH_HOST=http://127.0.0.1:7700
-    MEILISEARCH_KEY=masterKey
+```ini
+SCOUT_DRIVER=meilisearch
+MEILISEARCH_HOST=http://127.0.0.1:7700
+MEILISEARCH_KEY=masterKey
+```
 
 Для получения дополнительной информации обратитесь к [документации MeiliSearch](https://docs.meilisearch.com/learn/getting_started/quick_start.html).
 
-Кроме того, вы должны убедиться, что вы установили версию `meilisearch/meilisearch-php` которая совместима с вашей двоичной версией MeiliSearch, просмотрев [документацию MeiliSearch относительно двоичной совместимости](https://github.com/meilisearch/meilisearch-php#-compatibility-with-meilisearch).
+Кроме того, вы должны убедиться, что вы установили версию `meilisearch/meilisearch-php` которая совместима с вашей двоичной версией Meilisearch, просмотрев [документацию Meilisearch относительно двоичной совместимости](https://github.com/meilisearch/meilisearch-php#-compatibility-with-meilisearch).
 
-> {note} При обновлении Scout в приложении, которое использует MeiliSearch, вы всегда должны [просматривать любые дополнительные критические изменения](https://github.com/meilisearch/MeiliSearch/releases) в самой службе MeiliSearch.
 
-<a name="queueing"></a>
-### Очередь
+> [!WARNING]  
+> При обновлении Scout в приложении, которое использует MeiliSearch, вы всегда должны [просматривать любые дополнительные критические изменения](https://github.com/meilisearch/MeiliSearch/releases) в самой службе Meilisearch.
 
-Хотя при использовании Scout не является строго обязательным, но вам следует серьезно подумать о настройке [драйвера очереди](/docs/{{version}}/queues) перед использованием библиотеки. Запуск обработчика очереди позволит Scout ставить в очередь все операции, которые синхронизируют информацию вашей модели с вашими поисковыми индексами, обеспечивая гораздо лучшее время отклика для веб-интерфейса вашего приложения.
+<a name="typesense"></a>
+### Typesense
 
-После того как вы настроили драйвер очереди, установите значение опции `queue` в вашем конфигурационном файле `config/scout.php` равным `true`:
+[Typesense](https://typesense.org) - это быстрый и открытый поисковый движок, поддерживающий поиск по ключевым словам, семантический поиск, гео-поиск и векторный поиск.
 
-    'queue' => true,
+Вы можете [разместить Typesense у себя](https://typesense.org/docs/guide/install-typesense.html#option-2-local-machine-self-hosting) или использовать [Typesense Cloud](https://cloud.typesense.org).
+
+Чтобы начать использовать Typesense с Scout, установите Typesense PHP SDK через менеджер пакетов Composer:
+
+```shell
+composer require typesense/typesense-php
+```
+
+Затем установите переменную среды `SCOUT_DRIVER`, а также укажите адрес вашего Typesense и ключ API в файле `.env` вашего приложения:
+
+```env
+SCOUT_DRIVER=typesense
+TYPESENSE_API_KEY=masterKey
+TYPESENSE_HOST=localhost
+```
+
+При необходимости вы также можете указать порт, путь и протокол вашей установки:
+
+```env
+TYPESENSE_PORT=8108
+TYPESENSE_PATH=
+TYPESENSE_PROTOCOL=http
+```
+
+Дополнительные настройки и определения схемы для коллекций Typesense можно найти в конфигурационном файле вашего приложения `config/scout.php`. Для получения дополнительной информации о Typesense, пожалуйста, обратитесь к [документации Typesense](https://typesense.org/docs/guide/#quick-start).
+
+<a name="preparing-data-for-storage-in-typesense"></a>
+#### Подготовка данных для хранения в Typesense
+
+При использовании Typesense ваши модели для поиска должны определить метод `toSearchableArray`, который преобразует основной ключ вашей модели в строку и дату создания в метку времени UNIX:
+
+```php
+/**
+ * Получить индексируемый массив данных для модели.
+ *
+ * @return array<string, mixed>
+ */
+public function toSearchableArray()
+{
+    return array_merge($this->toArray(),[
+        'id' => (string) $this->id,
+        'created_at' => $this->created_at->timestamp,
+    ]);
+}
+```
+
+Вы также должны определить схемы коллекций Typesense в файле конфигурации вашего приложения `config/scout.php`. Схема коллекции описывает типы данных каждого поля, которые можно искать с помощью Typesense. Для получения дополнительной информации о всех доступных параметрах схемы обратитесь к [документации Typesense](https://typesense.org/docs/latest/api/collections.html#schema-parameters).
+
+Если вам необходимо изменить схему коллекции Typesense после её определения, вы можете либо выполнить команды `scout:flush` и `scout:import`, которые удалят все существующие индексированные данные и создадут схему заново. Либо вы можете использовать API Typesense для изменения схемы коллекции без удаления каких-либо индексированных данных.
+
+Если ваша модель для поиска поддерживает мягкое удаление, вы должны определить поле `__soft_deleted` в схеме соответствующей модели Typesense в файле конфигурации вашего приложения `config/scout.php`.
+
+
+```php
+User::class => [
+    'collection-schema' => [
+        'fields' => [
+            // ...
+            [
+                'name' => '__soft_deleted',
+                'type' => 'int32',
+                'optional' => true,
+            ],
+        ],
+    ],
+],
+```
+
+
+<a name="typesense-dynamic-search-parameters"></a>
+#### Динамические параметры поиска
+
+Typesense позволяет вам динамически изменять [параметры поиска](https://typesense.org/docs/latest/api/search.html#search-parameters) при выполнении операции поиска с помощью метода `options`:
+
+
+```php
+use App\Models\Todo;
+
+Todo::search('Groceries')->options([
+    'query_by' => 'title, description'
+])->get();
+```
 
 <a name="configuration"></a>
 ## Настройка
@@ -97,10 +209,8 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
         /**
          * Переопределение имени индекса модели по умолчанию
-         *
-         * @return string
          */
-        public function searchableAs()
+         public function searchableAs(): string
         {
             return 'posts_index';
         }
@@ -125,9 +235,9 @@ git: 34eb006893f9e86010025689656aa8cba0096687
         /**
          * Переопределение массива индекса модели по умолчанию
          *
-         * @return array
+         * @return array<string, mixed>
          */
-        public function toSearchableArray()
+        public function toSearchableArray(): array
         {
             $array = $this->toArray();
 
@@ -136,6 +246,58 @@ git: 34eb006893f9e86010025689656aa8cba0096687
             return $array;
         }
     }
+
+Некоторые поисковые движки, такие как Meilisearch, выполнят операции фильтрации (`>`, `<` и т. д.) только для данных правильного типа. Поэтому, при использовании таких поисковых движков и настройке вашего поискового контента, убедитесь, что числовые значения преобразованы в правильный тип:
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => (int) $this->id,
+            'name' => $this->name,
+            'price' => (float) $this->price,
+        ];
+    }
+<a name="configuring-filterable-data-for-meilisearch"></a>
+#### Настройка фильтруемых данных и параметров индекса (Meilisearch)
+
+В отличие от других драйверов Scout, Meilisearch требует предварительного определения настроек поиска индекса, таких как фильтруемые атрибуты, сортируемые атрибуты и [другие поддерживаемые поля настроек](https://docs.meilisearch.com/reference/api/settings.html).
+
+Фильтруемые атрибуты - это любые атрибуты, по которым вы планируете фильтровать при вызове метода `where` Scout, в то время как сортируемые атрибуты - это любые атрибуты, по которым вы планируете сортировать при вызове метода `orderBy` Scout. Чтобы определить настройки вашего индекса, отредактируйте раздел `index-settings` в записи `meilisearch` в файле конфигурации `scout` вашего приложения:
+
+```php
+use App\Models\User;
+use App\Models\Flight;
+
+'meilisearch' => [
+    'host' => env('MEILISEARCH_HOST', 'http://localhost:7700'),
+    'key' => env('MEILISEARCH_KEY', null),
+    'index-settings' => [
+        User::class => [
+            'filterableAttributes'=> ['id', 'name', 'email'],
+            'sortableAttributes' => ['created_at'],
+            // Other settings fields...
+        ],
+        Flight::class => [
+            'filterableAttributes'=> ['id', 'destination'],
+            'sortableAttributes' => ['updated_at'],
+        ],
+    ],
+],
+```
+
+Если модель, лежащая в основе определенного индекса, поддерживает мягкое удаление и включена в массив `index-settings`, Scout автоматически включит поддержку фильтрации для мягко удаленных моделей в этом индексе. Если у вас нет других атрибутов, по которым можно фильтровать или сортировать для определения индекса модели с мягким удалением, вы можете просто добавить пустую запись в массив `index-settings` для этой модели:
+
+```php
+'index-settings' => [
+    Flight::class => []
+],
+```
+
+После настройки параметров индекса вашего приложения необходимо вызвать команду Artisan `scout:sync-index-settings`. Эта команда сообщит Meilisearch о ваших текущих настройках индекса. Для удобства вы можете включить эту команду в ваш процесс развертывания:
+
+```shell
+php artisan scout:sync-index-settings
+```
 
 <a name="configuring-the-model-id"></a>
 ### Настройка идентификатора модели
@@ -155,22 +317,46 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
         /**
          * Переопределение значения ключа индекса модели по умолчанию
-         *
-         * @return mixed
          */
-        public function getScoutKey()
+        public function getScoutKey(): mixed
         {
             return $this->email;
         }
 
         /**
          * Переопределение имени ключа индекса модели по умолчанию
-         *
-         * @return mixed
          */
-        public function getScoutKeyName()
+        public function getScoutKeyName(): mixed
         {
             return 'email';
+        }
+    }
+
+
+<a name="configuring-search-engines-per-model"></a>
+### Настройка поисковых движков для каждой модели
+
+При выполнении поиска Scout обычно использует поисковый движок, указанный по умолчанию в файле конфигурации `scout` вашего приложения. Однако поисковый движок для определенной модели можно изменить, переопределив метод `searchableUsing` в модели:
+
+    <?php
+
+    namespace App\Models;
+
+    use Illuminate\Database\Eloquent\Model;
+    use Laravel\Scout\Engines\Engine;
+    use Laravel\Scout\EngineManager;
+    use Laravel\Scout\Searchable;
+
+    class User extends Model
+    {
+        use Searchable;
+
+        /**
+         * Get the engine used to index the model.
+         */
+        public function searchableUsing(): Engine
+        {
+            return app(EngineManager::class)->engine('meilisearch');
         }
     }
 
@@ -179,19 +365,28 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 
 Scout также позволяет автоматически идентифицировать пользователей при использовании [Algolia](https://algolia.com). Связывание аутентифицированного пользователя с операциями поиска может быть полезно при просмотре аналитики поиска на панели инструментов Algolia. Вы можете включить идентификацию пользователя, определив для переменной среды `SCOUT_IDENTIFY` значение `true` в файле `.env` вашего приложения:
 
-    SCOUT_IDENTIFY=true
+```ini
+SCOUT_IDENTIFY=true
+```
 
 Включение этой функции также передаст IP-адрес запроса и основной идентификатор вашего аутентифицированного пользователя в Algolia, поэтому эти данные будут связаны с любым поисковым запросом, сделанным пользователем.
 
-<a name="local-development"></a>
-## Локальная разработка
 
-Хотя вы можете использовать поисковые системы Algolia или MeiliSearch во время локальной разработки, вам может быть удобнее начать работу с поисковым драйвером «коллекций». Драйвер коллекций данных будет использовать условие «where» и фильтрацию набора результатов из вашей существующей базы данных, чтобы определить применимые результаты поиска для запроса. При использовании этого механизма нет необходимости «индексировать» доступные для поиска модели, поскольку они будут просто извлечены из локальной базы данных.
+
+тут должно быть ро бд
+
+
+
+
+
+
+
+
 
 Чтобы использовать драйвер коллекций, вы можете просто установить для переменной среды `SCOUT_DRIVER` значение `collection` или указать драйвер `collection` непосредственно в файле конфигурации `scout` вашего приложения:
 
 ```ini
-SCOUT_DRIVER=collection
+SCOUT_IDENTIFY=true
 ```
 
 После того как вы указали драйвер коллекции в качестве предпочтительного, вы можете начать [выполнение поисковых запросов](#searching) по вашим моделям. Индексирование поисковой системой, необходимое для заполнения индексов Algolia или MeiliSearch, не требуется при использовании драйвера коллекций.
