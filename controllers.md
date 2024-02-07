@@ -1,5 +1,5 @@
 ---
-git: 8bdce098dd04f317d58a812d0672ae5b4d6e1a82
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Контроллеры
@@ -51,7 +51,7 @@ php artisan make:controller UserController
 
 Когда входящий запрос совпадает с указанным URI маршрута, будет вызван метод `show` класса `App\Http\Controllers\UserController`, и параметры маршрута будут переданы методу.
 
-> **Note**  
+> [!NOTE]  
 > Контроллеры **не требуют** расширения базового класса. Однако у вас не будет доступа к удобным функциям, таким как методы `middleware` и`authorize`.
 
 <a name="single-action-controllers"></a>
@@ -87,7 +87,7 @@ php artisan make:controller UserController
 php artisan make:controller ProvisionServer --invokable
 ```
 
-> **Note**  
+> [!NOTE]  
 > Заготовки контроллера можно настроить с помощью [публикации заготовок](artisan#stub-customization).
 
 <a name="controller-middleware"></a>
@@ -147,7 +147,7 @@ php artisan make:controller PhotoController --resource
         'posts' => PostController::class,
     ]);
 
-<a name="actions-handled-by-resource-controller"></a>
+<a name="actions-handled-by-resource-controllers"></a>
 #### Действия, выполняемые ресурсными контроллерами
 
 | Метод     | URI                    | Действие | Имя маршрута   |
@@ -365,7 +365,7 @@ php artisan make:controller PhotoController --api
     Route::get('/photos/popular', [PhotoController::class, 'popular']);
     Route::resource('photos', PhotoController::class);
 
-> **Note**  
+> [!NOTE]  
 > Помните, что ваши контроллеры должны быть сосредоточенными. Если вам постоянно требуются методы, выходящие за рамки типичного набора действий с ресурсами, рассмотрите возможность разделения вашего контроллера на два меньших контроллера.
 
 <a name="singleton-resource-controllers"></a>

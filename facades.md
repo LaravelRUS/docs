@@ -1,5 +1,5 @@
 ---
-git: 7daaacc131eb7f0757e05fe747f26f403779048e
+git: d6605b0162301072ea404cac9eff166d068455dc
 ---
 
 # Фасады (Facades)
@@ -247,7 +247,7 @@ git: 7daaacc131eb7f0757e05fe747f26f403779048e
 Ниже вы найдете каждый фасад и его базовый класс. Это полезный инструмент для быстрого поиска в документации API. Ключ [привязки в контейнере служб](/docs/{{version}}/container) также указан, где это возможно.
 
 | Фасад                | Класс                                                                                                                                          | Привязка в контейнере служб |
-| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|
 | App                  | [Illuminate\\Foundation\\Application](https://laravel.com/api/{{version}}/Illuminate/Foundation/Application.html)                              | `app`                       |
 | Artisan              | [Illuminate\\Contracts\\Console\\Kernel](https://laravel.com/api/{{version}}/Illuminate/Contracts/Console/Kernel.html)                         | `artisan`                   |
 | Auth                 | [Illuminate\\Auth\\AuthManager](https://laravel.com/api/{{version}}/Illuminate/Auth/AuthManager.html)                                          | `auth`                      |
@@ -280,6 +280,7 @@ git: 7daaacc131eb7f0757e05fe747f26f403779048e
 | Queue                | [Illuminate\\Queue\\QueueManager](https://laravel.com/api/{{version}}/Illuminate/Queue/QueueManager.html)                                      | `queue`                     |
 | Queue (Instance)     | [Illuminate\\Contracts\\Queue\\Queue](https://laravel.com/api/{{version}}/Illuminate/Contracts/Queue/Queue.html)                               | `queue.connection`          |
 | Queue (Base Class)   | [Illuminate\\Queue\\Queue](https://laravel.com/api/{{version}}/Illuminate/Queue/Queue.html)                                                    |                             |
+| RateLimiter          | [Illuminate\Cache\RateLimiter](https://laravel.com/api/{{version}}/Illuminate/Cache/RateLimiter.html)                                          |                             |
 | Redirect             | [Illuminate\\Routing\\Redirector](https://laravel.com/api/{{version}}/Illuminate/Routing/Redirector.html)                                      | `redirect`                  |
 | Redis                | [Illuminate\\Redis\\RedisManager](https://laravel.com/api/{{version}}/Illuminate/Redis/RedisManager.html)                                      | `redis`                     |
 | Redis (Instance)     | [Illuminate\\Redis\\Connections\\Connection](https://laravel.com/api/{{version}}/Illuminate/Redis/Connections/Connection.html)                 | `redis.connection`          |
