@@ -1,5 +1,5 @@
 ---
-git: 9e0d1080f860c52bc048a99f3dbea2706a41a901
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Laravel Mix
@@ -17,5 +17,5 @@ mix.js('resources/js/app.js', 'public/js')
     .postCss('resources/css/app.css', 'public/css');
 ```
 
-> **Note**  
+> [!NOTE]
 > В новых установках Laravel, Vite заменил Laravel Mix. Для документации по Mix, пожалуйста, посетите [официальный сайт Laravel Mix](https://laravel-mix.com/). Если вы хотите перейти на Vite, пожалуйста, ознакомьтесь с нашим [руководством по миграции на Vite](https://github.com/laravel/vite-plugin/blob/main/UPGRADE.md#migrating-from-laravel-mix-to-vite).
