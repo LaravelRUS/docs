@@ -1,5 +1,5 @@
 ---
-git: 34eb006893f9e86010025689656aa8cba0096687
+git: 46c2634ef5a4f15427c94a3157b626cf5bd3937f
 ---
 
 # Laravel Octane
@@ -7,27 +7,63 @@ git: 34eb006893f9e86010025689656aa8cba0096687
 <a name="introduction"></a>
 ## Введение
 
-[Laravel Octane](https://github.com/laravel/octane) повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [Open Swoole](https://swoole.co.uk), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
+[Laravel Octane](https://github.com/laravel/octane) повышает производительность вашего приложения, обслуживая его с использованием мощных серверов приложений, включая [FrankenPHP](https://frankenphp.dev/), [Open Swoole](https://openswoole.com/), [Swoole](https://github.com/swoole/swoole-src) и [RoadRunner](https://roadrunner.dev). Octane загружает ваше приложение один раз, сохраняет его в памяти, а затем отправляет ему запросы на "сверхзвуковой скорости".
 
 <a name="installation"></a>
 ## Установка
 
 Octane можно установить через диспетчер пакетов Composer:
 
-```bash
+```shell
 composer require laravel/octane
 ```
 
 После установки Octane вы можете выполнить Artisan-команду `octane: install`, которая установит файл конфигурации Octane в ваше приложение:
 
-```bash
+```shell
 php artisan octane:install
 ```
 
 <a name="server-prerequisites"></a>
 ## Требования к серверу
 
-> {note} Laravel Octane требует [PHP 8.0+](https://php.net/releases/).
+> [!WARNING]  
+> Laravel Octane требует [PHP 8.1+](https://php.net/releases/).
+
+<a name="frankenphp"></a>
+### FrankenPHP
+
+> [!WARNING]
+> Интеграция Octane c FrankenPHP находится в бета-версии и должна использоваться с осторожностью в продакшене.
+
+[FrankenPHP](https://frankenphp.dev) - это сервер приложений PHP, написанный на Go, который поддерживает современные веб-функции, такие как ранние подсказки и сжатие Zstandard. Когда вы устанавливаете Octane и выбираете FrankenPHP в качестве сервера, Octane автоматически загрузит и установит для вас бинарный файл FrankenPHP.
+
+<a name="frankenphp-via-laravel-sail"></a>
+
+#### FrankenPHP через Laravel Sail
+
+Если вы планируете разрабатывать ваше приложение, используя [Laravel Sail](/docs/{{version}}/sail), вы должны выполнить следующие команды для установки Octane и FrankenPHP:
+
+```shell
+./vendor/bin/sail up
+
+./vendor/bin/sail composer require laravel/octane
+```
+
+Затем вы должны использовать команду Artisan `octane:install`, чтобы установить бинарный файл FrankenPHP:
+
+```shell
+./vendor/bin/sail artisan octane:install --server=frankenphp
+```
+
+Наконец, добавьте переменную окружения `SUPERVISOR_PHP_COMMAND` в определение сервиса `laravel.test` в файле `docker-compose.yml` вашего приложения. Эта переменная окружения будет содержать команду, которую Sail будет использовать для обслуживания вашего приложения с использованием Octane вместо сервера разработки PHP:
+
+```yaml
+services:
+  laravel.test:
+    environment:
+      SUPERVISOR_PHP_COMMAND: "/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=frankenphp --host=0.0.0.0 --admin-port=2019 --port=80" # [tl! add]
+```
 
 <a name="roadrunner"></a>
 ### RoadRunner
@@ -39,36 +75,33 @@ php artisan octane:install
 
 Если вы планируете разрабатывать свое приложение с использованием [Laravel Sail](/docs/{{version}}/sail), вам следует выполнить следующие команды для установки Octane и RoadRunner:
 
-```bash
+```shell
 ./vendor/bin/sail up
 
-./vendor/bin/sail composer require laravel/octane spiral/roadrunner
+./vendor/bin/sail composer require laravel/octane spiral/roadrunner-cli spiral/roadrunner-http 
 ```
 
 Затем вы должны запустить оболочку Sail и использовать исполняемый файл `rr` для получения последней сборки двоичного файла RoadRunner на основе Linux:
 
-```bash
+```shell
 ./vendor/bin/sail shell
 
 # через Sail оболочку ...
 ./vendor/bin/rr get-binary
 ```
 
-После установки двоичного файла RoadRunner вы можете выйти из сеанса оболочки Sail. Теперь вам нужно настроить файл `supervisor.conf`, используемый Sail, чтобы ваше приложение работало. Для начала выполните Artisan-команду `sail:publish`:
+Затем добавьте переменную окружения `SUPERVISOR_PHP_COMMAND` в определение сервиса `laravel.test` в файле `docker-compose.yml` вашего приложения. Эта переменная окружения будет содержать команду, которую Sail будет использовать для обслуживания вашего приложения с использованием Octane вместо сервера разработки PHP:
 
-```bash
-./vendor/bin/sail artisan sail:publish
-```
-
-Затем обновите директиву `command` в файле `docker/supervisord.conf` вашего приложения, чтобы Sail обслуживал приложение, используя Octane вместо сервера разработки PHP:
-
-```ini
-command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=roadrunner --host=0.0.0.0 --rpc-port=6001 --port=8000
+```yaml
+services:
+  laravel.test:
+    environment:
+      SUPERVISOR_PHP_COMMAND: "/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=roadrunner --host=0.0.0.0 --rpc-port=6001 --port=80" # [tl! add]
 ```
 
 Наконец, убедитесь, что двоичный файл `rr` исполняется, и создайте свои образы Sail:
 
-```bash
+```shell
 chmod +x ./rr
 
 ./vendor/bin/sail build --no-cache
@@ -79,25 +112,36 @@ chmod +x ./rr
 
 Если вы планируете использовать сервер приложений Swoole для обслуживания приложения Laravel Octane, вы должны установить расширение Swoole PHP. Обычно это можно сделать через PECL:
 
-```bash
+```shell
 pecl install swoole
 ```
+
+<a name="openswoole"></a>
+#### Open Swoole
+
+Если вы хотите использовать сервер приложений Open Swoole для обслуживания вашего приложения Laravel Octane, вам необходимо установить расширение PHP Open Swoole. Обычно это можно сделать через PECL:
+
+```shell
+pecl install openswoole
+```
+
+Использование Laravel Octane с Open Swoole предоставляет те же функции, что и Swoole, такие как параллельные задачи, тики и интервалы.
 
 <a name="swoole-via-laravel-sail"></a>
 #### Swoole через Laravel Sail
 
-> {note} Перед обслуживанием приложения Octane через Sail убедитесь, что у вас установлена последняя версия [Laravel Sail](/docs/{{version}}/sail), и выполните `./vendor/bin/sail build --no-cache` в корневом каталоге вашего приложения.
+> [!WARNING]  
+> Перед обслуживанием приложения Octane через Sail убедитесь, что у вас установлена последняя версия [Laravel Sail](/docs/{{version}}/sail), и выполните `./vendor/bin/sail build --no-cache` в корневом каталоге вашего приложения.
 
-В качестве альтернативы вы можете разработать приложение Octane на основе Swoole, используя [Laravel Sail](/docs/{{version}}/sail), официальную среду разработки на основе Docker для Laravel. Laravel Sail по умолчанию включает расширение Swoole. Однако вам все равно нужно будет настроить файл `supervisor.conf`, используемый Sail, чтобы ваше приложение работало. Для начала выполните Artisan-команду `sail:publish`:
+В качестве альтернативы вы можете разработать приложение Octane на основе Swoole, используя [Laravel Sail](/docs/{{version}}/sail), официальную среду разработки на основе Docker для Laravel. Laravel Sail по умолчанию включает расширение Swoole. Однако вам все равно нужно будет настроить файл `docker-compose.yml`, используемый Sail.
 
-```bash
-./vendor/bin/sail artisan sail:publish
-```
+Чтобы начать, добавьте переменную окружения `SUPERVISOR_PHP_COMMAND` в определение службы `laravel.test` в файле `docker-compose.yml` вашего приложения. Эта переменная окружения будет содержать команду, которую Sail будет использовать для обслуживания вашего приложения с использованием Octane вместо сервера разработки PHP:
 
-Затем обновите директиву `command` в файле `docker/supervisord.conf` вашего приложения, чтобы Sail обслуживал ваше приложение, используя Octane вместо сервера разработки PHP:
-
-```ini
-command=/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=80
+```yaml
+services:
+  laravel.test:
+    environment:
+      SUPERVISOR_PHP_COMMAND: "/usr/bin/php -d variables_order=EGPCS /var/www/html/artisan octane:start --server=swoole --host=0.0.0.0 --port=80" # [tl! add]
 ```
 
 Наконец, создайте свои образы Sail:
@@ -117,7 +161,7 @@ Swoole поддерживает несколько дополнительных 
         'log_file' => storage_path('logs/swoole_http.log'),
         'package_max_length' => 10 * 1024 * 1024,
     ],
-];
+],
 ```
 
 <a name="serving-your-application"></a>
@@ -125,7 +169,7 @@ Swoole поддерживает несколько дополнительных 
 
 Сервер Octane можно запустить с помощью Artisan-команды `octane:start`. По умолчанию эта команда будет использовать сервер, указанный в параметре конфигурации `server` в файле конфигурации `octane` вашего приложения:
 
-```bash
+```shell
 php artisan octane:start
 ```
 
@@ -143,13 +187,14 @@ php artisan octane:start
 <a name="serving-your-application-via-nginx"></a>
 ### Запуск приложения с Nginx
 
-> {tip} Если вы не совсем готовы управлять конфигурацией своего сервера или вам неудобно настраивать все различные службы, необходимые для запуска надежного приложения Laravel Octane, ознакомьтесь с [Laravel Forge](https://forge.laravel.com).
+> [!NOTE]
+> Если вы не совсем готовы управлять конфигурацией своего сервера или вам неудобно настраивать все различные службы, необходимые для запуска надежного приложения Laravel Octane, ознакомьтесь с [Laravel Forge](https://forge.laravel.com).
 
 В производственных средах вы должны обслуживать приложение Octane на традиционном веб-сервере, таком как Nginx или Apache. Это позволит веб-серверу обслуживать ваши статические ресурсы, такие как изображения и таблицы стилей, а также управлять прекращением действия вашего сертификата SSL.
 
 В приведенном ниже примере файла конфигурации, Nginx будет обслуживать статические ресурсы сайта и запросы прокси к серверу Octane, который работает на порту 8000:
 
-```conf
+```nginx
 map $http_upgrade $connection_upgrade {
     default upgrade;
     ''      close;
@@ -208,13 +253,13 @@ server {
 
 Поскольку ваше приложение загружается в память один раз при запуске сервера Octane, любые изменения в файлах вашего приложения не будут отражены при обновлении браузера. Например, определения маршрутов, добавленные в ваш файл `routes/web.php`, не будут отображаться до перезапуска сервера. Для удобства вы можете использовать флаг `--watch`, чтобы дать Octane команду автоматически перезапускать сервер при любых изменениях файла в вашем приложении:
 
-```bash
+```shell
 php artisan octane:start --watch
 ```
 
 Перед использованием этой функции вы должны убедиться, что [Node](https://nodejs.org) установлен в вашей локальной среде разработки. Кроме того, вы должны установить библиотеку просмотра файлов [Chokidar](https://github.com/paulmillr/chokidar) в свой project:library:
 
-```bash
+```shell
 npm install --save-dev chokidar
 ```
 
@@ -225,22 +270,22 @@ npm install --save-dev chokidar
 
 По умолчанию Octane запускает обработчика запросов приложений для каждого ядра ЦП (Центрального Процессора), предоставленного вашим компьютером. Затем эти воркеры (workers) будут использоваться для обслуживания входящих HTTP-запросов, когда они входят в ваше приложение. Вы можете вручную указать, сколько воркеров вы хотите запустить, используя опцию `--workers` при вызове команды `octane:start`:
 
-```bash
+```shell
 php artisan octane:start --workers=4
 ```
 
 Если вы используете сервер приложений Swoole, вы также можете указать, сколько ["task workers"](#concurrent-tasks) вы хотите запустить:
 
-```bash
+```shell
 php artisan octane:start --workers=4 --task-workers=6
 ```
 
 <a name="specifying-the-max-request-count"></a>
 ### Указание максимального количества запросов
 
-Чтобы предотвратить случайные утечки памяти, Octane может корректно перезапустить воркер (worker) после обработки заданного количества запросов. Чтобы указать Octane об этом, вы можете использовать параметр `--max-requests`:
+Чтобы предотвратить случайные утечки памяти, Octane корректно перезапустит воркер (worker) после обработки 500 запросов. Чтобы изменить это число, вы можете использовать параметр `--max-requests`:
 
-```bash
+```shell
 php artisan octane:start --max-requests=250
 ```
 
@@ -249,7 +294,7 @@ php artisan octane:start --max-requests=250
 
 Вы можете корректно перезапустить рабочие приложения сервера Octane, используя команду `octane:reload`. Как правило, это следует делать после развертывания, чтобы вновь развернутый код загружался в память и использовался для обслуживания последующих запросов:
 
-```bash
+```shell
 php artisan octane:reload
 ```
 
@@ -258,7 +303,7 @@ php artisan octane:reload
 
 Вы можете остановить сервер Octane, используя Artisan-команду `octane: stop`:
 
-```bash
+```shell
 php artisan octane:stop
 ```
 
@@ -267,7 +312,7 @@ php artisan octane:stop
 
 Вы можете проверить текущий статус сервера Octane, используя Artisan-команду `octane: status`:
 
-```bash
+```shell
 php artisan octane:status
 ```
 
@@ -290,12 +335,10 @@ use App\Service;
 
 /**
  * Регистрирует сервисы приложения.
- *
- * @return void
  */
-public function register()
+public function register(): void
 {
-    $this->app->singleton(Service::class, function ($app) {
+    $this->app->singleton(Service::class, function (Application $app) {
         return new Service($app);
     });
 }
@@ -308,8 +351,9 @@ public function register()
 ```php
 use App\Service;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Foundation\Application;
 
-$this->app->bind(Service::class, function ($app) {
+$this->app->bind(Service::class, function (Application $app) {
     return new Service($app);
 });
 
@@ -327,15 +371,14 @@ $this->app->singleton(Service::class, function () {
 
 ```php
 use App\Service;
+use Illuminate\Contracts\Foundation\Application;
 
 /**
  * Регистрирует сервисы приложения.
- *
- * @return void
  */
-public function register()
+public function register(): void
 {
-    $this->app->singleton(Service::class, function ($app) {
+    $this->app->singleton(Service::class, function (Application $app) {
         return new Service($app['request']);
     });
 }
@@ -347,12 +390,13 @@ public function register()
 
 ```php
 use App\Service;
+use Illuminate\Contracts\Foundation\Application;
 
-$this->app->bind(Service::class, function ($app) {
+$this->app->bind(Service::class, function (Application $app) {
     return new Service($app['request']);
 });
 
-$this->app->singleton(Service::class, function ($app) {
+$this->app->singleton(Service::class, function (Application $app) {
     return new Service(fn () => $app['request']);
 });
 
@@ -363,7 +407,8 @@ $service->method($request->input('name'));
 
 Глобальный помощник `request` всегда будет возвращать запрос, который приложение в настоящее время обрабатывает, и поэтому его можно безопасно использовать в вашем приложении.
 
-> {tip} Допускается вводить подсказку типа `Illuminate\Http\Request` по методам вашего контроллера и замыканиям маршрутов.
+[!WARNING]
+> Допускается вводить подсказку типа `Illuminate\Http\Request` по методам вашего контроллера и замыканиям маршрутов.
 
 <a name="configuration-repository-injection"></a>
 ### Настройка репозитория внедрения
@@ -372,15 +417,14 @@ $service->method($request->input('name'));
 
 ```php
 use App\Service;
+use Illuminate\Contracts\Foundation\Application;
 
 /**
  * Регистрирует сервисы приложения.
- *
- * @return void
  */
-public function register()
+public function register(): void
 {
-    $this->app->singleton(Service::class, function ($app) {
+    $this->app->singleton(Service::class, function (Application $app) {
         return new Service($app->make('config'));
     });
 }
@@ -393,8 +437,9 @@ public function register()
 ```php
 use App\Service;
 use Illuminate\Container\Container;
+use Illuminate\Contracts\Foundation\Application;
 
-$this->app->bind(Service::class, function ($app) {
+$this->app->bind(Service::class, function (Application $app) {
     return new Service($app->make('config'));
 });
 
@@ -417,15 +462,14 @@ use Illuminate\Support\Str;
 
 /**
  * Обработка входящего запроса.
- *
- * @param  \Illuminate\Http\Request  $request
- * @return void
  */
-public function index(Request $request)
+public function index(Request $request): array
 {
     Service::$data[] = Str::random(10);
 
-    // ...
+    return [
+        // ...
+    ];
 }
 ```
 
@@ -434,13 +478,14 @@ public function index(Request $request)
 <a name="concurrent-tasks"></a>
 ## Параллельные задачи
 
-> {note} Для этой функции требуется [Swoole](#swoole).
+> [!WARNING]
+> Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете выполнять операции одновременно с помощью легких фоновых задач. Вы можете сделать это, используя метод Octane `concurrently`. Вы можете комбинировать этот метод с деструктуризацией массива PHP для получения результатов каждой операции:
 
 ```php
-use App\User;
-use App\Server;
+use App\Models\User;
+use App\Models\Server;
 use Laravel\Octane\Facades\Octane;
 
 [$users, $servers] = Octane::concurrently([
@@ -451,14 +496,17 @@ use Laravel\Octane\Facades\Octane;
 
 Параллельные задачи, обрабатываемые Octane, используют "task workers" Swoole и выполняются в рамках совершенно другого процесса, чем входящий запрос. Количество воркеров (workers), доступных для обработки параллельных задач, определяется директивой `--task-worker` в команде `octane:start`:
 
-```bash
+```shell
 php artisan octane:start --workers=4 --task-workers=6
 ```
+
+При вызове метода `concurrently` не следует предоставлять более 1024 задач из-за ограничений, накладываемых системой задач Swoole.
 
 <a name="ticks-and-intervals"></a>
 ## Ticks & Intervals
 
-> {note} Для этой функции требуется [Swoole](#swoole).
+> [!WARNING]
+> Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете зарегистрировать операции "tick", которые будут выполняться каждые заданное количество секунд. Вы можете зарегистрировать обратные вызовы "tick" с помощью метода `tick`. Первым аргументом, предоставленным методу, должна быть строка, представляющая имя операции. Второй аргумент должен быть вызываемой функцией, которая будет вызываться через указанный интервал.
 
@@ -480,7 +528,8 @@ Octane::tick('simple-ticker', fn () => ray('Ticking...'))
 <a name="the-octane-cache"></a>
 ## Кеш Octane
 
-> {note} Для этой функции требуется [Swoole](#swoole).
+> [!WARNING]
+> Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете использовать кэш-драйвер Octane, который обеспечивает скорость чтения и записи до 2 миллионов операций в секунду. Таким образом, этот драйвер кэширования является отличным выбором для приложений, которым требуется экстремальная скорость чтения / записи на уровне кэширования.
 
@@ -489,8 +538,8 @@ Octane::tick('simple-ticker', fn () => ray('Ticking...'))
 ```php
 Cache::store('octane')->put('framework', 'Laravel', 30);
 ```
-
-> {note} Максимальное количество записей, разрешенных в кэше Octane, может быть определено в файле конфигурации вашего приложения `octane`.
+> [!NOTE]
+> Максимальное количество записей, разрешенных в кэше Octane, может быть определено в файле конфигурации вашего приложения `octane`.
 
 <a name="cache-intervals"></a>
 ### Интервалы кеширования
@@ -508,7 +557,8 @@ Cache::store('octane')->interval('random', function () {
 <a name="tables"></a>
 ## Таблицы
 
-> {note} Для этой функции требуется [Swoole](#swoole).
+> [!WARNING]
+> Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете определять свои собственные произвольные [таблицы Swoole](https://www.swoole.co.uk/docs/modules/swoole-table) и взаимодействовать с ними. Таблицы Swoole обеспечивают исключительную производительность, и к данным в этих таблицах могут получить доступ все воркеры (workers) на сервере. Однако данные в них будут потеряны при перезапуске сервера.
 
@@ -536,4 +586,5 @@ Octane::table('example')->set('uuid', [
 return Octane::table('example')->get('uuid');
 ```
 
-> {note} Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
+> [!WARNING]
+> Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
