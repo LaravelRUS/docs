@@ -1158,11 +1158,11 @@ Blade автоматически обнаружит класс, связанны
 
 Теперь, когда мы определили наш макет и шаблоны списка задач, нам просто нужно вернуть представление `task` из маршрута:
 
-use App\Models\Task;
-
-Route::get('/tasks', function () {
-    return view('tasks', ['tasks' => Task::all()]);
-});
+    use App\Models\Task;
+    
+    Route::get('/tasks', function () {
+        return view('tasks', ['tasks' => Task::all()]);
+    });
 
 <a name="layouts-using-template-inheritance"></a>
 ### Макеты с использованием наследования шаблонов
@@ -1226,7 +1226,7 @@ Route::get('/tasks', function () {
 
 Директива `@yield` также принимает значение по умолчанию в качестве второго параметра. Это значение будет отображено, если дополняемый раздел не определен:
 
-@yield('content', 'Default content')
+    @yield('content', 'Default content')
 
 <a name="forms"></a>
 ## Формы

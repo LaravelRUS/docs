@@ -294,24 +294,6 @@ Laravel будет использовать имя миграции, чтобы 
 
 Построитель схем Blueprint предлагает множество методов, соответствующих различным типам столбцов, которые вы можете добавить в таблицы базы данных. Все доступные методы перечислены в таблице ниже:
 
-<!-- <style>
-    #collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    #collection-method-list a {
-        display: block;
-    }
-
-    .collection-method code {
-        font-size: 14px;
-    }
-
-    .collection-method:not(.first-collection-method) {
-        margin-top: 50px;
-    }
-</style> -->
 
 <div class="docs-column-list" markdown="1">
 
@@ -763,7 +745,7 @@ Laravel будет использовать имя миграции, чтобы 
     $table->tinyInteger('votes');
 
 <a name="column-method-tinyText"></a>
-#### `tinyText()` {#collection-method}
+#### `tinyText()`
 
 Метод `tinyText` создаёт эквивалент столбца `TINYTEXT`:
 
