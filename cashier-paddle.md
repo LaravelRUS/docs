@@ -1,105 +1,96 @@
+git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+
+---
+
 # Laravel Cashier (Paddle)
 
-- [Laravel Cashier (Paddle)](#laravel-cashier-paddle)
-  - [Introduction](#introduction)
-  - [Upgrading Cashier](#upgrading-cashier)
-  - [Installation](#installation)
+- [Вступление](#introduction)
+- [Обновление Cashier](#upgrading-cashier)
+- [Установка](#installation)
     - [Paddle Sandbox](#paddle-sandbox)
-    - [Database Migrations](#database-migrations)
-  - [Configuration](#configuration)
-    - [Billable Model](#billable-model)
-    - [API Keys](#api-keys)
+    - [Миграции](#database-migrations)
+- [Конфигурация](#configuration)
+    - [Оплачиваемая модель](#billable-model)
+    - [API ключи](#api-keys)
     - [Paddle JS](#paddle-js)
-    - [Currency Configuration](#currency-configuration)
-    - [Overriding Default Models](#overriding-default-models)
-  - [Core Concepts](#core-concepts)
-    - [Pay Links](#pay-links)
-      - [Manually Rendering Pay Links](#manually-rendering-pay-links)
-    - [Inline Checkout](#inline-checkout)
-      - [Inline Checkout Without Pay Links](#inline-checkout-without-pay-links)
-      - [Manually Rendering An Inline Checkout](#manually-rendering-an-inline-checkout)
-    - [User Identification](#user-identification)
-  - [Prices](#prices)
-      - [Customers](#customers)
-      - [Coupons](#coupons)
-  - [Customers](#customers-1)
-    - [Customer Defaults](#customer-defaults)
-  - [Subscriptions](#subscriptions)
-    - [Creating Subscriptions](#creating-subscriptions)
-      - [Additional Details](#additional-details)
-      - [Coupons](#coupons-1)
-      - [Metadata](#metadata)
-    - [Checking Subscription Status](#checking-subscription-status)
-      - [Cancelled Subscription Status](#cancelled-subscription-status)
-      - [Past Due Status](#past-due-status)
-      - [Subscription Scopes](#subscription-scopes)
-    - [Subscription Single Charges](#subscription-single-charges)
-    - [Updating Payment Information](#updating-payment-information)
-    - [Changing Plans](#changing-plans)
-      - [Prorations](#prorations)
-    - [Subscription Quantity](#subscription-quantity)
-    - [Subscription Modifiers](#subscription-modifiers)
-      - [Retrieving Modifiers](#retrieving-modifiers)
-      - [Deleting Modifiers](#deleting-modifiers)
-    - [Pausing Subscriptions](#pausing-subscriptions)
-    - [Cancelling Subscriptions](#cancelling-subscriptions)
-  - [Subscription Trials](#subscription-trials)
-    - [With Payment Method Up Front](#with-payment-method-up-front)
-      - [Defining Trial Days In Paddle / Cashier](#defining-trial-days-in-paddle--cashier)
-    - [Without Payment Method Up Front](#without-payment-method-up-front)
-  - [Handling Paddle Webhooks](#handling-paddle-webhooks)
-      - [Webhooks & CSRF Protection](#webhooks--csrf-protection)
-    - [Defining Webhook Event Handlers](#defining-webhook-event-handlers)
-    - [Verifying Webhook Signatures](#verifying-webhook-signatures)
-  - [Single Charges](#single-charges)
-    - [Simple Charge](#simple-charge)
-    - [Charging Products](#charging-products)
-    - [Refunding Orders](#refunding-orders)
-  - [Receipts](#receipts)
-    - [Past & Upcoming Payments](#past--upcoming-payments)
-  - [Handling Failed Payments](#handling-failed-payments)
-  - [Testing](#testing)
+    - [Конфигурация валюты](#currency-configuration)
+    - [Переопределение моделей по умолчанию](#overriding-default-models)
+- [Основные концепции](#core-concepts)
+    - [Платежные ссылки](#pay-links)
+    - [Онлайн-оформление заказа](#inline-checkout)
+    - [Идентификация пользователя](#user-identification)
+- [Цены](#prices)
+- [Клиенты](#customers)
+    - [Параметры по умолчанию](#customer-defaults)
+- [Подписки](#subscriptions)
+    - [Создание подписок](#creating-subscriptions)
+    - [Проверка статуса подписки](#checking-subscription-status)
+    - [Единовременные платежи за подписку](#subscription-single-charges)
+    - [Обновление платежной информации](#updating-payment-information)
+    - [Изменение тарифных планов](#changing-plans)
+    - [Количество подписок](#subscription-quantity)
+    - [Модификаторы подписки](#subscription-modifiers)
+    - [Приостановка подписки](#pausing-subscriptions)
+    - [Отмена подписки](#cancelling-subscriptions)
+- [Пробные периоды](#subscription-trials)
+    - [С указанием способа оплаты](#with-payment-method-up-front)
+    - [Без указания способа оплаты](#without-payment-method-up-front)
+- [Обработка веб-хуков Paddle](#handling-paddle-webhooks)
+    - [Определение веб-хука событий](#defining-webhook-event-handlers)
+    - [Проверка подписей веб-хука](#verifying-webhook-signatures)
+- [Разовые списания](#single-charges)
+    - [Разовое списание](#simple-charge)
+    - [Списание за продукты](#charging-products)
+    - [Возврат заказов](#refunding-orders)
+- [Квитанции](#receipts)
+    - [Прошлые и предстоящие платежи](#past-and-upcoming-payments)
+- [Обработка несостоявшихся платежей](#handling-failed-payments)
+- [Тестирование](#testing)
 
 <a name="introduction"></a>
-## Introduction
+## Вступление
 
-Laravel Cashier Paddle provides an expressive, fluent interface to [Paddle's](https://paddle.com) subscription billing services. It handles almost all of the boilerplate subscription billing code you are dreading. In addition to basic subscription management, Cashier can handle: coupons, swapping subscription, subscription "quantities", cancellation grace periods, and more.
+[Laravel Cashier Paddle](https://github.com/laravel/cashier-paddle) предоставляет выразительный, плавный интерфейс для [Paddle](https://paddle.com) услуги выставления счетов по подписке. Он обрабатывает почти весь стандартный код выставления счетов за подписку, которого вы так боитесь. В дополнение к базовому управлению подпиской, кассир может обрабатывать: купоны, обмен подписки, "количество" подписки, льготные периоды отмены и многое другое.
 
-While working with Cashier we recommend you also review Paddle's [user guides](https://developer.paddle.com/guides) and [API documentation](https://developer.paddle.com/api-reference/intro).
+При работе с Cashier мы рекомендуем вам также ознакомиться с [руководствами пользователя Paddle](https://developer.paddle.com/guides) и [документацией по API](https://developer.paddle.com/api-reference/intro).
 
 <a name="upgrading-cashier"></a>
-## Upgrading Cashier
+## Обновление Cashier
 
-When upgrading to a new version of Cashier, it's important that you carefully review [the upgrade guide](https://github.com/laravel/cashier-paddle/blob/master/UPGRADE).
+При обновлении до новой версии Cashier важно внимательно ознакомиться с [руководством по обновлению](https://github.com/laravel/cashier-paddle/blob/master/UPGRADE.md).
 
 <a name="installation"></a>
-## Installation
+## Установка
 
-First, install the Cashier package for Paddle using the Composer package manager:
+Сначала установите пакет Cashier для Paddle с помощью менеджера пакетов Composer:
 
     composer require laravel/cashier-paddle
 
-> {note} To ensure Cashier properly handles all Paddle events, remember to [set up Cashier's webhook handling](#handling-paddle-webhooks).
+> {note} Чтобы убедиться, что Cashier правильно обрабатывает все события Paddle, не забудьте [настроить обработку веб-хуков Cashier](#handling-paddle-webhooks).
 
 <a name="paddle-sandbox"></a>
 ### Paddle Sandbox
 
-During local and staging development, you should [register a Paddle Sandbox account](https://developer.paddle.com/getting-started/sandbox). This account will give you a sandboxed environment to test and develop your applications without making actual payments. You may use Paddle's [test card numbers](https://developer.paddle.com/getting-started/sandbox#test-cards) to simulate various payment scenarios.
+Во время локальной и промежуточной разработки вам следует [зарегистрировать учетную запись Paddle Sandbox](https://developer.paddle.com/getting-started/sandbox). Эта учетная запись предоставит вам изолированную среду для тестирования и разработки ваших приложений без внесения фактических платежей. Вы можете использовать предоставляемые Paddle [номера тестовых карточек](https://developer.paddle.com/getting-started/sandbox#test-cards) для моделирования различных сценариев оплаты.
 
-After you have finished developing your application you may [apply for a Paddle vendor account](https://paddle.com).
+При использовании среды Paddle Sandbox вам следует установить переменной окружения `PADDLE_SANDBOX` значение `true` в файле `.env` вашего приложения:
+
+PADDLE_SANDBOX=true
+
+После того, как вы закончите разработку своего приложения, вы можете [подать заявку на создание учетной записи поставщика Paddle](https://paddle.com).
 
 <a name="database-migrations"></a>
-### Database Migrations
+### Миграции
 
-The Cashier service provider registers its own database migration directory, so remember to migrate your database after installing the package. The Cashier migrations will create a new `customers` table. In addition, a new `subscriptions` table will be created to store all of your customer's subscriptions. Finally, a new `receipts` table will be created to store all of your application's receipt information:
+Сервис-провайдер Cashier регистрирует свой собственный каталог миграции базы данных, поэтому не забудьте выполнить миграции вашей базы данных после установки пакета. Миграция Cashier создаст новую таблицу `customers`. Кроме того, будет создана новая таблица `subscriptions` для хранения всех подписок вашего клиента. Наконец, будет создана новая таблица `receipts` для хранения всей информации о квитанциях вашего приложения:
 
     php artisan migrate
 
-If you need to overwrite the migrations that are included with Cashier, you can publish them using the `vendor:publish` Artisan command:
+Если вам нужно перезаписать миграции, включенные в Cashier, вы можете опубликовать их с помощью команды Artisan `vendor:publish`:
 
     php artisan vendor:publish --tag="cashier-migrations"
 
-If you would like to prevent Cashier's migrations from running entirely, you may use the `ignoreMigrations` provided by Cashier. Typically, this method should be called in the `register` method of your `AppServiceProvider`:
+Если вы хотите полностью запретить выполнение миграций Cashier, вы можете использовать `ignoreMigrations`, предоставленное Cashier. Как правило, этот метод должен вызываться в методе `register` вашего `AppServiceProvider`:
 
     use Laravel\Paddle\Cashier;
 
@@ -114,12 +105,12 @@ If you would like to prevent Cashier's migrations from running entirely, you may
     }
 
 <a name="configuration"></a>
-## Configuration
+## Конфигурация
 
 <a name="billable-model"></a>
-### Billable Model
+### Оплачиваемая модель
 
-Before using Cashier, you must add the `Billable` trait to your user model definition. This trait provides various methods to allow you to perform common billing tasks, such as creating subscriptions, applying coupons and updating payment method information:
+Перед использованием Cashier вы должны добавить трейт `Billable` в определение вашей пользовательской модели. Эта функция предоставляет различные методы, позволяющие выполнять обычные задачи выставления счетов, такие как создание подписок, применение купонов и обновление информации о способе оплаты:
 
     use Laravel\Paddle\Billable;
 
@@ -128,7 +119,7 @@ Before using Cashier, you must add the `Billable` trait to your user model defin
         use Billable;
     }
 
-If you have billable entities that are not users, you may also add the trait to those classes:
+Если у вас есть оплачиваемые объекты, которые не являются пользователями, вы также можете добавить трейт к этим классам:
 
     use Illuminate\Database\Eloquent\Model;
     use Laravel\Paddle\Billable;
@@ -139,21 +130,21 @@ If you have billable entities that are not users, you may also add the trait to 
     }
 
 <a name="api-keys"></a>
-### API Keys
+### API ключи
 
-Next, you should configure your Paddle keys in your application's `.env` file. You can retrieve your Paddle API keys from the Paddle control panel:
+Далее вы должны настроить свои Paddle ключи в файле `.env` вашего приложения. Вы можете получить свои ключи Paddle API в панели управления Paddle:
 
     PADDLE_VENDOR_ID=your-paddle-vendor-id
     PADDLE_VENDOR_AUTH_CODE=your-paddle-vendor-auth-code
     PADDLE_PUBLIC_KEY="your-paddle-public-key"
     PADDLE_SANDBOX=true
 
-The `PADDLE_SANDBOX` environment variable should be set to `true` when you are using [Paddle's Sandbox environment](#paddle-sandbox). The `PADDLE_SANDBOX` variable should be set to `false` if you are deploying your application to production and are using Paddle's live vendor environment.
+Переменная окружения `PADDLE_SANDBOX` должна быть установлена в значение `true`, когда вы используете [среду Paddle Sandbox](#paddle-sandbox). Переменной `PADDLE_SANDBOX` следует присвоить значение `false`, если вы развертываете свое приложение в рабочей среде и используете среду реального поставщика Paddle.
 
 <a name="paddle-js"></a>
 ### Paddle JS
 
-Paddle relies on its own JavaScript library to initiate the Paddle checkout widget. You can load the JavaScript library by placing the `@paddleJS` Blade directive right before your application layout's closing `</head>` tag:
+Paddle использует свою собственную библиотеку JavaScript для запуска виджета оформления заказа. Вы можете загрузить библиотеку JavaScript, поместив директиву Blade `@paddleJS` прямо перед закрывающим тегом макета вашего приложения `</head>`:
 
     <head>
         ...
@@ -162,22 +153,22 @@ Paddle relies on its own JavaScript library to initiate the Paddle checkout widg
     </head>
 
 <a name="currency-configuration"></a>
-### Currency Configuration
+### Конфигурация валюты
 
-The default Cashier currency is United States Dollars (USD). You can change the default currency by defining a `CASHIER_CURRENCY` environment variable within your application's `.env` file:
+Валютой по умолчанию Cashier являются доллары США (USD). Вы можете изменить валюту по умолчанию, определив переменную среды `CASHIER_CURRENCY` в файле `.env` вашего приложения:
 
     CASHIER_CURRENCY=EUR
 
-In addition to configuring Cashier's currency, you may also specify a locale to be used when formatting money values for display on invoices. Internally, Cashier utilizes [PHP's `NumberFormatter` class](https://www.php.net/manual/en/class.numberformatter.php) to set the currency locale:
+В дополнение к настройке валюты Cashier, вы также можете указать язык, который будет использоваться при форматировании денежных значений для отображения в счетах-фактурах. Внутренне Cashier использует [класс PHP `NumberFormatter`](https://www.php.net/manual/ru/class.numberformatter.php) для установки языкового стандарта валюты:
 
     CASHIER_CURRENCY_LOCALE=nl_BE
 
-> {note} In order to use locales other than `en`, ensure the `ext-intl` PHP extension is installed and configured on your server.
+> {note} Чтобы использовать локали, отличные от `en`, убедитесь, что на вашем сервере установлено и настроено расширение PHP `ext-intl`.
 
 <a name="overriding-default-models"></a>
-### Overriding Default Models
+### Переопределение моделей по умолчанию
 
-You are free to extend the models used internally by Cashier by defining your own model and extending the corresponding Cashier model:
+Вы можете свободно расширять модели, используемые внутри Cashier, определив свою собственную модель и расширив соответствующую модель Cashier:
 
     use Laravel\Paddle\Subscription as CashierSubscription;
 
@@ -186,7 +177,7 @@ You are free to extend the models used internally by Cashier by defining your ow
         // ...
     }
 
-After defining your model, you may instruct Cashier to use your custom model via the `Laravel\Paddle\Cashier` class. Typically, you should inform Cashier about your custom models in the `boot` method of your application's `App\Providers\AppServiceProvider` class:
+После определения вашей модели вы можете поручить Cashier использовать вашу пользовательскую модель с помощью класса `Laravel\Paddle\Cashier`. Как правило, вы должны сообщить Cashier о ваших пользовательских моделях в методе `boot` класса `App\Providers\AppServiceProvider` вашего приложения:
 
     use App\Models\Cashier\Receipt;
     use App\Models\Cashier\Subscription;
@@ -203,12 +194,12 @@ After defining your model, you may instruct Cashier to use your custom model via
     }
 
 <a name="core-concepts"></a>
-## Core Concepts
+## Основные концепции
 
 <a name="pay-links"></a>
-### Pay Links
+### Платежные ссылки
 
-Paddle lacks an extensive CRUD API to perform subscription state changes. Therefore, most interactions with Paddle are done through its [checkout widget](https://developer.paddle.com/guides/how-tos/checkout/paddle-checkout). Before we can display the checkout widget, we must generate a "pay link" using Cashier. A "pay link" will inform the checkout widget of the billing operation we wish to perform:
+В Paddle отсутствует обширный CRUD API для выполнения изменений состояния подписки. Таким образом, большинство взаимодействий с Paddle осуществляется через его [виджет оформления заказа](https://developer.paddle.com/guides/how-tos/checkout/paddle-checkout). Прежде чем мы сможем отобразить виджет оформления заказа, мы должны сгенерировать "ссылку для оплаты" с помощью Cashier. "Ссылка для оплаты" проинформирует виджет оформления заказа об операции выставления счета, которую мы хотим выполнить:
 
     use App\Models\User;
     use Illuminate\Http\Request;
@@ -221,7 +212,7 @@ Paddle lacks an extensive CRUD API to perform subscription state changes. Theref
         return view('billing', ['payLink' => $payLink]);
     });
 
-Cashier includes a `paddle-button` [Blade component](/docs/{{version}}/blade#components). We may pass the pay link URL to this component as a "prop". When this button is clicked, Paddle's checkout widget will be displayed:
+Cashier включает в себя `paddle-button` [компонент Blade](/docs/{{version}}/blade#components). Мы можем передать URL-адрес ссылки на оплату этому компоненту в качестве "параметра". При нажатии на эту кнопку отобразится виджет оформления заказа Paddle:
 
 ```html
 <x-paddle-button :url="$payLink" class="px-8 py-4">
@@ -229,7 +220,7 @@ Cashier includes a `paddle-button` [Blade component](/docs/{{version}}/blade#com
 </x-paddle-button>
 ```
 
-By default, this will display a button with the standard Paddle styling. You can remove all Paddle styling by adding the `data-theme="none"` attribute to the component:
+По умолчанию при этом будет отображаться кнопка со стандартным дизайном Paddle. Вы можете удалить весь стиль Paddle, добавив атрибут `data-theme="none"` к компоненту:
 
 ```html
 <x-paddle-button :url="$payLink" class="px-8 py-4" data-theme="none">
@@ -237,46 +228,51 @@ By default, this will display a button with the standard Paddle styling. You can
 </x-paddle-button>
 ```
 
-The Paddle checkout widget is asynchronous. Once the user creates or updates a subscription within the widget, Paddle will send your application webhooks so that you may properly update the subscription state in our own database. Therefore, it's important that you properly [set up webhooks](#handling-paddle-webhooks) to accommodate for state changes from Paddle.
+Виджет оформления заказа Paddle является асинхронным. Как только пользователь создаст или обновит подписку в виджете, Paddle отправит вашему приложению веб-хуки, чтобы вы могли должным образом обновить состояние подписки в нашей собственной базе данных. Поэтому важно, чтобы вы правильно [настроили веб-хуки](#handling-paddle-webhooks), чтобы учесть изменения состояния от Paddle.
 
-For more information on pay links, you may review [the Paddle API documentation on pay link generation](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink).
+Для получения дополнительной информации о платежных ссылках вы можете ознакомиться с [документацией Paddle API по генерации платежных ссылок](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink).
 
-> {note} After a subscription state change, the delay for receiving the corresponding webhook is typically minimal but you should account for this in your application by considering that your user's subscription might not be immediately available after completing the checkout.
+> {note} После изменения состояния подписки задержка получения соответствующего веб-хука обычно минимальна, но вы должны учесть это в своем приложении, учитывая, что подписка вашего пользователя может быть недоступна сразу после завершения оформления заказа.
 
 <a name="manually-rendering-pay-links"></a>
-#### Manually Rendering Pay Links
+#### Отображение платежных ссылок вручную
 
-You may also manually render a pay link without using Laravel's built-in Blade components. To get started, generate the pay link URL as demonstrated in previous examples:
+Вы также можете вручную отобразить платежную ссылку без использования встроенных компонентов Blade Laravel. Для начала сгенерируйте URL-адрес платежной ссылки, как показано в предыдущих примерах:
 
     $payLink = $request->user()->newSubscription('default', $premium = 34567)
         ->returnTo(route('home'))
         ->create();
 
-Next, simply attach the pay link URL to an `a` element in your HTML:
+Затем просто прикрепите URL-адрес платежной ссылки к элементу `a` в вашем HTML:
 
     <a href="#!" class="ml-4 paddle_button" data-override="{{ $payLink }}">
         Paddle Checkout
     </a>
 
+<a name="payments-requiring-additional-confirmation"></a>
+#### Платежи, требующие дополнительного подтверждения
+
+Иногда для подтверждения и обработки платежа требуется дополнительная верификация. Когда это произойдет, Paddle отобразит экран подтверждения оплаты. Экраны подтверждения оплаты, предоставляемые Paddle или Cashier, могут быть адаптированы к платежному потоку конкретного банка или эмитента карты и могут включать дополнительное подтверждение карты, временную небольшую плату, отдельную аутентификацию устройства или другие формы проверки.
+
 <a name="inline-checkout"></a>
-### Inline Checkout
+### Встроенное оформление заказа
 
-If you don't want to make use of Paddle's "overlay" style checkout widget, Paddle also provides the option to display the widget inline. While this approach does not allow you to adjust any of the checkout's HTML fields, it allows you to embed the widget within your application.
+Если вы не хотите использовать виджет оформления заказа Paddle в стиле "overlay", Paddle также предоставляет возможность отображать виджет встроенным. Хотя этот подход не позволяет вам настраивать какие-либо HTML-поля оформления заказа, он позволяет вам встроить виджет в ваше приложение.
 
-To make it easy for you to get started with inline checkout, Cashier includes a `paddle-checkout` Blade component. To get started, you should [generate a pay link](#pay-links) and pass the pay link to the component's `override` attribute:
+Чтобы вам было легко начать работу со встроенным оформлением заказа, Cashier включает в себя функцию Blade-компонент `paddle-checkout`. Чтобы начать, вы должны [сгенерировать платежную ссылку](#pay-links) и передать платежную ссылку атрибуту `override` компонента:
 
 ```html
 <x-paddle-checkout :override="$payLink" class="w-full" />
 ```
 
-To adjust the height of the inline checkout component, you may pass the `height` attribute to the Blade component:
+Чтобы настроить высоту встроенного компонента оформления заказа, вы можете передать атрибут `height` компоненту Blade:
 
     <x-paddle-checkout :override="$payLink" class="w-full" height="500" />
 
 <a name="inline-checkout-without-pay-links"></a>
-#### Inline Checkout Without Pay Links
+#### Встроенное офрмление заказа без ссылок для оплаты
 
-Alternatively, you may customize the widget with custom options instead of using a pay link:
+В качестве альтернативы вы можете настроить виджет с помощью пользовательских опций вместо использования платежной ссылки:
 
     $options = [
         'product' => $productId,
@@ -285,16 +281,16 @@ Alternatively, you may customize the widget with custom options instead of using
 
     <x-paddle-checkout :options="$options" class="w-full" />
 
-Please consult Paddle's [guide on Inline Checkout](https://developer.paddle.com/guides/how-tos/checkout/inline-checkout) as well as their [parameter reference](https://developer.paddle.com/reference/paddle-js/parameters) for further details on the inline checkout's available options.
+Пожалуйста, ознакомьтесь с руководством Paddle по [оформлению заказа во встроенном режиме](https://developer.paddle.com/guides/how-tos/checkout/inline-checkout), а также их [ссылки на параметры](https://developer.paddle.com/reference/paddle-js/parameters) для получения более подробной информации о доступных опциях встроенного оформления заказа.
 
-> {note} If you would like to also use the `passthrough` option when specifying custom options, you should provide a key / value array as its value. Cashier will automatically handle converting the array to a JSON string. In addition, the `customer_id` passthrough option is reserved for internal Cashier usage.
+> {note} Если вы хотели бы также использовать опцию `passthrough` при указании пользовательских параметров, вам следует указать массив ключей / значений в качестве его значения. Cashier автоматически обработает преобразование массива в JSON-строку. Кроме того, опция сквозного ввода `customer_id` зарезервирована для использования внутренним Cashier.
 
 <a name="manually-rendering-an-inline-checkout"></a>
-#### Manually Rendering An Inline Checkout
+#### Ручная отрисовка встроенного оформления заказа
 
-You may also manually render an inline checkout without using Laravel's built-in Blade components. To get started, generate the pay link URL [as demonstrated in previous examples](#pay-links).
+Вы также можете вручную отобразить встроенную проверку без использования встроенных Blade-компонентов Laravel. Для начала сгенерируйте URL-адрес платежной ссылки [как показано в предыдущих примерах](#платные ссылки).
 
-Next, you may use Paddle.js to initialize the checkout. To keep this example simple, we will demonstrate this using [Alpine.js](https://github.com/alpinejs/alpine); however, you are free to translate this example to your own frontend stack:
+Далее вы можете использовать Paddle.js чтобы инициализировать оформление заказа. Чтобы упростить этот пример, мы продемонстрируем это с помощью [Alpine.js](https://github.com/alpinejs/alpine); однако вы можете свободно перевести этот пример в свой собственный стек интерфейса:
 
 ```html
 <div class="paddle-checkout" x-data="{}" x-init="
@@ -310,13 +306,13 @@ Next, you may use Paddle.js to initialize the checkout. To keep this example sim
 ```
 
 <a name="user-identification"></a>
-### User Identification
+### Идентификация пользователя
 
-In contrast to Stripe, Paddle users are unique across all of Paddle, not unique per Paddle account. Because of this, Paddle's API's do not currently provide a method to update a user's details such as their email address. When generating pay links, Paddle identifies users using the `customer_email` parameter. When creating a subscription, Paddle will try to match the user provided email to an existing Paddle user.
+В отличие от Stripe, пользователи Paddle уникальны для всего Paddle, а не для каждой учетной записи Paddle. Из-за этого API Paddle в настоящее время не предоставляют способ обновления данных пользователя, таких как его адрес электронной почты. При создании платных ссылок Paddle идентифицирует пользователей с помощью параметра `customer_email`. При создании подписки Paddle попытается сопоставить предоставленный пользователем адрес электронной почты с существующим пользователем Paddle.
 
-In light of this behavior, there are some important things to keep in mind when using Cashier and Paddle. First, you should be aware that even though subscriptions in Cashier are tied to the same application user, **they could be tied to different users within Paddle's internal systems**. Secondly, each subscription has its own connected payment method information and could also have different email addresses within Paddle's internal systems (depending on which email was assigned to the user when the subscription was created).
+В свете такого поведения есть несколько важных вещей, о которых следует помнить при использовании Cashier и Paddle. Во-первых, вы должны знать, что, хотя подписки в Cashier привязаны к одному и тому же пользователю приложения, **они могут быть привязаны к разным пользователям во внутренних системах Paddle**. Во-вторых, каждая подписка имеет свою собственную информацию о подключенном способе оплаты, а также может иметь разные адреса электронной почты во внутренних системах Paddle (в зависимости от того, какой адрес электронной почты был назначен пользователю при создании подписки).
 
-Therefore, when displaying subscriptions you should always inform the user which email address or payment method information is connected to the subscription on a per-subscription basis. Retrieving this information can be done with the following methods provided by the `Laravel\Paddle\Subscription` model:
+Поэтому при отображении подписок вы всегда должны сообщать пользователю, какой адрес электронной почты или информация о способе оплаты подключены к подписке для каждой подписки. Извлечение этой информации может быть выполнено с помощью следующих методов, предоставляемых моделью `Laravel\Paddle\Subscription`:
 
     $subscription = $user->subscription('default');
 
@@ -326,24 +322,24 @@ Therefore, when displaying subscriptions you should always inform the user which
     $subscription->cardLastFour();
     $subscription->cardExpirationDate();
 
-There is currently no way to modify a user's email address through the Paddle API. When a user wants to update their email address within Paddle, the only way for them to do so is to contact Paddle customer support. When communicating with Paddle, they need to provide the `paddleEmail` value of the subscription to assist Paddle in updating the correct user.
+В настоящее время нет способа изменить адрес электронной почты пользователя с помощью Paddle API. Когда пользователь хочет обновить свой адрес электронной почты в Paddle, единственный способ для него сделать это - обратиться в службу поддержки клиентов Paddle. При общении с Paddle им необходимо указать значение подписки `paddleEmail`, чтобы помочь Paddle обновить нужного пользователя.
 
 <a name="prices"></a>
-## Prices
+## Цены
 
-Paddle allows you to customize prices per currency, essentially allowing you to configure different prices for different countries. Cashier Paddle allows you to retrieve all of the prices for a given product using the `productPrices` method. This method accepts the product IDs of the products you wish to retrieve prices for:
+Paddle позволяет вам настраивать цены для каждой валюты, по сути, позволяя вам настраивать разные цены для разных стран. Приложение Cashier Paddle позволяет вам получить все цены на данный товар, используя метод `productPrices`. Этот метод принимает идентификаторы продуктов, цены на которые вы хотите получить:
 
     use Laravel\Paddle\Cashier;
 
     $prices = Cashier::productPrices([123, 456]);
 
-The currency will be determined based on the IP address of the request; however, you may optionally provide a specific country to retrieve prices for:
+Валюта будет определена на основе IP-адреса запроса; однако вы можете дополнительно указать конкретную страну для получения цен для нее:
 
     use Laravel\Paddle\Cashier;
 
     $prices = Cashier::productPrices([123, 456], ['customer_country' => 'BE']);
 
-After retrieving the prices you may display them however you wish:
+После получения цен вы можете отображать их так, как пожелаете:
 
 ```html
 <ul>
@@ -353,7 +349,7 @@ After retrieving the prices you may display them however you wish:
 </ul>
 ```
 
-You may also display the net price (excludes tax) and display the tax amount separately:
+Вы также можете отобразить цену нетто (без учета налога) и сумму налога отдельно:
 
 ```html
 <ul>
@@ -363,7 +359,7 @@ You may also display the net price (excludes tax) and display the tax amount sep
 </ul>
 ```
 
-If you retrieved prices for subscription plans you can display their initial and recurring price separately:
+Если вы извлекли цены на планы подписки, вы можете отобразить их начальную и повторяющуюся цены отдельно:
 
 ```html
 <ul>
@@ -373,23 +369,23 @@ If you retrieved prices for subscription plans you can display their initial and
 </ul>
 ```
 
-For more information, [check Paddle's API documentation on prices](https://developer.paddle.com/api-reference/checkout-api/prices/getprices).
+Для получения дополнительной информации [ознакомьтесь документацией Paddle API по ценам](https://developer.paddle.com/api-reference/checkout-api/prices/getprices).
 
 <a name="prices-customers"></a>
-#### Customers
+#### Клиенты
 
-If a user is already a customer and you would like to display the prices that apply to that customer, you may do so by retrieving the prices directly from the customer instance:
+Если пользователь уже является клиентом, и вы хотели бы отобразить цены, применимые к этому клиенту, то можете сделать это, извлекая цены непосредственно из экземпляра объекта клиента:
 
     use App\Models\User;
 
     $prices = User::find(1)->productPrices([123, 456]);
 
-Internally, Cashier will use the user's [`paddleCountry` method](#customer-defaults) to retrieve the prices in their currency. So, for example, a user living in the United States will see prices in USD while a user in Belgium will see prices in EUR. If no matching currency can be found the default currency of the product will be used. You can customize all prices of a product or subscription plan in the Paddle control panel.
+Внутри Cashier будет использовать пользовательский [метод `paddleCountry`](#customer-defaults) для получения цен в их валюте. Так, например, пользователь, живущий в Соединенных Штатах, увидит цены в долларах США, в то время как пользователь в Бельгии увидит цены в евро. Если подходящая валюта не найдена, будет использоваться валюта продукта по умолчанию. Вы можете настроить все цены на продукт или тарифный план подписки на панели управления Paddle.
 
 <a name="prices-coupons"></a>
-#### Coupons
+#### Купоны
 
-You may also choose to display prices after a coupon reduction. When calling the `productPrices` method, coupons may be passed as a comma delimited string:
+Вы также можете выбрать отображение цен после скидки по купону. При вызове метода `productPrices` купоны могут передаваться в виде строки, разделенной запятой:
 
     use Laravel\Paddle\Cashier;
 
@@ -397,7 +393,7 @@ You may also choose to display prices after a coupon reduction. When calling the
         'coupons' => 'SUMMERSALE,20PERCENTOFF'
     ]);
 
-Then, display the calculated prices using the `price` method:
+Затем отобразите рассчитанные цены, используя метод `price`:
 
 ```html
 <ul>
@@ -407,7 +403,7 @@ Then, display the calculated prices using the `price` method:
 </ul>
 ```
 
-You may display the original listed prices (without coupon discounts) using the `listPrice` method:
+Вы можете отобразить исходные указанные цены (без скидок по купонам), используя метод `listPrice`:
 
 ```html
 <ul>
@@ -417,15 +413,15 @@ You may display the original listed prices (without coupon discounts) using the 
 </ul>
 ```
 
-> {note} When using the prices API, Paddle only allows applying coupons to one-time purchase products and not to subscription plans.
+> {note} При использовании prices API, Paddle позволяет применять купоны только к продуктам для одноразовой покупки, а не к тарифным планам подписки.
 
 <a name="customers"></a>
-## Customers
+## Клиенты
 
 <a name="customer-defaults"></a>
-### Customer Defaults
+### Параметры по умолчанию
 
-Cashier allows you to define some useful defaults for your customers when creating pay links. Setting these defaults allow you to pre-fill a customer's email address, country, and postal code so that they can immediately move on to the payment portion of the checkout widget. You can set these defaults by overriding the following methods on your billable model:
+Cashier позволяет вам определять некоторые полезные значения по умолчанию для ваших клиентов при создании платежных ссылок. Установка этих значений по умолчанию позволяет вам предварительно ввести адрес электронной почты, страну и почтовый индекс клиента, чтобы он мог сразу перейти к платежной части виджета оформления заказа. Вы можете установить эти значения по умолчанию, переопределив следующие методы в вашей оплачиваемой модели:
 
     /**
      * Get the customer's email address to associate with Paddle.
@@ -463,15 +459,15 @@ Cashier allows you to define some useful defaults for your customers when creati
         //
     }
 
-These defaults will be used for every action in Cashier that generates a [pay link](#pay-links).
+Эти значения по умолчанию будут использоваться для каждого действия в Cashier, которое генерирует [платежную ссылку](#платежные ссылки).
 
 <a name="subscriptions"></a>
-## Subscriptions
+## Подписки
 
 <a name="creating-subscriptions"></a>
-### Creating Subscriptions
+### Создание подписок
 
-To create a subscription, first retrieve an instance of your billable model, which typically will be an instance of `App\Models\User`. Once you have retrieved the model instance, you may use the `newSubscription` method to create the model's subscription pay link:
+Чтобы создать подписку, сначала извлеките экземпляр вашей оплачиваемой модели, которая обычно будет экземпляром `App\Models\User`. Как только вы получите экземпляр модели, вы можете использовать метод `newSubscription` для создания ссылки на оплату подписки модели:
 
     use Illuminate\Http\Request;
 
@@ -483,9 +479,9 @@ To create a subscription, first retrieve an instance of your billable model, whi
         return view('billing', ['payLink' => $payLink]);
     });
 
-The first argument passed to the `newSubscription` method should be the name of the subscription. If your application only offers a single subscription, you might call this `default` or `primary`. The second argument is the specific plan the user is subscribing to. This value should correspond to the plan's identifier in Paddle. The `returnTo` method accepts a URL that your user will be redirected to after they successfully complete the checkout.
+Первым аргументом, передаваемым методу `newSubscription`, должно быть внутреннее имя подписки. Если ваше приложение предлагает только одну подписку, вы можете назвать это `default` или `primary`. Это название подписки предназначено только для внутреннего использования приложением и не предназначено для показа пользователям. Кроме того, он не должен содержать пробелов и никогда не должен быть изменен после создания подписки. Вторым аргументом, заданным методу `newSubscription`, является конкретный тарифный план, на который подписывается пользователь. Это значение должно соответствовать идентификатору плана в Paddle. Метод `returnTo` принимает URL-адрес, на который ваш пользователь будет перенаправлен после успешного завершения оформления заказа.
 
-The `create` method will create a pay link which you can use to generate a payment button. The payment button can be generated using the `paddle-button` [Blade component](blade#components) that is included with Cashier Paddle:
+Метод `create` создаст ссылку для оплаты, которую вы можете использовать для создания кнопки оплаты. Кнопка оплаты может быть сгенерирована с помощью `paddle-button` [Blade-компонента](/docs/{{version}}/blade#components), которая входит в комплект Cashier Paddle:
 
 ```html
 <x-paddle-button :url="$payLink" class="px-8 py-4">
@@ -493,12 +489,12 @@ The `create` method will create a pay link which you can use to generate a payme
 </x-paddle-button>
 ```
 
-After the user has finished their checkout, a `subscription_created` webhook will be dispatched from Paddle. Cashier will receive this webhook and setup the subscription for your customer. In order to make sure all webhooks are properly received and handled by your application, ensure you have properly [setup webhook handling](#handling-paddle-webhooks).
+После того, как пользователь завершит проверку, из Paddle будет отправлен веб-хук `subscription_created`. Cashier получит этот веб-хук и настроит подписку для вашего клиента. Чтобы убедиться, что все веб-хуки должным образом принимаются и обрабатываются вашим приложением, убедитесь, что у вас правильно [настроена обработка вэб-хуков](#handling-paddle-webhooks).
 
 <a name="additional-details"></a>
-#### Additional Details
+#### Дополнительные сведения
 
-If you would like to specify additional customer or subscription details, you may do so by passing them as an array of key / value pairs to the `create` method. To learn more about the additional fields supported by Paddle, check out Paddle's documentation on [generating pay links](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink):
+Если вы хотите указать дополнительные сведения о клиенте или подписке, вы можете сделать это, передав их в виде массива пар ключ/значение методу `create`. Чтобы узнать больше о дополнительных полях, поддерживаемых Paddle, ознакомьтесь с документацией Paddles по [созданию платежных ссылок](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink):
 
     $payLink = $user->newSubscription('default', $monthly = 12345)
         ->returnTo(route('home'))
@@ -507,9 +503,9 @@ If you would like to specify additional customer or subscription details, you ma
         ]);
 
 <a name="subscriptions-coupons"></a>
-#### Coupons
+#### Купоны
 
-If you would like to apply a coupon when creating the subscription, you may use the `withCoupon` method:
+Если вы хотите применить купон при создании подписки, вы можете использовать метод `withCoupon`:
 
     $payLink = $user->newSubscription('default', $monthly = 12345)
         ->returnTo(route('home'))
@@ -517,27 +513,27 @@ If you would like to apply a coupon when creating the subscription, you may use 
         ->create();
 
 <a name="metadata"></a>
-#### Metadata
+#### Метаданные
 
-You can also pass an array of metadata using the `withMetadata` method:
+Вы также можете передать массив метаданных, используя метод `withMetadata`:
 
     $payLink = $user->newSubscription('default', $monthly = 12345)
         ->returnTo(route('home'))
         ->withMetadata(['key' => 'value'])
         ->create();
 
-> {note} When providing metadata, please avoid using `subscription_name` as a metadata key. This key is reserved for internal use by Cashier.
+> {note} При предоставлении метаданных, пожалуйста, избегайте использования `subscription_name` в качестве ключа метаданных. Этот ключ зарезервирован для внутреннего использования Cashier.
 
 <a name="checking-subscription-status"></a>
-### Checking Subscription Status
+### Проверка статуса подписки
 
-Once a user is subscribed to your application, you may check their subscription status using a variety of convenient methods. First, the `subscribed` method returns `true` if the user has an active subscription, even if the subscription is currently within its trial period:
+Как только пользователь зарегистрируется в вашем приложении, вы можете проверить статус его подписки различными удобными способами. Во-первых, метод `subscribed` возвращает `true`, если у пользователя активная подписка, даже если в настоящее время подписка действует в течение пробного периода:
 
     if ($user->subscribed('default')) {
         //
     }
 
-The `subscribed` method also makes a great candidate for a [route middleware](middleware), allowing you to filter access to routes and controllers based on the user's subscription status:
+Метод `subscribed` также является отличным кандидатом для [посредника роута](/docs/{{version}}/middleware), позволяя вам фильтровать доступ к маршрутам и контроллерам на основе статуса подписки пользователя:
 
     <?php
 
@@ -565,63 +561,63 @@ The `subscribed` method also makes a great candidate for a [route middleware](mi
         }
     }
 
-If you would like to determine if a user is still within their trial period, you may use the `onTrial` method. This method can be useful for determining if you should display a warning to the user that they are still on their trial period:
+Если вы хотите определить, находится ли пользователь все еще в пределах своего пробного периода, вы можете использовать его метод `onTrial`. Этот метод может быть полезен для определения того, следует ли отображать предупреждение пользователю о том, что у него все еще действует пробный период:
 
     if ($user->subscription('default')->onTrial()) {
         //
     }
 
-The `subscribedToPlan` method may be used to determine if the user is subscribed to a given plan based on a given Paddle plan ID. In this example, we will determine if the user's `default` subscription is actively subscribed to the monthly plan:
+Метод `subscribedToPlan` может использоваться для определения того, подписан ли пользователь на данный тарифный план, на основе заданного идентификатора тарифного плана Paddle. В этом примере мы определим, является ли подписка пользователя `default` активной подпиской на ежемесячный план:
 
     if ($user->subscribedToPlan($monthly = 12345, 'default')) {
         //
     }
 
-By passing an array to the `subscribedToPlan` method, you may determine if the user's `default` subscription is actively subscribed to the monthly or the yearly plan:
+Передавая массив методу `subscribedToPlan`, вы можете определить, является ли подписка пользователя `default` активной подпиской на ежемесячный или годовой план:
 
     if ($user->subscribedToPlan([$monthly = 12345, $yearly = 54321], 'default')) {
         //
     }
 
-The `recurring` method may be used to determine if the user is currently subscribed and is no longer within their trial period:
+Метод `recurring` может быть использован для определения того, подписан ли пользователь в данный момент и не проходит ли пробный период:
 
     if ($user->subscription('default')->recurring()) {
         //
     }
 
 <a name="cancelled-subscription-status"></a>
-#### Cancelled Subscription Status
+#### Статус отмененной подписки
 
-To determine if the user was once an active subscriber but has cancelled their subscription, you may use the `cancelled` method:
+Чтобы определить, был ли пользователь когда-то активным подписчиком, но отменил свою подписку, вы можете использовать метод `cancelled`:
 
     if ($user->subscription('default')->cancelled()) {
         //
     }
 
-You may also determine if a user has cancelled their subscription, but are still on their "grace period" until the subscription fully expires. For example, if a user cancels a subscription on March 5th that was originally scheduled to expire on March 10th, the user is on their "grace period" until March 10th. Note that the `subscribed` method still returns `true` during this time:
+Вы также можете определить, отменил ли пользователь свою подписку, но все еще находится в "льготном периоде" до полного истечения срока действия подписки. Например, если пользователь отменяет подписку 5 марта, срок действия которой первоначально планировался на 10 марта, у пользователя действует "льготный период" до 10 марта. Обратите внимание, что метод `subscribed` все еще возвращает `true` в течение этого времени:
 
     if ($user->subscription('default')->onGracePeriod()) {
         //
     }
 
-To determine if the user has cancelled their subscription and is no longer within their "grace period", you may use the `ended` method:
+Чтобы определить, отменил ли пользователь свою подписку и больше не находится в пределах "льготного периода", вы можете использовать метод `ended`:
 
     if ($user->subscription('default')->ended()) {
         //
     }
 
 <a name="past-due-status"></a>
-#### Past Due Status
+#### Просроченный платежный статус
 
-If a payment fails for a subscription, it will be marked as `past_due`. When your subscription is in this state it will not be active until the customer has updated their payment information. You may determine if a subscription is past due using the `pastDue` method on the subscription instance:
+Если оплата подписки не произведена, она будет помечена как `past_due`. Когда ваша подписка находится в этом состоянии, она не будет активна до тех пор, пока клиент не обновит свою платежную информацию. Вы можете определить, просрочена ли подписка, используя метод `pastDue` в экземпляре подписки:
 
     if ($user->subscription('default')->pastDue()) {
         //
     }
 
-When a subscription is past due, you should instruct the user to [update their payment information](#updating-payment-information). You may configure how past due subscriptions are handled in your [Paddle subscription settings](https://vendors.paddle.com/subscription-settings).
+Если срок действия подписки просрочен, вы должны проинструктировать пользователя [обновить свою платежную информацию](#updating-payment-information). Вы можете настроить порядок обработки просроченных подписок в своих [настройках подписки Paddle](https://vendors.paddle.com/subscription-settings).
 
-If you would like subscriptions to still be considered active when they are `past_due`, you may use the `keepPastDueSubscriptionsActive` method provided by Cashier. Typically, this method should be called in the `register` method of your `AppServiceProvider`:
+Если вы хотите, чтобы подписки по-прежнему считались активными, когда они являются `past_due`, вы можете использовать метод `keepPastDueSubscriptionsActive`, предоставляемый Cashier. Как правило, этот метод должен вызываться в методе `register` вашего `AppServiceProvider`:
 
     use Laravel\Paddle\Cashier;
 
@@ -635,12 +631,12 @@ If you would like subscriptions to still be considered active when they are `pas
         Cashier::keepPastDueSubscriptionsActive();
     }
 
-> {note} When a subscription is in a `past_due` state it cannot be changed until payment information has been updated. Therefore, the `swap` and `updateQuantity` methods will throw an exception when the subscription is in a `past_due` state.
+> {note} Когда подписка находится в состоянии `past_due`, она не может быть изменена до тех пор, пока не будет обновлена платежная информация. Следовательно, методы `swap` и `updateQuantity` выдадут исключение, когда подписка находится в состоянии `past_due`.
 
 <a name="subscription-scopes"></a>
-#### Subscription Scopes
+#### Диапазоны подписки
 
-Most subscription states are also available as query scopes so that you may easily query your database for subscriptions that are in a given state:
+Большинство состояний подписки также доступны в виде диапазона запросов, так что вы можете легко запрашивать в своей базе данных подписки, находящиеся в заданном состоянии:
 
     // Get all active subscriptions...
     $subscriptions = Subscription::query()->active()->get();
@@ -648,7 +644,7 @@ Most subscription states are also available as query scopes so that you may easi
     // Get all of the cancelled subscriptions for a user...
     $subscriptions = $user->subscriptions()->cancelled()->get();
 
-A complete list of available scopes is available below:
+Полный список доступных диапазонов доступен ниже:
 
     Subscription::query()->active();
     Subscription::query()->onTrial();
@@ -666,18 +662,18 @@ A complete list of available scopes is available below:
     Subscription::query()->notOnGracePeriod();
 
 <a name="subscription-single-charges"></a>
-### Subscription Single Charges
+### Единовременные платежи за подписку
 
-Subscription single charges allow you to charge subscribers with a one-time charge on top of their subscriptions:
+Единовременная оплата подписки позволяет вам взимать с подписчиков единовременную плату сверх их подписки:
 
     $response = $user->subscription('default')->charge(12.99, 'Support Add-on');
 
-In contrast to [single charges](#single-charges), this method will immediately charge the customer's stored payment method for the subscription. The charge amount should always be defined in the currency of the subscription.
+В отличие от [единовременных платежей](#single-charges), этот метод немедленно взимает плату с сохраненного клиентом способа оплаты подписки. Сумма комиссии всегда должна определяться в валюте подписки.
 
 <a name="updating-payment-information"></a>
-### Updating Payment Information
+### Обновление платежной информации
 
-Paddle always saves a payment method per subscription. If you want to update the default payment method for a subscription, you should first generate a subscription "update URL" using the `updateUrl` method on the subscription model:
+Paddle всегда сохраняет способ оплаты для каждой подписки. Если вы хотите обновить способ оплаты подписки по умолчанию, вам следует сначала сгенерировать "URL обновления подписки", используя метод `updateURL` в модели подписки:
 
     use App\Models\User;
 
@@ -685,7 +681,7 @@ Paddle always saves a payment method per subscription. If you want to update the
 
     $updateUrl = $user->subscription('default')->updateUrl();
 
-Then, you may use the generated URL in combination with Cashier's provided `paddle-button` Blade component to allow the user to initiate the Paddle widget and update their payment information:
+Затем вы можете использовать сгенерированный URL-адрес в сочетании с предоставленным Cashier Blade-компонентом `paddle-button`, чтобы позволить пользователю запустить виджет Paddle и обновить свою платежную информацию:
 
 ```html
 <x-paddle-button :url="$updateUrl" class="px-8 py-4">
@@ -693,12 +689,12 @@ Then, you may use the generated URL in combination with Cashier's provided `padd
 </x-paddle-button>
 ```
 
-When a user has finished updating their information, a `subscription_updated` webhook will be dispatched by Paddle and the subscription details will be updated in your application's database.
+Когда пользователь завершит обновление своей информации, Paddle отправит веб-запрос `subscription_updated`, и сведения о подписке будут обновлены в базе данных вашего приложения.
 
 <a name="changing-plans"></a>
-### Changing Plans
+### Изменение тарифных планов
 
-After a user has subscribed to your application, they may occasionally want to change to a new subscription plan. To update the subscription plan for a user, you should pass the Paddle plan's identifier to the subscription's `swap` method:
+После того, как пользователь подписался на ваше приложение, он может иногда захотеть перейти на новый тарифный план подписки. Чтобы обновить план подписки для пользователя, вы должны передать идентификатор плана подписки в метод `swap` подписки:
 
     use App\Models\User;
 
@@ -706,31 +702,25 @@ After a user has subscribed to your application, they may occasionally want to c
 
     $user->subscription('default')->swap($premium = 34567);
 
-If the user is on a trial, the trial period will be maintained. Additionally, if a "quantity" exists for the subscription, that quantity will also be maintained.
-
-If you would like to swap plans and cancel any trial period the user is currently on, you may use the `skipTrial` method:
-
-    $user->subscription('default')
-            ->skipTrial()
-            ->swap($premium = 34567);
-
-If you would like to swap plans and immediately invoice the user instead of waiting for their next billing cycle, you may use the `swapAndInvoice` method:
+Если вы хотите поменять планы и немедленно выставить счет пользователю, не дожидаясь его следующего цикла выставления счетов, вы можете использовать метод `swapAndInvoice`:
 
     $user = User::find(1);
 
     $user->subscription('default')->swapAndInvoice($premium = 34567);
 
-<a name="prorations"></a>
-#### Prorations
+> {note} Планы нельзя менять местами, когда активна пробная версия. Для получения дополнительной информации об этом ограничении, пожалуйста, ознакомьтесь с [документацией Paddle](https://developer.paddle.com/api-reference/subscription-api/users/updateuser#usage-notes).
 
-By default, Paddle prorates charges when swapping between plans. The `noProrate` method may be used to update the subscription's without prorating the charges:
+<a name="prorations"></a>
+#### Пропорции
+
+По умолчанию Paddle пропорционально распределяет расходы при переключении между тарифными планами. Метод `noProrate` может использоваться для обновления подписок без пропорциональных списаний:
 
     $user->subscription('default')->noProrate()->swap($premium = 34567);
 
 <a name="subscription-quantity"></a>
-### Subscription Quantity
+### Количество подписок
 
-Sometimes subscriptions are affected by "quantity". For example, a project management application might charge $10 per month per project. To easily increment or decrement your subscription's quantity, use the `incrementQuantity` and `decrementQuantity` methods:
+Иногда на подписку влияет "количество". Например, приложение для управления проектами может взимать плату в размере 10 долларов США в месяц за каждый проект. Чтобы легко увеличивать или уменьшать количество ваших подписок, используйте методы `incrementQuantity` и `decrementQuantity`:
 
     $user = User::find(1);
 
@@ -744,42 +734,42 @@ Sometimes subscriptions are affected by "quantity". For example, a project manag
     // Subtract five from the subscription's current quantity...
     $user->subscription('default')->decrementQuantity(5);
 
-Alternatively, you may set a specific quantity using the `updateQuantity` method:
+В качестве альтернативы вы можете установить определенное количество, используя метод `updateQuantity`:
 
     $user->subscription('default')->updateQuantity(10);
 
-The `noProrate` method may be used to update the subscription's quantity without prorating the charges:
+Метод `noProrate` может быть использован для обновления количества подписок без пропорционального увеличения сборов:
 
     $user->subscription('default')->noProrate()->updateQuantity(10);
 
 <a name="subscription-modifiers"></a>
-### Subscription Modifiers
+### Модификаторы подписки
 
-Subscription modifiers allow you to implement [metered billing](https://developer.paddle.com/guides/how-tos/subscriptions/metered-billing#using-subscription-price-modifiers) or extend subscriptions with add-ons.
+Модификаторы подписки позволяют вам реализовать [расчет по счетчику](https://developer.paddle.com/guides/how-tos/subscriptions/metered-billing#using-subscription-price-modifiers) или расширяйте подписки с помощью дополнений.
 
-For example, you might want to offer a "Premium Support" add-on with your standard subscription. You can create this modifier like so:
+Например, вы можете захотеть предложить дополнительно "Премиум-поддержку" к вашей стандартной подписке. Вы можете создать этот модификатор следующим образом:
 
     $modifier = $user->subscription('default')->newModifier(12.99)->create();
 
-The example above will add a $12.99 add-on to the subscription. By default, this charge will recur on every interval you have configured for the subscription. If you would like, you can add a readable description to the modifier using the modifier's `description` method:
+В приведенном выше примере к подписке будет добавлено дополнение в размере 12,99 долларов США. По умолчанию эта плата будет взиматься повторно с каждого интервала, который вы настроили для подписки. Если вы хотите, вы можете добавить читаемое описание к модификатору, используя его метод `description`:
 
     $modifier = $user->subscription('default')->newModifier(12.99)
         ->description('Premium Support')
         ->create();
 
-To illustrate how to implement metered billing using modifiers, imagine your application charges per SMS message sent by the user. First, you should create a $0 plan in your Paddle dashboard. Once the user has been subscribed to this plan, you can add modifiers representing each individual charge to the subscription:
+Чтобы проиллюстрировать, как реализовать тарификацию с использованием модификаторов, представьте, что ваше приложение взимает плату за SMS-сообщение, отправленное пользователем. Во-первых, вы должны создать план стоимостью 0 долларов на своей панели управления Paddle. Как только пользователь подпишется на этот тарифный план, вы можете добавить к подписке модификаторы, представляющие каждую отдельную плату:
 
     $modifier = $user->subscription('default')->newModifier(0.99)
         ->description('New text message')
         ->oneTime()
         ->create();
 
-As you can see, we invoked the `oneTime` method when creating this modifier. This method will ensure the modifier is only charged once and does not recur every billing interval.
+Как вы можете видеть, мы вызвали метод `oneTime` при создании этого модификатора. Этот метод гарантирует, что плата за модификатор взимается только один раз и не повторяется через каждый платежный интервал.
 
 <a name="retrieving-modifiers"></a>
-#### Retrieving Modifiers
+#### Извлечение модификаторов
 
-You may retrieve a list of all modifiers for a subscription via the `modifiers` method:
+Вы можете получить список всех модификаторов для подписки с помощью метода `modifiers`:
 
     $modifiers = $user->subscription('default')->modifiers();
 
@@ -789,63 +779,63 @@ You may retrieve a list of all modifiers for a subscription via the `modifiers` 
     }
 
 <a name="deleting-modifiers"></a>
-#### Deleting Modifiers
+#### Удаление модификаторов
 
-Modifiers may be deleted by invoking the `delete` method on a `Laravel\Paddle\Modifier` instance:
+Модификаторы могут быть удалены путем вызова метода `delete` в экземпляре `Laravel\Paddle\Modifier`:
 
     $modifier->delete();
 
 <a name="pausing-subscriptions"></a>
-### Pausing Subscriptions
+### Приостановка подписки
 
-To pause a subscription, call the `pause` method on the user's subscription:
+Чтобы приостановить подписку, вызовите метод `pause` в подписке пользователя:
 
     $user->subscription('default')->pause();
 
-When a subscription is paused, Cashier will automatically set the `paused_from` column in your database. This column is used to know when the `paused` method should begin returning `true`. For example, if a customer pauses a subscription on March 1st, but the subscription was not scheduled to recur until March 5th, the `paused` method will continue to return `false` until March 5th. This is done because a user is typically allowed to continue using an application until the end of their billing cycle.
+Когда подписка приостановлена, Cashier автоматически установит столбец `paused_from` в вашей базе данных. Этот столбец используется, чтобы узнать, когда метод `paused` должен начать возвращать `true`. Например, если клиент приостанавливает подписку 1 марта, но повторение подписки не планировалось до 5 марта, метод `paused` будет продолжать возвращать `false` до 5 марта. Это делается потому, что пользователю обычно разрешается продолжать использовать приложение до окончания платежного цикла.
 
-You may determine if a user has paused their subscription but are still on their "grace period" using the `onPausedGracePeriod` method:
+Вы можете определить, приостановил ли пользователь свою подписку, но все еще находится в "льготном периоде", используя метод `onPausedGracePeriod`:
 
     if ($user->subscription('default')->onPausedGracePeriod()) {
         //
     }
 
-To resume a paused a subscription, you may call the `unpause` method on the user's subscription:
+Чтобы возобновить приостановленную подписку, вы можете вызвать метод `unpause` в подписке пользователя:
 
     $user->subscription('default')->unpause();
 
-> {note} A subscription cannot be modified while it is paused. If you want to swap to a different plan or update quantities you must resume the subscription first.
+> {note} Подписка не может быть изменена, пока она приостановлена. Если вы хотите перейти на другой тарифный план или обновить количество, вы должны сначала возобновить подписку.
 
 <a name="cancelling-subscriptions"></a>
-### Cancelling Subscriptions
+### Отмена подписки
 
-To cancel a subscription, call the `cancel` method on the user's subscription:
+Чтобы отменить подписку, вызовите метод `cancel` в подписке пользователя:
 
     $user->subscription('default')->cancel();
 
-When a subscription is cancelled, Cashier will automatically set the `ends_at` column in your database. This column is used to know when the `subscribed` method should begin returning `false`. For example, if a customer cancels a subscription on March 1st, but the subscription was not scheduled to end until March 5th, the `subscribed` method will continue to return `true` until March 5th. This is done because a user is typically allowed to continue using an application until the end of their billing cycle.
+Когда подписка будет отменена, Cashier автоматически установит столбец `ends_at` в вашей базе данных. Этот столбец используется, чтобы узнать, когда метод `subscribed` должен начать возвращать `false`. Например, если клиент отменяет подписку 1 марта, но завершение подписки не планировалось до 5 марта, метод `subscribed` будет продолжать возвращать `true` до 5 марта. Это делается потому, что пользователю обычно разрешается продолжать использовать приложение до окончания платежного цикла.
 
-You may determine if a user has cancelled their subscription but are still on their "grace period" using the `onGracePeriod` method:
+Вы можете определить, отменил ли пользователь свою подписку, но все еще находится в "льготном периоде", используя метод `onGracePeriod`:
 
     if ($user->subscription('default')->onGracePeriod()) {
         //
     }
 
-If you wish to cancel a subscription immediately, you may call the `cancelNow` method on the user's subscription:
+Если вы хотите немедленно отменить подписку, вы можете вызвать метод `cancelNow` для подписки пользователя:
 
     $user->subscription('default')->cancelNow();
 
-> {note} Paddle's subscriptions cannot be resumed after cancellation. If your customer wishes to resume their subscription, they will have to subscribe to a new subscription.
+> {note} Подписки Paddle не могут быть возобновлены после отмены. Если ваш клиент желает возобновить свою подписку, ему придется подписаться на новую подписку.
 
 <a name="subscription-trials"></a>
-## Subscription Trials
+## Пробные периоды
 
 <a name="with-payment-method-up-front"></a>
-### With Payment Method Up Front
+### С указанием способа оплаты
 
-> {note} While trialing and collecting payment method details up front, Paddle prevents any subscription changes such as swapping plans or updating quantities. If you want to allow a customer to swap plans during a trial the subscription must be cancelled and recreated.
+> {note} Предварительно опробовав и собрав информацию о способе оплаты, Paddle предотвращает любые изменения подписки, такие как замена тарифных планов или обновление количества. Если вы хотите разрешить клиенту менять планы во время пробной версии, подписку необходимо отменить и создать заново.
 
-If you would like to offer trial periods to your customers while still collecting payment method information up front, you should use the `trialDays` method when creating your subscription pay links:
+Если вы хотите предложить своим клиентам пробные периоды, предварительно собирая информацию о способе оплаты, вам следует использовать метод `trialDays` при создании ссылок для оплаты подписки:
 
     use Illuminate\Http\Request;
 
@@ -858,11 +848,11 @@ If you would like to offer trial periods to your customers while still collectin
         return view('billing', ['payLink' => $payLink]);
     });
 
-This method will set the trial period ending date on the subscription record within your application's database, as well as instruct Paddle to not begin billing the customer until after this date.
+Этот метод установит дату окончания пробного периода в записи подписки в базе данных вашего приложения, а также проинструктирует Paddle не начинать выставление счетов клиенту до истечения этой даты.
 
-> {note} If the customer's subscription is not cancelled before the trial ending date they will be charged as soon as the trial expires, so you should be sure to notify your users of their trial ending date.
+> {note} Если подписка клиента не будет отменена до даты окончания пробной версии, с него будет снята плата, как только истечет срок действия пробной версии, поэтому вам следует обязательно уведомить своих пользователей о дате окончания пробной версии.
 
-You may determine if the user is within their trial period using either the `onTrial` method of the user instance or the `onTrial` method of the subscription instance. The two examples below are equivalent:
+Вы можете определить, находится ли пользователь в пределах своего пробного периода, используя либо метод `onTrial` экземпляра пользователя, либо метод `onTrial` экземпляра подписки. Два приведенных ниже примера эквивалентны:
 
     if ($user->onTrial('default')) {
         //
@@ -873,14 +863,14 @@ You may determine if the user is within their trial period using either the `onT
     }
 
 <a name="defining-trial-days-in-paddle-cashier"></a>
-#### Defining Trial Days In Paddle / Cashier
+#### Определение пробных дней в Paddle / Cashier
 
-You may choose to define how many trial days your plan's receive in the Paddle dashboard or always pass them explicitly using Cashier. If you choose to define your plan's trial days in Paddle you should be aware that new subscriptions, including new subscriptions for a customer that had a subscription in the past, will always receive a trial period unless you explicitly call the `trialDays(0)` method.
+Вы можете указать, сколько пробных дней предоставляется вашему плану, на панели управления Paddle или всегда передавать их явно с помощью Cashier. Если вы решите определить пробные дни вашего плана в Paddle, вы должны знать, что новые подписки, включая новые подписки для клиента, у которого была подписка в прошлом, всегда будут получать пробный период, если вы явно не вызовете метод `trialDays(0)`.
 
 <a name="without-payment-method-up-front"></a>
-### Without Payment Method Up Front
+### Без указания способа оплаты
 
-If you would like to offer trial periods without collecting the user's payment method information up front, you may set the `trial_ends_at` column on the customer record attached to your user to your desired trial ending date. This is typically done during user registration:
+Если вы хотите предлагать пробные периоды без предварительного сбора информации о способе оплаты пользователя, вы можете установить в столбце `trial_ends_at` в записи клиента, прикрепленной к вашему пользователю, желаемую дату окончания пробной версии. Обычно это делается во время регистрации пользователя:
 
     use App\Models\User;
 
@@ -892,13 +882,13 @@ If you would like to offer trial periods without collecting the user's payment m
         'trial_ends_at' => now()->addDays(10)
     ]);
 
-Cashier refers to this type of trial as a "generic trial", since it is not attached to any existing subscription. The `onTrial` method on the `User` instance will return `true` if the current date is not past the value of `trial_ends_at`:
+Cashier называет этот тип пробной версии "общей пробной версией", поскольку она не привязана ни к одной существующей подписке. Метод `onTrial` в экземпляре `User` вернет `true`, если текущая дата не превышает значения `trial_ends_at`:
 
     if ($user->onTrial()) {
         // User is within their trial period...
     }
 
-Once you are ready to create an actual subscription for the user, you may use the `newSubscription` method as usual:
+Как только вы будете готовы создать фактическую подписку для пользователя, вы можете использовать метод `newSubscription`, как обычно:
 
     use Illuminate\Http\Request;
 
@@ -910,111 +900,134 @@ Once you are ready to create an actual subscription for the user, you may use th
         return view('billing', ['payLink' => $payLink]);
     });
 
-To retrieve the user's trial ending date, you may use the `trialEndsAt` method. This method will return a Carbon date instance if a user is on a trial or `null` if they aren't. You may also pass an optional subscription name parameter if you would like to get the trial ending date for a specific subscription other than the default one:
+Чтобы получить дату окончания пробной версии пользователя, вы можете использовать метод `trialEndsAt`. Этот метод вернет экземпляр Carbon date, если пользователь находится на пробной версии, или `null`, если это не так. Вы также можете передать необязательный параметр имени подписки, если хотите получить дату окончания пробной версии для конкретной подписки, отличной от подписки по умолчанию:
 
     if ($user->onTrial()) {
         $trialEndsAt = $user->trialEndsAt('main');
     }
 
-You may use the `onGenericTrial` method if you wish to know specifically that the user is within their "generic" trial period and has not created an actual subscription yet:
+Вы можете использовать метод `onGenericTrial`, если хотите точно знать, что пользователь находится в пределах своего "общего" пробного периода и еще не создал фактическую подписку:
 
     if ($user->onGenericTrial()) {
         // User is within their "generic" trial period...
     }
 
-> {note} There is no way to extend or modify a trial period on a Paddle subscription after it has been created.
+> {note} Невозможно продлить или изменить пробный период подписки на Paddle после того, как она была создана.
 
 <a name="handling-paddle-webhooks"></a>
-## Handling Paddle Webhooks
+## Обработка веб-хуков Paddle
 
-Paddle can notify your application of a variety of events via webhooks. By default, a route that points to Cashier's webhook controller is registered by the Cashier service provider. This controller will handle all incoming webhook requests.
+Paddle может уведомлять ваше приложение о различных событиях с помощью вэб-хуков. По умолчанию маршрут, который указывает на контроллер вэб-хук Cashier, регистрируется сервис-провайдером Cashier. Этот контроллер будет обрабатывать все входящие запросы веб-хуков.
 
-By default, this controller will automatically handle cancelling subscriptions that have too many failed charges ([as defined by your Paddle subscription settings](https://vendors.paddle.com/subscription-settings)), subscription updates, and payment method changes; however, as we'll soon discover, you can extend this controller to handle any Paddle webhook event you like.
+По умолчанию этот контроллер автоматически обрабатывает отмену подписок, в которых слишком много сброшенных платежей ([как определено в настройках вашей подписки Paddle])(https://vendors.paddle.com/subscription-settings)), обновления подписки и изменения способа оплаты; однако, как мы скоро узнаем, вы можете расширить этот контроллер для обработки любого события вэб-хука Paddle, как вам нравится.
 
-To ensure your application can handle Paddle webhooks, be sure to [configure the webhook URL in the Paddle control panel](https://vendors.paddle.com/alerts-webhooks). By default, Cashier's webhook controller responds to the `/paddle/webhook` URL path. The full list of all webhooks you should enable in the Paddle control panel are:
+Чтобы убедиться, что ваше приложение может обрабатывать вэб-хуки Paddle, обязательно [настройте URL-адрес вэб-хука на панели управления Paddle](https://vendors.paddle.com/alerts-webhooks). По умолчанию контроллер вэб-хуков Cashier отвечает на URL-адрес `/paddle/webhook`. Полный список всех веб-подключений, которые вы должны включить на панели управления Paddle, выглядит следующим образом:
 
-- Subscription Created
-- Subscription Updated
-- Subscription Cancelled
-- Payment Succeeded
-- Subscription Payment Succeeded
+- Подписка создана
+- Подписка обновлена
+- Подписка отменена
+- Платеж прошел успешно
+- Оплата подписки прошла успешно
 
-> {note} Make sure you protect incoming requests with Cashier's included [webhook signature verification](cashier-paddle#verifying-webhook-signatures) middleware.
+> {note} Убедитесь, что вы защищаете входящие запросы с помощью включенного промежуточного программного обеспечения Cashier [проверка подписи вэб-хука](/docs/{{version}}/cashier-paddle#verifying-webhook-signatures).
 
 <a name="webhooks-csrf-protection"></a>
-#### Webhooks & CSRF Protection
+#### Веб-хуки и защита от CSRF
 
-Since Paddle webhooks need to bypass Laravel's [CSRF protection](csrf), be sure to list the URI as an exception in your `App\Http\Middleware\VerifyCsrfToken` middleware or list the route outside of the `web` middleware group:
+Поскольку веб-хукам Paddle необходимо обходить Laravel [защиту от CSRF](/docs/{{version}}/csrf), обязательно укажите URI как исключение в вашем промежуточном программном обеспечении `App\Http\Middleware\VerifyCsrfToken` или укажите маршрут вне группы промежуточного программного обеспечения `web`:
 
     protected $except = [
         'paddle/*',
     ];
 
+<a name="webhooks-local-development"></a>
+#### Веб-хуки и локальная разработка
+
+Чтобы Paddle мог отправлять веб-хуки вашему приложению во время локальной разработки, вам необходимо предоставить доступ к вашему приложению через службу общего доступа к сайту, такую как [Ngrok](https://ngrok.com/) или [Expose](https://expose.dev/docs/introduction). Если вы разрабатываете свое приложение локально, используя [Laravel Sail](/docs/{{version}}/sail), вы можете использовать команду Sail [общий доступ к сайту](/docs/{{version}}/sail#sharing-your-site).
+
 <a name="defining-webhook-event-handlers"></a>
-### Defining Webhook Event Handlers
+### Определение веб-хука событий
 
-Cashier automatically handles subscription cancellation on failed charges and other common Paddle webhooks, but if you have additional webhook events you would like to handle, you should extend Cashier's `WebhookController`.
+Cashier автоматически обрабатывает отмену подписки при сбое начислений и других распространенных ошибках веб-хуков Paddle. Однако, если у вас есть дополнительные события вэб-хуков, которые вы хотели бы обработать, вы можете сделать это, прослушав следующие события, отправляемые Cashier:
 
-Your controller's method names should correspond to Cashier's controller method conventions. Specifically, methods should be prefixed with `handle` and the "camel case" name of the webhook you wish to handle. For example, if you wish to handle the `payment_succeeded` webhook, you should add a `handlePaymentSucceeded` method to the controller:
+- `Laravel\Paddle\Events\WebhookReceived`
+- `Laravel\Paddle\Events\WebhookHandled`
+
+Оба события содержат полную полезную нагрузку вэб-хука Paddle. Например, если вы хотите обработать веб-запрос `invoice.payment_succeeded`, вы можете зарегистрировать [прослушиватель](/docs/{{version}}/events#defining-listeners), который будет обрабатывать событие:
 
     <?php
 
-    namespace App\Http\Controllers;
+    namespace App\Listeners;
 
-    use Laravel\Paddle\Http\Controllers\WebhookController as CashierController;
+    use Laravel\Paddle\Events\WebhookReceived;
 
-    class WebhookController extends CashierController
+    class PaddleEventListener
     {
         /**
-         * Handle the payment succeeded webhook.
+         * Handle received Paddle webhooks.
          *
-         * @param  array  $payload
+         * @param  \Laravel\Paddle\Events\WebhookReceived  $event
          * @return void
          */
-        public function handlePaymentSucceeded($payload)
+        public function handle(WebhookReceived $event)
         {
-            // Handle the event...
+            if ($event->payload['alert_name'] === 'payment_succeeded') {
+                // Handle the incoming event...
+            }
         }
     }
 
-Next, define a route to your Cashier webhook controller within your application's `routes/web.php` file. This will overwrite the default route registered by Cashier's service provider:
+Как только ваш прослушиватель определен, вы можете зарегистрировать его в `EventServiceProvider` вашего приложения:
 
-    use App\Http\Controllers\WebhookController;
+    <?php
 
-    Route::post('/paddle/webhook', WebhookController::class);
+    namespace App\Providers;
 
-Cashier emits a `Laravel\Paddle\Events\WebhookReceived` event when a webhook is received and a `Laravel\Paddle\Events\WebhookHandled` event when a webhook was handled. Both events contain the full payload of the Paddle webhook.
+    use App\Listeners\PaddleEventListener;
+    use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+    use Laravel\Paddle\Events\WebhookReceived;
 
-Cashier also emit events dedicated to the type of the received webhook. In addition to the full payload from Paddle, they also contain the relevant models that were used to process the webhook such as the billable model, the subscription, or the receipt:
+    class EventServiceProvider extends ServiceProvider
+    {
+        protected $listen = [
+            WebhookReceived::class => [
+                PaddleEventListener::class,
+            ],
+        ];
+    }
 
-<div class="content-list" markdown="1">
+Cashier также выдает события, посвященные типу полученного вэб-хука. В дополнение к полной полезной нагрузке из Paddle, они также содержат соответствующие модели, которые использовались для обработки веб-хука, такие как оплачиваемая модель, подписка или квитанция:
+
+<!-- <div class="content-list" markdown="1"> -->
+
 - `Laravel\Paddle\Events\PaymentSucceeded`
 - `Laravel\Paddle\Events\SubscriptionPaymentSucceeded`
 - `Laravel\Paddle\Events\SubscriptionCreated`
 - `Laravel\Paddle\Events\SubscriptionUpdated`
 - `Laravel\Paddle\Events\SubscriptionCancelled`
-</div>
 
-You can also override the default, built-in webhook route by defining the `CASHIER_WEBHOOK` environment variable in your application's `.env` file. This value should be the full URL to your webhook route and needs to match the URL set in your Paddle control panel:
+<!-- </div> -->
+
+Вы также можете переопределить встроенный в роут веб-хука по умолчанию, определив переменную среды `CASHIER_WEBHOOK` в файле `.env` вашего приложения. Это значение должно быть полным URL-адресом вашего роута веб-хука и должно совпадать с URL-адресом, заданным в вашей панели управления Paddle:
 
 ```bash
 CASHIER_WEBHOOK=https://example.com/my-paddle-webhook-url
 ```
 
 <a name="verifying-webhook-signatures"></a>
-### Verifying Webhook Signatures
+### Проверка подписей веб-хука
 
-To secure your webhooks, you may use [Paddle's webhook signatures](https://developer.paddle.com/webhook-reference/verifying-webhooks). For convenience, Cashier automatically includes a middleware which validates that the incoming Paddle webhook request is valid.
+Чтобы обезопасить свои веб-хуки, вы можете использовать [подписи веб-хуков Paddle](https://developer.paddle.com/webhook-reference/verifying-webhooks). Для удобства Cashier автоматически включает посредника, которое проверяет правильность входящего запроса веб-хука Paddle.
 
-To enable webhook verification, ensure that the `PADDLE_PUBLIC_KEY` environment variable is defined in your application's `.env` file. The public key may be retrieved from your Paddle account dashboard.
+Чтобы включить проверку вэб-хука, убедитесь, что переменная окружения `PADDLE_PUBLIC_KEY` определена в файле `.env` вашего приложения. Открытый ключ можно получить с панели управления вашей учетной записи Paddle.
 
 <a name="single-charges"></a>
-## Single Charges
+## Разовые списания
 
 <a name="simple-charge"></a>
-### Simple Charge
+### Разовое списание
 
-If you would like to make a one-time charge against a customer, you may use the `charge` method on a billable model instance to generate a pay link for the charge. The `charge` method accepts the charge amount (float) as its first argument and a charge description as its second argument:
+Если вы хотите произвести единовременное списание средств с клиента, вы можете использовать метод `charge` в экземпляре оплачиваемой модели, чтобы сгенерировать ссылку для оплаты платежа. Метод `charge` принимает величину платежа (float) в качестве своего первого аргумента и описание платежа в качестве второго аргумента:
 
     use Illuminate\Http\Request;
 
@@ -1024,7 +1037,7 @@ If you would like to make a one-time charge against a customer, you may use the 
         ]);
     });
 
-After generating the pay link, you may use Cashier's provided `paddle-button` Blade component to allow the user to initiate the Paddle widget and complete the charge:
+После создания платежной ссылки вы можете использовать предоставленный Cashier Blade-компонент `paddle-button`, позволяющий пользователю активировать виджет Paddle и завершить оплату:
 
 ```html
 <x-paddle-button :url="$payLink" class="px-8 py-4">
@@ -1032,19 +1045,19 @@ After generating the pay link, you may use Cashier's provided `paddle-button` Bl
 </x-paddle-button>
 ```
 
-The `charge` method accepts an array as its third argument, allowing you to pass any options you wish to the underlying Paddle pay link creation. Please consult [the Paddle documentation](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink) to learn more about the options available to you when creating charges:
+Метод `charge` принимает массив в качестве своего третьего аргумента, позволяя вам передавать любые параметры, которые вы пожелаете, для создания базовой платежной ссылки Paddle. Пожалуйста, ознакомьтесь с [документацией по Paddle](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink), чтобы узнать больше о вариантах, доступных вам при создании платежей:
 
     $payLink = $user->charge(12.99, 'Action Figure', [
         'custom_option' => $value,
     ]);
 
-Charges happen in the currency specified in the `cashier.currency` configuration option. By default, this is set to USD. You may override the default currency by defining the `CASHIER_CURRENCY` environment variable in your application's `.env` file:
+Платежи производятся в валюте, указанной в опции конфигурации `cashier.currency`. По умолчанию это значение равно долларам США. Вы можете переопределить валюту по умолчанию, определив переменную среды `CASHIER_CURRENCY` в файле `.env` вашего приложения:
 
 ```bash
 CASHIER_CURRENCY=EUR
 ```
 
-You can also [override prices per currency](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink#price-overrides) using Paddle's dynamic pricing matching system. To do so, pass an array of prices instead of a fixed amount:
+Вы также можете [переопределить цены в каждой валюте](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink#price-overrides) с использованием системы динамического сопоставления цен Paddle. Для этого передайте массив цен вместо фиксированной суммы:
 
     $payLink = $user->charge([
         'USD:19.99',
@@ -1052,9 +1065,9 @@ You can also [override prices per currency](https://developer.paddle.com/api-ref
     ], 'Action Figure');
 
 <a name="charging-products"></a>
-### Charging Products
+### Списание за продукты
 
-If you would like to make a one-time charge against a specific product configured within Paddle, you may use the `chargeProduct` method on a billable model instance to generate a pay link:
+Если вы хотите произвести единовременную оплату за определенный продукт, настроенный в Paddle, вы можете использовать метод `chargeProduct` в экземпляре оплачиваемой модели для создания платежной ссылки:
 
     use Illuminate\Http\Request;
 
@@ -1064,7 +1077,7 @@ If you would like to make a one-time charge against a specific product configure
         ]);
     });
 
-Then, you may provide the pay link to the `paddle-button` component to allow the user to initialize the Paddle widget:
+Затем вы можете передать платежную ссылку на компонент `paddle-button`, чтобы позволить пользователю инициализировать виджет Paddle:
 
 ```html
 <x-paddle-button :url="$payLink" class="px-8 py-4">
@@ -1072,16 +1085,16 @@ Then, you may provide the pay link to the `paddle-button` component to allow the
 </x-paddle-button>
 ```
 
-The `chargeProduct` method accepts an array as its second argument, allowing you to pass any options you wish to the underlying Paddle pay link creation. Please consult [the Paddle documentation](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink) regarding the options that are available to you when creating charges:
+Метод `chargeProduct` принимает массив в качестве своего второго аргумента, позволяя вам передавать любые параметры, которые вы пожелаете, для создания базовой платежной ссылки Paddle. Пожалуйста, ознакомьтесь с [документацией по Paddle](https://developer.paddle.com/api-reference/product-api/pay-links/createpaylink) относительно опций, которые доступны вам при создании платежей:
 
     $payLink = $user->chargeProduct($productId, [
         'custom_option' => $value,
     ]);
 
 <a name="refunding-orders"></a>
-### Refunding Orders
+### Возврат заказов
 
-If you need to refund a Paddle order, you may use the `refund` method. This method accepts the Paddle order ID as its first argument. You may retrieve the receipts for a given billable model using the `receipts` method:
+Если вам нужно вернуть заказ Paddle, вы можете воспользоваться методом `refund`. Этот метод принимает идентификатор заказа весла в качестве своего первого аргумента. Вы можете получить квитанции для данной оплачиваемой модели, используя метод `receipts`:
 
     use App\Models\User;
 
@@ -1091,7 +1104,7 @@ If you need to refund a Paddle order, you may use the `refund` method. This meth
 
     $refundRequestId = $user->refund($receipt->order_id);
 
-You may optionally specify a specific amount to refund as well as a reason for the refund:
+При желании вы можете указать конкретную сумму для возврата, а также причину возврата:
 
     $receipt = $user->receipts()->first();
 
@@ -1099,12 +1112,12 @@ You may optionally specify a specific amount to refund as well as a reason for t
         $receipt->order_id, 5.00, 'Unused product time'
     );
 
-> {tip} You can use the `$refundRequestId` as a reference for the refund when contacting Paddle support.
+> {tip} Вы можете использовать `$refundRequestId` в качестве ссылки для возврата средств при обращении в службу поддержки Paddle.
 
 <a name="receipts"></a>
-## Receipts
+## Квитанции
 
-You may easily retrieve an array of a billable model's receipts via the `receipts` property:
+Вы можете легко получить массив квитанций оплачиваемой модели с помощью свойства `receipts`:
 
     use App\Models\User;
 
@@ -1112,7 +1125,7 @@ You may easily retrieve an array of a billable model's receipts via the `receipt
 
     $receipts = $user->receipts;
 
-When listing the receipts for the customer, you may use the receipt instance's methods to display the relevant receipt information. For example, you may wish to list every receipt in a table, allowing the user to easily download any of the receipts:
+При перечислении квитанций для клиента вы можете использовать методы экземпляра квитанции для отображения соответствующей информации о квитанции. Например, вы можете захотеть отобразить каждую квитанцию в таблице, что позволит пользователю легко загрузить любую из квитанций:
 
 ```html
 <table>
@@ -1127,9 +1140,9 @@ When listing the receipts for the customer, you may use the receipt instance's m
 ```
 
 <a name="past-and-upcoming-payments"></a>
-### Past & Upcoming Payments
+### Прошлые и предстоящие платежи
 
-You may use the `lastPayment` and `nextPayment` methods to retrieve and display a customer's past or upcoming payments for recurring subscriptions:
+Вы можете использовать методы `lastPayment` и `nextPayment` для получения и отображения прошлых или предстоящих платежей клиента за повторяющиеся подписки:
 
     use App\Models\User;
 
@@ -1140,16 +1153,16 @@ You may use the `lastPayment` and `nextPayment` methods to retrieve and display 
     $lastPayment = $subscription->lastPayment();
     $nextPayment = $subscription->nextPayment();
 
-Both of these methods will return an instance of `Laravel\Paddle\Payment`; however, `nextPayment` will return `null` when the billing cycle has ended (such as when a subscription has been cancelled):
+Оба этих метода вернут экземпляр `Laravel\Paddle\Payment`; однако `nextPayment` вернет `null`, когда цикл выставления счетов закончится (например, когда подписка была отменена):
 
     Next payment: {{ $nextPayment->amount() }} due on {{ $nextPayment->date()->format('d/m/Y') }}
 
 <a name="handling-failed-payments"></a>
-## Handling Failed Payments
+## Обработка несостоявшихся платежей
 
-Subscription payments fail for various reasons, such as expired cards or a card having insufficient funds. When this happens, we recommend that you let Paddle handle payment failures for you. Specifically, you may [setup Paddle's automatic billing emails](https://vendors.paddle.com/subscription-settings) in your Paddle dashboard.
+Оплата подписки не производится по разным причинам, таким как просроченный срок действия карты или недостаточное количество средств на карте. Когда это происходит, мы рекомендуем вам позволить Paddle обрабатывать сбои в оплате за вас. В частности, вы можете [настроить электронные письма с автоматическим выставлением счетов Paddle](https://vendors.paddle.com/subscription-settings) на вашей панели управления Paddle.
 
-Alternatively, you can perform more precise customization by catching the [`subscription_payment_failed`](https://developer.paddle.com/webhook-reference/subscription-alerts/subscription-payment-failed) webhook and enabling the "Subscription Payment Failed" option in the Webhook settings of your Paddle dashboard:
+В качестве альтернативы вы можете выполнить более точную настройку, перехватите веб-хук [`subscription_payment_failed`](https://developer.paddle.com/webhook-reference/subscription-alerts/subscription-payment-failed) и включите опцию "Не удалось оплатить подписку" в настройках Webhook вашей панели управления Paddle:
 
     <?php
 
@@ -1172,8 +1185,8 @@ Alternatively, you can perform more precise customization by catching the [`subs
     }
 
 <a name="testing"></a>
-## Testing
+## Тестирование
 
-While testing, you should manually test your billing flow to make sure your integration works as expected.
+Во время тестирования вам следует вручную протестировать процесс выставления счетов, чтобы убедиться, что ваша интеграция работает должным образом.
 
-For automated tests, including those executed within a CI environment, you may use [Laravel's HTTP Client](/docs//{{version}}/http-client#testing) to fake HTTP calls made to Paddle. Although this does not test the actual responses from Paddle, it does provide a way to test your application without actually calling Paddle's API.
+Для автоматизированных тестов, в том числе выполняемых в среде CI, вы можете использовать [HTTP-клиент Laravel](/docs/{{version}}/http-client#testing) для подделки HTTP-вызовов, выполняемых в Paddle. Хотя это не проверяет фактические ответы от Paddle, это предоставляет способ протестировать ваше приложение без фактического вызова API Paddle.
