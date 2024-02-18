@@ -1,42 +1,9 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Валидация
 
-- [Введение](#introduction)
-- [Быстрый старт](#validation-quickstart)
-    - [Определение маршрутов](#quick-defining-the-routes)
-    - [Создание контроллера](#quick-creating-the-controller)
-    - [Написание логики валидации](#quick-writing-the-validation-logic)
-    - [Отображение ошибок валидации](#quick-displaying-the-validation-errors)
-    - [Повторное заполнение форм](#repopulating-forms)
-    - [Примечание о необязательных полях](#a-note-on-optional-fields)
-- [Валидация запроса формы](#form-request-validation)
-    - [Создание запросов формы](#creating-form-requests)
-    - [Авторизация запросов](#authorizing-form-requests)
-    - [Корректировка сообщений об ошибках](#customizing-the-error-messages)
-    - [Подготовка входящих данных для валидации](#preparing-input-for-validation)
-- [Создание валидатора по требованию](#manually-creating-validators)
-    - [Автоматическое перенаправление](#automatic-redirection)
-    - [Именованные коллекции ошибок](#named-error-bags)
-    - [Корректировка сообщений об ошибках](#manual-customizing-the-error-messages)
-    - [Хук валидатора After](#after-validation-hook)
-- [Работа с проверенными данными](#working-with-validated-input)
-- [Работа с сообщениями об ошибках](#working-with-error-messages)
-    - [Указание пользовательских сообщений в языковых файлах](#specifying-custom-messages-in-language-files)
-    - [Указание атрибутов в языковых файлах](#specifying-attribute-in-language-files)
-    - [Указание пользовательских имен для атрибутов в языковых файлах](#specifying-values-in-language-files)
-- [Доступные правила валидации](#available-validation-rules)
-- [Условное добавление правил](#conditionally-adding-rules)
-- [Валидация массивов](#validating-arrays)
-    - [Исключение непроверенных ключей массива](#excluding-unvalidated-array-keys)
-    - [Проверка входных данных вложенного массива](#validating-nested-array-input)
-- [Валидация паролей](#validating-passwords)
-- [Пользовательские правила валидации](#custom-validation-rules)
-    - [Использование класса Rule](#using-rule-objects)
-    - [Использование замыканий](#using-closures)
-    - [Неявные правила](#implicit-rules)
 
 <a name="introduction"></a>
 ## Введение
@@ -742,18 +709,8 @@ Laravel также содержит глобального помощника `o
 
 Ниже приведен список всех доступных правил валидации и их функций:
 
-<!-- <style>
-    .collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
 
-    .collection-method-list a {
-        display: block;
-    }
-</style> -->
-
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [Accepted](#rule-accepted)
 - [Accepted If](#rule-accepted-if)
@@ -836,7 +793,7 @@ Laravel также содержит глобального помощника `o
 - [URL](#rule-url)
 - [UUID](#rule-uuid)
 
-<!-- </div> -->
+</div>
 
 <a name="rule-accepted"></a>
 #### accepted

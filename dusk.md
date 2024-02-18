@@ -1,56 +1,8 @@
-git d35acdeace1152f3559b81c5ae02c18e80197a52
-
+---
+git: d35acdeace1152f3559b81c5ae02c18e80197a52
 ---
 
 # Тестирование · Пакет Laravel Dusk
-
-- [Введение](#introduction)
-- [Установка](#installation)
-    - [Управление установками ChromeDriver](#managing-chromedriver-installations)
-    - [Использование других браузеров](#using-other-browsers)
-- [Начало работы](#getting-started)
-    - [Генерация тестов](#generating-tests)
-    - [Миграции базы данных](#migrations)
-    - [Запуск тестов](#running-tests)
-    - [Обработка файла переменных окружения](#environment-handling)
-- [Основы работы с браузером](#browser-basics)
-    - [Создание браузеров](#creating-browsers)
-    - [Навигация](#navigation)
-    - [Изменение размера окна браузера](#resizing-browser-windows)
-    - [Макрокоманды браузера](#browser-macros)
-    - [Аутентификация](#authentication)
-    - [Cookies](#cookies)
-    - [Выполнение JavaScript](#executing-javascript)
-    - [Получение снимка экрана](#taking-a-screenshot)
-    - [Сохранение вывода консоли на диск](#storing-console-output-to-disk)
-    - [Сохранение исходного кода страницы на диск](#storing-page-source-to-disk)
-- [Взаимодействие с элементами](#interacting-with-elements)
-    - [Селекторы Dusk](#dusk-selectors)
-    - [Текст, значения и атрибуты](#text-values-and-attributes)
-    - [Взаимодействие с формами](#interacting-with-forms)
-    - [Прикрепление файлов](#attaching-files)
-    - [Нажатие кнопок](#pressing-buttons)
-    - [Клик по ссылкам](#clicking-links)
-    - [Использование клавиатуры](#using-the-keyboard)
-    - [Использование мыши](#using-the-mouse)
-    - [Диалоговые окна JavaScript (Alert, Prompt, Confirm)](#javascript-dialogs)
-    - [Сегментированное тестирование по селекторам](#scoping-selectors)
-    - [Ожидание доступности элементов](#waiting-for-elements)
-    - [Прокрутка элемента в область видимости пользователя](#scrolling-an-element-into-view)
-- [Доступные утверждения](#available-assertions)
-- [Тестовые страницы](#pages)
-    - [Генерация тестовых страниц](#generating-pages)
-    - [Конфигурирование тестовых страниц](#configuring-pages)
-    - [Навигация по тестовым страницам](#navigating-to-pages)
-    - [Псевдонимы селекторов](#shorthand-selectors)
-    - [Методы тестовых страниц](#page-methods)
-- [Компоненты для тестов](#components)
-    - [Генерация компонентов](#generating-components)
-    - [Использование компонентов](#using-components)
-- [Непрерывная интеграция](#continuous-integration)
-    - [Heroku CI](#running-tests-on-heroku-ci)
-    - [Travis CI](#running-tests-on-travis-ci)
-    - [GitHub Actions](#running-tests-on-github-actions)
 
 <a name="introduction"></a>
 ## Введение
@@ -875,18 +827,7 @@ Dusk содержит различные методы для взаимодей�
 
 Dusk содержит множество утверждений, которые вы можете использовать при тестировании вашего приложения. Все доступные утверждения представлены в списке ниже:
 
-<!-- <style>
-    .collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    .collection-method-list a {
-        display: block;
-    }
-</style> -->
-
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [assertTitle](#assert-title)
 - [assertTitleContains](#assert-title-contains)
@@ -962,7 +903,7 @@ Dusk содержит множество утверждений, которые 
 - [assertVueContains](#assert-vue-contains)
 - [assertVueDoesNotContain](#assert-vue-does-not-contain)
 
-<!-- </div> -->
+</div>
 
 <a name="assert-title"></a>
 #### assertTitle

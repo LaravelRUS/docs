@@ -4,17 +4,6 @@ git 9871b627f83ecf235ff439e7599be0ca95b39623
 
 # Рекомендации по участию
 
-- [Отчеты об ошибках](#bug-reports)
-- [Вопросы поддержки](#support-questions)
-- [Обсуждение разработки ядра](#core-development-discussion)
-- [Какую ветку выбрать при запросах слияния?](#which-branch)
-- [Скомпилированные ресурсы исходников](#compiled-assets)
-- [Уязвимости безопасности](#security-vulnerabilities)
-- [Стиль кодирования](#coding-style)
-  - [PHPDoc](#phpdoc)
-  - [StyleCI](#styleci)
-- [Нормы поведения](#code-of-conduct)
-
 <a name="bug-reports"></a>
 ## Отчеты об ошибках
 

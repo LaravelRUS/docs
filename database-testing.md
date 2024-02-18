@@ -1,28 +1,9 @@
-git 186a9ef85d1edce04513d3259ad161bfb49beb24
-
+---
+git: 186a9ef85d1edce04513d3259ad161bfb49beb24
 ---
 
 # Тестирование · База данных
 
-- [Введение](#introduction)
-    - [Сброс базы данных после каждого теста](#resetting-the-database-after-each-test)
-- [Определение фабрик моделей](#defining-model-factories)
-    - [Обзор концепции](#concept-overview)
-    - [Генерация фабрик](#generating-factories)
-    - [Состояния фабрик](#factory-states)
-    - [Хуки фабрик](#factory-callbacks)
-- [Создание моделей с использованием фабрик](#creating-models-using-factories)
-    - [Инициализация экземпляров моделей](#instantiating-models)
-    - [Сохранение моделей](#persisting-models)
-    - [Последовательность состояний](#sequences)
-- [Отношения](#factory-relationships)
-    - [Отношения Has Many](#has-many-relationships)
-    - [Отношения Belongs To](#belongs-to-relationships)
-    - [Отношения Many To Many](#many-to-many-relationships)
-    - [Полиморфные отношения](#polymorphic-relationships)
-    - [Определение отношений внутри фабрик](#defining-relationships-within-factories)
-- [Запуск наполнителей](#running-seeders)
-- [Доступные утверждения](#available-assertions)
 
 <a name="introduction"></a>
 ## Введение

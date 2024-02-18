@@ -1,36 +1,8 @@
-git 9ae79ac7e1f9f55edd89ee3ca0e2b7024c9e4cfb
-
+---
+git: 9ae79ac7e1f9f55edd89ee3ca0e2b7024c9e4cfb
 ---
 
 # Аутентификация
-
-- [Введение](#introduction)
-    - [Стартовые комплекты](#starter-kits)
-    - [Рекомендации по базе данных](#introduction-database-considerations)
-    - [Обзор экосистемы](#ecosystem-overview)
-- [Быстрый запуск аутентификации](#authentication-quickstart)
-    - [Установка стартовых комплектов](#install-a-starter-kit)
-    - [Получение аутентифицированного пользователя](#retrieving-the-authenticated-user)
-    - [Защита маршрутов](#protecting-routes)
-    - [Частота попыток входа в приложение](#login-throttling)
-- [Самостоятельная реализация аутентификации пользователей](#authenticating-users)
-    - [Запоминание пользователей](#remembering-users)
-    - [Другие методы аутентификации](#other-authentication-methods)
-- [Basic HTTP-аутентификация](#http-basic-authentication)
-    - [Basic HTTP-аутентификация без сохранения состояния](#stateless-http-basic-authentication)
-- [Выход из приложения](#logging-out)
-    - [Аннулирование сессий на других устройствах](#invalidating-sessions-on-other-devices)
-- [Подтверждение пароля](#password-confirmation)
-    - [Конфигурация подтверждения пароля](#password-confirmation-configuration)
-    - [Маршрутизация подтверждения пароля](#password-confirmation-routing)
-    - [Защита маршрутов](#password-confirmation-protecting-routes)
-- [Добавление своих охранников аутентификации](#adding-custom-guards)
-    - [Анонимные охранники аутентификации на базе HTTP-запросов](#closure-request-guards)
-- [Добавление своих провайдеров пользователей](#adding-custom-user-providers)
-    - [Контракт `UserProvider`](#the-user-provider-contract)
-    - [Контракт `Authenticatable`](#the-authenticatable-contract)
-- [Аутентификация через социальные сети](#socialite)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение
@@ -655,7 +627,7 @@ Laravel также предлагает механизм для «выхода»
 
 - Метод `retrieveByCredentials` принимает массив учетных данных, переданный методу `Auth::attempt` при попытке аутентификации в приложении. Затем метод должен «запросить» у постоянного хранилища пользователя, соответствующего этим учетным данным. Как правило, этот метод запускает запрос с условием `WHERE`, который ищет запись пользователя с «именем пользователя», равнозначным `$credentials['имя пользователя']`. Метод должен возвращать реализацию `Authenticatable`. **Этот метод не должен пытаться выполнить проверку пароля или аутентификацию.**
 
-- Метод validateCredentials должен сравнивать переданный `$user` с `$credentials` для аутентификации пользователя. Например, этот метод обычно использует метод `Hash::check` для сравнения значения `$user->getAuthPassword()` со значением `$credentials['password']`. Этот метод должен возвращать `true` или `false`, указывая, действителен ли пароль.
+- Метод `validateCredentials` должен сравнивать переданный `$user` с `$credentials` для аутентификации пользователя. Например, этот метод обычно использует метод `Hash::check` для сравнения значения `$user->getAuthPassword()` со значением `$credentials['password']`. Этот метод должен возвращать `true` или `false`, указывая, действителен ли пароль.
 
 <a name="the-authenticatable-contract"></a>
 ### Контракт `Authenticatable`

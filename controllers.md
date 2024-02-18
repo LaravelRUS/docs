@@ -1,23 +1,8 @@
-git 80807a5b50ac83b11e641eb73a78aa50bd208563
-
+---
+git: 80807a5b50ac83b11e641eb73a78aa50bd208563
 ---
 
 # Контроллеры
-
-- [Введение](#introduction)
-- [Написание контроллеров](#writing-controllers)
-    - [Основные понятия о контроллерах](#basic-controllers)
-    - [Контроллеры одиночного действия](#single-action-controllers)
-- [Посредник контроллера](#controller-middleware)
-- [Ресурсные контроллеры](#resource-controllers)
-    - [Частичные ресурсные маршруты](#restful-partial-resource-routes)
-    - [Вложенные ресурсы](#restful-nested-resources)
-    - [Именование ресурсных маршрутов](#restful-naming-resource-routes)
-    - [Именование параметров ресурсных маршрутов](#restful-naming-resource-route-parameters)
-    - [Ограничение ресурсных маршрутов](#restful-scoping-resource-routes)
-    - [Локализация URI ресурсов](#restful-localizing-resource-uris)
-    - [Дополнение ресурсных контроллеров](#restful-supplementing-resource-controllers)
-- [Внедрение зависимостей и контроллеры](#dependency-injection-and-controllers)
 
 <a name="introduction"></a>
 ## Введение

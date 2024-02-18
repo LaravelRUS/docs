@@ -1,40 +1,9 @@
-git 1be7f7520dbec11ae6094ab9c848237c5be554f5
-
+---
+git: 1be7f7520dbec11ae6094ab9c848237c5be554f5
 ---
 
 # База данных · Построитель запросов
 
-- [Введение](#introduction)
-- [Выполнение запросов к базе данных](#running-database-queries)
-    - [Разбиение результатов](#chunking-results)
-    - [Отложенная потоковая передача результатов](#streaming-results-lazily)
-    - [Агрегатные функции](#aggregates)
-- [Выражения (select)](#select-statements)
-- [Необрабатываемые (сырые) SQL-выражения](#raw-expressions)
-- [Соединения (join)](#joins)
-- [Объединения результатов (union)](#unions)
-- [Основные выражения Where](#basic-where-clauses)
-    - [Выражения Where](#where-clauses)
-    - [Выражения Or Where](#or-where-clauses)
-    - [Выражения Where и JSON](#json-where-clauses)
-    - [Дополнительные выражения Where](#additional-where-clauses)
-    - [Логическая группировка](#logical-grouping)
-- [Расширенные выражения Where](#advanced-where-clauses)
-    - [Выражения Where Exists](#where-exists-clauses)
-    - [Подзапросы выражений Where](#subquery-where-clauses)
-- [Сортировка, группировка, ограничение и смещение](#ordering-grouping-limit-and-offset)
-    - [Сортировка](#ordering)
-    - [Группировка](#grouping)
-    - [Ограничение и смещение](#limit-and-offset)
-- [Условные выражения](#conditional-clauses)
-- [Вставка](#insert-statements)
-    - [Обновления-вставки](#upserts)
-- [Обновление](#update-statements)
-    - [Обновление столбцов JSON](#updating-json-columns)
-    - [Увеличение и уменьшение отдельных значений](#increment-and-decrement)
-- [Удаление](#delete-statements)
-- [Пессимистическая блокировка](#pessimistic-locking)
-- [Отладка](#debugging)
 
 <a name="introduction"></a>
 ## Введение

@@ -1,22 +1,8 @@
-# Laravel Valet
+---
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-    - [Upgrading Valet](#upgrading-valet)
-- [Serving Sites](#serving-sites)
-    - [The "Park" Command](#the-park-command)
-    - [The "Link" Command](#the-link-command)
-    - [Securing Sites With TLS](#securing-sites)
-- [Sharing Sites](#sharing-sites)
-    - [Sharing Sites Via Ngrok](#sharing-sites-via-ngrok)
-    - [Sharing Sites Via Expose](#sharing-sites-via-expose)
-    - [Sharing Sites On Your Local Network](#sharing-sites-on-your-local-network)
-- [Site Specific Environment Variables](#site-specific-environment-variables)
-- [Proxying Services](#proxying-services)
-- [Custom Valet Drivers](#custom-valet-drivers)
-    - [Local Drivers](#local-drivers)
-- [Other Valet Commands](#other-valet-commands)
-- [Valet Directories & Files](#valet-directories-and-files)
+---
+<!-- пустой заголовок, чтобы парсер не сожрал данные-->
+# Laravel Valet
 
 <a name="introduction"></a>
 ## Introduction
@@ -27,14 +13,8 @@ In other words, Valet is a blazing fast Laravel development environment that use
 
 Out of the box, Valet support includes, but is not limited to:
 
-<style>
-    #valet-support > ul {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        line-height: 1.9;
-    }
-</style>
+<div class="docs-column-list" markdown="1">
 
-<div id="valet-support" markdown="1">
 - [Laravel](https://laravel.com)
 - [Lumen](https://lumen.laravel.com)
 - [Bedrock](https://roots.io/bedrock/)
@@ -57,6 +37,7 @@ Out of the box, Valet support includes, but is not limited to:
 - [Symfony](https://symfony.com)
 - [WordPress](https://wordpress.org)
 - [Zend](https://framework.zend.com)
+
 </div>
 
 However, you may extend Valet with your own [custom drivers](#custom-valet-drivers).
@@ -354,16 +335,16 @@ If you would like to define a custom Valet driver for a single application, crea
 <a name="other-valet-commands"></a>
 ## Other Valet Commands
 
-Command  | Description
-------------- | -------------
-`valet forget` | Run this command from a "parked" directory to remove it from the parked directory list.
-`valet log` | View a list of logs which are written by Valet's services.
-`valet paths` | View all of your "parked" paths.
-`valet restart` | Restart the Valet daemons.
-`valet start` | Start the Valet daemons.
-`valet stop` | Stop the Valet daemons.
-`valet trust` | Add sudoers files for Brew and Valet to allow Valet commands to be run without prompting for your password.
-`valet uninstall` | Uninstall Valet: shows instructions for manual uninstall. Pass the `--force` option to aggressively delete all of Valet's resources.
+| Command           | Description                                                                                                                          |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| `valet forget`    | Run this command from a "parked" directory to remove it from the parked directory list.                                              |
+| `valet log`       | View a list of logs which are written by Valet's services.                                                                           |
+| `valet paths`     | View all of your "parked" paths.                                                                                                     |
+| `valet restart`   | Restart the Valet daemons.                                                                                                           |
+| `valet start`     | Start the Valet daemons.                                                                                                             |
+| `valet stop`      | Stop the Valet daemons.                                                                                                              |
+| `valet trust`     | Add sudoers files for Brew and Valet to allow Valet commands to be run without prompting for your password.                          |
+| `valet uninstall` | Uninstall Valet: shows instructions for manual uninstall. Pass the `--force` option to aggressively delete all of Valet's resources. |
 
 <a name="valet-directories-and-files"></a>
 ## Valet Directories & Files

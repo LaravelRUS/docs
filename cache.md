@@ -1,30 +1,8 @@
-git 86964eb6ea30d7693e6b13de717ef0cf21b09d91
-
+---
+git: 86964eb6ea30d7693e6b13de717ef0cf21b09d91
 ---
 
-# Кеш приложения
-
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-    - [Предварительная подготовка драйверов](#driver-prerequisites)
-- [Управление кешем приложения](#cache-usage)
-    - [Получение экземпляра кеша](#obtaining-a-cache-instance)
-    - [Получение элементов из кеша](#retrieving-items-from-the-cache)
-    - [Сохранение элементов в кеше](#storing-items-in-the-cache)
-    - [Удаление элементов из кеша](#removing-items-from-the-cache)
-    - [Глобальный помощник кеша](#the-cache-helper)
-- [Тегированный кеш](#cache-tags)
-    - [Сохранение элементов тегированного кеша](#storing-tagged-cache-items)
-    - [Доступ к элементам тегированного кеша](#accessing-tagged-cache-items)
-    - [Удаление элементов тегированного кеша](#removing-tagged-cache-items)
-- [Атомарные блокировки](#atomic-locks)
-    - [Предварительная подготовка драйверов](#lock-driver-prerequisites)
-    - [Управление блокировками](#managing-locks)
-    - [Управление блокировками между процессами](#managing-locks-across-processes)
-- [Добавление собственных драйверов кеша](#adding-custom-cache-drivers)
-    - [Написание драйвера кеша](#writing-the-driver)
-    - [Регистрация драйвера кеша](#registering-the-driver)
-- [События](#events)
+# Кэширование
 
 <a name="introduction"></a>
 ## Введение

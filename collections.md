@@ -1,21 +1,9 @@
+---
 git 470922e766798ba65da7dd5d2181351524cbcd69
-
 ---
 
 # Коллекции
 
-- [Введение](#introduction)
-    - [Создание коллекций](#creating-collections)
-    - [Расширение коллекций](#extending-collections)
-- [Доступные методы](#available-methods)
-- [Сообщения высшего порядка](#higher-order-messages)
-- [Отложенные коллекции](#lazy-collections)
-    - [Введение в отложенные коллекции](#lazy-collection-introduction)
-    - [Создание отложенных коллекций](#creating-lazy-collections)
-    - [Контракт `Enumerable`](#the-enumerable-contract)
-    - [Методы отложенных коллекций](#lazy-collection-methods)
-
-<a name="introduction"></a>
 ## Введение
 
 Класс `Illuminate\Support\Collection` обеспечивает гибкую и удобную обертку для работы с массивами данных. Например, посмотрите на следующий код. Здесь мы будем использовать хелпер `collect`, чтобы создать новый экземпляр коллекции из массива, запустим функцию `strtoupper` для каждого элемента, а затем удалим все пустые элементы:
@@ -82,18 +70,8 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 
 В большей части оставшейся документации по коллекциям мы обсудим каждый метод, доступный в классе `Collection`. Помните, что все эти методы можно объединить в цепочку для последовательного управления базовым массивом. Более того, почти каждый метод возвращает новый экземпляр `Collection`, позволяя вам при необходимости сохранить исходную копию коллекции:
 
-<!-- <style>
-    #collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
 
-    #collection-method-list a {
-        display: block;
-    }
-</style> -->
-
-<!-- <div id="collection-method-list" markdown="1"> -->
+ <div class="docs-column-list" markdown="1">
 
 - [`all()`](#method-all)
 - [`average()`](#method-average)
@@ -230,22 +208,11 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`wrap()`](#method-wrap)
 - [`zip()`](#method-zip)
 
-<!-- </div> -->
+ </div>
 
-<a name="method-listing"></a>
 ## Список методов
 
-<!-- <style>
-    #collection-method code {
-        font-size: 14px;
-    }
 
-    #collection-method:not(.first-collection-method) {
-        margin-top: 50px;
-    }
-</style> -->
-
-<a name="method-all"></a>
 #### `all()`
 
 Метод `all` возвращает базовый массив, представленный коллекцией:
@@ -1584,7 +1551,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
     // [1, 2, 3]
 
 <a name="method-pipethrough"></a>
-#### `pipeThrough()` {.collection-method}
+#### `pipeThrough()`
 
 Метод `pipeThrough` передает коллекцию заданному массиву замыканий и возвращает результат выполненных замыканий:
 
@@ -1983,7 +1950,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
     // [3, 2, 5, 1, 4] - (последовательность случайная)
 
 <a name="method-sliding"></a>
-#### `sliding()` {#collection-method}
+#### `sliding()`
 
 Метод `sliding` возвращает новую коллекцию фрагментов (chunks), представляющих представление элементов коллекции в виде "скользящего окна":
 
@@ -2092,7 +2059,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 Возвращенный фрагмент по умолчанию сохранит ключи. Если вы не хотите сохранять исходные ключи, вы можете использовать метод [`values`](#method-values), чтобы переиндексировать их.
 
 <a name="method-sole"></a>
-#### `sole()` {#collection-method}
+#### `sole()`
 
 Метод `sole` возвращает первый элемент в коллекции, который проходит заданный тест на истинность, но только если тест на истинность соответствует ровно одному элементу:
 
@@ -2311,7 +2278,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 Этот метод имеет ту же сигнатуру, что и метод [`sortKeys`](#method-sortkeys), но отсортирует коллекцию в обратном порядке.
 
 <a name="method-sortkeysusing"></a>
-#### `sortKeysUsing()` {.collection-method}
+#### `sortKeysUsing()`
 
 Метод `sortKeysUsing` сортирует коллекцию по ключам базового ассоциативного массива с помощью обратного вызова:
 
@@ -2580,7 +2547,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 > {note} В отличие от большинства других методов коллекции, `transform` модифицирует коллекцию. Если вы хотите вместо этого создать новую коллекцию, используйте метод [`map`](#method-map).
 
 <a name="method-undot"></a>
-#### `undot()` {.collection-method}
+#### `undot()`
 
 Метод `undot` расширяет одномерную коллекцию, использующую «точечную» нотацию, в многомерную коллекцию:
 
@@ -3235,7 +3202,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 
 Почти все методы, доступные в классе `Collection`, также доступны в классе `LazyCollection`. Оба класса реализуют контракт `Illuminate\Support\Enumerable`, который определяет следующие методы:
 
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1"> 
 
 - [`all()`](#method-all)
 - [`average()`](#method-average)
@@ -3364,7 +3331,7 @@ git 470922e766798ba65da7dd5d2181351524cbcd69
 - [`wrap()`](#method-wrap)
 - [`zip()`](#method-zip)
 
-<!-- </div> -->
+</div>
 
 > {note} Методы, которые изменяют коллекцию (такие, как `shift`, `pop`, `prepend` и т.д.), **недоступны** в классе `LazyCollection`.
 

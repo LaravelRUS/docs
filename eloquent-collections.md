@@ -1,12 +1,9 @@
-git 0114efaa616fc2853168f9fccfc072f9d11f7f43
-
+---
+git: 0114efaa616fc2853168f9fccfc072f9d11f7f43
 ---
 
 # Eloquent · Коллекции
 
-- [Введение](#introduction)
-- [Доступные методы](#available-methods)
-- [Пользовательские коллекции](#custom-collections)
 
 <a name="introduction"></a>
 ## Введение
@@ -43,18 +40,7 @@ git 0114efaa616fc2853168f9fccfc072f9d11f7f43
 
 Кроме того, класс `Illuminate\Database\Eloquent\Collection` содержит расширенный набор методов, помогающих управлять коллекциями моделей. Большинство методов возвращают экземпляры `Illuminate\Database\Eloquent\Collection`; однако некоторые методы, такие как `modelKeys`, возвращают экземпляр `Illuminate\Support\Collection`.
 
-<!-- <style>
-    #collection-method-list > p {
-        column-count: 1; -moz-column-count: 1; -webkit-column-count: 1;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    #collection-method-list a {
-        display: block;
-    }
-</style> -->
-
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div class="docs-column-list-1" markdown="1">
 
 - [contains](#method-contains)
 - [diff](#method-diff)

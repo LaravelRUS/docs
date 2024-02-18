@@ -1,5 +1,5 @@
-git 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
-
+---
+git: 9f92262a5af04c855905cae8a6a0e9fb2b9c46ba
 ---
 
 - ## Пролог

@@ -1,12 +1,8 @@
-git 8f0031b4ea65784d5786507f76fbf9843c0ea388
-
+---
+git: 8f0031b4ea65784d5786507f76fbf9843c0ea388
 ---
 
 # Тестирование · Тесты консольных команд
-
-- [Введение](#introduction)
-- [Ожидания успеха / неудачи](#success-failure-expectations)
-- [Ожидания ввода / вывода](#input-output-expectations)
 
 <a name="introduction"></a>
 ## Введение

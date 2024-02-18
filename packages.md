@@ -1,23 +1,9 @@
-git a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
-
+---
+git: a6db77c849b310697e8b68a9e9c9ff9290b9bfd3
 ---
 
 # Разработка пакетов
 
-- [Введение](#introduction)
-    - [Примечание о фасадах](#a-note-on-facades)
-- [Обнаружение пакетов](#package-discovery)
-- [Поставщики служб](#service-providers)
-- [Ресурсы](#resources)
-    - [Конфигурация](#configuration)
-    - [Миграции](#migrations)
-    - [Маршруты](#routes)
-    - [Переводы](#translations)
-    - [Шаблоны](#views)
-    - [Компоненты шаблонов](#view-components)
-- [Команды](#commands)
-- [Публичные ресурсы](#public-assets)
-- [Публикация групп файлов](#publishing-file-groups)
 
 <a name="introduction"></a>
 ## Введение

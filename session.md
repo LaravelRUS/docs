@@ -1,22 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Сессия HTTP
-
-- [Введение](#introduction)
-    - [Конфигурирование](#configuration)
-    - [Предварительная подготовка драйверов](#driver-prerequisites)
-- [Взаимодействие с сессией](#interacting-with-the-session)
-    - [Получение данных](#retrieving-data)
-    - [Сохранение данных](#storing-data)
-    - [Кратковременные данные](#flash-data)
-    - [Удаление данных](#deleting-data)
-    - [Пересоздание идентификатора сессии](#regenerating-the-session-id)
-- [Блокировка сессии](#session-blocking)
-- [Добавление пользовательских драйверов сессии](#adding-custom-session-drivers)
-    - [Реализация пользовательского драйвера](#implementing-the-driver)
-    - [Регистрация пользовательского драйвера](#registering-the-driver)
 
 <a name="introduction"></a>
 ## Введение

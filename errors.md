@@ -1,19 +1,9 @@
-git 0f19f3d770b961aee8576b24deb394a0b9a2f7ad
-
+---
+git: 0f19f3d770b961aee8576b24deb394a0b9a2f7ad
 ---
 
 # Обработка ошибок (Exception)
 
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-- [Обработчик исключений](#the-exception-handler)
-    - [Отчет об исключениях](#reporting-exceptions)
-    - [Игнорирование исключений по типу](#ignoring-exceptions-by-type)
-    - [Отображение исключений](#rendering-exceptions)
-    - [Отчетные и отображаемые исключения](#renderable-exceptions)
-    - [Сопоставление исключений по типу](#mapping-exceptions-by-type)
-- [HTTP-исключения](#http-exceptions)
-    - [Пользовательские страницы ошибок HTTP](#custom-http-error-pages)
 
 <a name="introduction"></a>
 ## Введение

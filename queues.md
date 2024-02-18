@@ -1,54 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Очереди
-
-- [Введение](#introduction)
-    - [Соединения и очереди](#connections-vs-queues)
-    - [Предварительная подготовка драйверов](#driver-prerequisites)
-- [Создание заданий (jobs)](#creating-jobs)
-    - [Генерация класса задания](#generating-job-classes)
-    - [Структура класса](#class-structure)
-    - [Уникальные задания](#unique-jobs)
-- [Посредник задания](#job-middleware)
-    - [Ограничение частоты](#rate-limiting)
-    - [Предотвращение дублирования задания](#preventing-job-overlaps)
-    - [Ограничение частоты генерации исключений](#throttling-exceptions)
-- [Отправка заданий](#dispatching-jobs)
-    - [Отложенная отправка](#delayed-dispatching)
-    - [Синхронная отправка](#synchronous-dispatching)
-    - [Задания и транзакции базы данных](#jobs-and-database-transactions)
-    - [Цепочка заданий](#job-chaining)
-    - [Настройка соединения и очереди](#customizing-the-queue-and-connection)
-    - [Указание максимального количества попыток задания / значений тайм-аута](#max-job-attempts-and-timeout)
-    - [Обработка ошибок](#error-handling)
-- [Пакетная обработка заданий](#job-batching)
-    - [Определение пакета заданий](#defining-batchable-jobs)
-    - [Отправка пакета заданий](#dispatching-batches)
-    - [Добавление заданий в пакет заданий](#adding-jobs-to-batches)
-    - [Инспектирование пакета](#inspecting-batches)
-    - [Отмена пакетов](#cancelling-batches)
-    - [Отказы в пакете заданий](#batch-failures)
-    - [Очистка пакетов](#pruning-batches)
-- [Анонимные очереди](#queueing-closures)
-- [Запуск обработчика очереди](#running-the-queue-worker)
-    - [Команда `queue:work`](#the-queue-work-command)
-    - [Приоритеты очереди](#queue-priorities)
-    - [Обработчики очереди и развертывание](#queue-workers-and-deployment)
-    - [Истечение срока и тайм-ауты задания](#job-expirations-and-timeouts)
-- [Конфигурация Supervisor](#supervisor-configuration)
-- [Разбор неудачных заданий (failed jobs)](#dealing-with-failed-jobs)
-    - [Очистка после неудачных заданий](#cleaning-up-after-failed-jobs)
-    - [Повторная попытка выполнения неудачных заданий](#retrying-failed-jobs)
-    - [Игнорирование отсутствующих моделей](#ignoring-missing-models)
-    - [Удаление неудачных заданий](#pruning-failed-jobs)
-    - [Хранение неудачных заданий в DynamoDB](#storing-failed-jobs-in-dynamodb)
-    - [Отключение хранилища неудачных заданий](#disabling-failed-job-storage)
-    - [События неудачных заданий](#failed-job-events)
-- [Удаление заданий из очередей](#clearing-jobs-from-queues)
-- [Мониторинг очередей](#monitoring-your-queues)
-- [События заданий](#job-events)
 
 <a name="introduction"></a>
 ## Введение

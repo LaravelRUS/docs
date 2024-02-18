@@ -1,12 +1,9 @@
-git 212cf52490604efe98f1e486c9db94dd69be24e4
-
+---
+git: 212cf52490604efe98f1e486c9db94dd69be24e4
 ---
 
 # Шифрование
 
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-- [Использование шифровальщика](#using-the-encrypter)
 
 <a name="introduction"></a>
 ## Введение

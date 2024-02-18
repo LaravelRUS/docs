@@ -1,19 +1,8 @@
-git 882c775698f28e3148786c07fa0b8f9393308e13
-
+---
+git: 882c775698f28e3148786c07fa0b8f9393308e13
 ---
 
 # Пакет Laravel Socialite
-
-- [Введение](#introduction)
-- [Установка](#installation)
-- [Обновление пакета Socialite](#upgrading-socialite)
-- [Конфигурирование](#configuration)
-- [Аутентификация](#authentication)
-    - [Маршрутизация](#routing)
-    - [Аутентификация и хранение](#authentication-and-storage)
-    - [Права доступа](#access-scopes)
-    - [Необязательные параметры](#optional-parameters)
-- [Получение сведений о пользователе](#retrieving-user-details)
 
 <a name="introduction"></a>
 ## Введение

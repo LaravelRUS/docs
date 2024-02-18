@@ -1,19 +1,9 @@
-git fa38597c7d27bf505b912772e848272d44cc3adf
-
+---
+git: fa38597c7d27bf505b912772e848272d44cc3adf
 ---
 
 # HTML-шаблоны
 
-- [Введение](#introduction)
-- [Создание и отрисовка шаблонов](#creating-and-rendering-views)
-    - [Вложенные каталоги шаблонов](#nested-view-directories)
-    - [Использование первого доступного шаблона](#creating-the-first-available-view)
-    - [Определение наличия шаблона](#determining-if-a-view-exists)
-- [Передача данных шаблону](#passing-data-to-views)
-    - [Общедоступные данные для всех шаблонов](#sharing-data-with-all-views)
-- [Компоновщики шаблонов](#view-composers)
-    - [Создатели шаблонов](#view-creators)
-- [Оптимизация шаблонов](#optimizing-views)
 
 <a name="introduction"></a>
 ## Введение

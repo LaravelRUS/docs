@@ -1,24 +1,8 @@
-git af5bdad4fcc39375bff3a8185d5e48df869d2918
-
+---
+git: af5bdad4fcc39375bff3a8185d5e48df869d2918
 ---
 
 # События (Events)
-
-- [Введение](#introduction)
-- [Регистрация событий и слушателей](#registering-events-and-listeners)
-    - [Генерация событий и слушателей](#generating-events-and-listeners)
-    - [Ручная регистрация событий](#manually-registering-events)
-    - [Автообнаружение событий](#event-discovery)
-- [Определение событий](#defining-events)
-- [Определение слушателей](#defining-listeners)
-- [Слушатели событий в очереди](#queued-event-listeners)
-    - [Взаимодействие с очередью вручную](#manually-interacting-with-the-queue)
-    - [Слушатели событий в очереди и транзакции базы данных](#queued-event-listeners-and-database-transactions)
-    - [Обработка невыполненных заданий](#handling-failed-jobs)
-- [Отправка событий](#dispatching-events)
-- [Подписчики событий](#event-subscribers)
-    - [Написание подписчиков на события](#writing-event-subscribers)
-    - [Регистрация подписчиков на события](#registering-event-subscribers)
 
 <a name="introduction"></a>
 ## Введение

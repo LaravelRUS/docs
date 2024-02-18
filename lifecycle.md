@@ -1,17 +1,9 @@
-git 3997418dec9e03d10bfefb1620ff51a34fb10b0b
-
+---
+git: 3997418dec9e03d10bfefb1620ff51a34fb10b0b
 ---
 
 # Жизненный цикл запроса
 
-- [Введение](#introduction)
-- [Обзор жизненного цикла](#lifecycle-overview)
-    - [Первые шаги](#first-steps)
-    - [HTTP-ядро и ядро консоли](#http-console-kernels)
-    - [Поставщики служб](#service-providers)
-    - [Маршрутизация](#routing)
-    - [Окончание](#finishing-up)
-- [Сосредоточьтесь на поставщиках служб](#focus-on-service-providers)
 
 <a name="introduction"></a>
 ## Введение

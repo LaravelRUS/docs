@@ -1,15 +1,8 @@
-git 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
-
+---
+git: 0ab96f0b7c55966f5402b99e37268a0e9dacd03e
 ---
 
 # Хеширование
-
-- [Введение](#introduction)
-- [Конфигурирование](#configuration)
-- [Основы использования](#basic-usage)
-    - [Хеширование паролей](#hashing-passwords)
-    - [Проверка совпадения пароля с хешем](#verifying-that-a-password-matches-a-hash)
-    - [Определение необходимости повторного хеширования пароля](#determining-if-a-password-needs-to-be-rehashed)
 
 <a name="introduction"></a>
 ## Введение

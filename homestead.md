@@ -1,41 +1,8 @@
-git 6ac13f37adbed3ce6a6532fd790f70bd731b8571
-
+---
+git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 ---
 
 # Laravel Homestead
-
-- [Введение](#introduction)
-- [Установка и настройка](#installation-and-setup)
-    - [Первые шаги](#first-steps)
-    - [Настройка Homestead](#configuring-homestead)
-    - [Настройка Nginx](#configuring-nginx-sites)
-    - [Настройка сервисов](#configuring-services)
-    - [Запуск Vagrant Box](#launching-the-vagrant-box)
-    - [Подготовка к установке](#per-project-installation)
-    - [Установка дополнительных пакетов](#installing-optional-features)
-    - [Псевдонимы](#aliases)
-- [Обновление Homestead](#updating-homestead)
-- [Ежедневное использование](#daily-usage)
-    - [Подключение через SSH](#connecting-via-ssh)
-    - [Добавление сайтов](#adding-additional-sites)
-    - [Настройка окружения](#environment-variables)
-    - [Порты](#ports)
-    - [Версии PHP](#php-versions)
-    - [Соединение с базой данных](#connecting-to-databases)
-    - [Резервные копии базы данных](#database-backups)
-    - [Настройка расписания Cron](#configuring-cron-schedules)
-    - [Настройка MailHog](#configuring-mailhog)
-    - [Настройка Minio](#configuring-minio)
-    - [Laravel Dusk](#laravel-dusk)
-    - [Совместное использование](#sharing-your-environment)
-- [Отладка и профилирование](#debugging-and-profiling)
-    - [Отладка веб-запросов](#debugging-web-requests)
-    - [Отладка CLI-приложений](#debugging-cli-applications)
-    - [Профилирование приложения с Blackfire](#profiling-applications-with-blackfire)
-- [Сетевые интерфейсы](#network-interfaces)
-- [Добавление команд Homestead](#extending-homestead)
-- [Специфичные настройки](#provider-specific-settings)
-    - [VirtualBox](#provider-specific-virtualbox)
 
 <a name="introduction"></a>
 ## Введение
@@ -50,6 +17,8 @@ Homestead работает в любой системе Windows, macOS или Li
 
 <a name="included-software"></a>
 ### Включенное в набор программное обеспечение
+
+<div class="docs-column-list-2" markdown="1"> 
 
 - Ubuntu 20.04
 - Git
@@ -77,9 +46,13 @@ Homestead работает в любой системе Windows, macOS или Li
 - Xdebug
 - XHProf / Tideways / XHGui
 - wp-cli
+- 
+</div>
 
 <a name="optional-software"></a>
 ### Дополнительное программное обеспечение
+
+<div class="docs-column-list-2" markdown="1"> 
 
 - Apache
 - Blackfire
@@ -110,6 +83,8 @@ Homestead работает в любой системе Windows, macOS или Li
 - TimescaleDB
 - Trader <small>(PHP extension)</small>
 - Webdriver & Laravel Dusk Utilities
+
+</div>
 
 <a name="installation-and-setup"></a>
 ## Установка и настройка

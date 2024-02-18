@@ -1,26 +1,8 @@
-git 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
-
+---
+git: 18c6d69ad0cebc55b2970bd4da78a455c5970d7e
 ---
 
 # Контейнер служб (service container)
-
-- [Введение](#introduction)
-  - [Неконфигурируемое внедрение](#zero-configuration-resolution)
-  - [Когда использовать контейнер](#when-to-use-the-container)
-- [Связывание](#binding)
-  - [Основы связываний](#binding-basics)
-  - [Связывание интерфейсов и реализаций](#binding-interfaces-to-implementations)
-  - [Контекстная привязка](#contextual-binding)
-  - [Связывание примитивов](#binding-primitives)
-  - [Связывание типизированных вариаций](#binding-typed-variadics)
-  - [Добавление меток](#tagging)
-  - [Расширяемость связываний](#extending-bindings)
-- [Извлечение](#resolving)
-  - [Метод `make`](#the-make-method)
-  - [Автоматическое внедрение зависимостей](#automatic-injection)
-- [Вызов и внедрение метода](#method-invocation-and-injection)
-- [События контейнера](#container-events)
-- [PSR-11](#psr-11)
 
 <a name="introduction"></a>
 ## Введение

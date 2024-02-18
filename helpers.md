@@ -1,11 +1,8 @@
-git ff7f2bf9e463e6f4027d6c6218107f319effead9
-
+---
+git: ff7f2bf9e463e6f4027d6c6218107f319effead9
 ---
 
 # Глобальные помощники (helpers)
-
-- [Введение](#introduction)
-- [Доступные методы](#available-methods)
 
 <a name="introduction"></a>
 ## Введение
@@ -15,21 +12,10 @@ Laravel содержит множество глобальных «вспомо�
 <a name="available-methods"></a>
 ## Доступные методы
 
-<!-- <style>
-    .collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
-
-    .collection-method-list a {
-        display: block;
-    }
-</style> -->
-
 <a name="arrays-and-objects-method-list"></a>
 ### Массивы и объекты
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [Arr::accessible](#method-array-accessible)
 - [Arr::add](#method-array-add)
@@ -67,12 +53,12 @@ Laravel содержит множество глобальных «вспомо�
 - [data_set](#method-data-set)
 - [head](#method-head)
 - [last](#method-last)
-<!-- </div> -->
+</div>
 
 <a name="paths-method-list"></a>
 ### Пути
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [app_path](#method-app-path)
 - [base_path](#method-base-path)
@@ -83,12 +69,12 @@ Laravel содержит множество глобальных «вспомо�
 - [resource_path](#method-resource-path)
 - [storage_path](#method-storage-path)
 
-<!-- </div> -->
+</div>
 
 <a name="strings-method-list"></a>
 ### Строки
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [\__](#method-__)
 - [class_basename](#method-class-basename)
@@ -147,14 +133,14 @@ Laravel содержит множество глобальных «вспомо�
 - [trans](#method-trans)
 - [trans_choice](#method-trans-choice)
 
-<!-- </div> -->
+</div>
 
 <a name="fluent-strings-method-list"></a>
 ### Строки Fluent
 
 Строки Fluent обеспечивают более гибкий объектно-ориентированный интерфейс для работы со строковыми значениями, позволяя объединять несколько строковых операций вместе с использованием более удобочитаемого синтаксиса по сравнению с традиционными строковыми операциями.
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [after](#method-fluent-str-after)
 - [afterLast](#method-fluent-str-after-last)
@@ -230,12 +216,12 @@ Laravel содержит множество глобальных «вспомо�
 - [wordCount](#method-fluent-str-word-count)
 - [words](#method-fluent-str-words)
 
-<!-- </div> -->
+</div>
 
 <a name="urls-method-list"></a>
 ### URL-адреса
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1"> 
 
 - [action](#method-action)
 - [asset](#method-asset)
@@ -244,12 +230,12 @@ Laravel содержит множество глобальных «вспомо�
 - [secure_url](#method-secure-url)
 - [url](#method-url)
 
-<!-- </div> -->
+</div>
 
 <a name="miscellaneous-method-list"></a>
 ### Разное
 
-<!-- <div class="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [abort](#method-abort)
 - [abort_if](#method-abort-if)
@@ -299,20 +285,10 @@ Laravel содержит множество глобальных «вспомо�
 - [view](#method-view)
 - [with](#method-with)
 
-<!-- </div> -->
+</div>
 
 <a name="method-listing"></a>
 ## Список методов
-
-<!-- <style>
-    #collection-method code {
-        font-size: 14px;
-    }
-
-    #collection-method:not(.first-collection-method) {
-        margin-top: 50px;
-    }
-</style> -->
 
 <a name="arrays"></a>
 ## Массивы и объекты
@@ -1713,7 +1689,7 @@ Laravel содержит множество глобальных «вспомо�
     // 2
 
 <a name="method-str-substrreplace"></a>
-#### `Str::substrReplace()` {.collection-method}
+#### `Str::substrReplace()` 
 
 Метод `Str::substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав `0` четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
 
@@ -1737,7 +1713,7 @@ Laravel содержит множество глобальных «вспомо�
     // A Nice Title Uses The Correct Case
 
 <a name="method-str-to-html-string"></a>
-#### `Str::toHtmlString()` {.collection-method}
+#### `Str::toHtmlString()` 
 
 Метод `Str::toHtmlString` преобразует экземпляр строки в экземпляр Illuminate\Support\HtmlString, который может отображаться в шаблонах Blade:
 
@@ -1907,7 +1883,7 @@ Str::wordCount('Hello, world!'); // 2
     // 'This '
 
 <a name="method-fluent-str-between"></a>
-#### `between` {.collection-method}
+#### `between` 
 
 Метод `between` возвращает часть строки между двумя значениями:
 
@@ -2446,7 +2422,7 @@ If no matches are found, an empty collection will be returned.
     // '/Laravel'
 
 <a name="method-fluent-str-scan"></a>
-#### `scan` {.collection-method}
+#### `scan` 
 
 Метод `scan` анализирует входные данные из строки в коллекцию в соответствии с форматом, поддерживаемым [`sscanf` функцией PHP](https://www.php.net/manual/ru/function.sscanf.php):
 
@@ -2557,7 +2533,7 @@ If no matches are found, an empty collection will be returned.
     // Frame
 
 <a name="method-fluent-str-substrreplace"></a>
-#### `substrReplace` {.collection-method}
+#### `substrReplace`
 
 Метод `substrReplace` заменяет текст в части строки, начиная с позиции, указанной третьим аргументом, и заменяет число символов, указанное четвертым аргументом. Передав 0 четвертым аргументом в метод, строка будет вставлена в указанную позицию без замены каких-либо существующих символов в строке:
 
@@ -2663,7 +2639,7 @@ If no matches are found, an empty collection will be returned.
 При необходимости вы можете передать другое замыкание в качестве третьего параметра методу `when`. Это замыкание будет выполнено, если параметр условия оценивается как `false`.
 
 <a name="method-fluent-str-when-contains"></a>
-#### `whenContains` {.collection-method}
+#### `whenContains`
 
 Метод `whenContains` вызывает данное замыкание, если строка содержит заданное значение. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
@@ -2690,7 +2666,7 @@ If no matches are found, an empty collection will be returned.
     // Tony Stark
 
 <a name="method-fluent-str-when-contains-all"></a>
-#### `whenContainsAll` {.collection-method}
+#### `whenContainsAll`
 
 Метод `whenContainsAll` вызывает данное замыкание, если строка содержит все заданные подстроки. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
@@ -2719,7 +2695,7 @@ If no matches are found, an empty collection will be returned.
     // 'Laravel'
 
 <a name="method-fluent-str-when-not-empty"></a>
-#### `whenNotEmpty` {.collection-method}
+#### `whenNotEmpty`
 
 Метод `whenNotEmpty` вызывает данное замыкание, если строка не пуста. Если замыкание возвращает значение, это значение также будет возвращено методом `whenNotEmpty`. Если замыкание не возвращает значение, будет возвращен экземпляр класса `Stringable`:
 
@@ -2732,7 +2708,7 @@ If no matches are found, an empty collection will be returned.
     // 'Laravel Framework'
 
 <a name="method-fluent-str-when-starts-with"></a>
-#### `whenStartsWith` {.collection-method}
+#### `whenStartsWith`
 
 Метод `whenStartsWith` вызывает данное замыкание, если строка начинается с данной подстроки. Замыкание получит свободный экземпляр класса `Stringable` в качестве аргумента:
 
@@ -2745,7 +2721,7 @@ If no matches are found, an empty collection will be returned.
     // 'Disney World'
 
 <a name="method-fluent-str-when-ends-with"></a>
-#### `whenEndsWith` {.collection-method}
+#### `whenEndsWith`
 
 Метод `whenEndsWith` вызывает данное замыкание, если строка заканчивается заданной подстрокой. Замыкание получит свободный экземпляр строки:
 
@@ -2758,7 +2734,7 @@ If no matches are found, an empty collection will be returned.
     // 'Disney World'
 
 <a name="method-fluent-str-when-exactly"></a>
-#### `whenExactly` {.collection-method}
+#### `whenExactly`
 
 Метод `whenExactly` вызывает данное замыкание, если строка точно соответствует заданной строке. Закрытие получит свободный экземпляр строки:
 
@@ -2771,7 +2747,7 @@ If no matches are found, an empty collection will be returned.
     // 'Laravel'
 
 <a name="method-fluent-str-when-is"></a>
-#### `whenIs` {.collection-method}
+#### `whenIs`
 
 Метод `whenIs` вызывает данное замыкание, если строка соответствует заданному шаблону. Звездочки могут использоваться в качестве подстановочных знаков. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:	
 
@@ -2784,7 +2760,7 @@ If no matches are found, an empty collection will be returned.
     // 'foo/bar/baz'
 
 <a name="method-fluent-str-when-is-ascii"></a>
-#### `whenIsAscii` {.collection-method}
+#### `whenIsAscii`
 
 Метод `whenIsAscii` вызывает данное замыкание, если строка представляет собой 7-битный ASCII. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
@@ -2797,7 +2773,7 @@ If no matches are found, an empty collection will be returned.
     // 'Laravel'
 
 <a name="method-fluent-str-when-is-uuid"></a>
-#### `whenIsUuid` {.collection-method}
+#### `whenIsUuid`
 
 Метод `whenIsUuid` вызывает данное замыкание, если строка является допустимым UUID. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 
@@ -2810,7 +2786,7 @@ If no matches are found, an empty collection will be returned.
     // 'a0a2a2d2'
 
 <a name="method-fluent-str-when-test"></a>
-#### `whenTest` {.collection-method}
+#### `whenTest`
 
 Метод `whenTest` вызывает данное замыкание, если строка соответствует заданному регулярному выражению. Замыкание получит экземпляр класса `Stringable` в качестве аргумента:
 

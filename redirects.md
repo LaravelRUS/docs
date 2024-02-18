@@ -1,13 +1,8 @@
-git 2a0615c0b2833c9a6c80052c6896071fa525d0fc
-
+---
+git: 2a0615c0b2833c9a6c80052c6896071fa525d0fc
 ---
 
 # HTTP переадресация
-
-- [Создание переадресации](#creating-redirects)
-- [Переадресация на именованные маршруты](#redirecting-named-routes)
-- [Переадресация на методы контроллера](#redirecting-controller-actions)
-- [Переадресация с данными сеанса](#redirecting-with-flashed-session-data)
 
 <a name="creating-redirects"></a>
 ## Создание переадресации

@@ -1,22 +1,8 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
-
+---
+git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 ---
 
 # Laravel Horizon
-
-- [Вступление](#introduction)
-- [Установка](#installation)
-    - [Настройка](#configuration)
-    - [Стратегии балансировки](#balancing-strategies)
-    - [Авторизация в информационной панели](#dashboard-authorization)
-- [Обновление Horizon](#upgrading-horizon)
-- [Запуск Horizon](#running-horizon)
-    - [Развертывание Horizon](#deploying-horizon)
-- [Теги](#tags)
-- [Уведомления](#notifications)
-- [Метрики](#metrics)
-- [Удаление невыполненных заданий](#deleting-failed-jobs)
-- [Удаление заданий из очередей](#clearing-jobs-from-queues)
 
 <a name="introduction"></a>
 ## Вступление

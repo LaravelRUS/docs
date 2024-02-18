@@ -1,29 +1,9 @@
-git 2cf67bcaacfec590098cefb45af824b74671cfa0
-
+---
+git: 2cf67bcaacfec590098cefb45af824b74671cfa0
 ---
 
 # Пакет Laravel Sanctum
 
-- [Введение](#introduction)
-    - [Как это работает](#how-it-works)
-- [Установка](#installation)
-- [Конфигурирование](#configuration)
-    - [Переопределение моделей по умолчанию](#overriding-default-models)
-- [Аутентификация токена API](#api-token-authentication)
-    - [Выдача токенов API](#issuing-api-tokens)
-    - [Полномочия токена](#token-abilities)
-    - [Защита маршрутов](#protecting-routes)
-    - [Отзыв токенов](#revoking-tokens)
-- [Аутентификация SPA](#spa-authentication)
-    - [Конфигурирование SPA](#spa-configuration)
-    - [Выполнение аутентификации SPA](#spa-authenticating)
-    - [Защита маршрутов SPA](#protecting-spa-routes)
-    - [Авторизация частных каналов вещания](#authorizing-private-broadcast-channels)
-- [Аутентификация мобильного приложения](#mobile-application-authentication)
-    - [Выдача токенов API мобильного приложения](#issuing-mobile-api-tokens)
-    - [Защита маршрутов API мобильного приложения](#protecting-mobile-api-routes)
-    - [Отзыв токенов API мобильного приложения](#revoking-mobile-api-tokens)
-- [Тестирование](#testing)
 
 <a name="introduction"></a>
 ## Введение

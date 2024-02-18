@@ -1,20 +1,9 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Eloquent · Ресурсы API (Resource)
 
-- [Введение](#introduction)
-- [Генерация ресурсов](#generating-resources)
-- [Обзор концепции](#concept-overview)
-    - [Коллекции ресурса](#resource-collections)
-- [Написание ресурсов](#writing-resources)
-    - [Обертывание данных](#data-wrapping)
-    - [Постраничная разбивка](#pagination)
-    - [Условные атрибуты](#conditional-attributes)
-    - [Условные отношения](#conditional-relationships)
-    - [Добавление метаданных](#adding-meta-data)
-- [Ответы ресурса](#resource-responses)
 
 <a name="introduction"></a>
 ## Введение

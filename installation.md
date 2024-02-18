@@ -1,26 +1,8 @@
-git bdc1629ce5b121d6d0e65f7d4c154cba70bb5ff0
-
+---
+git: bdc1629ce5b121d6d0e65f7d4c154cba70bb5ff0
 ---
 
 # Установка
-
-- [Установка](#установка)
-  - [Встречайте Laravel](#meet-laravel)
-    - [Почему именно Laravel?](#why-laravel)
-  - [Ваш первый проект на Laravel](#your-first-laravel-project)
-    - [Начало работы в macOS](#getting-started-on-macos)
-    - [Начало работы в Windows](#getting-started-on-windows)
-      - [Разработка в подсистеме WSL2](#getting-started-on-windows-wsl)
-    - [Начало работы в Linux](#getting-started-on-linux)
-    - [Выбор служб Sail](#choosing-your-sail-services)
-    - [Установка через Composer](#installation-via-composer)
-      - [Установщик Laravel](#the-laravel-installer)
-  - [Начальная конфигурация](#initial-configuration)
-    - [Конфигурация на основе окружения](#environment-based-configuration)
-    - [Конфигурация каталога](#directory-configuration)
-  - [Следующие шаги](#next-steps)
-    - [Laravel как клиент-серверный фреймворк](#laravel-the-fullstack-framework)
-    - [Laravel в качестве сервера API](#laravel-the-api-backend)
 
 <a name="meet-laravel"></a>
 ## Встречайте Laravel

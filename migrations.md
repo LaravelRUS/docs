@@ -1,31 +1,8 @@
-git d35acdeace1152f3559b81c5ae02c18e80197a52
-
+---
+git: d35acdeace1152f3559b81c5ae02c18e80197a52
 ---
 
 # База данных · Миграции
-
-- [Введение](#introduction)
-- [Генерация миграций](#generating-migrations)
-    - [Сжатие миграций](#squashing-migrations)
-- [Структура миграций](#migration-structure)
-- [Запуск миграций](#running-migrations)
-    - [Откат миграций](#rolling-back-migrations)
-- [Таблицы](#tables)
-    - [Создание таблиц](#creating-tables)
-    - [Обновление таблиц](#updating-tables)
-    - [Переименование / удаление таблиц](#renaming-and-dropping-tables)
-- [Столбцы](#columns)
-    - [Создание столбцов](#creating-columns)
-    - [Доступные типы столбцов](#available-column-types)
-    - [Модификаторы столбца](#column-modifiers)
-    - [Изменение столбцов](#modifying-columns)
-    - [Удаление столбцов](#dropping-columns)
-- [Индексы](#indexes)
-    - [Создание индексов](#creating-indexes)
-    - [Переименование индексов](#renaming-indexes)
-    - [Удаление индексов](#dropping-indexes)
-    - [Ограничения внешнего ключа](#foreign-key-constraints)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение
@@ -317,26 +294,8 @@ Laravel будет использовать имя миграции, чтобы 
 
 Построитель схем Blueprint предлагает множество методов, соответствующих различным типам столбцов, которые вы можете добавить в таблицы базы данных. Все доступные методы перечислены в таблице ниже:
 
-<!-- <style>
-    #collection-method-list > p {
-        column-count: 3; -moz-column-count: 3; -webkit-column-count: 3;
-        column-gap: 2em; -moz-column-gap: 2em; -webkit-column-gap: 2em;
-    }
 
-    #collection-method-list a {
-        display: block;
-    }
-
-    .collection-method code {
-        font-size: 14px;
-    }
-
-    .collection-method:not(.first-collection-method) {
-        margin-top: 50px;
-    }
-</style> -->
-
-<!-- <div id="collection-method-list" markdown="1"> -->
+<div class="docs-column-list" markdown="1">
 
 - [bigIncrements](#column-method-bigIncrements)
 - [bigInteger](#column-method-bigInteger)
@@ -403,7 +362,7 @@ Laravel будет использовать имя миграции, чтобы 
 - [uuid](#column-method-uuid)
 - [year](#column-method-year)
 
-<!-- </div> -->
+</div>
 
 <a name="column-method-bigIncrements"></a>
 #### `bigIncrements()`
@@ -786,7 +745,7 @@ Laravel будет использовать имя миграции, чтобы 
     $table->tinyInteger('votes');
 
 <a name="column-method-tinyText"></a>
-#### `tinyText()` {#collection-method}
+#### `tinyText()`
 
 Метод `tinyText` создаёт эквивалент столбца `TINYTEXT`:
 
@@ -1185,3 +1144,4 @@ Laravel также поддерживает создание ограничен�
 | `Illuminate\Database\Events\MigrationsEnded`   | Завершено выполнение пакета миграций.  |
 | `Illuminate\Database\Events\MigrationStarted`  | Одна миграция вот-вот будет выполнена. |
 | `Illuminate\Database\Events\MigrationEnded`    | Выполнение одной миграции завершено.   |
+

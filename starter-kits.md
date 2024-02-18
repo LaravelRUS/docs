@@ -1,15 +1,9 @@
-git ce3a0010f10469471667ab7eb177ce27217aca86
-
+---
+git: ce3a0010f10469471667ab7eb177ce27217aca86
 ---
 
 # Стартовые комплекты
 
-- [Введение](#introduction)
-- [Laravel Breeze](#laravel-breeze)
-    - [Установка](#laravel-breeze-installation)
-    - [Breeze & Inertia](#breeze-and-inertia)
-    - [Breeze & Next.js / API](#breeze-and-next)
-- [Laravel Jetstream](#laravel-jetstream)
 
 <a name="introduction"></a>
 ## Введение

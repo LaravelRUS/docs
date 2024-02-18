@@ -1,19 +1,9 @@
-git e40c6670934574de22db31ad6e84c4a035d65c6c
-
+---
+git: e40c6670934574de22db31ad6e84c4a035d65c6c
 ---
 
 # Подтверждение адреса электронной почты
 
-- [Введение](#introduction)
-    - [Подготовка модели](#model-preparation)
-    - [Подготовка базы данных](#database-preparation)
-- [Маршрутизация](#verification-routing)
-    - [Уведомление о подтверждении электронной почты](#the-email-verification-notice)
-    - [Обработчик проверки электронной почты](#the-email-verification-handler)
-    - [Повторная отправка письма с подтверждением](#resending-the-verification-email)
-    - [Защита маршрутов](#protecting-routes)
-- [Настройка](#customization)
-- [События](#events)
 
 <a name="introduction"></a>
 ## Введение

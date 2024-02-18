@@ -1,24 +1,9 @@
-git 58b5d7776b6ea1b04bfbe1f54c4800bc053f83aa
-
+---
+git: 58b5d7776b6ea1b04bfbe1f54c4800bc053f83aa
 ---
 
 # HTTP-ответы
 
-- [Создание ответов](#creating-responses)
-    - [Добавление заголовков к ответам](#attaching-headers-to-responses)
-    - [Добавление файлов Cookies к ответам](#attaching-cookies-to-responses)
-    - [Файлы Cookies и шифрование](#cookies-and-encryption)
-- [Перенаправления](#redirects)
-    - [Перенаправление на именованные маршруты](#redirecting-named-routes)
-    - [Перенаправление к действиям контроллера](#redirecting-controller-actions)
-    - [Перенаправление на внешние домены](#redirecting-external-domains)
-    - [Перенаправление с кратковременным сохранением данных в сессии](#redirecting-with-flashed-session-data)
-- [Другие типы ответов](#other-response-types)
-    - [Ответы с HTML-шаблонами](#view-responses)
-    - [Ответы JSON](#json-responses)
-    - [Ответы для загрузки файлов](#file-downloads)
-    - [Ответы, отображающие содержимое файлов](#file-responses)
-- [Макрокоманды ответа](#response-macros)
 
 <a name="creating-responses"></a>
 ## Создание ответов

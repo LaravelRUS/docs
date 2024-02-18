@@ -1,51 +1,8 @@
-git bc890b36ef203f0dd3521da5466be50d7c016527
-
+---
+git: bc890b36ef203f0dd3521da5466be50d7c016527
 ---
 
 # Laravel Passport
-
-- [Введение](#introduction)
-    - [Passport или Sanctum?](#passport-or-sanctum)
-- [Установка](#installation)
-    - [Развертывание Passport](#deploying-passport)
-    - [Настройка миграции](#migration-customization)
-    - [Обновление Passport](#upgrading-passport)
-- [Настройка](#configuration)
-    - [Хеширование секретного ключа клиента](#client-secret-hashing)
-    - [Срок жизни токена](#token-lifetimes)
-    - [Переопределение моделей по умолчанию](#overriding-default-models)
-- [Выдача токенов доступа](#issuing-access-tokens)
-    - [Управление клиентами](#managing-clients)
-    - [Запрос токенов](#requesting-tokens)
-    - [Обновление токенов](#refreshing-tokens)
-    - [Отзыв токенов](#revoking-tokens)
-    - [Удаление токенов](#purging-tokens)
-- [Предоставление кода авторизации с помощью PKCE](#code-grant-pkce)
-    - [Создание клиента](#creating-a-auth-pkce-grant-client)
-    - [Запрос токенов](#requesting-auth-pkce-grant-tokens)
-- [Парольные токены](#password-grant-tokens)
-    - [Создание токенов](#creating-a-password-grant-client)
-    - [Запрос токенов](#requesting-password-grant-tokens)
-    - [Запрос токена для всех областей](#requesting-all-scopes)
-    - [Настройка пользовательского провайдера](#customizing-the-user-provider)
-    - [Настройка поля имени пользователя](#customizing-the-username-field)
-    - [Настройка проверки пароля пользователя](#customizing-the-password-validation)
-- [Неявные токены](#implicit-grant-tokens)
-- [Токены учетных данных](#client-credentials-grant-tokens)
-- [Токены персонального доступа](#personal-access-tokens)
-    - [Создание токенов](#creating-a-personal-access-client)
-    - [Управление токенами](#managing-personal-access-tokens)
-- [Защита маршрутов](#protecting-routes)
-    - [Через посредников](#via-middleware)
-    - [Через передачу токена](#passing-the-access-token)
-- [Области токенов](#token-scopes)
-    - [Определение областей](#defining-scopes)
-    - [Области по-умолчанию](#default-scope)
-    - [Назначение областей токенам](#assigning-scopes-to-tokens)
-    - [Проверка областей](#checking-scopes)
-- [Использование API через JavaScript](#consuming-your-api-with-javascript)
-- [События](#events)
-- [Тестирование](#testing)
 
 <a name="introduction"></a>
 ## Введение

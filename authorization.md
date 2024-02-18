@@ -1,31 +1,8 @@
-git 3e3b8fe42e7bd6eb6d955259ff6f2649d314262e
-
+---
+git: 3e3b8fe42e7bd6eb6d955259ff6f2649d314262e
 ---
 
 # Авторизация
-
-- [Введение](#introduction)
-- [Шлюзы (Gate)](#gates)
-    - [Написание шлюзов](#writing-gates)
-    - [Авторизация действий через шлюзы](#authorizing-actions-via-gates)
-    - [Ответы шлюза](#gate-responses)
-    - [Хуки шлюзов](#intercepting-gate-checks)
-    - [Встроенная авторизация](#inline-authorization)
-- [Создание политик](#creating-policies)
-    - [Генерация политик](#generating-policies)
-    - [Регистрация политик](#registering-policies)
-- [Написание политик](#writing-policies)
-    - [Методы политики](#policy-methods)
-    - [Ответы политики](#policy-responses)
-    - [Методы политики без моделей](#methods-without-models)
-    - [Гостевые пользователи](#guest-users)
-    - [Фильтры политики](#policy-filters)
-- [Авторизация действий с помощью политик](#authorizing-actions-using-policies)
-    - [Через модель User](#via-the-user-model)
-    - [Через помощников контроллера](#via-controller-helpers)
-    - [Через посредника](#via-middleware)
-    - [Через шаблоны Blade](#via-blade-templates)
-    - [Предоставление дополнительного контекста политики](#supplying-additional-context)
 
 <a name="introduction"></a>
 ## Введение

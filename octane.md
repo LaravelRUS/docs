@@ -1,31 +1,8 @@
-git 34eb006893f9e86010025689656aa8cba0096687
-
+---
+git: 34eb006893f9e86010025689656aa8cba0096687
 ---
 
 # Laravel Octane
-
-- [Введение](#introduction)
-- [Установка](#installation)
-- [Требования к серверу](#server-prerequisites)
-    - [RoadRunner](#roadrunner)
-    - [Swoole](#swoole)
-- [Запуск приложения](#serving-your-application)
-    - [Запуск с HTTPS](#serving-your-application-via-https)
-    - [Запуск с Nginx](#serving-your-application-via-nginx)
-    - [Наблюдение за изменениями файлов](#watching-for-file-changes)
-    - [Указание количества Worker](#specifying-the-worker-count)
-    - [Указание максимального количества запросов](#specifying-the-max-request-count)
-    - [Перезагрузка Workers](#reloading-the-workers)
-    - [Остановка сервера](#stopping-the-server)
-- [Внедрение зависимости и Octane](#dependency-injection-and-octane)
-    - [Контейнер для внедрений](#container-injection)
-    - [Запрос на внедрение](#request-injection)
-    - [Настройка репозитория внедрения](#configuration-repository-injection)
-- [Управление утечкой памяти](#managing-memory-leaks)
-- [Параллельные задачи](#concurrent-tasks)
-- [Ticks & Intervals](#ticks-and-intervals)
-- [Кеш Octane](#the-octane-cache)
-- [Таблицы](#tables)
 
 <a name="introduction"></a>
 ## Введение
@@ -50,7 +27,7 @@ php artisan octane:install
 <a name="server-prerequisites"></a>
 ## Требования к серверу
 
-> {Примечание} Laravel Octane требует [PHP 8.0+](https://php.net/releases/).
+> {note} Laravel Octane требует [PHP 8.0+](https://php.net/releases/).
 
 <a name="roadrunner"></a>
 ### RoadRunner
@@ -109,7 +86,7 @@ pecl install swoole
 <a name="swoole-via-laravel-sail"></a>
 #### Swoole через Laravel Sail
 
-> {Примечание} Перед обслуживанием приложения Octane через Sail убедитесь, что у вас установлена последняя версия [Laravel Sail](/docs/{{version}}/sail), и выполните `./vendor/bin/sail build --no-cache` в корневом каталоге вашего приложения.
+> {note} Перед обслуживанием приложения Octane через Sail убедитесь, что у вас установлена последняя версия [Laravel Sail](/docs/{{version}}/sail), и выполните `./vendor/bin/sail build --no-cache` в корневом каталоге вашего приложения.
 
 В качестве альтернативы вы можете разработать приложение Octane на основе Swoole, используя [Laravel Sail](/docs/{{version}}/sail), официальную среду разработки на основе Docker для Laravel. Laravel Sail по умолчанию включает расширение Swoole. Однако вам все равно нужно будет настроить файл `supervisor.conf`, используемый Sail, чтобы ваше приложение работало. Для начала выполните Artisan-команду `sail:publish`:
 
@@ -166,7 +143,7 @@ php artisan octane:start
 <a name="serving-your-application-via-nginx"></a>
 ### Запуск приложения с Nginx
 
-> {Примечание} Если вы не совсем готовы управлять конфигурацией своего сервера или вам неудобно настраивать все различные службы, необходимые для запуска надежного приложения Laravel Octane, ознакомьтесь с [Laravel Forge](https://forge.laravel.com).
+> {tip} Если вы не совсем готовы управлять конфигурацией своего сервера или вам неудобно настраивать все различные службы, необходимые для запуска надежного приложения Laravel Octane, ознакомьтесь с [Laravel Forge](https://forge.laravel.com).
 
 В производственных средах вы должны обслуживать приложение Octane на традиционном веб-сервере, таком как Nginx или Apache. Это позволит веб-серверу обслуживать ваши статические ресурсы, такие как изображения и таблицы стилей, а также управлять прекращением действия вашего сертификата SSL.
 
@@ -386,7 +363,7 @@ $service->method($request->input('name'));
 
 Глобальный помощник `request` всегда будет возвращать запрос, который приложение в настоящее время обрабатывает, и поэтому его можно безопасно использовать в вашем приложении.
 
-> {Примечание} Допускается вводить подсказку типа `Illuminate\Http\Request` по методам вашего контроллера и замыканиям маршрутов.
+> {tip} Допускается вводить подсказку типа `Illuminate\Http\Request` по методам вашего контроллера и замыканиям маршрутов.
 
 <a name="configuration-repository-injection"></a>
 ### Настройка репозитория внедрения
@@ -457,7 +434,7 @@ public function index(Request $request)
 <a name="concurrent-tasks"></a>
 ## Параллельные задачи
 
-> {Примечание} Для этой функции требуется [Swoole](#swoole).
+> {note} Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете выполнять операции одновременно с помощью легких фоновых задач. Вы можете сделать это, используя метод Octane `concurrently`. Вы можете комбинировать этот метод с деструктуризацией массива PHP для получения результатов каждой операции:
 
@@ -481,7 +458,7 @@ php artisan octane:start --workers=4 --task-workers=6
 <a name="ticks-and-intervals"></a>
 ## Ticks & Intervals
 
-> {Примечание} Для этой функции требуется [Swoole](#swoole).
+> {note} Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете зарегистрировать операции "tick", которые будут выполняться каждые заданное количество секунд. Вы можете зарегистрировать обратные вызовы "tick" с помощью метода `tick`. Первым аргументом, предоставленным методу, должна быть строка, представляющая имя операции. Второй аргумент должен быть вызываемой функцией, которая будет вызываться через указанный интервал.
 
@@ -503,7 +480,7 @@ Octane::tick('simple-ticker', fn () => ray('Ticking...'))
 <a name="the-octane-cache"></a>
 ## Кеш Octane
 
-> {Примечание} Для этой функции требуется [Swoole](#swoole).
+> {note} Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете использовать кэш-драйвер Octane, который обеспечивает скорость чтения и записи до 2 миллионов операций в секунду. Таким образом, этот драйвер кэширования является отличным выбором для приложений, которым требуется экстремальная скорость чтения / записи на уровне кэширования.
 
@@ -513,7 +490,7 @@ Octane::tick('simple-ticker', fn () => ray('Ticking...'))
 Cache::store('octane')->put('framework', 'Laravel', 30);
 ```
 
-> {Примечание} Максимальное количество записей, разрешенных в кэше Octane, может быть определено в файле конфигурации вашего приложения `octane`.
+> {tip} Максимальное количество записей, разрешенных в кэше Octane, может быть определено в файле конфигурации вашего приложения `octane`.
 
 <a name="cache-intervals"></a>
 ### Интервалы кеширования
@@ -531,7 +508,7 @@ Cache::store('octane')->interval('random', function () {
 <a name="tables"></a>
 ## Таблицы
 
-> {Примечание} Для этой функции требуется [Swoole](#swoole).
+> {note} Для этой функции требуется [Swoole](#swoole).
 
 При использовании Swoole вы можете определять свои собственные произвольные [таблицы Swoole](https://www.swoole.co.uk/docs/modules/swoole-table) и взаимодействовать с ними. Таблицы Swoole обеспечивают исключительную производительность, и к данным в этих таблицах могут получить доступ все воркеры (workers) на сервере. Однако данные в них будут потеряны при перезапуске сервера.
 
@@ -559,4 +536,4 @@ Octane::table('example')->set('uuid', [
 return Octane::table('example')->get('uuid');
 ```
 
-> {Примечание} Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
+> {note} Таблицы Swoole поддерживают следующие типы столбцов: `string`, `int` и `float`.
