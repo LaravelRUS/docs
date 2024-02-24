@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: b1ad87d60cbb98f2f17d9f3aa02b186278959877
 ---
 
 # Очереди
@@ -221,7 +221,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUnique;
 
@@ -261,7 +261,7 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     <?php
 
-    use App\Product;
+    use App\Models\Product;
     use Illuminate\Contracts\Queue\ShouldQueue;
     use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 

@@ -1,5 +1,5 @@
 ---
-git: 3593e2be5a7cebce36bf815412a89f6198dd8133
+git: b1ad87d60cbb98f2f17d9f3aa02b186278959877
 ---
 
 # Примечания к релизу
@@ -173,7 +173,7 @@ _Авторы: [Taylor Otwell](https://github.com/taylorotwell) и [Mohamed Said
 Новый метод `batch` фасада `Bus` используется для отправки пакета заданий. Конечно, это в первую очередь полезно в сочетании с замыканиями по завершению. Итак, вы можете использовать методы `then`, `catch`, и `finally` для определения замыканий пакета заданий. Каждый из этих замыканий получит экземпляр `Illuminate\Bus\Batch` при вызове:
 
     use App\Jobs\ProcessPodcast;
-    use App\Podcast;
+    use App\Models\Podcast;
     use Illuminate\Bus\Batch;
     use Illuminate\Support\Facades\Bus;
     use Throwable;

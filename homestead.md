@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: 41169362bce8c5a141b9ca7eb26c6c3c17fe19ac
 ---
 
 # Laravel Homestead
@@ -46,7 +46,7 @@ Homestead работает в любой системе Windows, macOS или Li
 - Xdebug
 - XHProf / Tideways / XHGui
 - wp-cli
-- 
+
 </div>
 
 <a name="optional-software"></a>
