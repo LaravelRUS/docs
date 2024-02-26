@@ -1,5 +1,5 @@
 ---
-git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
+git: da7f0c1b2c5b35fde895bf4ef5fefd743c4a48d0
 ---
 
 # Руководство по обновлению
@@ -197,8 +197,8 @@ git: 6ac13f37adbed3ce6a6532fd790f70bd731b8571
 
     define('LARAVEL_START', microtime(true));
 
-    if (file_exists(__DIR__.'/../storage/framework/maintenance.php')) {
-        require __DIR__.'/../storage/framework/maintenance.php';
+    if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+        require $maintenance;
     }
 
 <a name="artisan-down-message"></a>

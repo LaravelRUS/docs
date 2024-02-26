@@ -1,5 +1,5 @@
 ---
-git: 7bd089d98d0fc153b3cd198529fb7d12ced74ca1
+git: b1ad87d60cbb98f2f17d9f3aa02b186278959877
 ---
 
 # Трансляция (broadcast) событий
@@ -218,7 +218,7 @@ window.Echo = new Echo({
 
     namespace App\Events;
 
-    use App\Order;
+    use App\Models\Order;
     use Illuminate\Broadcasting\Channel;
     use Illuminate\Broadcasting\InteractsWithSockets;
     use Illuminate\Broadcasting\PresenceChannel;

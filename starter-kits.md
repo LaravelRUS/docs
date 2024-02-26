@@ -1,5 +1,5 @@
 ---
-git: ce3a0010f10469471667ab7eb177ce27217aca86
+git: 3799ea1f233d53097aa582e6475020f97226c1dc
 ---
 
 # Стартовые комплекты
@@ -74,7 +74,7 @@ php artisan migrate
 <a name="breeze-and-next"></a>
 ### Breeze & Next.js / API
 
-Laravel Breeze также может формировать API аутентификации, готовый для аутентификации современных приложений JavaScript, таких, как те, которые работают на [Next](https://nextjs.org), [Nuxt](https://nuxtjs.org) и других. Для начала укажите стек `api` в качестве желаемого стека при выполнении Artisan-команды `breeze:install`:
+Laravel Breeze также может формировать API аутентификации, готовый для аутентификации современных приложений JavaScript, таких, как те, которые работают на [Next](https://nextjs.org), [Nuxt](https://nuxt.com) и других. Для начала укажите стек `api` в качестве желаемого стека при выполнении Artisan-команды `breeze:install`:
 
 ```nothing
 php artisan breeze:install api
@@ -96,4 +96,4 @@ php artisan migrate
 
 Jetstream предлагает красиво оформленный каркас приложений для Laravel и включает в себя вход в систему, регистрацию, подтверждение адреса электронной почты, двухфакторную аутентификацию, управление сессиями, поддержку API через Laravel Sanctum, и дополнительно, управление командой. Jetstream разработан с использованием [Tailwind CSS](https://tailwindcss.com) и предлагает на ваш выбор каркас клиентского интерфейса под управлением [Livewire](https://laravel-livewire.com) либо [Inertia.js](https://inertiajs.com).
 
-Полное описание по установке Laravel Jetstream можно найти в [официальной документации Jetstream](https://jetstream.laravel.com/2.x/introduction.html).
+Полное описание по установке Laravel Jetstream можно найти в [официальной документации Jetstream](https://jetstream.laravel.com/introduction.html).

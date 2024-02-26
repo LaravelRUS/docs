@@ -1,5 +1,5 @@
 ---
-git: d35acdeace1152f3559b81c5ae02c18e80197a52
+git: c5552838e6da6b6a538f8ac052ce7a8b790c14ed
 ---
 
 # База данных · Миграции
@@ -846,7 +846,7 @@ Laravel будет использовать имя миграции, чтобы 
 | `->unsigned()`                      | Установить столбцы INTEGER как UNSIGNED (MySQL).                                                                 |
 | `->useCurrent()`                    | Установить столбцы TIMESTAMP для использования CURRENT_TIMESTAMP в качестве значения по умолчанию.               |
 | `->useCurrentOnUpdate()`            | Установить столбцы TIMESTAMP для использования CURRENT_TIMESTAMP при обновлении записи.                          |
-| `->virtualAs($expression)`          | Создать виртуальный генерируемый столбец (MySQL).                                                                |
+| `->virtualAs($expression)`          | Создать виртуальный генерируемый столбец (MySQL / PostgreSQL / SQLite).                                                                |
 | `->generatedAs($expression)`        | Создать столбец идентификаторов с указанными параметрами последовательности (PostgreSQL).                        |
 | `->always()`                        | Определить приоритет значений последовательности над вводом для столбца идентификаторов (PostgreSQL).            |
 | `->isGeometry()`                    | Установить для пространственного столбца тип `geometry` - по умолчанию устанавливается `geography` (PostgreSQL). |

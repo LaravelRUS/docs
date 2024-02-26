@@ -1,5 +1,5 @@
 ---
-git: 34eb006893f9e86010025689656aa8cba0096687
+git: b1ad87d60cbb98f2f17d9f3aa02b186278959877
 ---
 
 # Laravel Octane
@@ -439,8 +439,8 @@ public function index(Request $request)
 При использовании Swoole вы можете выполнять операции одновременно с помощью легких фоновых задач. Вы можете сделать это, используя метод Octane `concurrently`. Вы можете комбинировать этот метод с деструктуризацией массива PHP для получения результатов каждой операции:
 
 ```php
-use App\User;
-use App\Server;
+use App\Models\User;
+use App\Models\Server;
 use Laravel\Octane\Facades\Octane;
 
 [$users, $servers] = Octane::concurrently([
